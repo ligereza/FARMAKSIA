@@ -11,7 +11,7 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 
 | Hipótesis | Estado |
 |---|---|
-| CODE-INE | descriptor provisional de transición y señal de objetivo 026; interoperable con VIZZ; operador independiente eliminado |
+| CODE-INE | descriptor provisional de transición y objetivo declarado/verificado 027; interoperable con VIZZ; operador independiente eliminado |
 | X-ANA-X | archivado como hipótesis independiente; protocolo de analogía conservado |
 | KETAMINE | en cuarentena; sin prototipo activo ni teoría forzada |
 | VIZZ | control 025 de consulta, exposición y condiciones de display; instrumentación manual opt-in; sin datos humanos, eficacia desconocida |
@@ -55,12 +55,14 @@ cuando no existe un archivo humano.
 - [Frontera de latencia y cobertura VIZZ](experiments/024-vizz-latency-coverage-boundary/results.md)
 - [Invariancia de condición de display VIZZ](experiments/025-vizz-display-condition-invariance/results.md)
 - [Señal de objetivo CODE-INE](experiments/026-codeine-objective-signal/results.md)
+- [Oráculo de objetivo CODE-INE](experiments/027-codeine-objective-oracle/results.md)
 - [Auditoría consolidada de estado](research/decisions/032-laboratory-state-audit.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Literatura de observabilidad VIZZ](research/literature/010-vizz-observability-boundary.md)
 - [Literatura de condiciones de display VIZZ](research/literature/011-vizz-display-conditions.md)
 - [Literatura de señal objetiva CODE-INE](research/literature/012-codeine-objective-signal.md)
+- [Literatura de oráculos verificables CODE-INE](research/literature/013-codeine-verifiable-objective.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
 - [Compuerta de adopción de herramientas](research/decisions/011-tool-adoption-gate.md)

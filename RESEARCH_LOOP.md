@@ -208,6 +208,13 @@ de objetivo. Con un score completo se distinguieron `stable`, `regressed` y
 de rango fue rechazado. La señal es declarada por fixture: no demuestra que el
 objetivo sea verdadero ni que exista deriva subjetiva.
 
+El experimento 027 añadió una segunda señal sintética separada del score. La
+coincidencia produjo tres casos `verified` (`stable`, `regressed` y
+`recovered`); la ausencia de oracle produjo `declared_only`, la discrepancia
+produjo `conflict`, el oracle incompleto `unavailable` y el mal formado
+`rejected`. La verificación sigue limitada al fixture: no equivale a una tarea
+humana ni convierte CODE-INE en operador independiente.
+
 La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
@@ -216,9 +223,9 @@ diseño. Los desconocidos humanos permanecen explícitos.
 
 El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
 
-1. CODEINE: mantener separadas transición base, señal objetiva declarada y
-   estado humano; exigir una fuente de objetivo antes de llamar deriva a una
-   secuencia.
+1. CODEINE: mantener separadas transición base, score declarado, oracle de
+   objetivo y estado humano; exigir coincidencia con un oracle completo antes
+   de llamar verificada a una secuencia.
 2. VIZZ: extender fixtures sintéticos de cobertura, latencia y contexto antes
    de evaluar eye tracking; cualquier sesión humana seguirá requiriendo una
    acción explícita de consentimiento.
@@ -227,7 +234,7 @@ X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
-`research/literature/006–012`. No se incorporará KETAMINE al prototipo hasta
+`research/literature/006–013`. No se incorporará KETAMINE al prototipo hasta
 que aparezca una experiencia que lo justifique.
 
 ## Regla de honestidad del loop

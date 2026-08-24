@@ -1,0 +1,55 @@
+{
+  "schema": "farmaxia:codeine-objective-oracle-cases:0.1",
+  "drift_tolerance": 0.1,
+  "profiles": [
+    {
+      "id": "aligned_stable",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "oracle": {"c01": false, "c02": true, "c03": true, "c04": true, "c05": true, "c06": true, "c07": true, "c08": true},
+      "expected_evidence_status": "verified",
+      "expected_verified_drift": "stable"
+    },
+    {
+      "id": "aligned_regressed",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.80, "c06": 0.70, "c07": 0.60, "c08": 0.55},
+      "oracle": {"c01": false, "c02": true, "c03": true, "c04": true, "c05": true, "c06": false, "c07": false, "c08": false},
+      "expected_evidence_status": "verified",
+      "expected_verified_drift": "regressed"
+    },
+    {
+      "id": "aligned_recovered",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.70, "c06": 0.65, "c07": 0.85, "c08": 0.85},
+      "oracle": {"c01": false, "c02": true, "c03": true, "c04": true, "c05": false, "c06": false, "c07": true, "c08": true},
+      "expected_evidence_status": "verified",
+      "expected_verified_drift": "recovered"
+    },
+    {
+      "id": "declared_only",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "oracle": null,
+      "expected_evidence_status": "declared_only",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "conflict",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "oracle": {"c01": false, "c02": true, "c03": true, "c04": true, "c05": true, "c06": false, "c07": false, "c08": false},
+      "expected_evidence_status": "conflict",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "incomplete_oracle",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.80, "c06": 0.70, "c07": 0.60, "c08": 0.55},
+      "oracle": {"c01": false, "c02": true, "c03": true, "c04": true, "c05": true, "c06": false, "c07": false},
+      "expected_evidence_status": "unavailable",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "malformed_oracle",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "oracle": {"c01": false, "c02": true, "c03": true, "c04": "pass", "c05": true, "c06": true, "c07": true, "c08": true},
+      "expected_evidence_status": "rejected",
+      "expected_verified_drift": null
+    }
+  ]
+}

@@ -34,6 +34,7 @@ def main() -> None:
     check((ROOT / "research" / "literature" / "010-vizz-observability-boundary.md").is_file(), "observability literature record is missing", failures)
     check((ROOT / "research" / "literature" / "011-vizz-display-conditions.md").is_file(), "display condition literature record is missing", failures)
     check((ROOT / "research" / "literature" / "012-codeine-objective-signal.md").is_file(), "objective signal literature record is missing", failures)
+    check((ROOT / "research" / "literature" / "013-codeine-verifiable-objective.md").is_file(), "verifiable objective literature record is missing", failures)
 
     required_experiments = [
         "013-vizz-perceptual-adaptation",
@@ -50,6 +51,7 @@ def main() -> None:
         "024-vizz-latency-coverage-boundary",
         "025-vizz-display-condition-invariance",
         "026-codeine-objective-signal",
+        "027-codeine-objective-oracle",
     ]
     for experiment in required_experiments:
         directory = ROOT / "experiments" / experiment
@@ -66,6 +68,7 @@ def main() -> None:
         "034-vizz-latency-coverage-boundary.md",
         "035-vizz-display-condition-invariance.md",
         "036-codeine-objective-signal.md",
+        "037-codeine-objective-oracle.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

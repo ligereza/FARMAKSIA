@@ -1,0 +1,148 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:027-codeine-objective-oracle",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_score_oracle_comparison_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "compares_declared_objective_scores_with_synthetic_oracle",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:oracle-protocol-027",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "017B950B324C1C6AB0596A1173481F0562B92A0C25F12C3B00B603CC4F501715",
+      "role": "score_oracle_comparison_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:oracle-cases-027",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "9AF8107556B124B5770C215B53E7ABAB5DED91512C52AB8FEBAEE7F4755A1CAC",
+      "role": "declared_score_and_oracle_profiles",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:oracle-source-session-027",
+      "type": "entity",
+      "path": "../022-vizz-codeine-long-bridge/session.json",
+      "sha256": "09304E5A79EE805553D3C4AF186704DFF3D345CE4754E407E3448A588932A52C",
+      "role": "synthetic_vizz_session",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:oracle-bridge-027",
+      "type": "entity",
+      "path": "../020-vizz-codeine-event-bridge/run_experiment.py",
+      "sha256": "96940D7616B9924E226CA35241E2E65A7818B668E3F4A50A7FEA71ED6388B645",
+      "role": "vizz_codeine_normalizer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:oracle-codeine-027",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "base_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:oracle-runner-027",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "788D78E022671DAFB6812D8AC0D5D99A4961AF03E0272B3D999790762FC2F73C",
+      "role": "score_oracle_comparison_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:oracle-kill-test-027",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "F2D2C37F4BC3C24F766312CAF7AB69970D65700979F3199E67136535672B9711",
+      "role": "oracle_comparison_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:oracle-results-027",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "1FF771E55B06159BEC950BA45618A34D08D73A0325199C922E0C8DD0E6F8E7A2",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:oracle-literature-013",
+      "type": "entity",
+      "path": "../../research/literature/013-codeine-verifiable-objective.md",
+      "sha256": "22B45734717E5CC5AB43CF59445E2BFAA910DAF0447BF3E97AF394BDF988951A",
+      "role": "test_oracle_and_code_comprehension_literature",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-oracle-027",
+      "type": "activity",
+      "used": [
+        "farmaxia:oracle-protocol-027",
+        "farmaxia:oracle-cases-027",
+        "farmaxia:oracle-source-session-027",
+        "farmaxia:oracle-bridge-027",
+        "farmaxia:oracle-codeine-027",
+        "farmaxia:oracle-literature-013"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-oracle-027",
+      "type": "activity",
+      "used": [
+        "farmaxia:oracle-cases-027",
+        "farmaxia:oracle-source-session-027",
+        "farmaxia:oracle-runner-027"
+      ],
+      "generated": ["farmaxia:oracle-results-027"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-oracle-kill-tests-027",
+      "type": "activity",
+      "used": ["farmaxia:oracle-results-027", "farmaxia:oracle-kill-test-027"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:oracle-verification-027",
+      "expression": "does agreement between a declared score and a separate oracle produce verified objective evidence",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:oracle-cases-027", "farmaxia:oracle-results-027"]
+    },
+    {
+      "id": "farmaxia:query:oracle-boundary-027",
+      "expression": "do absent, incomplete, conflicting, and malformed oracles avoid a verified drift claim",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:oracle-runner-027", "farmaxia:oracle-kill-test-027", "farmaxia:oracle-results-027"]
+    }
+  ],
+  "unknowns": [
+    "Whether a synthetic oracle corresponds to an independently verifiable real task outcome",
+    "Who or what can supply an acceptable oracle in a future consented session",
+    "Whether verified objective regression corresponds to subjective drift"
+  ]
+}
