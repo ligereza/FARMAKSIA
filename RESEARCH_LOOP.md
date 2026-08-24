@@ -167,6 +167,12 @@ custodia y el validador directo coincidieron en manifiesto válido, hash roto,
 referencia desconocida y archivo ausente. La decisión 028 archiva X-ANA-X como
 hipótesis independiente y conserva la analogía solo como técnica documental.
 
+El experimento 020 comprobó que el envelope VIZZ opt-in puede alimentar el
+detector CODE-INE con cinco campos mínimos. La muestra de tres eventos no
+permite declarar repetición; la pérdida de `action_class` se rechaza en vez de
+inferirse. VIZZ y CODE-INE pueden compartir instrumentación sin duplicar
+captura.
+
 ## Frente activo
 
 El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:

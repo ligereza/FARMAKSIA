@@ -11,10 +11,10 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 
 | Hipótesis | Estado |
 |---|---|
-| CODE-INE | descriptor provisional de transición actividad→mejora→repetición; operador independiente eliminado |
+| CODE-INE | descriptor provisional de transición; interoperable con VIZZ 020; operador independiente eliminado |
 | X-ANA-X | archivado como hipótesis independiente; protocolo de analogía conservado |
 | KETAMINE | contrato provisional; novedad muy debilitada frente a índices y pérdidas geométricas/compositivas conocidas |
-| VIZZ | prototipo 015 de consulta, exposición e instrumentación opt-in; sin datos humanos, eficacia desconocida |
+| VIZZ | prototipo 020 de consulta, exposición e instrumentación opt-in; sin datos humanos, eficacia desconocida |
 
 No se implementan operadores como API ni se fija arquitectura mientras sus
 kill tests sigan abiertos.
@@ -48,6 +48,7 @@ cuando no existe un archivo humano.
 - [Prototipo VIZZ de adaptación perceptual](experiments/013-vizz-perceptual-adaptation/results.md)
 - [Consulta VIZZ de entrada en repetición](experiments/014-vizz-decision-query/results.md)
 - [Contrato VIZZ de sesión](experiments/015-vizz-session-contract/results.md)
+- [Puente VIZZ → CODE-INE](experiments/020-vizz-codeine-event-bridge/results.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
 - [Compuerta de adopción de herramientas](research/decisions/011-tool-adoption-gate.md)

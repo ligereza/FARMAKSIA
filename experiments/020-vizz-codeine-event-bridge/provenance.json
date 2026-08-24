@@ -1,0 +1,131 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:020-vizz-codeine-event-bridge",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_cross_contract_mapping_and_loss_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "validates_vizz_events_and_feeds_codeine_detector",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:bridge-protocol-020",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "B9E7AACC856FA9C17C90061638DE48AD0CF92D022E15F865C30D037D8D96F6F2",
+      "role": "cross_contract_bridge",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:bridge-vizz-cases-020",
+      "type": "entity",
+      "path": "../015-vizz-session-contract/cases.json",
+      "sha256": "2777FA10273056BF825E266F4F22324875528FA5D7E5491B585AD3E1A6245786",
+      "role": "reused_declared_synthetic_vizz_events",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:bridge-vizz-validator-020",
+      "type": "entity",
+      "path": "../015-vizz-session-contract/run_experiment.py",
+      "sha256": "A7EBA5B874A8EFA3C807BCABD3EFD38B90C96CD3A1D0EC8A511FE7AD80AA5CEF",
+      "role": "vizz_contract_validator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:bridge-codeine-detector-020",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "codeine_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:bridge-runner-020",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "96940D7616B9924E226CA35241E2E65A7818B668E3F4A50A7FEA71ED6388B645",
+      "role": "cross_contract_adapter",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:bridge-kill-test-020",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "7E13A8D49D8577BD6EE8773C95150BED050DF1C384B569DE6DC959E2E01CB0A4",
+      "role": "information_loss_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:bridge-results-020",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "FFEE15BC8ABA48C8280F0D87C0AD86F03F7E2E803CB91586B4B1FCC6C149373F",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-vizz-codeine-bridge-020",
+      "type": "activity",
+      "used": [
+        "farmaxia:bridge-protocol-020",
+        "farmaxia:bridge-vizz-cases-020",
+        "farmaxia:bridge-vizz-validator-020",
+        "farmaxia:bridge-codeine-detector-020"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-vizz-codeine-bridge-020",
+      "type": "activity",
+      "used": [
+        "farmaxia:bridge-vizz-cases-020",
+        "farmaxia:bridge-vizz-validator-020",
+        "farmaxia:bridge-codeine-detector-020",
+        "farmaxia:bridge-runner-020"
+      ],
+      "generated": ["farmaxia:bridge-results-020"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-vizz-codeine-kill-tests-020",
+      "type": "activity",
+      "used": ["farmaxia:bridge-results-020", "farmaxia:bridge-kill-test-020"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:bridge-contract-compatibility",
+      "expression": "can the opt-in VIZZ envelope feed the CODE-INE detector without new capture",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:bridge-vizz-cases-020", "farmaxia:bridge-codeine-detector-020", "farmaxia:bridge-results-020"]
+    },
+    {
+      "id": "farmaxia:query:bridge-information-loss",
+      "expression": "does loss of action_class make repetition unavailable rather than silently inferred",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:bridge-vizz-validator-020", "farmaxia:bridge-runner-020", "farmaxia:bridge-kill-test-020"]
+    }
+  ],
+  "unknowns": [
+    "Whether real manual events can be emitted with stable action classes",
+    "Whether the discarded VIZZ fields are needed for a richer CODE-INE state model",
+    "Whether any resulting transition corresponds to human-reported experience"
+  ]
+}

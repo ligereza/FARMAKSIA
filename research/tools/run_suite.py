@@ -53,6 +53,7 @@ def main() -> None:
         "experiments/017-xanax-analogy-chain/provenance.json",
         "experiments/018-xanax-reformulation-control/provenance.json",
         "experiments/019-xanax-provenance-archive-audit/provenance.json",
+        "experiments/020-vizz-codeine-event-bridge/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -350,6 +351,36 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 019", python_script("research/tools/validate_provenance.py", provenance[18]), "PROVENANCE_VALID")
+
+    bridge = subprocess.run(
+        python_script("experiments/020-vizz-codeine-event-bridge/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if bridge.returncode != 0:
+        raise RuntimeError("experiment 020 failed")
+    bridge_result = json.loads(bridge.stdout)
+    if (
+        bridge_result["vizz_event_count"],
+        bridge_result["codeine_event_count"],
+        bridge_result["transition"]["last_significant_improvement"],
+        bridge_result["transition"]["repetition_entry"],
+        bridge_result["human_data"],
+        bridge_result["devices_started"],
+        bridge_result["network_used"],
+        bridge_result["raw_capture"],
+    ) != (3, 3, "s02", None, False, False, False, False):
+        raise RuntimeError("experiment 020 VIZZ-CODE-INE bridge boundary failure")
+    print("PASS experiment 020")
+    command(
+        "kill test VIZZ-CODE-INE bridge 020",
+        python_script("experiments/020-vizz-codeine-event-bridge/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 020", python_script("research/tools/validate_provenance.py", provenance[19]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
