@@ -12,6 +12,7 @@
     "consent_required": true,
     "camera_default": "off",
     "network_allowed": false,
+    "network_scope": "same_origin_only_for_bundled_assets",
     "sample_persistence": "none",
     "raw_video_persistence": "none",
     "clear_on_stop": true,

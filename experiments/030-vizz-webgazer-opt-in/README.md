@@ -16,8 +16,9 @@ ocular. El marcador no es una medición clínica ni una receta óptica.
 
 - La cámara está apagada al cargar la página y el consentimiento no está
   marcado por defecto.
-- La página carga una copia local de WebGazer.js 3.5.3; no usa CDN, `fetch`,
-  almacenamiento web, telemetría ni transporte de red desde el adaptador.
+- La página carga una copia local de WebGazer.js 3.5.3; no usa CDN ni red
+  externa. La política CSP permite únicamente `fetch` al mismo `localhost`
+  para los recursos internos que WebGazer pueda necesitar.
 - `saveDataAcrossSessions(false)` se fija antes de iniciar. El adaptador no
   guarda vídeo ni coordenadas; solo mantiene el último punto y un contador en
   memoria para la visualización.

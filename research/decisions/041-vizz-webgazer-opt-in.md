@@ -8,12 +8,14 @@ El experimento 030 implementa una página ejecutable que carga WebGazer.js
 3.5.3 desde `vendor/`, solicita cámara solo después de una acción de
 consentimiento, ofrece nueve objetivos de calibración y dibuja un marcador con
 predicciones recibidas en memoria. El test estático pasa y confirma que el
-adaptador no contiene CDN, `fetch`, beacons, almacenamiento web ni una ruta de
-exportación.
+adaptador no contiene CDN, beacons, almacenamiento web ni una ruta de
+exportación. La CSP solo permite `fetch` al mismo origen para que WebGazer
+pueda cargar recursos internos desde `localhost`; el tráfico externo sigue
+bloqueado.
 
 La automatización no abrió navegador, no solicitó permiso, no encendió cámara,
-no utilizó red y no generó datos humanos. Por eso esta decisión demuestra
-integración y controles, no precisión ni utilidad perceptual.
+no utilizó un origen externo y no generó datos humanos. Por eso esta decisión
+demuestra integración y controles, no precisión ni utilidad perceptual.
 
 ## Decisión
 

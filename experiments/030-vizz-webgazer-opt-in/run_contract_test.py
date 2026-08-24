@@ -29,6 +29,7 @@ def main() -> None:
         "consent_required": True,
         "camera_default": "off",
         "network_allowed": False,
+        "network_scope": "same_origin_only_for_bundled_assets",
         "sample_persistence": "none",
         "raw_video_persistence": "none",
         "clear_on_stop": True,
@@ -43,6 +44,8 @@ def main() -> None:
     require('id="consent-checkbox" type="checkbox"' in html, "consent checkbox is missing or not opt-in", failures)
     require('id="start-button" type="button" disabled' in html, "start button is not disabled by default", failures)
     require('id="stop-button" type="button"' in html, "stop button is missing", failures)
+    require("connect-src 'self'" in html, "CSP does not allow same-origin bundled resources", failures)
+    require("connect-src 'none'" not in html, "CSP blocks WebGazer's same-origin resource loader", failures)
 
     required_tokens = [
         "window.saveDataAcrossSessions = false",
@@ -72,7 +75,8 @@ def main() -> None:
         raise SystemExit(1)
     print("CONTRACT_TESTS_VALID")
     print("camera_started_by_automation=False")
-    print("network_used_by_adapter=False")
+    print("external_network_used_by_adapter=False")
+    print("same_origin_assets_allowed=True")
     print("persistent_samples=False")
 
 
