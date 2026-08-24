@@ -75,6 +75,7 @@ def main() -> None:
         "037-codeine-objective-oracle.md",
         "038-vizz-gaze-quality-gate.md",
         "039-codeine-executable-oracle.md",
+        "040-laboratory-completion-audit.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

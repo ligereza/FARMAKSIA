@@ -230,13 +230,21 @@ mutaciones de falla, recuperación y acción cambiaron el resultado del oracle;
 el módulo no lee el score. La evidencia sigue limitada a una especificación de
 tarea sintética y no a una experiencia humana.
 
+La auditoría 040 recorrió los requisitos de esta fase: prototipos mínimos,
+literatura, adopción, contratos, procedencia, kill tests, límites, decisiones y
+seguridad. `LAB_COMPLETION_VALID` confirma que la fundación reproducible está
+cubierta; VIZZ y CODE-INE conservan desconocidos humanos explícitos, X-ANA-X
+está archivado y KETAMINE sigue en cuarentena. Esto cierra la fase de fundación,
+no las hipótesis científicas o neurobiológicas.
+
 La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
 
-## Frente activo
+## Reapertura futura
 
-El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
+Los siguientes frentes solo se reabrirán si reducen un desconocido declarado y
+respetan la auditoría 040:
 
 1. CODEINE: mantener separadas transición base, score declarado, oracle
    ejecutable y estado humano; exigir que las mutaciones relevantes sean

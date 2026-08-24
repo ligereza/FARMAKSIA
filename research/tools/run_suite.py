@@ -68,6 +68,7 @@ def main() -> None:
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
     command("validate empty corpus manifest", python_script("research/tools/validate_corpus_manifest.py"), "CORPUS_VALID")
     command("audit consolidated lab state", python_script("research/tools/audit_lab_state.py"), "LAB_STATE_VALID")
+    command("audit laboratory completion", python_script("research/tools/audit_lab_completion.py"), "LAB_COMPLETION_VALID")
     command("experiment 001", python_script("experiments/001-representation-boundary/run_experiment.py"))
     command("provenance 001", python_script("research/tools/validate_provenance.py", provenance[0]), "PROVENANCE_VALID")
     command("experiment 002", python_script("experiments/002-continuation-boundary/run_experiment.py"))

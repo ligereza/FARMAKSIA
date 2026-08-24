@@ -67,6 +67,7 @@ cuando no existe un archivo humano.
 - [Literatura de oráculos verificables CODE-INE](research/literature/013-codeine-verifiable-objective.md)
 - [Literatura de oracle ejecutable y mutation testing CODE-INE](research/literature/015-codeine-executable-oracle-mutation.md)
 - [Decisión de oracle ejecutable CODE-INE](research/decisions/039-codeine-executable-oracle.md)
+- [Auditoría de completitud de la fundación](research/decisions/040-laboratory-completion-audit.md)
 - [Literatura de calidad de mirada y herramientas VIZZ](research/literature/014-vizz-gaze-quality-tools.md)
 - [Decisión de compuerta gaze-contingent VIZZ](research/decisions/038-vizz-gaze-quality-gate.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
