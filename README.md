@@ -13,7 +13,7 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 |---|---|
 | CODE-INE | descriptor provisional de transición; interoperable con VIZZ 020; operador independiente eliminado |
 | X-ANA-X | archivado como hipótesis independiente; protocolo de analogía conservado |
-| KETAMINE | contrato provisional; novedad muy debilitada frente a índices y pérdidas geométricas/compositivas conocidas |
+| KETAMINE | en cuarentena; sin prototipo activo ni teoría forzada |
 | VIZZ | control 022 de consulta, exposición e instrumentación manual opt-in; sin datos humanos, eficacia desconocida |
 
 No se implementan operadores como API ni se fija arquitectura mientras sus
@@ -51,6 +51,7 @@ cuando no existe un archivo humano.
 - [Puente VIZZ → CODE-INE](experiments/020-vizz-codeine-event-bridge/results.md)
 - [Compuerta del adaptador manual VIZZ](experiments/021-manual-adapter-gate/results.md)
 - [Puente largo VIZZ → CODE-INE](experiments/022-vizz-codeine-long-bridge/results.md)
+- [Auditoría consolidada de estado](research/decisions/032-laboratory-state-audit.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
 - [Compuerta de adopción de herramientas](research/decisions/011-tool-adoption-gate.md)

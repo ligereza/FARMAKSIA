@@ -183,6 +183,10 @@ recuperó `c04 → c07` en CODE-INE sin escribir una sesión. Esto demuestra que
 contrato puede expresar la transición buscada; no demuestra percepción humana,
 repetición subjetiva ni deriva.
 
+La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
+X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
+diseño. Los desconocidos humanos permanecen explícitos.
+
 ## Frente activo
 
 El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
