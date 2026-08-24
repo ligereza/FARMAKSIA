@@ -16,9 +16,10 @@ ocular. El marcador no es una medición clínica ni una receta óptica.
 
 - La cámara está apagada al cargar la página y el consentimiento no está
   marcado por defecto.
-- La página carga una copia local de WebGazer.js 3.5.3; no usa CDN ni red
-  externa. La política CSP permite únicamente `fetch` al mismo `localhost`
-  para los recursos internos que WebGazer pueda necesitar.
+- La página carga una copia local de WebGazer.js 3.5.3 y los assets oficiales
+  de `@mediapipe/face_mesh` 0.4.1633559619; no usa CDN ni red externa. La
+  política CSP permite únicamente `fetch` al mismo `localhost` para esos
+  recursos internos.
 - `saveDataAcrossSessions(false)` se fija antes de iniciar. El adaptador no
   guarda vídeo ni coordenadas; solo mantiene el último punto y un contador en
   memoria para la visualización.
@@ -58,6 +59,11 @@ GPL-3.0-or-later; el código se conserva en `vendor/` junto a su licencia. La
 versión 3.5.3 declara que la maintenance oficial terminó el 24-02-2026, por lo
 que esta adopción queda experimental y requiere revisión de licencia antes de
 incorporarse a un producto con otra licencia.
+
+Su tracker por defecto requiere además los assets locales de
+[`@mediapipe/face_mesh`](https://www.npmjs.com/package/@mediapipe/face_mesh/v/0.4.1633559619),
+declarados Apache-2.0 y conservados en `mediapipe/face_mesh/`. Sin esa carpeta,
+`webgazer.begin()` falla dentro del bundle minificado.
 
 La evidencia científica registrada en
 [`research/literature/014-vizz-gaze-quality-tools.md`](../../research/literature/014-vizz-gaze-quality-tools.md)

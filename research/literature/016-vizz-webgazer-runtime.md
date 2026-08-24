@@ -17,7 +17,10 @@ auto-calibración por interacción y consentimiento del usuario. El paquete
 declara `GPL-3.0-or-later` y la release 3.5.3 comunica que es la última release
 planificada, con maintenance oficial terminada y soporte comunitario posible.
 La licencia y el texto GPLv3 están archivados junto al bundle para que el
-runtime no dependa de un CDN. El navegador debe poder resolver los recursos
+runtime no dependa de un CDN. WebGazer 3.5.3 declara por defecto
+`faceMeshSolutionPath: "./mediapipe/face_mesh"`; esos assets se incorporan
+desde `@mediapipe/face_mesh` 0.4.1633559619 con licencia Apache-2.0. El
+navegador debe poder resolver los recursos
 internos mediante el mismo origen local; por ello la CSP de 030 permite
 `connect-src 'self'` y bloquea orígenes externos.
 

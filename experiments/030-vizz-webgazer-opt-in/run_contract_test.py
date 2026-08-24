@@ -21,6 +21,18 @@ def main() -> None:
     html = (HERE / "index.html").read_text(encoding="utf-8")
     js = (HERE / "app.js").read_text(encoding="utf-8")
     vendor = HERE / "vendor" / "webgazer.js"
+    mediapipe = HERE / "mediapipe" / "face_mesh"
+    media_assets = [
+        "face_mesh.binarypb",
+        "face_mesh_solution_packed_assets.data",
+        "face_mesh_solution_packed_assets_loader.js",
+        "face_mesh_solution_simd_wasm_bin.data",
+        "face_mesh_solution_simd_wasm_bin.js",
+        "face_mesh_solution_simd_wasm_bin.wasm",
+        "face_mesh_solution_wasm_bin.js",
+        "face_mesh_solution_wasm_bin.wasm",
+        "face_mesh.js",
+    ]
 
     require(policy["schema"] == "farmaxia:vizz-webgazer-runtime:0.1", "wrong runtime policy schema", failures)
     require(policy["dependency"]["version"] == "3.5.3", "WebGazer version is not pinned", failures)
@@ -38,6 +50,11 @@ def main() -> None:
     require(vendor.is_file() and vendor.stat().st_size > 1_000_000, "local WebGazer bundle is missing or unexpectedly small", failures)
     require((HERE / "vendor" / "LICENSE.md").is_file(), "WebGazer license file is missing", failures)
     require((HERE / "vendor" / "GPLv3.md").is_file(), "GPLv3 text is missing", failures)
+    require(mediapipe.is_dir(), "local MediaPipe Face Mesh directory is missing", failures)
+    for asset in media_assets:
+        require((mediapipe / asset).is_file(), f"MediaPipe asset is missing: {asset}", failures)
+    require((mediapipe / "THIRD_PARTY_NOTICE.md").is_file(), "MediaPipe third-party notice is missing", failures)
+    require('faceMeshSolutionPath:"./mediapipe/face_mesh"' in vendor.read_text(encoding="utf-8"), "WebGazer local tracker path is not pinned", failures)
 
     local_scripts = re.findall(r'<script[^>]+src="([^"]+)"', html, flags=re.IGNORECASE)
     require(local_scripts == ["./vendor/webgazer.js", "./app.js"], "HTML has an unpinned or remote script", failures)

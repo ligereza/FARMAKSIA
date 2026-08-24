@@ -23,7 +23,7 @@
       "id": "farmaxia:webgazer-protocol-030",
       "type": "entity",
       "path": "README.md",
-      "sha256": "6C830BCBF718F377862981934B47591CA81B42CF6B170E520C770B3803C1C20D",
+      "sha256": "8DFD6EF8E39E506753677BD5CF400DFD28DCB94828039BA9AD7776963961CD72",
       "role": "real_webcam_opt_in_experiment_contract",
       "authority": "human_reviewed_record"
     },
@@ -31,7 +31,7 @@
       "id": "farmaxia:webgazer-policy-030",
       "type": "entity",
       "path": "runtime_policy.json",
-      "sha256": "B87FE264A16D79590C258C50D82C29ECAA4BC7CAD2BE6518E1BDCB5BC1D10C1C",
+      "sha256": "3552FF9E00595BD2D963C2B519AA01585FCBBAB01314B8EAF6702A886AD83EF9",
       "role": "privacy_and_quality_runtime_policy",
       "authority": "human_declared_control"
     },
@@ -55,7 +55,7 @@
       "id": "farmaxia:webgazer-static-audit-030",
       "type": "entity",
       "path": "run_contract_test.py",
-      "sha256": "9DB6D4B799F13130374C12DCBDDDA2718F6582C758E5E5FAF4145404CB4E4B62",
+      "sha256": "5C668CE65E21E7D91BD9E6595D210AE90D0B676CF9D71BB452D7050F59829BBB",
       "role": "privacy_consent_and_cleanup_static_audit",
       "authority": "human_declared_tool"
     },
@@ -63,7 +63,7 @@
       "id": "farmaxia:webgazer-results-030",
       "type": "entity",
       "path": "results.md",
-      "sha256": "F9159D3C1C886166C5958DB7ABD73997FD16F8821CC4C5D348325FF24A6BEDAC",
+      "sha256": "6B4E883A4FA9BA968667287E7BE7AB6E724BEEE12578171B4AA18429BF4EE215",
       "role": "static_contract_measurement_record",
       "authority": "human_reviewed_record"
     },
@@ -100,10 +100,90 @@
       "authority": "human_reviewed_record"
     },
     {
+      "id": "farmaxia:mediapipe-binarypb-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh.binarypb",
+      "sha256": "139546BF05AEBB33E2611B6B945F3A1629C316CA924E33CEC1547C85DDEF9F53",
+      "role": "local_mediapipe_graph_asset",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-packed-data-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh_solution_packed_assets.data",
+      "sha256": "DBE5905C582C0462CDAEA17E7E6ECEA92EDAA8CCCC515C5E2E7291F2CBB5FB99",
+      "role": "local_mediapipe_packed_asset",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-packed-loader-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh_solution_packed_assets_loader.js",
+      "sha256": "E5DE8685B299184813F7CEC668E499023937AE521B70F60CD0FC4832930446E0",
+      "role": "local_mediapipe_loader",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-simd-data-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh_solution_simd_wasm_bin.data",
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+      "role": "local_mediapipe_simd_data_asset",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-simd-js-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh_solution_simd_wasm_bin.js",
+      "sha256": "CA291877AFB9C13308CF6BE42F23CD39F1ADF0036BB63ECAD2CE16073BCF07C7",
+      "role": "local_mediapipe_simd_loader",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-simd-wasm-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh_solution_simd_wasm_bin.wasm",
+      "sha256": "FB9E9CFE8B83A914E40EAB2EFD3B0D92A61F82A7C968589F223AB2A7E331D314",
+      "role": "local_mediapipe_simd_binary",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-wasm-js-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh_solution_wasm_bin.js",
+      "sha256": "0A532AE8450E7E5F2788CC92AD190210F721446D3FD9CB259FDDA958E66102C1",
+      "role": "local_mediapipe_loader_fallback",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-wasm-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh_solution_wasm_bin.wasm",
+      "sha256": "54522FA25C505BF094242F969B4E4919125EB0DADCCB568F2AF171BBD65865F9",
+      "role": "local_mediapipe_binary_fallback",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-face-mesh-js-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/face_mesh.js",
+      "sha256": "5DB8555AC80CA2AD7366FBB3EA53C0D0959609FC9ABB7B8BE37A74EC1AC4BA9C",
+      "role": "local_mediapipe_solution_runtime",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:mediapipe-notice-030",
+      "type": "entity",
+      "path": "mediapipe/face_mesh/THIRD_PARTY_NOTICE.md",
+      "sha256": "38BBCA5C2CBD995279CD24D364924030AAA99B3A3358B31067F4ADC734121BB9",
+      "role": "mediapipe_license_and_source_notice",
+      "authority": "human_reviewed_record"
+    },
+    {
       "id": "farmaxia:webgazer-literature-016",
       "type": "entity",
       "path": "../../research/literature/016-vizz-webgazer-runtime.md",
-      "sha256": "B963A74A29874434856A80878816EDF94B8BFB4753E2478ABFF35134B323D99B",
+      "sha256": "D3CE893C33E4FA34F2515C1A67D94A8EE24D476D6843FC859914132E7ABB4FC1",
       "role": "primary_runtime_and_scientific_limit_record",
       "authority": "human_reviewed_record"
     }
@@ -119,6 +199,7 @@
         "farmaxia:webgazer-license-030",
         "farmaxia:webgazer-gpl-030",
         "farmaxia:webgazer-notice-030",
+        "farmaxia:mediapipe-notice-030",
         "farmaxia:webgazer-literature-016"
       ],
       "generated": [],
@@ -132,7 +213,16 @@
         "farmaxia:webgazer-page-030",
         "farmaxia:webgazer-runtime-030",
         "farmaxia:webgazer-static-audit-030",
-        "farmaxia:webgazer-vendor-030"
+        "farmaxia:webgazer-vendor-030",
+        "farmaxia:mediapipe-binarypb-030",
+        "farmaxia:mediapipe-packed-data-030",
+        "farmaxia:mediapipe-packed-loader-030",
+        "farmaxia:mediapipe-simd-data-030",
+        "farmaxia:mediapipe-simd-js-030",
+        "farmaxia:mediapipe-simd-wasm-030",
+        "farmaxia:mediapipe-wasm-js-030",
+        "farmaxia:mediapipe-wasm-030",
+        "farmaxia:mediapipe-face-mesh-js-030"
       ],
       "generated": ["farmaxia:webgazer-results-030"],
       "agent": "farmaxia:python-runner"
@@ -157,6 +247,8 @@
       "required_entities": [
         "farmaxia:webgazer-runtime-030",
         "farmaxia:webgazer-static-audit-030",
+        "farmaxia:mediapipe-face-mesh-js-030",
+        "farmaxia:mediapipe-simd-wasm-030",
         "farmaxia:webgazer-results-030"
       ]
     }

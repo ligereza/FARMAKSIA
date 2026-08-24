@@ -8,6 +8,14 @@
     "license": "GPL-3.0-or-later",
     "maintenance": "official_maintenance_ended_2026-02-24"
   },
+  "runtime_assets": {
+    "tracker": "MediaPipe Face Mesh",
+    "package": "@mediapipe/face_mesh",
+    "version": "0.4.1633559619",
+    "license": "Apache-2.0",
+    "path": "./mediapipe/face_mesh",
+    "external_fetch_allowed": false
+  },
   "privacy": {
     "consent_required": true,
     "camera_default": "off",

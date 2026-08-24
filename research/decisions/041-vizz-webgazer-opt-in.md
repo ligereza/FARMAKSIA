@@ -5,7 +5,8 @@ Fecha: 2026-08-24
 ## Evidencia nueva
 
 El experimento 030 implementa una página ejecutable que carga WebGazer.js
-3.5.3 desde `vendor/`, solicita cámara solo después de una acción de
+3.5.3 desde `vendor/` y sus assets MediaPipe Face Mesh desde
+`mediapipe/face_mesh/`, solicita cámara solo después de una acción de
 consentimiento, ofrece nueve objetivos de calibración y dibuja un marcador con
 predicciones recibidas en memoria. El test estático pasa y confirma que el
 adaptador no contiene CDN, beacons, almacenamiento web ni una ruta de
