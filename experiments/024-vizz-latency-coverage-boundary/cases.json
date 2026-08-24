@@ -1,0 +1,11 @@
+{
+  "schema": "farmaxia:vizz-latency-coverage-cases:0.1",
+  "focus_radius": 15,
+  "latencies": [
+    {"id": "zero", "latency_ms": 0, "expected_classification": "available"},
+    {"id": "within_fixture_edge", "latency_ms": 100, "expected_classification": "available"},
+    {"id": "past_fixture_edge", "latency_ms": 101, "expected_classification": "unavailable"},
+    {"id": "moderate_delay", "latency_ms": 250, "expected_classification": "unavailable"},
+    {"id": "large_delay", "latency_ms": 1000, "expected_classification": "unavailable"}
+  ]
+}

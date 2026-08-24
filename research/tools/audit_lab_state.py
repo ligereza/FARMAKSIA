@@ -45,6 +45,7 @@ def main() -> None:
         "021-manual-adapter-gate",
         "022-vizz-codeine-long-bridge",
         "023-vizz-codeine-observability-boundary",
+        "024-vizz-latency-coverage-boundary",
     ]
     for experiment in required_experiments:
         directory = ROOT / "experiments" / experiment
@@ -58,6 +59,7 @@ def main() -> None:
         "030-manual-adapter-gate.md",
         "031-long-vizz-codeine-bridge.md",
         "033-vizz-codeine-observability-boundary.md",
+        "034-vizz-latency-coverage-boundary.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

@@ -190,6 +190,12 @@ ganancia o reclasificar una acción produjo una entrada formalmente válida pero
 literatura 010 añade latencia y calidad de medición como límites previos a
 incorporar eye tracking.
 
+El experimento 024 modeló una trayectoria de mirada sintética con latencia
+declarada. Cuando el ancla o cualquier evento posterior quedó fuera del foco,
+la consulta pasó a `unavailable`; el runner no derivó CODE-INE desde el
+subconjunto visible. El borde 100/101 ms pertenece al fixture y no es un
+umbral fisiológico.
+
 La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
@@ -208,7 +214,7 @@ X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
-`research/literature/006–009`. No se incorporará KETAMINE al prototipo hasta
+`research/literature/006–010`. No se incorporará KETAMINE al prototipo hasta
 que aparezca una experiencia que lo justifique.
 
 ## Regla de honestidad del loop

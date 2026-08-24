@@ -1,0 +1,140 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:024-vizz-latency-coverage-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_synthetic_latency_and_coverage_contract"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_delayed_gaze_fixture_and_coverage_gate",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:latency-protocol-024",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "F9B53A808A8FDAE97319ACA16ACD9D05EAF0B276F7C3EEAE688F577E959FCD2E",
+      "role": "latency_coverage_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:latency-cases-024",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "DF07999C4DF0C6002FDC0684340645AE89D8E401F66FFADB59C8C699A84615B2",
+      "role": "declared_latency_profiles",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:latency-trace-024",
+      "type": "entity",
+      "path": "trace.json",
+      "sha256": "D3DA18D1788491C6B530E082A1A0477AC60D8C477C2E4BDC3BC1D8040937109F",
+      "role": "synthetic_events_and_gaze_samples",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:latency-codeine-024",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "codeine_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:latency-runner-024",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "E4B6D6D3A4883D1B911C90A11CACBA81D4469DB22EF1075726855790F28BFB99",
+      "role": "delayed_renderer_and_coverage_gate",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:latency-kill-test-024",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "8043B866473631DF28F255A0F6926E9297455794043541FD1B6A0AB8493953E1",
+      "role": "latency_coverage_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:latency-results-024",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "340F2A3EEE04CC8531B42234905F21824FC3EC77A63DCBF58035C52487F271C3",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:latency-literature-010",
+      "type": "entity",
+      "path": "../../research/literature/010-vizz-observability-boundary.md",
+      "sha256": "C595C27B5486705421D643E2F415A7D21CACF1E6B94A50ECF6F84BBC260855F2",
+      "role": "latency_and_eye_tracking_boundary_literature",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-latency-024",
+      "type": "activity",
+      "used": [
+        "farmaxia:latency-protocol-024",
+        "farmaxia:latency-cases-024",
+        "farmaxia:latency-trace-024",
+        "farmaxia:latency-codeine-024",
+        "farmaxia:latency-literature-010"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-latency-024",
+      "type": "activity",
+      "used": [
+        "farmaxia:latency-cases-024",
+        "farmaxia:latency-trace-024",
+        "farmaxia:latency-codeine-024",
+        "farmaxia:latency-runner-024"
+      ],
+      "generated": ["farmaxia:latency-results-024"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-latency-kill-tests-024",
+      "type": "activity",
+      "used": ["farmaxia:latency-results-024", "farmaxia:latency-kill-test-024"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:latency-coverage-024",
+      "expression": "does delayed gaze exposure preserve complete coverage of the global repetition query",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:latency-cases-024", "farmaxia:latency-trace-024", "farmaxia:latency-results-024"]
+    },
+    {
+      "id": "farmaxia:query:partial-coverage-gate-024",
+      "expression": "does incomplete exposure remain unavailable rather than producing a partial CODE-INE transition",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:latency-runner-024", "farmaxia:latency-kill-test-024", "farmaxia:latency-results-024"]
+    }
+  ],
+  "unknowns": [
+    "What end-to-end latency a real device would produce",
+    "Whether a person notices the delayed focus or changes task behavior",
+    "Whether peripheral context is needed for a human to label the transition"
+  ]
+}
