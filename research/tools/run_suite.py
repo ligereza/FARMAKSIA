@@ -58,6 +58,7 @@ def main() -> None:
         "experiments/022-vizz-codeine-long-bridge/provenance.json",
         "experiments/023-vizz-codeine-observability-boundary/provenance.json",
         "experiments/024-vizz-latency-coverage-boundary/provenance.json",
+        "experiments/025-vizz-display-condition-invariance/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -512,6 +513,41 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 024", python_script("research/tools/validate_provenance.py", provenance[23]), "PROVENANCE_VALID")
+
+    display = subprocess.run(
+        python_script("experiments/025-vizz-display-condition-invariance/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if display.returncode != 0:
+        raise RuntimeError("experiment 025 failed")
+    display_result = json.loads(display.stdout)
+    if (
+        display_result["case_count"],
+        display_result["classification_counts"],
+        display_result["all_expected_classifications"],
+        display_result["full_display_invariant"],
+        display_result["baseline_transition"]["last_significant_improvement"],
+        display_result["baseline_transition"]["repetition_entry"],
+        display_result["human_data"],
+        display_result["devices_started"],
+        display_result["network_used"],
+        display_result["raw_capture"],
+        display_result["physiological_inference"],
+        display_result["pharmacological_inference"],
+        display_result["optical_prescription_applied"],
+    ) != (6, {"available": 4, "unavailable": 2}, True, True, "c04", "c07", False, False, False, False, False, False, False):
+        raise RuntimeError("experiment 025 display condition invariance failure")
+    print("PASS experiment 025")
+    command(
+        "kill test VIZZ display condition 025",
+        python_script("experiments/025-vizz-display-condition-invariance/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 025", python_script("research/tools/validate_provenance.py", provenance[24]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

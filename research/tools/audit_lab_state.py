@@ -32,6 +32,7 @@ def main() -> None:
     check("UNASSIGNED / QUARANTINED" in loop, "loop quarantine contract is missing", failures)
     check("X-ANA-X" in loop and "archiva" in loop, "loop archive record is missing", failures)
     check((ROOT / "research" / "literature" / "010-vizz-observability-boundary.md").is_file(), "observability literature record is missing", failures)
+    check((ROOT / "research" / "literature" / "011-vizz-display-conditions.md").is_file(), "display condition literature record is missing", failures)
 
     required_experiments = [
         "013-vizz-perceptual-adaptation",
@@ -46,6 +47,7 @@ def main() -> None:
         "022-vizz-codeine-long-bridge",
         "023-vizz-codeine-observability-boundary",
         "024-vizz-latency-coverage-boundary",
+        "025-vizz-display-condition-invariance",
     ]
     for experiment in required_experiments:
         directory = ROOT / "experiments" / experiment
@@ -60,6 +62,7 @@ def main() -> None:
         "031-long-vizz-codeine-bridge.md",
         "033-vizz-codeine-observability-boundary.md",
         "034-vizz-latency-coverage-boundary.md",
+        "035-vizz-display-condition-invariance.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

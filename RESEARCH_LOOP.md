@@ -196,6 +196,12 @@ la consulta pasó a `unavailable`; el runner no derivó CODE-INE desde el
 subconjunto visible. El borde 100/101 ms pertenece al fixture y no es un
 umbral fisiológico.
 
+El experimento 025 verificó que los perfiles completos de día, tarde y noche
+no mutan el fingerprint semántico. Un foco nocturno puede conservar la
+consulta `c04 → c07` aunque pierda contexto anterior, pero un foco sin ancla o
+un campo agregado queda `unavailable`. La condición `night` no se interpreta
+como pupila, melatonina, fatiga, ansiedad, intoxicación ni receta óptica.
+
 La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
@@ -214,7 +220,7 @@ X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
-`research/literature/006–010`. No se incorporará KETAMINE al prototipo hasta
+`research/literature/006–011`. No se incorporará KETAMINE al prototipo hasta
 que aparezca una experiencia que lo justifique.
 
 ## Regla de honestidad del loop

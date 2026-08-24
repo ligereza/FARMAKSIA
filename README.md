@@ -14,7 +14,7 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 | CODE-INE | descriptor provisional de transición; interoperable con VIZZ 020; operador independiente eliminado |
 | X-ANA-X | archivado como hipótesis independiente; protocolo de analogía conservado |
 | KETAMINE | en cuarentena; sin prototipo activo ni teoría forzada |
-| VIZZ | control 022 de consulta, exposición e instrumentación manual opt-in; sin datos humanos, eficacia desconocida |
+| VIZZ | control 025 de consulta, exposición y condiciones de display; instrumentación manual opt-in; sin datos humanos, eficacia desconocida |
 
 No se implementan operadores como API ni se fija arquitectura mientras sus
 kill tests sigan abiertos.
@@ -53,9 +53,12 @@ cuando no existe un archivo humano.
 - [Puente largo VIZZ → CODE-INE](experiments/022-vizz-codeine-long-bridge/results.md)
 - [Frontera de observabilidad VIZZ → CODE-INE](experiments/023-vizz-codeine-observability-boundary/results.md)
 - [Frontera de latencia y cobertura VIZZ](experiments/024-vizz-latency-coverage-boundary/results.md)
+- [Invariancia de condición de display VIZZ](experiments/025-vizz-display-condition-invariance/results.md)
 - [Auditoría consolidada de estado](research/decisions/032-laboratory-state-audit.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
+- [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Literatura de observabilidad VIZZ](research/literature/010-vizz-observability-boundary.md)
+- [Literatura de condiciones de display VIZZ](research/literature/011-vizz-display-conditions.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
 - [Compuerta de adopción de herramientas](research/decisions/011-tool-adoption-gate.md)

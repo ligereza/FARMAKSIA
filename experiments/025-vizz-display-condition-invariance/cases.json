@@ -1,0 +1,72 @@
+{
+  "schema": "farmaxia:vizz-display-condition-cases:0.1",
+  "required_query_event_ids": ["c04", "c05", "c06", "c07", "c08"],
+  "profiles": [
+    {
+      "id": "day_full",
+      "condition": "day",
+      "representation": "full",
+      "visible_event_ids": "all",
+      "luminance": 1.0,
+      "contrast": 1.0,
+      "chromatic_shift": 0.0,
+      "text_scale": 1.0,
+      "expected_classification": "available"
+    },
+    {
+      "id": "evening_full",
+      "condition": "evening",
+      "representation": "full",
+      "visible_event_ids": "all",
+      "luminance": 0.7,
+      "contrast": 0.95,
+      "chromatic_shift": 0.2,
+      "text_scale": 1.0,
+      "expected_classification": "available"
+    },
+    {
+      "id": "night_full",
+      "condition": "night",
+      "representation": "full",
+      "visible_event_ids": "all",
+      "luminance": 0.35,
+      "contrast": 0.9,
+      "chromatic_shift": 0.4,
+      "text_scale": 1.1,
+      "expected_classification": "available"
+    },
+    {
+      "id": "night_focus_complete",
+      "condition": "night",
+      "representation": "focus",
+      "visible_event_ids": ["c04", "c05", "c06", "c07", "c08"],
+      "luminance": 0.35,
+      "contrast": 0.9,
+      "chromatic_shift": 0.4,
+      "text_scale": 1.25,
+      "expected_classification": "available"
+    },
+    {
+      "id": "night_focus_missing_anchor",
+      "condition": "night",
+      "representation": "focus",
+      "visible_event_ids": ["c05", "c06", "c07", "c08"],
+      "luminance": 0.35,
+      "contrast": 0.9,
+      "chromatic_shift": 0.4,
+      "text_scale": 1.25,
+      "expected_classification": "unavailable"
+    },
+    {
+      "id": "night_field",
+      "condition": "night",
+      "representation": "field",
+      "visible_event_ids": [],
+      "luminance": 0.35,
+      "contrast": 0.9,
+      "chromatic_shift": 0.4,
+      "text_scale": 1.0,
+      "expected_classification": "unavailable"
+    }
+  ]
+}

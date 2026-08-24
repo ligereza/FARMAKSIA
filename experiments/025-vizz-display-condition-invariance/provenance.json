@@ -1,0 +1,148 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:025-vizz-display-condition-invariance",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_display_condition_invariance_and_scope_limits"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_display_profiles_and_query_coverage_gate",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:display-protocol-025",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "116EFF6DA8BD1658108BE8FF952F12231733979D042AF5997A7DA965DD36F033",
+      "role": "display_condition_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:display-cases-025",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "B8DFE0AB4DEAFDC8D611771FA032803EC4A283C93C77B58903EAA3B147B33361",
+      "role": "declared_display_profiles",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:display-source-session-025",
+      "type": "entity",
+      "path": "../022-vizz-codeine-long-bridge/session.json",
+      "sha256": "09304E5A79EE805553D3C4AF186704DFF3D345CE4754E407E3448A588932A52C",
+      "role": "synthetic_task_session",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:display-bridge-025",
+      "type": "entity",
+      "path": "../020-vizz-codeine-event-bridge/run_experiment.py",
+      "sha256": "96940D7616B9924E226CA35241E2E65A7818B668E3F4A50A7FEA71ED6388B645",
+      "role": "vizz_codeine_normalizer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:display-codeine-025",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "codeine_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:display-runner-025",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "54B3582954A743644D0CF83ACFE44B10FBDC579BAC170A8BF39E3F8F1C4C01AA",
+      "role": "display_invariance_and_coverage_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:display-kill-test-025",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "7D1B1C8CB5D4AE6407EE17DB17190BCB0D42BE18BC5D7136A475A0404F4B87B6",
+      "role": "display_invariance_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:display-results-025",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "5483728CE1ED0213E9C587EC71396EA170337D0955F3CE3343616252F25A7EE0",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:display-literature-011",
+      "type": "entity",
+      "path": "../../research/literature/011-vizz-display-conditions.md",
+      "sha256": "B68EC09B13CB61A7873D551B39D03F0646E06B1CBAA3E30773376402FE534980",
+      "role": "screen_light_and_optics_literature",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-display-025",
+      "type": "activity",
+      "used": [
+        "farmaxia:display-protocol-025",
+        "farmaxia:display-cases-025",
+        "farmaxia:display-source-session-025",
+        "farmaxia:display-bridge-025",
+        "farmaxia:display-codeine-025",
+        "farmaxia:display-literature-011"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-display-025",
+      "type": "activity",
+      "used": [
+        "farmaxia:display-cases-025",
+        "farmaxia:display-source-session-025",
+        "farmaxia:display-runner-025"
+      ],
+      "generated": ["farmaxia:display-results-025"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-display-kill-tests-025",
+      "type": "activity",
+      "used": ["farmaxia:display-results-025", "farmaxia:display-kill-test-025"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:display-invariance-025",
+      "expression": "do display condition parameters preserve the semantic fingerprint of a full session",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:display-cases-025", "farmaxia:display-source-session-025", "farmaxia:display-results-025"]
+    },
+    {
+      "id": "farmaxia:query:display-coverage-025",
+      "expression": "does a focus without the anchor or an aggregate field remain unavailable",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:display-runner-025", "farmaxia:display-kill-test-025", "farmaxia:display-results-025"]
+    }
+  ],
+  "unknowns": [
+    "Whether any display profile changes human comfort or comprehension",
+    "Whether a human needs the lost context before the anchor to label repetition",
+    "Whether a real prescription and working distance change the useful display scale"
+  ]
+}
