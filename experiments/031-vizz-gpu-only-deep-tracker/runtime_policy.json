@@ -1,0 +1,49 @@
+{
+  "schema": "farmaxia:vizz-gpu-only-runtime:0.1",
+  "experiment": "farmaxia:experiment:031-vizz-gpu-only-deep-tracker",
+  "objective": "Verificar una ruta de seguimiento facial/gaze con inferencia ML exclusivamente en GPU antes de entrenar pesos de gaze.",
+  "gpu_policy": {
+    "required_api": "WebGPU",
+    "adapter_power_preference": "low-power",
+    "onnx_execution_providers": ["webgpu"],
+    "mediapipe_delegate": "GPU",
+    "cpu_or_wasm_fallback": false,
+    "fail_closed_code": "gpu_unavailable",
+    "target_processing_rate_hz": 18
+  },
+  "models": {
+    "face_landmarker": {
+      "source": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+      "role": "face_and_iris_landmarks",
+      "training_status": "official_pretrained_asset"
+    },
+    "tiny_gaze_encoder": {
+      "path": "./models/tiny_gaze_encoder.onnx",
+      "role": "GPU_pipeline_probe_not_gaze_predictor",
+      "training_status": "untrained_deterministic_smoke_model"
+    }
+  },
+  "privacy": {
+    "consent_required": true,
+    "camera_default": "off",
+    "network_allowed": false,
+    "network_scope": "same_origin_only_for_bundled_assets",
+    "sample_persistence": "none",
+    "raw_video_persistence": "none",
+    "clear_on_stop": true
+  },
+  "automation_boundary": {
+    "human_data": false,
+    "devices_started": false,
+    "network_used": false,
+    "raw_capture": false
+  },
+  "not_claimed": [
+    "gaze_accuracy",
+    "clinical_accuracy",
+    "attention_or_fatigue_inference",
+    "anxiety_or_neurotransmitter_inference",
+    "intoxication_detection",
+    "thermal_reduction_from_GPU"
+  ]
+}

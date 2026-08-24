@@ -1,0 +1,173 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:031-vizz-gpu-only-deep-tracker",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "sets_gpu_only_and_privacy_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "audits_static_contract_without_devices",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-031-readme",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "BAFAC825DFD36F940467AA3CD1DF0F6BB6B796A132EEEF9FC21992DBE4426811",
+      "role": "gpu_only_protocol_and_manual_test",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-031-policy",
+      "type": "entity",
+      "path": "runtime_policy.json",
+      "sha256": "53853A2697900F24A1AAE242AF401372C9B208E3F3561D2C9AE8EC849BBB05BF",
+      "role": "gpu_privacy_and_non_claim_policy",
+      "authority": "human_declared_control"
+    },
+    {
+      "id": "farmaxia:vizz-031-page",
+      "type": "entity",
+      "path": "index.html",
+      "sha256": "9B70C6239986C3670EAB8D3BEE6C746145D52E34F6656B8A286E3B7B2EF1916C",
+      "role": "local_opt_in_gpu_experiment_page",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-031-runtime",
+      "type": "entity",
+      "path": "app.js",
+      "sha256": "CF7EAA7F3385173C8F1B100EC60790BED614B4FDF4D5115BCC916237CA477511",
+      "role": "gpu_gate_landmarker_encoder_and_cleanup",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-031-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "sha256": "A407EE5985A015ADE868BDA6875DB2F09DD17A1F301E99711E94F6F432979B25",
+      "role": "static_gpu_only_privacy_and_asset_audit",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-031-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "928D01BAAA8D71607B1CF153353F2AC29D60DB4051E63A9054B0CC00C0077AE4",
+      "role": "evidence_and_unknowns_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-031-model-builder",
+      "type": "entity",
+      "path": "build_model.py",
+      "sha256": "1D401544CEE126AFEE76CDDCD80AEFF0792444D859DBC16535A15F90CBD98E7D",
+      "role": "reproducible_stdlib_onnx_probe_builder",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-031-model",
+      "type": "entity",
+      "path": "models/tiny_gaze_encoder.onnx",
+      "sha256": "85344528684884D9060B1613856DF47EFB53CDCA3A98D4224577406805CA7A65",
+      "role": "deterministic_untrained_gpu_smoke_model",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-031-face-model",
+      "type": "entity",
+      "path": "models/face_landmarker.task",
+      "sha256": "64184E229B263107BC2B804C6625DB1341FF2BB731874B0BCC2FE6544E0BC9FF",
+      "role": "official_mediapipe_face_landmarker_asset",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-031-ort",
+      "type": "entity",
+      "path": "vendor/ort.webgpu.min.js",
+      "sha256": "2D0BAC4406B97D87C2EE2F279A0E6AD089567E62283D41E7E535A40E5C03D2F5",
+      "role": "pinned_onnxruntime_webgpu_bundle",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-031-mediapipe-bundle",
+      "type": "entity",
+      "path": "vendor/tasks-vision/vision_bundle.mjs",
+      "sha256": "D885630C297C0B20B1FE86096CB06291C4C8080876F27852E724F24AC603713F",
+      "role": "pinned_mediapipe_tasks_vision_bundle",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-031-notice",
+      "type": "entity",
+      "path": "vendor/THIRD_PARTY_NOTICE.md",
+      "sha256": "B3529B18A3AA10109B6F8EC40354292962DEDEB6FA0BAFDB3CCBB5BFE5CC5FB3",
+      "role": "dependency_license_and_source_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-031-build-probe",
+      "type": "activity",
+      "label": "build deterministic ONNX probe",
+      "agent": "farmaxia:python-runner",
+      "used": ["farmaxia:vizz-031-model-builder"],
+      "generated": ["farmaxia:vizz-031-model"]
+    },
+    {
+      "id": "farmaxia:vizz-031-static-audit",
+      "type": "activity",
+      "label": "run GPU-only and privacy contract",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-031-policy",
+        "farmaxia:vizz-031-page",
+        "farmaxia:vizz-031-runtime",
+        "farmaxia:vizz-031-contract",
+        "farmaxia:vizz-031-model",
+        "farmaxia:vizz-031-face-model"
+      ],
+      "generated": ["farmaxia:vizz-031-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-031-query-onnxruntime",
+      "question": "Can the browser select ONNX Runtime WebGPU without requesting a CPU/WASM provider?",
+      "source": "https://onnxruntime.ai/docs/tutorials/web/ep-webgpu.html",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-031-runtime", "farmaxia:vizz-031-policy"]
+    },
+    {
+      "id": "farmaxia:vizz-031-query-mediapipe",
+      "question": "Does the web Face Landmarker API expose an explicit GPU delegate?",
+      "source": "https://github.com/google-ai-edge/mediapipe-samples-web/blob/main/src/workers/face-landmarker.worker.ts",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-031-runtime", "farmaxia:vizz-031-mediapipe-bundle"]
+    },
+    {
+      "id": "farmaxia:vizz-031-query-model",
+      "question": "What is the provenance of the face landmark model copied into the repository?",
+      "source": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-031-face-model"]
+    }
+  ],
+  "unknowns": [
+    "No browser WebGPU execution was available in the terminal session.",
+    "No thermal, FPS, latency or accuracy measurement has been made.",
+    "The encoder has no human-trained gaze weights and cannot support an accuracy claim.",
+    "MediaPipe GPU initialization behavior remains browser and driver dependent."
+  ]
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; worker-src 'self' blob:; connect-src 'self'; media-src 'self' blob:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>VIZZ 031 · GPU-only tracker</title>
+  <style>
+    :root { color-scheme: dark; --bg:#090d14; --panel:#111827; --line:#273449; --text:#e8eef8; --muted:#95a4ba; --accent:#6ee7b7; --warn:#fbbf24; --bad:#fb7185; }
+    * { box-sizing:border-box; }
+    html, body { height:100%; margin:0; background:radial-gradient(circle at 50% -15%, #1a2c40 0, var(--bg) 52%); color:var(--text); font:14px/1.45 system-ui, sans-serif; }
+    body { overflow:hidden; }
+    .topbar { min-height:58px; display:flex; align-items:center; gap:14px; padding:10px 16px; border-bottom:1px solid var(--line); background:rgba(9,13,20,.92); position:relative; z-index:5; }
+    .brand { margin-right:auto; font-weight:700; letter-spacing:.02em; }
+    .brand small { display:block; color:var(--muted); font-weight:400; font-size:11px; }
+    .status { max-width:330px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .status[data-kind="ok"] { color:var(--accent); }
+    .status[data-kind="warn"] { color:var(--warn); }
+    .status[data-kind="error"] { color:var(--bad); }
+    button, .consent { border:1px solid var(--line); border-radius:8px; background:#172235; color:var(--text); padding:8px 11px; cursor:pointer; }
+    button:hover:not(:disabled) { border-color:#5c7493; background:#1c2d46; }
+    button:disabled { cursor:not-allowed; opacity:.45; }
+    .consent { display:flex; align-items:center; gap:7px; padding:7px 10px; color:var(--muted); }
+    .consent input { accent-color:var(--accent); }
+    main { height:calc(100% - 58px); position:relative; }
+    #calibration-stage { position:absolute; inset:0; overflow:hidden; background:linear-gradient(145deg, rgba(18,31,48,.62), rgba(4,8,14,.72)); }
+    #calibration-stage::before { content:""; position:absolute; inset:7%; border:1px solid rgba(148,163,184,.12); border-radius:18px; pointer-events:none; }
+    .stage-card { position:absolute; top:22px; left:50%; transform:translateX(-50%); width:min(620px, calc(100% - 32px)); padding:16px 18px; border:1px solid rgba(148,163,184,.22); border-radius:14px; background:rgba(12,18,29,.83); backdrop-filter:blur(9px); text-align:center; pointer-events:none; }
+    .stage-card h1 { margin:0 0 5px; font-size:18px; }
+    .stage-card p { margin:0; color:var(--muted); }
+    #calibration-dot, #signal-marker { position:absolute; width:28px; height:28px; border-radius:50%; transform:translate(-50%, -50%); }
+    #calibration-dot { border:3px solid #fff; background:var(--accent); box-shadow:0 0 0 7px rgba(110,231,183,.14), 0 0 24px rgba(110,231,183,.8); cursor:pointer; display:none; z-index:3; }
+    #signal-marker { border:2px solid var(--warn); background:rgba(251,191,36,.4); box-shadow:0 0 18px rgba(251,191,36,.75); display:none; z-index:2; pointer-events:none; }
+    .telemetry { position:absolute; left:22px; bottom:20px; width:min(370px, calc(100% - 44px)); padding:12px 14px; border:1px solid rgba(148,163,184,.2); border-radius:12px; background:rgba(12,18,29,.78); color:var(--muted); pointer-events:none; }
+    .telemetry strong { color:var(--text); }
+    .telemetry code { color:var(--accent); }
+    #camera { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; left:-10px; top:-10px; }
+    .hidden { display:none !important; }
+    @media (max-width: 900px) { .status { max-width:170px; } .topbar { gap:7px; padding-inline:9px; } button, .consent { padding:7px 8px; } .consent span { display:none; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VIZZ 031 <small>Deep tracker GPU-only · experimento aislado</small></div>
+    <div id="status" class="status" data-kind="neutral" role="status">GPU requerida. No se solicita cámara.</div>
+    <label class="consent"><input id="consent-checkbox" type="checkbox"><span>Autorizo cámara local</span></label>
+    <button id="start-button" type="button" disabled>Iniciar</button>
+    <button id="reset-button" type="button" disabled>Recalibrar</button>
+    <button id="stop-button" type="button" disabled>Detener</button>
+  </header>
+  <main>
+    <section id="calibration-stage" aria-label="Área de calibración a pantalla completa">
+      <div class="stage-card">
+        <h1 id="stage-title">Pipeline GPU preparado para prueba</h1>
+        <p id="stage-message">El modelo de gaze todavía no tiene pesos entrenados. Esta primera rebanada verifica la ruta GPU y captura calibración en memoria.</p>
+      </div>
+      <button id="calibration-dot" type="button" aria-label="Punto de calibración"></button>
+      <div id="signal-marker" aria-hidden="true"></div>
+      <div class="telemetry">
+        <div>Backend ML: <strong id="backend-value">bloqueado</strong></div>
+        <div>Frames: <strong id="frames-value">0</strong> · Inferencias GPU: <strong id="inference-value">0</strong></div>
+        <div>Rostro: <strong id="face-value">sin señal</strong> · Muestras: <strong id="samples-value">0</strong></div>
+        <div>Última salida: <code id="output-value">—</code></div>
+      </div>
+    </section>
+    <video id="camera" playsinline muted aria-hidden="true"></video>
+  </main>
+  <script src="./vendor/ort.webgpu.min.js"></script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

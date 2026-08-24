@@ -64,6 +64,7 @@ def main() -> None:
         "experiments/028-vizz-gaze-quality-gate/provenance.json",
         "experiments/029-codeine-executable-oracle/provenance.json",
         "experiments/030-vizz-webgazer-opt-in/provenance.json",
+        "experiments/031-vizz-gpu-only-deep-tracker/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -695,6 +696,12 @@ def main() -> None:
         "CONTRACT_TESTS_VALID",
     )
     command("provenance 030", python_script("research/tools/validate_provenance.py", provenance[29]), "PROVENANCE_VALID")
+    command(
+        "contract test VIZZ GPU-only 031",
+        python_script("experiments/031-vizz-gpu-only-deep-tracker/run_contract_test.py"),
+        "CONTRACT_TESTS_VALID",
+    )
+    command("provenance 031", python_script("research/tools/validate_provenance.py", provenance[30]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
