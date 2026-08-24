@@ -48,6 +48,7 @@ def main() -> None:
         "experiments/012-curves-layers-boundary/provenance.json",
         "experiments/013-vizz-perceptual-adaptation/provenance.json",
         "experiments/014-vizz-decision-query/provenance.json",
+        "experiments/015-vizz-session-contract/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -203,6 +204,33 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 014", python_script("research/tools/validate_provenance.py", provenance[13]), "PROVENANCE_VALID")
+
+    vizz_session = subprocess.run(
+        python_script("experiments/015-vizz-session-contract/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if vizz_session.returncode != 0:
+        raise RuntimeError("experiment 015 failed")
+    vizz_session_result = json.loads(vizz_session.stdout)
+    if (
+        vizz_session_result["accepted_cases"],
+        vizz_session_result["human_data"],
+        vizz_session_result["devices_started"],
+        vizz_session_result["network_used"],
+        vizz_session_result["raw_capture"],
+    ) != (2, False, False, False, False):
+        raise RuntimeError("experiment 015 session boundary failure")
+    print("PASS experiment 015")
+    command(
+        "kill test VIZZ session 015",
+        python_script("experiments/015-vizz-session-contract/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 015", python_script("research/tools/validate_provenance.py", provenance[14]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

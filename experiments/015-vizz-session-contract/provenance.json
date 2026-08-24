@@ -1,0 +1,109 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:015-vizz-session-contract",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_consent_and_data_minimization_contract"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "validates_synthetic_session_envelopes",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-session-protocol-015",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "474D838CBD4B8F7FBB5E79F7BB6E2CED47ACDECDD9219543E7E1081150BEDB2A",
+      "role": "consent_and_data_minimization_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-session-cases-015",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "2777FA10273056BF825E266F4F22324875528FA5D7E5491B585AD3E1A6245786",
+      "role": "declared_synthetic_envelopes",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-session-runner-015",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "A7EBA5B874A8EFA3C807BCABD3EFD38B90C96CD3A1D0EC8A511FE7AD80AA5CEF",
+      "role": "session_envelope_validator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-session-kill-test-015",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "6856A687801D3A5D9A719AAB5A95B120CB6447FF6B8CBA64048544D558F042BF",
+      "role": "privacy_and_consent_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-session-results-015",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "093E63940F4EC321A8855A2382651FD9461F0697A909B5EE2CE24D521D0B037B",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-vizz-session-contract-015",
+      "type": "activity",
+      "used": ["farmaxia:vizz-session-protocol-015", "farmaxia:vizz-session-cases-015"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:validate-vizz-session-envelopes-015",
+      "type": "activity",
+      "used": [
+        "farmaxia:vizz-session-protocol-015",
+        "farmaxia:vizz-session-cases-015",
+        "farmaxia:vizz-session-runner-015"
+      ],
+      "generated": ["farmaxia:vizz-session-results-015"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-vizz-session-kill-tests-015",
+      "type": "activity",
+      "used": ["farmaxia:vizz-session-results-015", "farmaxia:vizz-session-kill-test-015"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:vizz-safe-default",
+      "expression": "does disabled capture produce zero events without consent",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-session-cases-015", "farmaxia:vizz-session-results-015"]
+    },
+    {
+      "id": "farmaxia:query:vizz-task-event-minimum",
+      "expression": "can opt-in task events preserve time, phase, action, gain and errors without raw content",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-session-cases-015", "farmaxia:vizz-session-results-015"]
+    }
+  ],
+  "unknowns": [
+    "Whether a real local session can be represented by abstract task events without harmful omissions",
+    "Whether a human would consent to or benefit from gaze-contingent adaptation",
+    "Whether any display adaptation improves decisions without reducing peripheral context"
+  ]
+}

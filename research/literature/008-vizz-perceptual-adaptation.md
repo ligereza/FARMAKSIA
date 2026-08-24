@@ -1,6 +1,6 @@
 # Investigación 008 — VIZZ como representación adaptada a la percepción
 
-Fecha: 2026-08-23
+Fecha: 2026-08-24
 
 ## Pregunta
 
@@ -105,13 +105,17 @@ carga cognitiva:
 | Herramienta | Uso posible | Decisión inicial |
 |---|---|---|
 | SVG/Canvas/GLSL | prototipos de representación, color, movimiento y espacio | adoptar primero, bajo costo |
-| WebGazer.js | mirada aproximada con webcam y procesamiento local | evaluar; mantenimiento oficial terminado en 2026 |
-| Pupil Core | pupila y mirada con hardware dedicado | candidato de investigación, costo alto |
-| PsychoPy/PsychoJS | estímulos, temporización y registro experimental | adoptar cuando exista un contraste perceptual concreto |
+| WebGazer.js | mirada aproximada con webcam y procesamiento local | no adoptar todavía: la versión 3.5.3 figura como funcional, pero el mantenimiento oficial terminó el 24-02-2026; exige consentimiento de webcam y su precisión local sigue sin medirse en FARMAXIA |
+| Pupil Core | pupila y mirada con hardware dedicado | no adoptar todavía: proyecto abierto y activo, pero requiere hardware, dependencias y una API de red; costo y complejidad altos para la compuerta actual |
+| PsychoPy/PsychoJS | estímulos, temporización y registro experimental | candidato posterior: la documentación 2026.1.0 cubre Builder, Coder y PsychoJS, pero todavía no existe una tarea perceptual humana que justifique añadir la dependencia |
+| Validador Python estándar | envelope opt-in de eventos abstractos sin dispositivos | adoptar ahora para probar el contrato 015; no registra pantalla, teclado, cámara, audio ni mirada |
 | OpenCV/MediaPipe | visión auxiliar y calibración | no introducir antes de necesitarla |
 
-Fuentes: https://github.com/brownhci/WebGazer,
-https://github.com/pupil-labs/pupil y https://psychopy.org/.
+Fuentes primarias consultadas el 2026-08-24:
+https://github.com/brownhci/WebGazer,
+https://github.com/pupil-labs/pupil,
+https://devdocs.psychopy.org/documentation.html y
+https://devdocs.psychopy.org/builder/.
 
 ## Hipótesis inicial de VIZZ
 

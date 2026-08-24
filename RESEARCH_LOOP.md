@@ -139,6 +139,11 @@ una ventana que incluía el ancla y todo el tramo posterior; el campo mantuvo
 una señal proxy, pero no la relación temporal completa. La frontera queda
 demostrada solo sobre la traza sintética.
 
+El experimento 015 cerró la compuerta de entrada para una futura sesión local:
+el estado por defecto produce cero eventos, el opt-in acepta únicamente
+eventos abstractos de tarea y el kill test rechaza texto crudo. No se inició
+ningún dispositivo ni se recogieron datos humanos.
+
 ## Frente activo
 
 El siguiente ciclo construirá tres prototipos sin infraestructura general:
@@ -147,9 +152,9 @@ El siguiente ciclo construirá tres prototipos sin infraestructura general:
    rush/mejora frente a repetición/deriva.
 2. XANAX: una cadena de analogía y búsqueda sobre un problema real pequeño,
    con transferencia y ruptura verificables.
-3. VIZZ: instrumentar una sesión local opt-in y verificar que los eventos
-   observados permitan repetir el contrato 014; solo si la medición lo exige,
-   evaluar eye tracking.
+3. VIZZ: probar el adaptador manual con una sesión local explícitamente
+   consentida, sin contenido personal, y verificar que sus eventos permitan
+   repetir el contrato 014; solo si la medición lo exige, evaluar eye tracking.
 
 Las herramientas candidatas y la investigación científica están registradas en
 `research/literature/006–009`. No se incorporará KETAMINE al prototipo hasta

@@ -1,0 +1,104 @@
+{
+  "schema": "farmaxia:vizz-session-cases:0.1",
+  "cases": [
+    {
+      "id": "safe-default-off",
+      "session": {
+        "schema": "farmaxia:vizz-session:0.1",
+        "consent": {
+          "granted": false,
+          "scope": "none",
+          "raw_capture": false
+        },
+        "capture": {
+          "enabled": false,
+          "source": "manual_event_adapter"
+        },
+        "events": []
+      },
+      "expected": "valid"
+    },
+    {
+      "id": "opt-in-task-events",
+      "session": {
+        "schema": "farmaxia:vizz-session:0.1",
+        "consent": {
+          "granted": true,
+          "scope": "task_events_only",
+          "raw_capture": false
+        },
+        "capture": {
+          "enabled": true,
+          "source": "manual_event_adapter"
+        },
+        "events": [
+          {
+            "event_id": "s01",
+            "t_ms": 0,
+            "kind": "objective",
+            "payload": {
+              "objective_id": "task-01",
+              "phase": "goal",
+              "action_class": "goal",
+              "gain": 0.0,
+              "errors": 0
+            }
+          },
+          {
+            "event_id": "s02",
+            "t_ms": 1000,
+            "kind": "action",
+            "payload": {
+              "objective_id": "task-01",
+              "phase": "build",
+              "action_class": "build",
+              "gain": 0.6,
+              "errors": 0
+            }
+          },
+          {
+            "event_id": "s03",
+            "t_ms": 2000,
+            "kind": "outcome",
+            "payload": {
+              "objective_id": "task-01",
+              "phase": "verify",
+              "action_class": "test",
+              "gain": 0.0,
+              "errors": 1,
+              "display_condition": "day"
+            }
+          }
+        ]
+      },
+      "expected": "valid"
+    },
+    {
+      "id": "reject-raw-text",
+      "session": {
+        "schema": "farmaxia:vizz-session:0.1",
+        "consent": {
+          "granted": true,
+          "scope": "task_events_only",
+          "raw_capture": false
+        },
+        "capture": {
+          "enabled": true,
+          "source": "manual_event_adapter"
+        },
+        "events": [
+          {
+            "event_id": "bad01",
+            "t_ms": 0,
+            "kind": "action",
+            "payload": {
+              "action_class": "build",
+              "text": "private content must not enter this contract"
+            }
+          }
+        ]
+      },
+      "expected": "invalid"
+    }
+  ]
+}
