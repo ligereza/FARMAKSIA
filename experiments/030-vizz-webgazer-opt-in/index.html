@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self' blob:; connect-src 'none'; media-src 'self' blob:; img-src 'self' data:; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta http-equiv="Permissions-Policy" content="camera=(self)">
+    <title>VIZZ · seguimiento ocular local</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #10151b;
+        --panel: #18212b;
+        --panel-2: #202d38;
+        --text: #e7edf2;
+        --muted: #a9b7c2;
+        --accent: #75e0c1;
+        --warn: #f6c66d;
+        --danger: #ff8c8c;
+        font-family: system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; background: var(--bg); color: var(--text); min-height: 100vh; }
+      main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+      h1, h2 { margin-top: 0; }
+      h1 { font-size: clamp(1.8rem, 4vw, 3rem); }
+      p, li { line-height: 1.55; }
+      .notice { border-left: 4px solid var(--warn); background: var(--panel); padding: 1rem; }
+      .layout { display: grid; grid-template-columns: minmax(250px, 0.8fr) minmax(420px, 1.2fr); gap: 1rem; align-items: start; }
+      .panel { background: var(--panel); border: 1px solid #30404d; border-radius: 12px; padding: 1rem; }
+      .consent { display: flex; gap: 0.7rem; align-items: flex-start; padding: 0.8rem; background: var(--panel-2); border-radius: 8px; }
+      .consent input { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; }
+      .buttons { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+      button { border: 1px solid #496071; border-radius: 7px; padding: 0.65rem 0.9rem; background: #2b3d4c; color: var(--text); cursor: pointer; font: inherit; }
+      button:hover:not(:disabled), button:focus-visible:not(:disabled) { border-color: var(--accent); }
+      button:disabled { cursor: not-allowed; opacity: 0.45; }
+      .danger { border-color: #995555; }
+      .status { min-height: 3.2rem; margin-top: 1rem; padding: 0.75rem; border-radius: 8px; background: var(--panel-2); }
+      .status[data-tone="ok"] { border-left: 4px solid var(--accent); }
+      .status[data-tone="warn"] { border-left: 4px solid var(--warn); }
+      .status[data-tone="error"] { border-left: 4px solid var(--danger); }
+      .metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.6rem; margin-top: 1rem; }
+      .metric { background: var(--panel-2); padding: 0.7rem; border-radius: 8px; }
+      .metric span { display: block; color: var(--muted); font-size: 0.84rem; }
+      .metric strong { display: block; font-size: 1.2rem; margin-top: 0.15rem; }
+      .calibration { position: relative; min-height: 600px; overflow: hidden; background: #0a0e12; border: 1px solid #30404d; border-radius: 12px; }
+      .calibration-intro { padding: 1rem; color: var(--muted); }
+      .calibration-dot { position: absolute; width: 34px; height: 34px; margin: -17px 0 0 -17px; padding: 0; border-radius: 50%; background: #334b5a; border: 3px solid #b9cad4; opacity: 0.55; }
+      .calibration-dot.visited { background: var(--accent); border-color: #e4fff7; opacity: 1; }
+      .calibration-dot:focus-visible { outline: 3px solid var(--warn); outline-offset: 5px; }
+      .dot-1 { left: 8%; top: 12%; } .dot-2 { left: 50%; top: 12%; } .dot-3 { left: 92%; top: 12%; }
+      .dot-4 { left: 8%; top: 50%; } .dot-5 { left: 50%; top: 50%; } .dot-6 { left: 92%; top: 50%; }
+      .dot-7 { left: 8%; top: 88%; } .dot-8 { left: 50%; top: 88%; } .dot-9 { left: 92%; top: 88%; }
+      #gaze-marker { display: none; position: fixed; width: 22px; height: 22px; margin: -11px 0 0 -11px; border: 3px solid var(--accent); border-radius: 50%; box-shadow: 0 0 0 5px #75e0c144, 0 0 18px #75e0c1; pointer-events: none; z-index: 10; }
+      .small { color: var(--muted); font-size: 0.9rem; }
+      code { color: var(--accent); }
+      @media (max-width: 820px) { .layout { grid-template-columns: 1fr; } .calibration { min-height: 480px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>VIZZ · seguimiento ocular real</h1>
+      <div class="notice">
+        <strong>Prototipo experimental, no clínico.</strong>
+        <p>La cámara permanece apagada hasta que marques el consentimiento y pulses iniciar. El procesamiento de WebGazer ocurre en esta pestaña. No se guardan vídeo ni coordenadas en disco. El marcador solo visualiza una estimación; no diagnostica atención, ansiedad, fatiga, pupila, intoxicación ni neuroquímica.</p>
+      </div>
+      <div class="layout" style="margin-top: 1rem;">
+        <section class="panel" aria-labelledby="control-title">
+          <h2 id="control-title">Control y consentimiento</h2>
+          <label class="consent" for="consent-checkbox">
+            <input id="consent-checkbox" type="checkbox">
+            <span>Entiendo que esta pestaña solicitará acceso temporal a mi cámara para estimar un punto de mirada, y acepto iniciar el seguimiento manualmente.</span>
+          </label>
+          <div class="buttons">
+            <button id="start-button" type="button" disabled>Iniciar seguimiento</button>
+            <button id="recalibrate-button" type="button" disabled>Recalibrar y borrar modelo</button>
+            <button id="stop-button" type="button" class="danger">Detener y borrar estado</button>
+          </div>
+          <div id="status" class="status" data-tone="warn" role="status" aria-live="polite">Cámara apagada. Marca el consentimiento para habilitar el inicio.</div>
+          <div class="metrics" aria-label="Métricas volátiles de la sesión">
+            <div class="metric"><span>Predicciones válidas</span><strong id="sample-count">0</strong></div>
+            <div class="metric"><span>Calibración</span><strong id="calibration-count">0 / 9</strong></div>
+            <div class="metric"><span>Última posición</span><strong id="last-position">—</strong></div>
+            <div class="metric"><span>Adaptación</span><strong id="adaptation-state">bloqueada</strong></div>
+          </div>
+          <p class="small">La posición y el contador desaparecen al detener. No hay exportación, almacenamiento web, telemetría ni red en este adaptador.</p>
+        </section>
+        <section class="calibration" aria-labelledby="calibration-title">
+          <div class="calibration-intro">
+            <h2 id="calibration-title">Calibración visible</h2>
+            <p>Mira cada punto y pulsa sobre él. Completa los nueve puntos después de iniciar; el marcador se habilita solo al terminar.</p>
+          </div>
+          <button class="calibration-dot dot-1" data-point="1" type="button" aria-label="Punto de calibración 1"></button>
+          <button class="calibration-dot dot-2" data-point="2" type="button" aria-label="Punto de calibración 2"></button>
+          <button class="calibration-dot dot-3" data-point="3" type="button" aria-label="Punto de calibración 3"></button>
+          <button class="calibration-dot dot-4" data-point="4" type="button" aria-label="Punto de calibración 4"></button>
+          <button class="calibration-dot dot-5" data-point="5" type="button" aria-label="Punto de calibración 5"></button>
+          <button class="calibration-dot dot-6" data-point="6" type="button" aria-label="Punto de calibración 6"></button>
+          <button class="calibration-dot dot-7" data-point="7" type="button" aria-label="Punto de calibración 7"></button>
+          <button class="calibration-dot dot-8" data-point="8" type="button" aria-label="Punto de calibración 8"></button>
+          <button class="calibration-dot dot-9" data-point="9" type="button" aria-label="Punto de calibración 9"></button>
+        </section>
+      </div>
+      <p class="small" style="margin-top: 1rem;">Para ejecutar: sirve el repositorio con <code>python -m http.server 8000</code> y abre esta carpeta en <code>localhost</code>. El análisis automático no inicia cámara.</p>
+    </main>
+    <div id="gaze-marker" aria-hidden="true"></div>
+    <script src="./vendor/webgazer.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

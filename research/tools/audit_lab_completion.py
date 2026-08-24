@@ -31,6 +31,7 @@ REQUIRED_EXPERIMENTS = [
     "027-codeine-objective-oracle",
     "028-vizz-gaze-quality-gate",
     "029-codeine-executable-oracle",
+    "030-vizz-webgazer-opt-in",
 ]
 
 DECISIONS = [
@@ -44,6 +45,7 @@ DECISIONS = [
     "037-codeine-objective-oracle.md",
     "038-vizz-gaze-quality-gate.md",
     "039-codeine-executable-oracle.md",
+    "041-vizz-webgazer-opt-in.md",
 ]
 
 LITERATURE = [
@@ -57,6 +59,7 @@ LITERATURE = [
     "013-codeine-verifiable-objective.md",
     "014-vizz-gaze-quality-tools.md",
     "015-codeine-executable-oracle-mutation.md",
+    "016-vizz-webgazer-runtime.md",
 ]
 
 
@@ -103,6 +106,7 @@ def main() -> None:
         ROOT / "experiments" / "016-codeine-session-state" / "provenance.json",
         ROOT / "experiments" / "028-vizz-gaze-quality-gate" / "provenance.json",
         ROOT / "experiments" / "029-codeine-executable-oracle" / "provenance.json",
+        ROOT / "experiments" / "030-vizz-webgazer-opt-in" / "provenance.json",
     ]
     for path in active_unknowns:
         manifest = json.loads(path.read_text(encoding="utf-8"))

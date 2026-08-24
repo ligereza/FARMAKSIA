@@ -1,0 +1,171 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:030-vizz-webgazer-opt-in",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_real_eye_tracking_opt_in_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "audits_static_runtime_contract_without_devices",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:webgazer-protocol-030",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "A318DCCE323419D2A94463864C856A18A434B8649E02FA5E02D61D67CCA7F004",
+      "role": "real_webcam_opt_in_experiment_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:webgazer-policy-030",
+      "type": "entity",
+      "path": "runtime_policy.json",
+      "sha256": "945AEF3D5AC9239C26778855A7E04F83E92654A86FCC985156E3AB69FB53C43E",
+      "role": "privacy_and_quality_runtime_policy",
+      "authority": "human_declared_control"
+    },
+    {
+      "id": "farmaxia:webgazer-page-030",
+      "type": "entity",
+      "path": "index.html",
+      "sha256": "B2BFCA207637B3FA08EC107CE046F21FFBF730419E526DDB75907B315A817CAD",
+      "role": "local_opt_in_calibration_page",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:webgazer-runtime-030",
+      "type": "entity",
+      "path": "app.js",
+      "sha256": "E3D018886E55EB9A2D9DE60242DC4A285B70BCE2DB7B00524529E0C334F7914C",
+      "role": "webgazer_lifecycle_and_volatile_marker_adapter",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:webgazer-static-audit-030",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "sha256": "23606AB247D1A1E63A00D92807ECCCDE1C174607B8215DBD12741AF65D432A35",
+      "role": "privacy_consent_and_cleanup_static_audit",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:webgazer-results-030",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "5BE80E6D002382882831ED1DC3B5C415399474592FF754D0C3897F230DEE1EF3",
+      "role": "static_contract_measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:webgazer-vendor-030",
+      "type": "entity",
+      "path": "vendor/webgazer.js",
+      "sha256": "E276D085EB490B5BA65481C368371BE03B1A358D12D95336AF0A8239F643F8E0",
+      "role": "pinned_third_party_runtime_bundle",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:webgazer-license-030",
+      "type": "entity",
+      "path": "vendor/LICENSE.md",
+      "sha256": "11CBCEA71578CE59935F5D839D331268F2BE5F2FB155ED869DFA24252E9B49F8",
+      "role": "third_party_license_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:webgazer-gpl-030",
+      "type": "entity",
+      "path": "vendor/GPLv3.md",
+      "sha256": "26C03BC049C15FC5B9E52D791A06F1A6BC32F89EDC8F8C701AB0AADF66E85B82",
+      "role": "third_party_license_text",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:webgazer-notice-030",
+      "type": "entity",
+      "path": "vendor/THIRD_PARTY_NOTICE.md",
+      "sha256": "7DF4961A46A716D1227B5FE54047CDC7B19F8A810F0EDDB780976D4072DDB4BE",
+      "role": "third_party_dependency_notice",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:webgazer-literature-016",
+      "type": "entity",
+      "path": "../../research/literature/016-vizz-webgazer-runtime.md",
+      "sha256": "8F4FEDB35E73621BF43A9213CDA8472DEE06C96D7833E6F83F02F2D79881BFF9",
+      "role": "primary_runtime_and_scientific_limit_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-webgazer-runtime-030",
+      "type": "activity",
+      "used": [
+        "farmaxia:webgazer-protocol-030",
+        "farmaxia:webgazer-policy-030",
+        "farmaxia:webgazer-vendor-030",
+        "farmaxia:webgazer-license-030",
+        "farmaxia:webgazer-gpl-030",
+        "farmaxia:webgazer-notice-030",
+        "farmaxia:webgazer-literature-016"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:audit-webgazer-runtime-030",
+      "type": "activity",
+      "used": [
+        "farmaxia:webgazer-policy-030",
+        "farmaxia:webgazer-page-030",
+        "farmaxia:webgazer-runtime-030",
+        "farmaxia:webgazer-static-audit-030",
+        "farmaxia:webgazer-vendor-030"
+      ],
+      "generated": ["farmaxia:webgazer-results-030"],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:webgazer-opt-in-030",
+      "expression": "does the local WebGazer adapter require explicit consent, expose visible calibration, and avoid runtime network and persistence primitives",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:webgazer-policy-030",
+        "farmaxia:webgazer-page-030",
+        "farmaxia:webgazer-runtime-030",
+        "farmaxia:webgazer-results-030"
+      ]
+    },
+    {
+      "id": "farmaxia:query:webgazer-cleanup-030",
+      "expression": "does stop and page teardown attempt to release listeners, video tracks, prediction loop, and local calibration data",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:webgazer-runtime-030",
+        "farmaxia:webgazer-static-audit-030",
+        "farmaxia:webgazer-results-030"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Whether WebGazer predictions meet a useful error bound on any real device",
+    "Whether the browser releases the camera track correctly on every supported browser",
+    "Whether a real person completes calibration and experiences the marker as comfortable",
+    "Whether gaze-contingent adaptation improves comprehension or reduces visual strain",
+    "Whether prescription, working distance, luminance, night condition, pupil state, or intoxication changes the useful gaze window"
+  ]
+}

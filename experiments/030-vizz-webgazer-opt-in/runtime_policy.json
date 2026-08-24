@@ -1,0 +1,38 @@
+{
+  "schema": "farmaxia:vizz-webgazer-runtime:0.1",
+  "experiment": "farmaxia:experiment:030-vizz-webgazer-opt-in",
+  "dependency": {
+    "name": "WebGazer.js",
+    "version": "3.5.3",
+    "source": "https://github.com/brownhci/WebGazer",
+    "license": "GPL-3.0-or-later",
+    "maintenance": "official_maintenance_ended_2026-02-24"
+  },
+  "privacy": {
+    "consent_required": true,
+    "camera_default": "off",
+    "network_allowed": false,
+    "sample_persistence": "none",
+    "raw_video_persistence": "none",
+    "clear_on_stop": true,
+    "coordinates_displayed_in_memory": true
+  },
+  "quality_gate": {
+    "calibration_points": 9,
+    "minimum_valid_predictions": 10,
+    "adaptation": "visual_marker_only_after_calibration"
+  },
+  "automation_boundary": {
+    "human_data": false,
+    "devices_started": false,
+    "network_used": false,
+    "raw_capture": false
+  },
+  "not_claimed": [
+    "clinical_accuracy",
+    "attention_or_fatigue_inference",
+    "anxiety_or_neurotransmitter_inference",
+    "intoxication_detection",
+    "optical_prescription_or_health_benefit"
+  ]
+}

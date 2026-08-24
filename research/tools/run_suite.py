@@ -63,6 +63,7 @@ def main() -> None:
         "experiments/027-codeine-objective-oracle/provenance.json",
         "experiments/028-vizz-gaze-quality-gate/provenance.json",
         "experiments/029-codeine-executable-oracle/provenance.json",
+        "experiments/030-vizz-webgazer-opt-in/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -687,6 +688,13 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 029", python_script("research/tools/validate_provenance.py", provenance[28]), "PROVENANCE_VALID")
+
+    command(
+        "contract test VIZZ WebGazer 030",
+        python_script("experiments/030-vizz-webgazer-opt-in/run_contract_test.py"),
+        "CONTRACT_TESTS_VALID",
+    )
+    command("provenance 030", python_script("research/tools/validate_provenance.py", provenance[29]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

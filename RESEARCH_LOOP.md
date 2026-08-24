@@ -230,6 +230,14 @@ mutaciones de falla, recuperación y acción cambiaron el resultado del oracle;
 el módulo no lee el score. La evidencia sigue limitada a una especificación de
 tarea sintética y no a una experiencia humana.
 
+El experimento 030 convirtió la compuerta sintética de VIZZ en un adaptador
+real de sandbox: WebGazer 3.5.3 se sirve localmente, el inicio requiere
+consentimiento explícito, la calibración usa nueve objetivos, el marcador vive
+en memoria y el apagado intenta detener vídeo, loop y modelo. El test estático
+pasó sin abrir cámara, pedir permisos ni usar red. Esto demuestra integración,
+no precisión, latencia, cobertura, comodidad, eficacia o inferencia de estados
+humanos; esas propiedades siguen desconocidas.
+
 La auditoría 040 recorrió los requisitos de esta fase: prototipos mínimos,
 literatura, adopción, contratos, procedencia, kill tests, límites, decisiones y
 seguridad. `LAB_COMPLETION_VALID` confirma que la fundación reproducible está
@@ -249,16 +257,17 @@ respetan la auditoría 040:
 1. CODEINE: mantener separadas transición base, score declarado, oracle
    ejecutable y estado humano; exigir que las mutaciones relevantes sean
    detectables antes de llamar verificada a una secuencia.
-2. VIZZ: conservar la compuerta de calidad gaze-contingent y, antes de evaluar
-   eye tracking real, especificar retención, error, latencia extremo a extremo,
-   apagado y consentimiento; cualquier sesión humana seguirá requiriendo una
-   acción explícita de consentimiento.
+2. VIZZ: usar el adaptador WebGazer únicamente para una sesión humana futura
+   y explícitamente consentida; medir retención, error frente a referencia,
+   latencia extremo a extremo, apagado y límites ópticos antes de inferir
+   utilidad. La automatización no inicia esa sesión ni aporta datos humanos.
 
 X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
-`research/literature/006–015`. No se incorporará KETAMINE al prototipo hasta
+`research/literature/006–016`. WebGazer queda adoptado solo en el sandbox 030;
+Pupil Core sigue diferido. No se incorporará KETAMINE al prototipo hasta
 que aparezca una experiencia que lo justifique.
 
 ## Regla de honestidad del loop

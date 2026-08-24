@@ -14,7 +14,7 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 | CODE-INE | descriptor provisional con oracle ejecutable 029; interoperable con VIZZ; operador independiente eliminado |
 | X-ANA-X | archivado como hipótesis independiente; protocolo de analogía conservado |
 | KETAMINE | en cuarentena; sin prototipo activo ni teoría forzada |
-| VIZZ | compuerta 028 de calidad/procedencia gaze-contingent; instrumentación manual opt-in; sin datos humanos, eficacia desconocida |
+| VIZZ | compuerta 028 y adaptador WebGazer local opt-in 030; sin datos humanos, precisión y eficacia desconocidas |
 
 No se implementan operadores como API ni se fija arquitectura mientras sus
 kill tests sigan abiertos.
@@ -58,6 +58,7 @@ cuando no existe un archivo humano.
 - [Oráculo de objetivo CODE-INE](experiments/027-codeine-objective-oracle/results.md)
 - [Oracle ejecutable y mutación CODE-INE](experiments/029-codeine-executable-oracle/results.md)
 - [Compuerta de calidad gaze-contingent VIZZ](experiments/028-vizz-gaze-quality-gate/results.md)
+- [Adaptador WebGazer local opt-in VIZZ](experiments/030-vizz-webgazer-opt-in/results.md)
 - [Auditoría consolidada de estado](research/decisions/032-laboratory-state-audit.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
@@ -70,6 +71,8 @@ cuando no existe un archivo humano.
 - [Auditoría de completitud de la fundación](research/decisions/040-laboratory-completion-audit.md)
 - [Literatura de calidad de mirada y herramientas VIZZ](research/literature/014-vizz-gaze-quality-tools.md)
 - [Decisión de compuerta gaze-contingent VIZZ](research/decisions/038-vizz-gaze-quality-gate.md)
+- [Literatura del runtime WebGazer VIZZ](research/literature/016-vizz-webgazer-runtime.md)
+- [Decisión de adopción experimental WebGazer VIZZ](research/decisions/041-vizz-webgazer-opt-in.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
 - [Compuerta de adopción de herramientas](research/decisions/011-tool-adoption-gate.md)
