@@ -16,6 +16,11 @@
     "path": "./mediapipe/face_mesh",
     "external_fetch_allowed": false
   },
+  "csp": {
+    "dynamic_script_execution": "unsafe-eval_required_by_vendored_mediapipe_emscripten",
+    "webassembly_execution": "wasm-unsafe-eval",
+    "external_script_and_connection_origins": false
+  },
   "privacy": {
     "consent_required": true,
     "camera_default": "off",

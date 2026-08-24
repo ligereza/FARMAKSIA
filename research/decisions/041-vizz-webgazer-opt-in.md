@@ -16,7 +16,10 @@ bloqueado.
 
 La automatización no abrió navegador, no solicitó permiso, no encendió cámara,
 no utilizó un origen externo y no generó datos humanos. Por eso esta decisión
-demuestra integración y controles, no precisión ni utilidad perceptual.
+demuestra integración y controles, no precisión ni utilidad perceptual. La CSP
+permite `unsafe-eval` y `wasm-unsafe-eval` únicamente para el runtime local de
+MediaPipe/Emscripten, que usa `Function()` y WebAssembly durante su arranque.
+Los orígenes externos continúan bloqueados.
 
 ## Decisión
 

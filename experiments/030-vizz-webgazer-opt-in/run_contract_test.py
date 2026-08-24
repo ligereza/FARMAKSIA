@@ -37,6 +37,11 @@ def main() -> None:
     require(policy["schema"] == "farmaxia:vizz-webgazer-runtime:0.1", "wrong runtime policy schema", failures)
     require(policy["dependency"]["version"] == "3.5.3", "WebGazer version is not pinned", failures)
     require(policy["dependency"]["license"] == "GPL-3.0-or-later", "WebGazer license is not recorded", failures)
+    require(policy["csp"] == {
+        "dynamic_script_execution": "unsafe-eval_required_by_vendored_mediapipe_emscripten",
+        "webassembly_execution": "wasm-unsafe-eval",
+        "external_script_and_connection_origins": False,
+    }, "CSP exception policy drifted", failures)
     require(policy["privacy"] == {
         "consent_required": True,
         "camera_default": "off",
@@ -63,6 +68,7 @@ def main() -> None:
     require('id="stop-button" type="button"' in html, "stop button is missing", failures)
     require('class="topbar"' in html, "controls are not in the top toolbar", failures)
     require('id="calibration-stage"' in html, "full calibration stage is missing", failures)
+    require("script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'" in html, "CSP does not allow the local MediaPipe runtime", failures)
     require("connect-src 'self'" in html, "CSP does not allow same-origin bundled resources", failures)
     require("connect-src 'none'" not in html, "CSP blocks WebGazer's same-origin resource loader", failures)
 

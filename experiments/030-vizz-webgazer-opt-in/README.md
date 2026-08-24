@@ -18,8 +18,10 @@ ocular. El marcador no es una medición clínica ni una receta óptica.
   marcado por defecto.
 - La página carga una copia local de WebGazer.js 3.5.3 y los assets oficiales
   de `@mediapipe/face_mesh` 0.4.1633559619; no usa CDN ni red externa. La
-  política CSP permite únicamente `fetch` al mismo `localhost` para esos
-  recursos internos.
+  CSP permite `fetch` y conexiones solo al mismo origen. El runtime
+  Emscripten vendorizado requiere `unsafe-eval` para `Function()` y
+  `wasm-unsafe-eval` para WebAssembly; esta excepción queda limitada a este
+  sandbox local y no autoriza orígenes externos.
 - `saveDataAcrossSessions(false)` se fija antes de iniciar. El adaptador no
   guarda vídeo ni coordenadas; solo mantiene el último punto y un contador en
   memoria para la visualización.

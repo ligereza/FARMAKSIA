@@ -22,7 +22,11 @@ runtime no dependa de un CDN. WebGazer 3.5.3 declara por defecto
 desde `@mediapipe/face_mesh` 0.4.1633559619 con licencia Apache-2.0. El
 navegador debe poder resolver los recursos
 internos mediante el mismo origen local; por ello la CSP de 030 permite
-`connect-src 'self'` y bloquea orígenes externos.
+`connect-src 'self'` y bloquea orígenes externos. Los bundles Emscripten de
+MediaPipe usan `Function()` para crear constructores y `WebAssembly` para el
+tracker, por lo que el sandbox declara `unsafe-eval` y `wasm-unsafe-eval` en
+`script-src`; esta es una excepción localizada del prototipo, no una política
+para producción.
 
 ## API adoptada por el adaptador
 

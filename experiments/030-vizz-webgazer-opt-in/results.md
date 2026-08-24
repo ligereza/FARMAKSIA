@@ -18,6 +18,9 @@ reportar.
 - Se rechaza cualquier script remoto, origen CSP externo, `XMLHttpRequest`,
   beacon, `localStorage` o `sessionStorage` en el adaptador; el `fetch` de
   recursos solo puede dirigirse al mismo origen.
+- Se permite `unsafe-eval` y `wasm-unsafe-eval` solo porque los assets locales
+  de MediaPipe/Emscripten usan `Function()` y WebAssembly; no se permiten
+  orígenes remotos.
 - Se exige la presencia local de los assets MediaPipe Face Mesh usados por el
   tracker por defecto; no basta con que exista `webgazer.js`.
 - Se exige que el apagado llame `clearGazeListener`, `stopVideo`, `end` y

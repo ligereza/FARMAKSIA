@@ -23,7 +23,7 @@
       "id": "farmaxia:webgazer-protocol-030",
       "type": "entity",
       "path": "README.md",
-      "sha256": "8DFD6EF8E39E506753677BD5CF400DFD28DCB94828039BA9AD7776963961CD72",
+      "sha256": "BAE5AC162D50A79B422438F935598B8A4E6F5E50D45D95A5FD1F76EB87F480B7",
       "role": "real_webcam_opt_in_experiment_contract",
       "authority": "human_reviewed_record"
     },
@@ -31,7 +31,7 @@
       "id": "farmaxia:webgazer-policy-030",
       "type": "entity",
       "path": "runtime_policy.json",
-      "sha256": "3552FF9E00595BD2D963C2B519AA01585FCBBAB01314B8EAF6702A886AD83EF9",
+      "sha256": "2242220FCF4AFF2AA0D079CCAFFD0A585186A2B8973C0CBF60034A381247A14A",
       "role": "privacy_and_quality_runtime_policy",
       "authority": "human_declared_control"
     },
@@ -39,7 +39,7 @@
       "id": "farmaxia:webgazer-page-030",
       "type": "entity",
       "path": "index.html",
-      "sha256": "C97E74FD939946EB21A7DB490F5DD7B4D479656C5C07711F307D1FAD0615ADF7",
+      "sha256": "6DB10D6D6DC946B30D36665BF0D365FA09E73888AC9C0D259ADD9BAB0ABF0287",
       "role": "local_opt_in_calibration_page",
       "authority": "human_declared_tool"
     },
@@ -55,7 +55,7 @@
       "id": "farmaxia:webgazer-static-audit-030",
       "type": "entity",
       "path": "run_contract_test.py",
-      "sha256": "5C668CE65E21E7D91BD9E6595D210AE90D0B676CF9D71BB452D7050F59829BBB",
+      "sha256": "EADBDD8F70E58F7EA7673F5EBB3C54CE79048E5EDBB2589A6E18DE0A837A43A6",
       "role": "privacy_consent_and_cleanup_static_audit",
       "authority": "human_declared_tool"
     },
@@ -63,7 +63,7 @@
       "id": "farmaxia:webgazer-results-030",
       "type": "entity",
       "path": "results.md",
-      "sha256": "6B4E883A4FA9BA968667287E7BE7AB6E724BEEE12578171B4AA18429BF4EE215",
+      "sha256": "5BA5D87E556B15B5E293ACCDA8ED14A45A162F1F92A9CA8C9A36B3875858E2CA",
       "role": "static_contract_measurement_record",
       "authority": "human_reviewed_record"
     },
@@ -183,7 +183,7 @@
       "id": "farmaxia:webgazer-literature-016",
       "type": "entity",
       "path": "../../research/literature/016-vizz-webgazer-runtime.md",
-      "sha256": "D3CE893C33E4FA34F2515C1A67D94A8EE24D476D6843FC859914132E7ABB4FC1",
+      "sha256": "DD32ADD3B969EF726B190244CEFD7571A37DD4013D98DE3776DFFBF6B2AAACAE",
       "role": "primary_runtime_and_scientific_limit_record",
       "authority": "human_reviewed_record"
     }
