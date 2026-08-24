@@ -90,9 +90,9 @@ materializado solo obtiene crédito claro en un workload repetido y el grafo con
 bounding boxes recupera consultas geométricas limitadas. Ninguno de los dos
 resultados prueba una teoría nueva.
 
-El ciclo 014 preparó el piloto VIZZ con revisión de accesibilidad y el contrato
-de ingreso de corpus. El instrumento está listo, pero todavía no existe
-evidencia humana.
+El diseño inicial del piloto VIZZ preparó la revisión de accesibilidad y el
+contrato de ingreso de corpus. El instrumento está listo, pero todavía no
+existe evidencia humana.
 
 El ciclo 015 aplicó el kill test amplio de CODE-INE. Autoridad, irreversibilidad,
 reutilización y opción futura no produjeron una capacidad fuera del control
@@ -132,6 +132,13 @@ campo conserva señales agregadas y pierde identidad y orden de acciones.
 Estas son diferencias de exposición computacional, no evidencia de confort o
 comprensión humana.
 
+El experimento 014 convirtió la siguiente pregunta en una decisión falsable:
+detectar la entrada en repetición después de la última mejora significativa.
+Texto y timeline conservaron la consulta global; el foco solo la conservó con
+una ventana que incluía el ancla y todo el tramo posterior; el campo mantuvo
+una señal proxy, pero no la relación temporal completa. La frontera queda
+demostrada solo sobre la traza sintética.
+
 ## Frente activo
 
 El siguiente ciclo construirá tres prototipos sin infraestructura general:
@@ -140,8 +147,9 @@ El siguiente ciclo construirá tres prototipos sin infraestructura general:
    rush/mejora frente a repetición/deriva.
 2. XANAX: una cadena de analogía y búsqueda sobre un problema real pequeño,
    con transferencia y ruptura verificables.
-3. VIZZ: extender el prototipo 013 con una tarea de decisión reproducible y,
-   solo si la medición lo exige, evaluar eye tracking.
+3. VIZZ: instrumentar una sesión local opt-in y verificar que los eventos
+   observados permitan repetir el contrato 014; solo si la medición lo exige,
+   evaluar eye tracking.
 
 Las herramientas candidatas y la investigación científica están registradas en
 `research/literature/006–009`. No se incorporará KETAMINE al prototipo hasta

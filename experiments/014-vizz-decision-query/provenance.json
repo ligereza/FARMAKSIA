@@ -1,0 +1,109 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:014-vizz-decision-query",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_decision_query_and_limits"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "evaluates_information_availability_and_kill_tests",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-source-trace-013",
+      "type": "entity",
+      "path": "../013-vizz-perceptual-adaptation/trace.json",
+      "sha256": "0D5C4D7B7A9082F29FABDA11F4520A19D5FD05EE936E52BB7967A30B791FB4F6",
+      "role": "reused_declared_synthetic_trace",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-decision-protocol-014",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "964422FBB2D2BF7EEF210509EB15609C9BFDEE222CCCD4D7F09E4F0A1C092D72",
+      "role": "decision_query_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-decision-runner-014",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "FBF99E8F7DB34C64D042FD05DD81D4B91BD9FE283F03DEF7F13DC30EA82DFA7A",
+      "role": "decision_availability_measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-decision-kill-test-014",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "9885EBE18BBCFF5F90BEC3A11594C9D02BA93453CA0F8ED31077E389C134C070",
+      "role": "boundary_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-decision-results-014",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "72145149556C07EF9E1FDB6E6768529937DF4FD71944C7055DD62765E15E140F",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:reuse-vizz-trace-013",
+      "type": "activity",
+      "used": ["farmaxia:vizz-source-trace-013", "farmaxia:vizz-decision-protocol-014"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-vizz-decision-query-014",
+      "type": "activity",
+      "used": [
+        "farmaxia:vizz-source-trace-013",
+        "farmaxia:vizz-decision-protocol-014",
+        "farmaxia:vizz-decision-runner-014"
+      ],
+      "generated": ["farmaxia:vizz-decision-results-014"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-vizz-decision-kill-tests-014",
+      "type": "activity",
+      "used": ["farmaxia:vizz-decision-results-014", "farmaxia:vizz-decision-kill-test-014"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:vizz-global-repetition-tail",
+      "expression": "is low-gain activity occurring after the last significant improvement",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-source-trace-013", "farmaxia:vizz-decision-results-014"]
+    },
+    {
+      "id": "farmaxia:query:vizz-local-repetition-proxy",
+      "expression": "does the exposure contain a low-gain error-bearing repetition signal",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-source-trace-013", "farmaxia:vizz-decision-results-014"]
+    }
+  ],
+  "unknowns": [
+    "Whether a human detects the transition faster in any representation",
+    "Whether a gaze-contingent window improves task performance without harmful context loss",
+    "Whether display conditions alter comfort, sleep, or decision quality"
+  ]
+}

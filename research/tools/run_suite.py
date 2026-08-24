@@ -47,6 +47,7 @@ def main() -> None:
         "experiments/011-nonrectangular-boundary/provenance.json",
         "experiments/012-curves-layers-boundary/provenance.json",
         "experiments/013-vizz-perceptual-adaptation/provenance.json",
+        "experiments/014-vizz-decision-query/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -173,6 +174,35 @@ def main() -> None:
     print("PASS experiment 013")
     command("verify VIZZ 013", python_script("experiments/013-vizz-perceptual-adaptation/verify_vizz.py"), "VIZZ_PROTOTYPE_VALID")
     command("provenance 013", python_script("research/tools/validate_provenance.py", provenance[12]), "PROVENANCE_VALID")
+
+    vizz_decision = subprocess.run(
+        python_script("experiments/014-vizz-decision-query/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if vizz_decision.returncode != 0:
+        raise RuntimeError("experiment 014 failed")
+    vizz_decision_result = json.loads(vizz_decision.stdout)
+    if (
+        vizz_decision_result["event_count"],
+        vizz_decision_result["oracle"]["anchor_event"],
+        vizz_decision_result["oracle"]["tail_event_ids"],
+    ) != (10, "e06", ["e07", "e08", "e09", "e10"]):
+        raise RuntimeError("experiment 014 oracle mismatch")
+    if not vizz_decision_result["representations"][0]["global_tail_available"]:
+        raise RuntimeError("experiment 014 complete text lost global query")
+    if vizz_decision_result["representations"][3]["global_tail_available"]:
+        raise RuntimeError("experiment 014 aggregate recovered global query")
+    print("PASS experiment 014")
+    command(
+        "kill test VIZZ decision 014",
+        python_script("experiments/014-vizz-decision-query/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 014", python_script("research/tools/validate_provenance.py", provenance[13]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
