@@ -54,6 +54,7 @@ def main() -> None:
         "experiments/018-xanax-reformulation-control/provenance.json",
         "experiments/019-xanax-provenance-archive-audit/provenance.json",
         "experiments/020-vizz-codeine-event-bridge/provenance.json",
+        "experiments/021-manual-adapter-gate/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -381,6 +382,36 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 020", python_script("research/tools/validate_provenance.py", provenance[19]), "PROVENANCE_VALID")
+
+    manual_adapter = subprocess.run(
+        python_script("experiments/021-manual-adapter-gate/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if manual_adapter.returncode != 0:
+        raise RuntimeError("experiment 021 failed")
+    manual_adapter_result = json.loads(manual_adapter.stdout)
+    if (
+        manual_adapter_result["consent_gate"],
+        manual_adapter_result["validated_event_count"],
+        manual_adapter_result["dry_run_valid"],
+        manual_adapter_result["session_written"],
+        manual_adapter_result["human_data"],
+        manual_adapter_result["devices_started"],
+        manual_adapter_result["network_used"],
+        manual_adapter_result["raw_capture"],
+    ) != (True, 3, True, False, False, False, False, False):
+        raise RuntimeError("experiment 021 manual adapter gate failure")
+    print("PASS experiment 021")
+    command(
+        "kill test manual adapter 021",
+        python_script("experiments/021-manual-adapter-gate/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 021", python_script("research/tools/validate_provenance.py", provenance[20]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

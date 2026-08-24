@@ -1,0 +1,121 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:021-manual-adapter-gate",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_manual_consent_and_output_gate"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "tests_adapter_blocking_validation_and_dry_run",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:manual-adapter-protocol-021",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "185C738E3184CEBF8A11DF6E2534986D2CB04DEE02CB744CF6D773B600E47D34",
+      "role": "manual_adapter_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:manual-adapter-tool-021",
+      "type": "entity",
+      "path": "../../research/tools/manual_event_adapter.py",
+      "sha256": "ED0D5F3C79A3BCF0077C0EC7231E4DEDD44C0BC16CF5E2C7A668E3967B070EC8",
+      "role": "consent_gated_local_adapter",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:manual-adapter-vizz-cases-021",
+      "type": "entity",
+      "path": "../015-vizz-session-contract/cases.json",
+      "sha256": "2777FA10273056BF825E266F4F22324875528FA5D7E5491B585AD3E1A6245786",
+      "role": "reused_synthetic_opt_in_fixture",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:manual-adapter-runner-021",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "9D1457E2EE068E2AFCC8911181AE01F595BF33FC32F976876E3C3E17B130AEA7",
+      "role": "adapter_gate_measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:manual-adapter-kill-test-021",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "A61E4D73E25A28E702C29DD299C4C3C4E49980A8EF09CA347DD7EFE78D62D936",
+      "role": "consent_privacy_and_overwrite_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:manual-adapter-results-021",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "D37B3DA42EE0E3F481D68F9B8C536F2DE4DE1DB36A52C7D26FE7F5DEF613D6EB",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-manual-adapter-gate-021",
+      "type": "activity",
+      "used": [
+        "farmaxia:manual-adapter-protocol-021",
+        "farmaxia:manual-adapter-tool-021",
+        "farmaxia:manual-adapter-vizz-cases-021"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-manual-adapter-gate-021",
+      "type": "activity",
+      "used": [
+        "farmaxia:manual-adapter-tool-021",
+        "farmaxia:manual-adapter-vizz-cases-021",
+        "farmaxia:manual-adapter-runner-021"
+      ],
+      "generated": ["farmaxia:manual-adapter-results-021"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-manual-adapter-kill-tests-021",
+      "type": "activity",
+      "used": ["farmaxia:manual-adapter-results-021", "farmaxia:manual-adapter-kill-test-021"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:manual-consent-gate",
+      "expression": "does missing explicit consent block session creation before output",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:manual-adapter-tool-021", "farmaxia:manual-adapter-results-021"]
+    },
+    {
+      "id": "farmaxia:query:manual-dry-run",
+      "expression": "can abstract opt-in events be validated without writing a session",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:manual-adapter-tool-021", "farmaxia:manual-adapter-runner-021"]
+    }
+  ],
+  "unknowns": [
+    "Whether a deliberate user can emit action classes without task interruption",
+    "Whether a longer consented sequence will support the CODE-INE repetition query",
+    "Whether any manual event record has value for human perception or comfort"
+  ]
+}

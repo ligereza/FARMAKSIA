@@ -173,6 +173,11 @@ permite declarar repetición; la pérdida de `action_class` se rechaza en vez de
 inferirse. VIZZ y CODE-INE pueden compartir instrumentación sin duplicar
 captura.
 
+El experimento 021 dejó preparado el adaptador manual: sin `--consent` bloquea
+antes de escribir, con dry-run valida tres eventos sin crear sesión y protege
+salidas existentes. No se activó ninguna sesión real; consentimiento y utilidad
+humana siguen fuera de la evidencia computacional.
+
 ## Frente activo
 
 El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
