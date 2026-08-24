@@ -31,6 +31,7 @@ def main() -> None:
     check("sin datos humanos" in readme, "VIZZ human-data limit is missing", failures)
     check("UNASSIGNED / QUARANTINED" in loop, "loop quarantine contract is missing", failures)
     check("X-ANA-X" in loop and "archiva" in loop, "loop archive record is missing", failures)
+    check((ROOT / "research" / "literature" / "010-vizz-observability-boundary.md").is_file(), "observability literature record is missing", failures)
 
     required_experiments = [
         "013-vizz-perceptual-adaptation",
@@ -43,6 +44,7 @@ def main() -> None:
         "020-vizz-codeine-event-bridge",
         "021-manual-adapter-gate",
         "022-vizz-codeine-long-bridge",
+        "023-vizz-codeine-observability-boundary",
     ]
     for experiment in required_experiments:
         directory = ROOT / "experiments" / experiment
@@ -55,6 +57,7 @@ def main() -> None:
         "029-vizz-codeine-bridge.md",
         "030-manual-adapter-gate.md",
         "031-long-vizz-codeine-bridge.md",
+        "033-vizz-codeine-observability-boundary.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

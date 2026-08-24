@@ -1,0 +1,148 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:023-vizz-codeine-observability-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_observability_boundary_and_expected_classifications"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_structural_and_semantic_mutation_matrix",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:observability-protocol-023",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "6DECCBCA7D017F712260CE4881523D32AEB0CA2FA57C089E1DD323E2B4215118",
+      "role": "observability_boundary_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:observability-cases-023",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "C13156992FC37A4AB31646A29BDBB809564875C6D140B34AF16BA53BCE4AA4F3",
+      "role": "declared_mutation_matrix",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:observability-source-session-023",
+      "type": "entity",
+      "path": "../022-vizz-codeine-long-bridge/session.json",
+      "sha256": "09304E5A79EE805553D3C4AF186704DFF3D345CE4754E407E3448A588932A52C",
+      "role": "synthetic_baseline_session",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:observability-vizz-validator-023",
+      "type": "entity",
+      "path": "../015-vizz-session-contract/run_experiment.py",
+      "sha256": "A7EBA5B874A8EFA3C807BCABD3EFD38B90C96CD3A1D0EC8A511FE7AD80AA5CEF",
+      "role": "vizz_envelope_validator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:observability-bridge-023",
+      "type": "entity",
+      "path": "../020-vizz-codeine-event-bridge/run_experiment.py",
+      "sha256": "96940D7616B9924E226CA35241E2E65A7818B668E3F4A50A7FEA71ED6388B645",
+      "role": "vizz_codeine_normalizer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:observability-codeine-023",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "codeine_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:observability-runner-023",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "014F8F4A12EE3E0F04995936402430CCE87B40A0BEE4729FC5DA9C87A21F7CC9",
+      "role": "mutation_matrix_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:observability-kill-test-023",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "737F2FCF6F0D52F63211D5A1DF6E9F8626D15004152F933A211CFE4BF5F910A6",
+      "role": "observability_boundary_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:observability-results-023",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "18DCAF139B06D316BE98CBBAF2E8532F6F7B6F3A7A9453EC8F4B00EA67836D69",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-observability-023",
+      "type": "activity",
+      "used": [
+        "farmaxia:observability-protocol-023",
+        "farmaxia:observability-cases-023",
+        "farmaxia:observability-source-session-023",
+        "farmaxia:observability-vizz-validator-023",
+        "farmaxia:observability-bridge-023",
+        "farmaxia:observability-codeine-023"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-observability-023",
+      "type": "activity",
+      "used": [
+        "farmaxia:observability-cases-023",
+        "farmaxia:observability-source-session-023",
+        "farmaxia:observability-runner-023"
+      ],
+      "generated": ["farmaxia:observability-results-023"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-observability-kill-tests-023",
+      "type": "activity",
+      "used": ["farmaxia:observability-results-023", "farmaxia:observability-kill-test-023"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:observability-classes-023",
+      "expression": "does the bridge distinguish available, rejected, and semantically ambiguous observations",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:observability-cases-023", "farmaxia:observability-results-023"]
+    },
+    {
+      "id": "farmaxia:query:observability-limit-023",
+      "expression": "can a formally valid event envelope be mistaken for a verified human state",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:observability-vizz-validator-023", "farmaxia:observability-codeine-023", "farmaxia:observability-results-023"]
+    }
+  ],
+  "unknowns": [
+    "Whether a human can provide the declared action and gain labels without task interruption",
+    "Whether an external objective signal can validate gain rather than merely record it",
+    "Whether gaze-contingent latency or peripheral context loss would cause the same ambiguity in a human display"
+  ]
+}

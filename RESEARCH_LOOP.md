@@ -183,6 +183,13 @@ recuperó `c04 → c07` en CODE-INE sin escribir una sesión. Esto demuestra que
 contrato puede expresar la transición buscada; no demuestra percepción humana,
 repetición subjetiva ni deriva.
 
+El experimento 023 sometió ese puente a mutaciones adversariales. Los defectos
+estructurales fueron rechazados, mientras que omitir el ancla, alterar su
+ganancia o reclasificar una acción produjo una entrada formalmente válida pero
+`ambiguous`. La forma del envelope no prueba la verdad de sus etiquetas; la
+literatura 010 añade latencia y calidad de medición como límites previos a
+incorporar eye tracking.
+
 La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
@@ -191,11 +198,11 @@ diseño. Los desconocidos humanos permanecen explícitos.
 
 El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
 
-1. CODEINE: probar el envelope opt-in con una sesión manual mínima y verificar
-   si las clases de acción pueden declararse sin capturar contenido personal.
-2. VIZZ: probar el adaptador manual con una sesión local explícitamente
-   consentida, sin contenido personal, y verificar que sus eventos permitan
-   repetir el contrato 014; solo si la medición lo exige, evaluar eye tracking.
+1. CODEINE: mantener separadas transición disponible, entrada rechazada y
+   observación ambigua; no interpretar etiquetas manuales como estado humano.
+2. VIZZ: extender fixtures sintéticos de cobertura, latencia y contexto antes
+   de evaluar eye tracking; cualquier sesión humana seguirá requiriendo una
+   acción explícita de consentimiento.
 
 X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.

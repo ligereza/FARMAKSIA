@@ -56,6 +56,7 @@ def main() -> None:
         "experiments/020-vizz-codeine-event-bridge/provenance.json",
         "experiments/021-manual-adapter-gate/provenance.json",
         "experiments/022-vizz-codeine-long-bridge/provenance.json",
+        "experiments/023-vizz-codeine-observability-boundary/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -446,6 +447,38 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 022", python_script("research/tools/validate_provenance.py", provenance[21]), "PROVENANCE_VALID")
+
+    observability = subprocess.run(
+        python_script("experiments/023-vizz-codeine-observability-boundary/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if observability.returncode != 0:
+        raise RuntimeError("experiment 023 failed")
+    observability_result = json.loads(observability.stdout)
+    if (
+        observability_result["case_count"],
+        observability_result["classification_counts"],
+        observability_result["all_expected_classifications"],
+        observability_result["baseline_transition"]["last_significant_improvement"],
+        observability_result["baseline_transition"]["repetition_entry"],
+        observability_result["human_data"],
+        observability_result["devices_started"],
+        observability_result["network_used"],
+        observability_result["raw_capture"],
+        observability_result["pharmacological_inference"],
+    ) != (7, {"available": 1, "rejected": 3, "ambiguous": 3}, True, "c04", "c07", False, False, False, False, False):
+        raise RuntimeError("experiment 023 observability boundary failure")
+    print("PASS experiment 023")
+    command(
+        "kill test VIZZ-CODE-INE observability 023",
+        python_script("experiments/023-vizz-codeine-observability-boundary/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 023", python_script("research/tools/validate_provenance.py", provenance[22]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

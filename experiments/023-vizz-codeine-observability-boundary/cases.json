@@ -1,0 +1,13 @@
+{
+  "schema": "farmaxia:vizz-codeine-observability-cases:0.1",
+  "source": "../022-vizz-codeine-long-bridge/session.json",
+  "cases": [
+    {"id": "baseline", "mutation": "none", "expected_classification": "available"},
+    {"id": "missing_action_class", "mutation": "drop_action_class", "expected_classification": "rejected"},
+    {"id": "non_monotonic_time", "mutation": "set_c07_time_backwards", "expected_classification": "rejected"},
+    {"id": "duplicate_event_id", "mutation": "duplicate_c07_id", "expected_classification": "rejected"},
+    {"id": "remove_anchor", "mutation": "remove_c04", "expected_classification": "ambiguous"},
+    {"id": "change_anchor_gain", "mutation": "lower_c04_gain", "expected_classification": "ambiguous"},
+    {"id": "relabel_repetition", "mutation": "relabel_c07_as_build", "expected_classification": "ambiguous"}
+  ]
+}
