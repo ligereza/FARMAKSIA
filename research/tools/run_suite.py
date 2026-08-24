@@ -50,6 +50,7 @@ def main() -> None:
         "experiments/014-vizz-decision-query/provenance.json",
         "experiments/015-vizz-session-contract/provenance.json",
         "experiments/016-codeine-session-state/provenance.json",
+        "experiments/017-xanax-analogy-chain/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -261,6 +262,34 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 016", python_script("research/tools/validate_provenance.py", provenance[15]), "PROVENANCE_VALID")
+
+    xanax_chain = subprocess.run(
+        python_script("experiments/017-xanax-analogy-chain/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if xanax_chain.returncode != 0:
+        raise RuntimeError("experiment 017 failed")
+    xanax_chain_result = json.loads(xanax_chain.stdout)
+    if (
+        xanax_chain_result["search"]["selected_source"],
+        xanax_chain_result["verification"]["prediction_verified"],
+        xanax_chain_result["rupture"]["status"],
+        xanax_chain_result["human_data"],
+        xanax_chain_result["arbitrary_corpus"],
+        xanax_chain_result["search"]["network_used"],
+    ) != ("queue-interval", True, "break", False, False, False):
+        raise RuntimeError("experiment 017 X-ANA-X chain boundary failure")
+    print("PASS experiment 017")
+    command(
+        "kill test X-ANA-X chain 017",
+        python_script("experiments/017-xanax-analogy-chain/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 017", python_script("research/tools/validate_provenance.py", provenance[16]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

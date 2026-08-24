@@ -1,0 +1,134 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/",
+    "https://pubmed.ncbi.nlm.nih.gov/27012301/",
+    "https://onlinelibrary.wiley.com/doi/10.1207/s15516709cog0000_20"
+  ],
+  "experiment": "farmaxia:experiment:017-xanax-analogy-chain",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_analogy_mapping_prediction_and_rupture"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "ranks_sources_runs_target_query_and_tests_boundary",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:xanax-chain-protocol-017",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "BE1360E244B2DA30C9920425A2B906BFAB4C72D0414BB104B1CCB750C230B001",
+      "role": "analogy_chain_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:xanax-source-catalog-017",
+      "type": "entity",
+      "path": "source_catalog.json",
+      "sha256": "0A01208FB684473E71A83E8AFFC5DFC281A92B4979AC2A29D23CADEF5DFEEB11",
+      "role": "declared_controlled_source_cards",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-svg-source-017",
+      "type": "entity",
+      "path": "../001-representation-boundary/input.svg",
+      "sha256": "32CC423A7C30929E27C863D7BDAD9804F90C38E9F81617BC03989B40839E7694",
+      "role": "reused_local_target_geometry",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-event-source-017",
+      "type": "entity",
+      "path": "../001-representation-boundary/events.json",
+      "sha256": "CEBFED9A62A03D01B8BA15CD8B507F2FFC6CBEB0D47EAC2B64D9BA2583CA78CC",
+      "role": "reused_local_temporal_input",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-chain-runner-017",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "0B133485544A43CD619484020D000F0E34BC85FA8092F845D15918C6DFCC9485",
+      "role": "analogy_search_transfer_verification_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-chain-kill-test-017",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "46A55045CDBBBA54AB727752C45C6A38B7049FCA403405AD96829DA8108A68DE",
+      "role": "analogy_boundary_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-chain-results-017",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "145EC32545B847F2F9A802A023462A0BFF6EA5630004397918A082EFCA430DB9",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-xanax-chain-017",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-chain-protocol-017",
+        "farmaxia:xanax-source-catalog-017",
+        "farmaxia:xanax-svg-source-017",
+        "farmaxia:xanax-event-source-017"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-xanax-chain-017",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-chain-protocol-017",
+        "farmaxia:xanax-source-catalog-017",
+        "farmaxia:xanax-svg-source-017",
+        "farmaxia:xanax-event-source-017",
+        "farmaxia:xanax-chain-runner-017"
+      ],
+      "generated": ["farmaxia:xanax-chain-results-017"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-xanax-chain-kill-tests-017",
+      "type": "activity",
+      "used": ["farmaxia:xanax-chain-results-017", "farmaxia:xanax-chain-kill-test-017"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:xanax-analogy-transfer",
+      "expression": "does the selected source predict the target temporal relation",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-source-catalog-017", "farmaxia:xanax-event-source-017", "farmaxia:xanax-chain-results-017"]
+    },
+    {
+      "id": "farmaxia:query:xanax-analogy-rupture",
+      "expression": "does the chain refuse a target geometry relation absent from the source mapping",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-source-catalog-017", "farmaxia:xanax-svg-source-017", "farmaxia:xanax-chain-results-017"]
+    }
+  ],
+  "unknowns": [
+    "Whether the source ranking remains useful with a larger declared catalog",
+    "Whether a human distinguishes a verified analogy from a persuasive but wrong analogy",
+    "Whether X-ANA-X adds anything beyond known query reformulation and state augmentation"
+  ]
+}

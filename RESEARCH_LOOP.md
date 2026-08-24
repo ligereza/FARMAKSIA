@@ -150,14 +150,20 @@ mientras que una vista de actividad conservó solo una señal proxy. La deriva
 quedó no disponible sin una medida de objetivo. CODE-INE continúa como
 descriptor de transición, no como operador ni explicación neuroquímica.
 
+El experimento 017 ejecutó por primera vez una cadena X-ANA-X completa sobre
+fixtures locales: búsqueda por señales, fuente, mapeo, predicción verificada y
+ruptura geométrica explícita. La fuente de intervalos predijo `left-region` en
+`t=0.25`; no pudo inventar `right_of_center` cuando esa relación no estaba
+declarada. La novedad frente a reformulación sigue sin demostrarse.
+
 ## Frente activo
 
 El siguiente ciclo construirá tres prototipos sin infraestructura general:
 
 1. CODEINE: probar el envelope opt-in con una sesión manual mínima y verificar
    si las clases de acción pueden declararse sin capturar contenido personal.
-2. XANAX: una cadena de analogía y búsqueda sobre un problema real pequeño,
-   con transferencia y ruptura verificables.
+2. XANAX: repetir la cadena sobre un problema pequeño real del repositorio con
+   una fuente documental primaria explícita y comparar contra reformulación.
 3. VIZZ: probar el adaptador manual con una sesión local explícitamente
    consentida, sin contenido personal, y verificar que sus eventos permitan
    repetir el contrato 014; solo si la medición lo exige, evaluar eye tracking.

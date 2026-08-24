@@ -1,0 +1,35 @@
+{
+  "schema": "farmaxia:xanax-source-catalog:0.1",
+  "sources": [
+    {
+      "id": "queue-interval",
+      "domain": "queue of jobs",
+      "authority": "human_declared_fixture",
+      "uri": "local://farmaxia/source/queue-interval",
+      "scent": ["active", "time", "enter", "exit", "interval"],
+      "relations": ["enters_before_exits", "active_at_time", "occupies_slot"],
+      "mapping": {
+        "job": "region",
+        "interval": "active_interval",
+        "enter_exit": "temporal_events",
+        "slot": "target_point"
+      },
+      "transferable": ["active_at_time"],
+      "not_transferable": ["right_of_center", "area", "stroke_color"]
+    },
+    {
+      "id": "static-containment",
+      "domain": "object containing a point",
+      "authority": "human_declared_fixture",
+      "uri": "local://farmaxia/source/static-containment",
+      "scent": ["point", "contains", "intersect", "region"],
+      "relations": ["contains_point", "overlaps"],
+      "mapping": {
+        "object": "region",
+        "point": "target_point"
+      },
+      "transferable": ["contains_point"],
+      "not_transferable": ["active_at_time", "enter_exit"]
+    }
+  ]
+}

@@ -12,7 +12,7 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 | Hipótesis | Estado |
 |---|---|
 | CODE-INE | descriptor provisional de transición actividad→mejora→repetición; operador independiente eliminado |
-| X-ANA-X | contrato provisional; la temporalidad exige entrada externa, novedad aún no demostrada |
+| X-ANA-X | prototipo 017 de analogía verificable; novedad conceptual aún no demostrada |
 | KETAMINE | contrato provisional; novedad muy debilitada frente a índices y pérdidas geométricas/compositivas conocidas |
 | VIZZ | prototipo 015 de consulta, exposición e instrumentación opt-in; sin datos humanos, eficacia desconocida |
 
@@ -38,6 +38,7 @@ cuando no existe un archivo humano.
 - [Kill test amplio de CODE-INE](experiments/007-codeine-general-boundary/results.md)
 - [Transición de sesión CODE-INE](experiments/016-codeine-session-state/results.md)
 - [Frontera de X-ANA-X](experiments/008-xanax-boundary/results.md)
+- [Cadena de analogía X-ANA-X](experiments/017-xanax-analogy-chain/results.md)
 - [Kill test metodológico de VIZZ](research/decisions/015-vizz-carryover-kill.md)
 - [Piloto VIZZ contrabalanceado](experiments/009-vizz-counterbalanced/results.md)
 - [Kill test poligonal de KETAMINE](experiments/011-nonrectangular-boundary/results.md)
