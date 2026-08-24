@@ -1,0 +1,149 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:009-vizz-counterbalanced",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_counterbalanced_vizz_design"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "generates_verifies_and_analyzes_pilot",
+      "version": "3.13.15"
+    },
+    {
+      "id": "farmaxia:node-verifier",
+      "type": "software_agent",
+      "role": "checks_inline_javascript_syntax",
+      "version": "24.15.0"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:balanced-vizz-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "1D1B623AE521654F80962AFE7B949A858A02856D3203276155955A9312C17EE1",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:balanced-vizz-trial-sets",
+      "type": "entity",
+      "path": "trial_sets.json",
+      "sha256": "D86D43423E6000E870B6B47F5B4F50C17E61C77A7F16507CAF4E167B6CB6C954",
+      "role": "counterbalanced_fixture",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:balanced-vizz-generator",
+      "type": "entity",
+      "path": "generate_pilot.py",
+      "sha256": "C20484CA8152D99C75BBD9A3D9514AAA20C4F2445816AB64EE9104CCBBC14DB8",
+      "role": "pilot_generator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:balanced-vizz-verifier",
+      "type": "entity",
+      "path": "verify_pilot.py",
+      "sha256": "C70F3FB4C2D9F1ECFD68E80A7C9251D55845B2359C93BB0FC396896A966DB2DB",
+      "role": "counterbalance_integrity_verifier",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:balanced-vizz-analyzer",
+      "type": "entity",
+      "path": "analyze_pilot.py",
+      "sha256": "A0DD8F423AFB8472CDA108693FF4F735791491A67B0AABB6BFD0CC4091BDC258",
+      "role": "human_result_analyzer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:balanced-vizz-aggregator",
+      "type": "entity",
+      "path": "aggregate_pilot.py",
+      "sha256": "B799106E42AB2C45FD7C8CB85EABB1030B7FE516D0AD8C80DA89550F05951772",
+      "role": "multi_participant_descriptive_aggregator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:balanced-vizz-pilot",
+      "type": "entity",
+      "path": "pilot.html",
+      "sha256": "0AC7CC4888DD9690F6397DB0EF260177C6B3EE337E2675192E161CD27516082A",
+      "role": "offline_human_instrument",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:balanced-vizz-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "BDC956CADD76DAF1C7EEF62ABD0705A446313A333403F9399CF9DA1F7F8D3E89",
+      "role": "design_validation_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:generate-balanced-vizz-pilot",
+      "type": "activity",
+      "used": ["farmaxia:balanced-vizz-trial-sets", "farmaxia:balanced-vizz-generator"],
+      "generated": ["farmaxia:balanced-vizz-pilot"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:verify-balanced-vizz-pilot",
+      "type": "activity",
+      "used": ["farmaxia:balanced-vizz-trial-sets", "farmaxia:balanced-vizz-pilot", "farmaxia:balanced-vizz-verifier"],
+      "generated": [],
+      "agent": "farmaxia:node-verifier"
+    },
+    {
+      "id": "farmaxia:analyze-balanced-vizz-pilot",
+      "type": "activity",
+      "used": ["farmaxia:balanced-vizz-trial-sets", "farmaxia:balanced-vizz-analyzer"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:aggregate-balanced-vizz-pilots",
+      "type": "activity",
+      "used": ["farmaxia:balanced-vizz-trial-sets", "farmaxia:balanced-vizz-aggregator"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-balanced-vizz-design",
+      "type": "activity",
+      "used": ["farmaxia:balanced-vizz-protocol", "farmaxia:balanced-vizz-trial-sets", "farmaxia:balanced-vizz-verifier"],
+      "generated": ["farmaxia:balanced-vizz-results"],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:balanced-condition-set",
+      "expression": "does each session assign each condition and trial set exactly once",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:balanced-vizz-trial-sets", "farmaxia:balanced-vizz-verifier"]
+    },
+    {
+      "id": "farmaxia:query:balanced-pilot-integrity",
+      "expression": "does the offline pilot preserve parity, human authority, and no-network constraints",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:balanced-vizz-pilot"]
+    }
+  ],
+  "unknowns": [
+    "Whether participants show a condition effect after set and order are balanced",
+    "Whether the three trial sets are equally difficult",
+    "Whether the visual interaction improves a real creative decision rather than this analytic task"
+  ]
+}

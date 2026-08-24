@@ -1,0 +1,36 @@
+{
+  "schema": "farmaxia:vizz-trial-sets:0.1",
+  "evaluation_rule": {
+    "correct_action": "reuse-C",
+    "score": "expected_gain + reuse_credit - 0.1 * cost"
+  },
+  "sets": [
+    {
+      "id": "set-A",
+      "branches": [
+        {"id": "continue-A", "kind": "continue", "expected_gain": 0.14, "cost": 0.8, "uncertainty": 0.1, "reuse_credit": 0.0, "evidence": ["three compatible versions", "stable geometry"]},
+        {"id": "switch-B", "kind": "switch", "expected_gain": 0.26, "cost": 0.7, "uncertainty": 0.35, "reuse_credit": 0.0, "evidence": ["one promising fragment", "unverified external reference"]},
+        {"id": "reuse-C", "kind": "reuse", "expected_gain": 0.18, "cost": 0.2, "uncertainty": 0.05, "reuse_credit": 0.22, "evidence": ["previously verified export", "known playback path"]},
+        {"id": "stop", "kind": "stop", "expected_gain": 0.0, "cost": 0.0, "uncertainty": 0.0, "reuse_credit": 0.0, "evidence": ["preserve current artifact", "avoid irreversible change"]}
+      ]
+    },
+    {
+      "id": "set-B",
+      "branches": [
+        {"id": "continue-A", "kind": "continue", "expected_gain": 0.21, "cost": 0.65, "uncertainty": 0.16, "reuse_credit": 0.0, "evidence": ["two compatible drafts", "geometry needs review"]},
+        {"id": "switch-B", "kind": "switch", "expected_gain": 0.31, "cost": 0.55, "uncertainty": 0.28, "reuse_credit": 0.0, "evidence": ["new color direction", "external reference partially checked"]},
+        {"id": "reuse-C", "kind": "reuse", "expected_gain": 0.22, "cost": 0.25, "uncertainty": 0.08, "reuse_credit": 0.18, "evidence": ["verified render cache", "known export path"]},
+        {"id": "stop", "kind": "stop", "expected_gain": 0.0, "cost": 0.0, "uncertainty": 0.0, "reuse_credit": 0.0, "evidence": ["preserve current artifact", "avoid unreviewed change"]}
+      ]
+    },
+    {
+      "id": "set-C",
+      "branches": [
+        {"id": "continue-A", "kind": "continue", "expected_gain": 0.24, "cost": 0.45, "uncertainty": 0.14, "reuse_credit": 0.0, "evidence": ["stable node graph", "one unresolved dependency"]},
+        {"id": "switch-B", "kind": "switch", "expected_gain": 0.29, "cost": 0.5, "uncertainty": 0.31, "reuse_credit": 0.0, "evidence": ["promising alternate layer", "asset provenance incomplete"]},
+        {"id": "reuse-C", "kind": "reuse", "expected_gain": 0.2, "cost": 0.18, "uncertainty": 0.06, "reuse_credit": 0.2, "evidence": ["previously checked scene", "reversible playback path"]},
+        {"id": "stop", "kind": "stop", "expected_gain": 0.0, "cost": 0.0, "uncertainty": 0.0, "reuse_credit": 0.0, "evidence": ["preserve current artifact", "avoid irreversible change"]}
+      ]
+    }
+  ]
+}

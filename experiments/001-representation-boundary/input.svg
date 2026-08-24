@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 240" width="400" height="240">
+  <rect id="court" x="20" y="20" width="360" height="200" fill="none" stroke="black"/>
+  <path id="center-line" d="M 200 20 L 200 220" fill="none" stroke="blue"/>
+  <rect id="left-region" x="120" y="80" width="100" height="80" fill="none" stroke="red"/>
+  <rect id="right-region" x="240" y="80" width="100" height="80" fill="none" stroke="green"/>
+</svg>

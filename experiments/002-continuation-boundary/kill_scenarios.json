@@ -1,0 +1,14 @@
+{
+  "scenarios": [
+    {
+      "id": "cost-shape-adversary",
+      "budget": 2.0,
+      "initial_quality": 0.2,
+      "static_queue": ["option_A", "option_B"],
+      "actions": {
+        "option_A": {"kind": "continue", "cost": 0.5, "expected_gain": 0.15, "realized_gain": 0.15, "max_uses": 1, "to_branch": "A"},
+        "option_B": {"kind": "switch", "cost": 2.0, "expected_gain": 0.4, "realized_gain": 0.4, "max_uses": 1, "to_branch": "B"}
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+[
+  {"time": 0.0, "region": "left-region", "event": "enter"},
+  {"time": 0.5, "region": "left-region", "event": "exit"},
+  {"time": 0.5, "region": "right-region", "event": "enter"},
+  {"time": 1.0, "region": "right-region", "event": "exit"}
+]

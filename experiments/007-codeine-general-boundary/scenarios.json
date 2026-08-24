@@ -1,0 +1,50 @@
+[
+  {
+    "id": "reuse-safe",
+    "description": "reuse verified artifact under low cost",
+    "actions": [
+      {"id": "continue-A", "kind": "continue", "expected_gain": 0.30, "cost": 0.25, "reuse_credit": 0.00, "option_value": 0.05, "irreversible_risk": 0.05, "authorized": true, "verified": false},
+      {"id": "reuse-C", "kind": "reuse", "expected_gain": 0.18, "cost": 0.10, "reuse_credit": 0.12, "option_value": 0.08, "irreversible_risk": 0.02, "authorized": true, "verified": true}
+    ]
+  },
+  {
+    "id": "future-option",
+    "description": "continue preserves a valuable future branch",
+    "actions": [
+      {"id": "continue-A", "kind": "continue", "expected_gain": 0.20, "cost": 0.30, "reuse_credit": 0.00, "option_value": 0.30, "irreversible_risk": 0.05, "authorized": true, "verified": false},
+      {"id": "switch-B", "kind": "switch", "expected_gain": 0.32, "cost": 0.60, "reuse_credit": 0.00, "option_value": 0.50, "irreversible_risk": 0.08, "authorized": true, "verified": false}
+    ]
+  },
+  {
+    "id": "irreversible-veto",
+    "description": "high irreversible risk is not authorized",
+    "actions": [
+      {"id": "commit-D", "kind": "continue", "expected_gain": 0.80, "cost": 0.20, "reuse_credit": 0.00, "option_value": 0.10, "irreversible_risk": 0.60, "authorized": true, "verified": false},
+      {"id": "continue-A", "kind": "continue", "expected_gain": 0.25, "cost": 0.10, "reuse_credit": 0.00, "option_value": 0.02, "irreversible_risk": 0.05, "authorized": true, "verified": false}
+    ]
+  },
+  {
+    "id": "human-authority-veto",
+    "description": "the high-value action lacks human authority",
+    "actions": [
+      {"id": "switch-B", "kind": "switch", "expected_gain": 0.90, "cost": 0.10, "reuse_credit": 0.00, "option_value": 0.10, "irreversible_risk": 0.05, "authorized": false, "verified": false},
+      {"id": "continue-A", "kind": "continue", "expected_gain": 0.05, "cost": 0.20, "reuse_credit": 0.00, "option_value": 0.00, "irreversible_risk": 0.02, "authorized": true, "verified": false}
+    ]
+  },
+  {
+    "id": "stop-negative",
+    "description": "all authorized options destroy value",
+    "actions": [
+      {"id": "continue-A", "kind": "continue", "expected_gain": 0.05, "cost": 0.30, "reuse_credit": 0.00, "option_value": 0.00, "irreversible_risk": 0.02, "authorized": true, "verified": false},
+      {"id": "switch-B", "kind": "switch", "expected_gain": 0.10, "cost": 0.40, "reuse_credit": 0.00, "option_value": 0.00, "irreversible_risk": 0.02, "authorized": true, "verified": false}
+    ]
+  },
+  {
+    "id": "reuse-preference-tie",
+    "description": "reuse bonus changes an otherwise exact utility tie",
+    "actions": [
+      {"id": "continue-A", "kind": "continue", "expected_gain": 0.45, "cost": 0.20, "reuse_credit": 0.00, "option_value": 0.10, "irreversible_risk": 0.05, "authorized": true, "verified": false},
+      {"id": "reuse-C", "kind": "reuse", "expected_gain": 0.30, "cost": 0.20, "reuse_credit": 0.12, "option_value": 0.10, "irreversible_risk": 0.02, "authorized": true, "verified": true}
+    ]
+  }
+]

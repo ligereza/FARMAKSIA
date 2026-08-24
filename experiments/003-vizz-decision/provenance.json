@@ -1,0 +1,271 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:003-vizz-decision",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_task_and_authority_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "generates_and_verifies_conditions",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-decision-state",
+      "type": "entity",
+      "path": "decision-state.json",
+      "sha256": "D35111C887C571873887ED2D96827E6F56A8CB9035175CBF5797B06B84B5CCAC",
+      "role": "decision_fixture",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:vizz-experiment-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-generator",
+      "type": "entity",
+      "path": "generate_conditions.py",
+      "sha256": "E91A740A9B809085DA750A065BC28E6FF62FBD904219B5A05031F45E94CED0A7",
+      "role": "stimulus_generator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-verifier",
+      "type": "entity",
+      "path": "verify_conditions.py",
+      "sha256": "2C475FB0C1AA00A3581D3D43587DC07B35360A6DAEC13C2F33BFDDD5D473759C",
+      "role": "information_parity_verifier",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-condition-manifest",
+      "type": "entity",
+      "path": "conditions/manifest.json",
+      "sha256": "D842D744B115E7817288B855E36331A290E92395193DCFDBAD16FDC925FF9157",
+      "role": "condition_registry",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-table-condition",
+      "type": "entity",
+      "path": "conditions/table.html",
+      "sha256": "14B4CB9DCAF60DAD699F745E532422796A3AEB35E4E3EB4D4C5279C2084B1085",
+      "role": "static_condition",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-static-condition",
+      "type": "entity",
+      "path": "conditions/static.svg",
+      "sha256": "30FEFAEBF055C5280D4E6A2E543D917315B5694D1F6C18AC08656B9A68715CA0",
+      "role": "static_condition",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-interactive-condition",
+      "type": "entity",
+      "path": "conditions/vizz.html",
+      "sha256": "BB8C0EC1FEC53D0A89F5B998B9320FDFAC248BED7BBC52330B7C46ADD94BF785",
+      "role": "interactive_condition",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-parity-result",
+      "type": "entity",
+      "role": "automated_verification_result",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-pilot-generator",
+      "type": "entity",
+      "path": "generate_pilot.py",
+      "sha256": "139892121511964A01CFE27433F0E89413B612725B391E8F4E1668F5078D4D01",
+      "role": "pilot_generator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-pilot",
+      "type": "entity",
+      "path": "pilot.html",
+      "sha256": "1BEB1268C08C976EF5B6444D0C54D68EE2AFDF56717000C794F01FD3F5C4E8AC",
+      "role": "offline_human_instrument",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-pilot-protocol",
+      "type": "entity",
+      "path": "pilot_protocol.md",
+      "sha256": "9FF3948F796BFE1883BEB564407C8925540B9345CDA5B15EC0EEACE1ED4467E3",
+      "role": "human_pilot_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-accessibility-audit",
+      "type": "entity",
+      "path": "accessibility-audit.md",
+      "sha256": "9F6BE17FE3A5B466AB0951CA956D690F66A135D5799617C6267C50F4D7CE3F8C",
+      "role": "accessibility_review",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-design-audit",
+      "type": "entity",
+      "path": "design-audit.md",
+      "sha256": "AA706CCFF1748D019A63F279615AEB959BBA16D96EDD218E28F7F26CC2FBFB08",
+      "role": "methodological_design_audit",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-pilot-verifier",
+      "type": "entity",
+      "path": "verify_pilot.py",
+      "sha256": "12067143B27199BAB446FFF123523D1551E1557E805F6244981274EC268B9BCF",
+      "role": "pilot_integrity_verifier",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-design-auditor",
+      "type": "entity",
+      "path": "audit_pilot_design.py",
+      "sha256": "8FFD3B1A8338360AC29DA6A210AFEA32EC7F09B959101BC9888B1EB2266C4AB7",
+      "role": "carryover_risk_auditor",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-pilot-validation",
+      "type": "entity",
+      "role": "pilot_validation_result",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-analysis-tool",
+      "type": "entity",
+      "path": "analyze_pilot.py",
+      "sha256": "224C50A3C6AF5C5F4196FEC62CCC14746967BA36C3020C9E435F84906714B2BF",
+      "role": "human_result_analyzer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-human-analysis",
+      "type": "entity",
+      "role": "analysis_output_if_human_data_exists",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-vizz-fixture",
+      "type": "activity",
+      "used": [],
+      "generated": ["farmaxia:vizz-decision-state", "farmaxia:vizz-experiment-protocol"],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:generate-vizz-conditions",
+      "type": "activity",
+      "used": ["farmaxia:vizz-decision-state", "farmaxia:vizz-generator"],
+      "generated": ["farmaxia:vizz-condition-manifest", "farmaxia:vizz-table-condition", "farmaxia:vizz-static-condition", "farmaxia:vizz-interactive-condition"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:verify-vizz-parity",
+      "type": "activity",
+      "used": ["farmaxia:vizz-decision-state", "farmaxia:vizz-condition-manifest", "farmaxia:vizz-table-condition", "farmaxia:vizz-static-condition", "farmaxia:vizz-interactive-condition", "farmaxia:vizz-verifier"],
+      "generated": ["farmaxia:vizz-parity-result"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-vizz-prepilot",
+      "type": "activity",
+      "used": ["farmaxia:vizz-parity-result"],
+      "generated": ["farmaxia:vizz-results"],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:generate-vizz-pilot",
+      "type": "activity",
+      "used": ["farmaxia:vizz-decision-state", "farmaxia:vizz-pilot-generator"],
+      "generated": ["farmaxia:vizz-pilot"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:verify-vizz-pilot",
+      "type": "activity",
+      "used": ["farmaxia:vizz-decision-state", "farmaxia:vizz-pilot", "farmaxia:vizz-pilot-verifier"],
+      "generated": ["farmaxia:vizz-pilot-validation"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:audit-vizz-pilot-design",
+      "type": "activity",
+      "used": ["farmaxia:vizz-decision-state", "farmaxia:vizz-condition-manifest", "farmaxia:vizz-pilot", "farmaxia:vizz-design-auditor"],
+      "generated": ["farmaxia:vizz-design-audit"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-vizz-accessibility",
+      "type": "activity",
+      "used": ["farmaxia:vizz-pilot", "farmaxia:vizz-pilot-protocol", "farmaxia:vizz-accessibility-audit"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:analyze-vizz-pilot",
+      "type": "activity",
+      "used": ["farmaxia:vizz-decision-state", "farmaxia:vizz-analysis-tool"],
+      "generated": ["farmaxia:vizz-human-analysis"],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:vizz-decision",
+      "expression": "which action should a person choose under budget 1.0",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:vizz-decision-state"]
+    },
+    {
+      "id": "farmaxia:query:vizz-information-parity",
+      "expression": "do all conditions expose the same normalized branches and evidence",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-condition-manifest"]
+    },
+    {
+      "id": "farmaxia:query:vizz-pilot-integrity",
+      "expression": "does the offline pilot preserve information parity and human authority",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-pilot"]
+    },
+    {
+      "id": "farmaxia:query:vizz-human-analysis",
+      "expression": "what changes by condition in human decision, duration, confidence and uncertainty detection",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:vizz-human-analysis"]
+    }
+  ],
+  "unknowns": [
+    "Whether a human will perceive the relevant uncertainty more reliably in VIZZ",
+    "Whether interaction improves decisions rather than merely adding information",
+    "Whether the chosen task rule is adequate for artistic workflows"
+  ]
+}

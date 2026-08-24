@@ -1,0 +1,111 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:002-continuation-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_scenarios_and_threshold"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "simulates_policies",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:workflow-fixture",
+      "type": "entity",
+      "path": "workflows.json",
+      "sha256": "521743EAC5363AA7AEEE40A494AA11D1D8EBBD2B93C2328B55EC543F82A457FC",
+      "role": "scenario_fixture",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:continuation-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "8AB52479DE0C76883AF3AA2A702169A7DA6F41D3BD847A51C44C7BD725D5D6E9",
+      "role": "measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:continuation-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:kill-scenarios",
+      "type": "entity",
+      "path": "kill_scenarios.json",
+      "sha256": "CD6E34E258558BF79CFFE792AF12653D92696F9978C8F343DAA4F677900C4CBF",
+      "role": "adversarial_fixture",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:kill-runner",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "4A0D4CDFDE6B66D7C676E1FA8917D0D888E7FB76BE1B36F974D2724FD6199723",
+      "role": "falsification_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:kill-results",
+      "type": "entity",
+      "path": "results-kill.md",
+      "role": "falsification_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:simulate-continuation-policies",
+      "type": "activity",
+      "used": ["farmaxia:workflow-fixture", "farmaxia:continuation-runner"],
+      "generated": ["farmaxia:continuation-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-continuation-boundary",
+      "type": "activity",
+      "used": ["farmaxia:continuation-results"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-codeine-kill-test",
+      "type": "activity",
+      "used": ["farmaxia:workflow-fixture", "farmaxia:kill-scenarios", "farmaxia:kill-runner"],
+      "generated": ["farmaxia:kill-results"],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:continuation-boundary",
+      "expression": "does a policy change trajectory beyond ordering a fixed queue",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:workflow-fixture"]
+    },
+    {
+      "id": "farmaxia:query:codeine-kill",
+      "expression": "does the candidate differ from dynamic priority or value of computation",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:kill-scenarios"]
+    }
+  ],
+  "unknowns": [
+    "Whether a dynamic scheduler can reproduce the candidate policy",
+    "Whether the candidate adds anything beyond rational metareasoning",
+    "Whether manually declared expected gains are robust under uncertainty"
+  ]
+}

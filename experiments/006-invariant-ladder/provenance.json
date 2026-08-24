@@ -1,0 +1,103 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:006-invariant-ladder",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_invariant_ladder_and_kill_tests"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "executes_controlled_representation_measurements",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:invariant-svg-source",
+      "type": "entity",
+      "path": "../001-representation-boundary/input.svg",
+      "sha256": "32CC423A7C30929E27C863D7BDAD9804F90C38E9F81617BC03989B40839E7694",
+      "role": "primary_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:invariant-event-source",
+      "type": "entity",
+      "path": "../001-representation-boundary/events.json",
+      "sha256": "CEBFED9A62A03D01B8BA15CD8B507F2FFC6CBEB0D47EAC2B64D9BA2583CA78CC",
+      "role": "external_temporal_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:invariant-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "A0677BA4547189A96D48548218A18851B923B5D01B39EB533CA65EDF3B3FB5EB",
+      "role": "controlled_measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:invariant-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "C45791CCE0CECA9097D275A7171003590C58A45EBACE32F90ED155348E3BC1A9",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:invariant-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "5038E4379837A4B540A4EEDE6BA54A9B9D44CAF9DF200C9DEDDFEC86A126717D",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:run-invariant-ladder",
+      "type": "activity",
+      "used": [
+        "farmaxia:invariant-svg-source",
+        "farmaxia:invariant-event-source",
+        "farmaxia:invariant-runner"
+      ],
+      "generated": ["farmaxia:invariant-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-invariant-ladder",
+      "type": "activity",
+      "used": ["farmaxia:invariant-results", "farmaxia:invariant-protocol"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:known-materialization-credit",
+      "expression": "does indexed-table explain the observed repeated-query credit",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:invariant-svg-source"]
+    },
+    {
+      "id": "farmaxia:query:controlled-residue",
+      "expression": "which queries remain available after each controlled information loss",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:invariant-svg-source"]
+    }
+  ],
+  "unknowns": [
+    "Whether bounding boxes suffice for non-rectangular creative geometry",
+    "Whether a larger corpus changes the workload break-even point",
+    "Whether KETAMINE has a distinction beyond known materialized views, indexes, caches, and conversions",
+    "Whether external temporal inputs should be modeled as X-ANA-X in a general theory"
+  ]
+}

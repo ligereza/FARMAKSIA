@@ -1,0 +1,19 @@
+{
+  "schema": "farmaxia:corpus-manifest:0.1",
+  "status": "empty_by_design",
+  "policy": {
+    "no_unverified_downloads": true,
+    "no_human_data_without_authorization": true,
+    "required_for_acceptance": [
+      "source_uri",
+      "license_uri",
+      "license_verified",
+      "authority",
+      "sha256",
+      "declared_query",
+      "representations",
+      "residue"
+    ]
+  },
+  "entries": []
+}

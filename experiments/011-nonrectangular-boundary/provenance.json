@@ -1,0 +1,105 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:011-nonrectangular-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_polygon_query_and_loss_test"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "generates_and_checks_polygon_cases",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:polygon-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "3BF3395EBECB49DA1701517B29AC69D09143BB1E50A30430458B21C2AEB06390",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:polygon-generator",
+      "type": "entity",
+      "path": "generate_cases.py",
+      "sha256": "DD9752DAD0B1FD85A187B534F0FAFEC2FD55848B28035C39C75083CBF9864736",
+      "role": "synthetic_polygon_generator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:polygon-cases",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "4A8F9585DECBD98D567BD6959AFA98862476EFF082FCD84BC0E5869D99CA02E0",
+      "role": "generated_polygon_fixture",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:polygon-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "D5035B15602355764EC68BC453595012CE4F5C22ED61F1826050F9482B6B136F",
+      "role": "exact_geometry_comparison_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:polygon-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "073EE9ADED64E65A549988B7D00DDDA3495B0DC74323455F3D32FD25436F736D",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:generate-polygon-cases",
+      "type": "activity",
+      "used": ["farmaxia:polygon-generator"],
+      "generated": ["farmaxia:polygon-cases"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-polygon-loss-test",
+      "type": "activity",
+      "used": ["farmaxia:polygon-protocol", "farmaxia:polygon-cases", "farmaxia:polygon-runner"],
+      "generated": ["farmaxia:polygon-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-polygon-scope",
+      "type": "activity",
+      "used": ["farmaxia:polygon-results", "farmaxia:polygon-protocol"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:polygon-exact-preservation",
+      "expression": "does a bounding-box graph preserve point-in-polygon queries",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:polygon-cases"]
+    },
+    {
+      "id": "farmaxia:query:polygon-residue",
+      "expression": "which geometric invariants are lost by graphification",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:polygon-results"]
+    }
+  ],
+  "unknowns": [
+    "Whether curves and layered composition introduce additional losses",
+    "Whether a creative scene has queries for which a lossy graph is still the right representation",
+    "Whether a richer graph can preserve exact geometry without becoming an existing geometry index or mesh representation"
+  ]
+}

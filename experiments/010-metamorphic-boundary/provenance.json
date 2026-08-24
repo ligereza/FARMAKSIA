@@ -1,0 +1,105 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:010-metamorphic-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_metamorphic_properties_and_scope"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "generates_and_checks_synthetic_cases",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:metamorphic-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "3A0AD0A725D93804AEBB1892D15E1BF65B21138B5F9890F2334B0567B690C89A",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:metamorphic-generator",
+      "type": "entity",
+      "path": "generate_cases.py",
+      "sha256": "C673E9D05AFE1944A60C54D71F7B3CE6CF910C0F12B0DE0FD621EF79B1FD754E",
+      "role": "synthetic_fixture_generator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:metamorphic-cases",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "C5261933E0191658976D940E3D90F61B62CFB4FB2862C925192A4CF879E09101",
+      "role": "generated_synthetic_fixture",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:metamorphic-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "1F54F1EB26256E99037970AB2BAFE4FC96CFFC7A390C9B2741929F56FB1A4DA1",
+      "role": "metamorphic_property_checker",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:metamorphic-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "9F8970DB406B273B45276A51054E1F8E4FB0BF71930A39CE3188819B3F025B65",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:generate-metamorphic-cases",
+      "type": "activity",
+      "used": ["farmaxia:metamorphic-generator"],
+      "generated": ["farmaxia:metamorphic-cases"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-metamorphic-properties",
+      "type": "activity",
+      "used": ["farmaxia:metamorphic-protocol", "farmaxia:metamorphic-cases", "farmaxia:metamorphic-runner"],
+      "generated": ["farmaxia:metamorphic-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-metamorphic-scope",
+      "type": "activity",
+      "used": ["farmaxia:metamorphic-results", "farmaxia:metamorphic-protocol"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:metamorphic-preservation",
+      "expression": "do controlled representation losses preserve the declared observables across 40 cases",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:metamorphic-cases"]
+    },
+    {
+      "id": "farmaxia:query:metamorphic-composition",
+      "expression": "does graph non-commutativity and table equivalence persist across the generated family",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:metamorphic-results"]
+    }
+  ],
+  "unknowns": [
+    "Whether the properties persist for curves, layers, composition order, or metadata",
+    "Whether a licensed creative work changes the boundary",
+    "Whether the synthetic generator covers the failure modes relevant to creative workflows"
+  ]
+}

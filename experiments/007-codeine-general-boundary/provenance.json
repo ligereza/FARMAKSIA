@@ -1,0 +1,94 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:007-codeine-general-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_broad_codeine_hypothesis_and_control"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "executes_policy_comparison",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:codeine-general-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "6DBD2D54B10A9C752F43187BA6F59387FE410017588ECEDA90F59361607270A2",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:codeine-general-scenarios",
+      "type": "entity",
+      "path": "scenarios.json",
+      "sha256": "849FFAADBB275AAE008495225ED3008664853A633C56191DDB0083316AA95B44",
+      "role": "adversarial_scenario_fixture",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:codeine-general-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "77730068985D3EB0E866CF01B867C734112F992C3B79EB38640BC6579E0C227F",
+      "role": "policy_comparison_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-general-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "1FCDE3C857BF0EB69201BD151C1B6230F268364CE74890F6555DA99BC4F5EA2D",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:run-codeine-general-comparison",
+      "type": "activity",
+      "used": [
+        "farmaxia:codeine-general-protocol",
+        "farmaxia:codeine-general-scenarios",
+        "farmaxia:codeine-general-runner"
+      ],
+      "generated": ["farmaxia:codeine-general-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-codeine-general-kill",
+      "type": "activity",
+      "used": ["farmaxia:codeine-general-protocol", "farmaxia:codeine-general-results"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:codeine-independent-capability",
+      "expression": "does CODE-INE choose an action that constrained value-of-computation cannot express",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:codeine-general-scenarios"]
+    },
+    {
+      "id": "farmaxia:query:codeine-policy-residue",
+      "expression": "is any disagreement a capability difference or a configurable preference",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:codeine-general-results"]
+    }
+  ],
+  "unknowns": [
+    "Whether online learning or non-stationary preferences require a different control",
+    "Whether human policy preferences can be represented without reducing them to utility constraints",
+    "Whether the result generalizes beyond six declared scenarios"
+  ]
+}

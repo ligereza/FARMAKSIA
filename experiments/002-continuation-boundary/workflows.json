@@ -1,0 +1,53 @@
+{
+  "experiment": "farmaxia:experiment:002-continuation-boundary",
+  "utility": {
+    "cost_penalty": 0.1,
+    "min_expected_gain_per_cost": 0.1
+  },
+  "scenarios": [
+    {
+      "id": "deep-path",
+      "budget": 2.0,
+      "initial_quality": 0.2,
+      "static_queue": ["continue_A", "continue_A", "reuse"],
+      "actions": {
+        "continue_A": {"kind": "continue", "cost": 1.0, "expected_gain": 0.22, "realized_gain": 0.22, "max_uses": 2, "to_branch": "A"},
+        "switch_B": {"kind": "switch", "cost": 0.8, "expected_gain": 0.12, "realized_gain": 0.12, "max_uses": 1, "to_branch": "B"},
+        "reuse": {"kind": "reuse", "cost": 0.2, "expected_gain": 0.03, "realized_gain": 0.03, "max_uses": 1, "to_branch": "A"}
+      }
+    },
+    {
+      "id": "dead-end",
+      "budget": 1.0,
+      "initial_quality": 0.3,
+      "static_queue": ["continue_A", "reuse"],
+      "actions": {
+        "continue_A": {"kind": "continue", "cost": 1.0, "expected_gain": 0.05, "realized_gain": 0.0, "max_uses": 1, "to_branch": "A"},
+        "switch_B": {"kind": "switch", "cost": 0.8, "expected_gain": 0.32, "realized_gain": 0.32, "max_uses": 1, "to_branch": "B"},
+        "reuse": {"kind": "reuse", "cost": 0.2, "expected_gain": 0.08, "realized_gain": 0.08, "max_uses": 1, "to_branch": "A"}
+      }
+    },
+    {
+      "id": "reuse-credit",
+      "budget": 1.0,
+      "initial_quality": 0.4,
+      "static_queue": ["continue_A", "reuse"],
+      "actions": {
+        "continue_A": {"kind": "continue", "cost": 1.0, "expected_gain": 0.08, "realized_gain": 0.08, "max_uses": 1, "to_branch": "A"},
+        "switch_B": {"kind": "switch", "cost": 0.8, "expected_gain": 0.12, "realized_gain": 0.12, "max_uses": 1, "to_branch": "B"},
+        "reuse": {"kind": "reuse", "cost": 0.2, "expected_gain": 0.26, "realized_gain": 0.26, "max_uses": 1, "to_branch": "A"}
+      }
+    },
+    {
+      "id": "stop-now",
+      "budget": 1.0,
+      "initial_quality": 0.85,
+      "static_queue": ["continue_A", "reuse"],
+      "actions": {
+        "continue_A": {"kind": "continue", "cost": 1.0, "expected_gain": 0.02, "realized_gain": 0.02, "max_uses": 1, "to_branch": "A"},
+        "switch_B": {"kind": "switch", "cost": 0.8, "expected_gain": 0.03, "realized_gain": 0.03, "max_uses": 1, "to_branch": "B"},
+        "reuse": {"kind": "reuse", "cost": 0.2, "expected_gain": 0.01, "realized_gain": 0.01, "max_uses": 1, "to_branch": "A"}
+      }
+    }
+  ]
+}

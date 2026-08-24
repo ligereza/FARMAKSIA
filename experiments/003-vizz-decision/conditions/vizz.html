@@ -1,0 +1,51 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FARMAKSIA VIZZ condition: linked view</title>
+<style>
+body { font-family: system-ui, sans-serif; margin: 2rem; background: #f7f4ed; color: #1f2933; }
+button { margin: .2rem; padding: .45rem .7rem; }
+#items { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: .8rem; }
+.card { border: 1px solid #a8a29e; background: white; padding: .8rem; }
+.card.selected { outline: 3px solid #3568a8; }
+.bar { height: 12px; background: #3568a8; }
+.uncertainty { height: 8px; background: #d07b32; }
+small { color: #57534e; }
+</style>
+<h1>Condition C — VIZZ candidata</h1>
+<p data-information-signature="7422A6FB4117FD3C64AFCF8DB2CFCBB03C5578E5919AB96522AC7912CBC93BA4">choose the action with the best expected creative value under budget 1.0</p>
+<p>La interfaz permite ordenar y seleccionar; no recomienda ni decide.</p>
+<div>
+  <button data-sort="original">orden original</button>
+  <button data-sort="expected_gain">ordenar por gain</button>
+  <button data-sort="uncertainty">ordenar por uncertainty</button>
+  <button data-sort="reuse_credit">ordenar por reuse credit</button>
+</div>
+<p id="selection">Selección humana: ninguna</p>
+<section id="items"></section>
+<script>
+const branches = [{"id": "continue-A", "kind": "continue", "expected_gain": 0.14, "cost": 0.8, "uncertainty": 0.1, "reuse_credit": 0.0, "evidence": ["three compatible versions", "stable geometry"]}, {"id": "switch-B", "kind": "switch", "expected_gain": 0.26, "cost": 0.7, "uncertainty": 0.35, "reuse_credit": 0.0, "evidence": ["one promising fragment", "unverified external reference"]}, {"id": "reuse-C", "kind": "reuse", "expected_gain": 0.18, "cost": 0.2, "uncertainty": 0.05, "reuse_credit": 0.22, "evidence": ["previously verified export", "known playback path"]}, {"id": "stop", "kind": "stop", "expected_gain": 0.0, "cost": 0.0, "uncertainty": 0.0, "reuse_credit": 0.0, "evidence": ["preserve current artifact", "avoid irreversible change"]}];
+const items = document.querySelector('#items');
+const selection = document.querySelector('#selection');
+function render(order) {
+  const values = [...branches];
+  if (order !== 'original') values.sort((a,b) => b[order] - a[order]);
+  items.replaceChildren(...values.map(branch => {
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.dataset.branch = branch.id;
+    card.innerHTML = `<h2>${branch.id}</h2><p>${branch.kind}</p>` +
+      `<div class="bar" style="width:${branch.expected_gain * 100}%" title="expected gain"></div>` +
+      `<div class="uncertainty" style="width:${branch.uncertainty * 100}%" title="uncertainty"></div>` +
+      `<p>gain ${branch.expected_gain.toFixed(2)} · cost ${branch.cost.toFixed(2)} · uncertainty ${branch.uncertainty.toFixed(2)} · reuse ${branch.reuse_credit.toFixed(2)}</p>` +
+      `<small>${branch.evidence.join('; ')}</small>`;
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.card').forEach(node => node.classList.remove('selected'));
+      card.classList.add('selected');
+      selection.textContent = `Selección humana: ${branch.id}`;
+    });
+    return card;
+  }));
+}
+document.querySelectorAll('button[data-sort]').forEach(button => button.addEventListener('click', () => render(button.dataset.sort)));
+render('original');
+</script>

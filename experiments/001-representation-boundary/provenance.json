@@ -1,0 +1,175 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:001-representation-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_query_and_hypotheses"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "parses_and_measures",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:input-svg",
+      "type": "entity",
+      "path": "input.svg",
+      "sha256": "32CC423A7C30929E27C863D7BDAD9804F90C38E9F81617BC03989B40839E7694",
+      "role": "source_artifact",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:event-log",
+      "type": "entity",
+      "path": "events.json",
+      "sha256": "CEBFED9A62A03D01B8BA15CD8B507F2FFC6CBEB0D47EAC2B64D9BA2583CA78CC",
+      "role": "additional_temporal_input",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:runner-script",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "555ABA28429B9C54833A92983B866CA1D669072EC4A976DDB0D8CD70265C4CC1",
+      "role": "measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:constant-time-control",
+      "type": "entity",
+      "role": "null_control",
+      "authority": "human_declared_control",
+      "description": "All regions active for the complete interval; no temporal distinction."
+    },
+    {
+      "id": "farmaxia:spatial-regions",
+      "type": "entity",
+      "role": "parsed_geometry",
+      "derived_from": ["farmaxia:input-svg"],
+      "authority": "computed",
+      "residue": ["SVG styles, ordering and root metadata are not represented"]
+    },
+    {
+      "id": "farmaxia:geometry-table",
+      "type": "entity",
+      "role": "representation",
+      "derived_from": ["farmaxia:spatial-regions"],
+      "authority": "computed",
+      "preserves": ["farmaxia:query:q0"],
+      "residue": ["original element tags and styles"]
+    },
+    {
+      "id": "farmaxia:relation-graph",
+      "type": "entity",
+      "role": "representation",
+      "derived_from": ["farmaxia:spatial-regions"],
+      "authority": "computed",
+      "preserves": ["farmaxia:query:q0_as_derived_fact"],
+      "residue": ["coordinates, dimensions and general geometric recomputation"]
+    },
+    {
+      "id": "farmaxia:temporal-geometry",
+      "type": "entity",
+      "role": "state_augmented_representation",
+      "derived_from": ["farmaxia:spatial-regions", "farmaxia:event-log"],
+      "authority": "computed_plus_external_input",
+      "preserves": ["farmaxia:query:q0"],
+      "enables": ["farmaxia:query:q-time"],
+      "residue": ["temporal state is not present in the SVG alone"]
+    },
+    {
+      "id": "farmaxia:temporal-control",
+      "type": "entity",
+      "role": "control_representation",
+      "derived_from": ["farmaxia:spatial-regions", "farmaxia:constant-time-control"],
+      "authority": "computed_plus_declared_control",
+      "preserves": ["farmaxia:query:q0"],
+      "residue": ["temporal field carries no discriminative information"]
+    },
+    {
+      "id": "farmaxia:experiment-results",
+      "type": "entity",
+      "role": "measurement_record",
+      "path": "results.md",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:parse-svg",
+      "type": "activity",
+      "used": ["farmaxia:input-svg", "farmaxia:runner-script"],
+      "generated": ["farmaxia:spatial-regions"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:build-table",
+      "type": "activity",
+      "used": ["farmaxia:spatial-regions", "farmaxia:runner-script"],
+      "generated": ["farmaxia:geometry-table"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:build-graph",
+      "type": "activity",
+      "used": ["farmaxia:spatial-regions", "farmaxia:runner-script"],
+      "generated": ["farmaxia:relation-graph"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:join-events",
+      "type": "activity",
+      "used": ["farmaxia:spatial-regions", "farmaxia:event-log", "farmaxia:runner-script"],
+      "generated": ["farmaxia:temporal-geometry"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:build-temporal-control",
+      "type": "activity",
+      "used": ["farmaxia:spatial-regions", "farmaxia:constant-time-control", "farmaxia:runner-script"],
+      "generated": ["farmaxia:temporal-control"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:human-review",
+      "type": "activity",
+      "used": ["farmaxia:experiment-results"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:q0",
+      "expression": "closed regions intersecting center line x=200",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:input-svg"]
+    },
+    {
+      "id": "farmaxia:query:q0_as_derived_fact",
+      "expression": "which graph nodes have relation intersects(center-line)",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:relation-graph"]
+    },
+    {
+      "id": "farmaxia:query:q-time",
+      "expression": "which regions are active at time t",
+      "authority": "human_declared_hypothesis",
+      "required_entities": ["farmaxia:event-log"]
+    }
+  ],
+  "unknowns": [
+    "Whether the temporal join is genuinely X-ANA-X or a composite of state augmentation and KETAMINE",
+    "Whether the graph should retain geometry to preserve recomputability",
+    "Whether the local manifest should later be replaced by RO-Crate or OpenLineage"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "source": "../decision-state.json",
+  "data_signature": "7422A6FB4117FD3C64AFCF8DB2CFCBB03C5578E5919AB96522AC7912CBC93BA4",
+  "conditions": [
+    {
+      "id": "table",
+      "path": "table.html",
+      "mode": "static"
+    },
+    {
+      "id": "static-graph",
+      "path": "static.svg",
+      "mode": "static"
+    },
+    {
+      "id": "vizz-candidate",
+      "path": "vizz.html",
+      "mode": "interactive"
+    }
+  ],
+  "human_authority": {
+    "system_may": [
+      "sort alternatives",
+      "compute ratios",
+      "show provenance",
+      "highlight uncertainty"
+    ],
+    "system_may_not": [
+      "declare artistic value",
+      "choose on behalf of the person",
+      "hide unknowns"
+    ]
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:005-composition-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_composition_contracts"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "executes_compositions",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:composition-svg-source",
+      "type": "entity",
+      "path": "../001-representation-boundary/input.svg",
+      "sha256": "32CC423A7C30929E27C863D7BDAD9804F90C38E9F81617BC03989B40839E7694",
+      "role": "primary_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:composition-event-source",
+      "type": "entity",
+      "path": "../001-representation-boundary/events.json",
+      "sha256": "CEBFED9A62A03D01B8BA15CD8B507F2FFC6CBEB0D47EAC2B64D9BA2583CA78CC",
+      "role": "external_temporal_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:composition-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "DB5123FCFFBD945A98EC1E23C2BA9A694E7095138BCCEEB2A37005876CFB3FD2",
+      "role": "composition_measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:composition-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "A27E78211EA6DAE82D85ED10E12F95309FACCD61C4BA6F8635B8D9C09AE9D1D7",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:composition-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:run-composition-orders",
+      "type": "activity",
+      "used": ["farmaxia:composition-svg-source", "farmaxia:composition-event-source", "farmaxia:composition-runner"],
+      "generated": ["farmaxia:composition-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-composition-boundary",
+      "type": "activity",
+      "used": ["farmaxia:composition-results", "farmaxia:composition-protocol"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:composition-commutativity",
+      "expression": "do X-ANA-X and KETAMINE preserve the same observable in both orders",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:composition-svg-source"]
+    }
+  ],
+  "unknowns": [
+    "Whether the table pair remains equivalent for additional observables",
+    "Whether a graph retaining geometry makes the graph pair commute",
+    "Whether these composition rules generalize beyond the tiny SVG fixture"
+  ]
+}

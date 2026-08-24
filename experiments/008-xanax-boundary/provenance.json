@@ -1,0 +1,103 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:008-xanax-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_xanax_contract_factors_and_kill_tests"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "executes_factorized_contract_paths",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:xanax-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "7A29474227280A1405A55E116543768B3CD07E4267D58DAFD0D251955AC92D56",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:xanax-svg-source",
+      "type": "entity",
+      "path": "../001-representation-boundary/input.svg",
+      "sha256": "32CC423A7C30929E27C863D7BDAD9804F90C38E9F81617BC03989B40839E7694",
+      "role": "primary_spatial_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-event-source",
+      "type": "entity",
+      "path": "../001-representation-boundary/events.json",
+      "sha256": "CEBFED9A62A03D01B8BA15CD8B507F2FFC6CBEB0D47EAC2B64D9BA2583CA78CC",
+      "role": "external_temporal_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "592FA29AF4A0BBD40B015D7A1F4D0CA2D6FB4A87CF92D423E202E814422B4A78",
+      "role": "contract_factorization_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "39FCE88B8EF90C1D4C1B13BF82015C43B149F583ED1AFCBCA7DACCE4D400D0FE",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:run-xanax-contract-paths",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-protocol",
+        "farmaxia:xanax-svg-source",
+        "farmaxia:xanax-event-source",
+        "farmaxia:xanax-runner"
+      ],
+      "generated": ["farmaxia:xanax-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-xanax-boundary",
+      "type": "activity",
+      "used": ["farmaxia:xanax-protocol", "farmaxia:xanax-results"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:xanax-external-input",
+      "expression": "can the temporal observable be answered without events.json",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:xanax-svg-source", "farmaxia:xanax-event-source"]
+    },
+    {
+      "id": "farmaxia:query:xanax-contract-identifiability",
+      "expression": "do identical answers imply identical operator contracts",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:xanax-results"]
+    }
+  ],
+  "unknowns": [
+    "Whether a creative reformulation can be shown not to reduce to a known query transformation",
+    "Whether a richer temporal or causal source changes the boundary",
+    "Whether contract signatures are sufficient for independent reproducibility in a larger corpus"
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "query": "choose the action with the best expected creative value under budget 1.0",
+  "budget": 1.0,
+  "evaluation_rule": {
+    "type": "declared_analytic_task_not_artistic_truth",
+    "score": "expected_gain + reuse_credit - 0.1 * cost",
+    "correct_action_for_pilot": "reuse-C",
+    "note": "This rule scores a controlled decision task; it does not define artistic value."
+  },
+  "branches": [
+    {
+      "id": "continue-A",
+      "kind": "continue",
+      "expected_gain": 0.14,
+      "cost": 0.8,
+      "uncertainty": 0.10,
+      "reuse_credit": 0.00,
+      "evidence": ["three compatible versions", "stable geometry"]
+    },
+    {
+      "id": "switch-B",
+      "kind": "switch",
+      "expected_gain": 0.26,
+      "cost": 0.7,
+      "uncertainty": 0.35,
+      "reuse_credit": 0.00,
+      "evidence": ["one promising fragment", "unverified external reference"]
+    },
+    {
+      "id": "reuse-C",
+      "kind": "reuse",
+      "expected_gain": 0.18,
+      "cost": 0.2,
+      "uncertainty": 0.05,
+      "reuse_credit": 0.22,
+      "evidence": ["previously verified export", "known playback path"]
+    },
+    {
+      "id": "stop",
+      "kind": "stop",
+      "expected_gain": 0.00,
+      "cost": 0.0,
+      "uncertainty": 0.0,
+      "reuse_credit": 0.0,
+      "evidence": ["preserve current artifact", "avoid irreversible change"]
+    }
+  ],
+  "human_authority": {
+    "system_may": ["sort alternatives", "compute ratios", "show provenance", "highlight uncertainty"],
+    "system_may_not": ["declare artistic value", "choose on behalf of the person", "hide unknowns"]
+  }
+}

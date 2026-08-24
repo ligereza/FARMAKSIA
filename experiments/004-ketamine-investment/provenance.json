@@ -1,0 +1,104 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:004-ketamine-investment",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_workload_and_classification"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "builds_and_measures_representations",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:svg-source-001",
+      "type": "entity",
+      "path": "../001-representation-boundary/input.svg",
+      "sha256": "32CC423A7C30929E27C863D7BDAD9804F90C38E9F81617BC03989B40839E7694",
+      "role": "primary_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:event-source-001",
+      "type": "entity",
+      "path": "../001-representation-boundary/events.json",
+      "sha256": "CEBFED9A62A03D01B8BA15CD8B507F2FFC6CBEB0D47EAC2B64D9BA2583CA78CC",
+      "role": "external_temporal_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:ketamine-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "53C63F02F88960F4FD1E8827EE11A936CBF4F7F3A2BEE2215E1A47476326B4D1",
+      "role": "measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:ketamine-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "B3FEBD9BBA6C2593F2E2198009A335F759C980F11140665C2DC1AA00EF8A1504",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:ketamine-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:parse-ketamine-source",
+      "type": "activity",
+      "used": ["farmaxia:svg-source-001", "farmaxia:ketamine-runner"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:measure-representation-workloads",
+      "type": "activity",
+      "used": ["farmaxia:svg-source-001", "farmaxia:event-source-001", "farmaxia:ketamine-runner"],
+      "generated": ["farmaxia:ketamine-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-ketamine-boundary",
+      "type": "activity",
+      "used": ["farmaxia:ketamine-results", "farmaxia:ketamine-protocol"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:ketamine-workload",
+      "expression": "which representations preserve declared queries under which workload costs",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:svg-source-001"]
+    },
+    {
+      "id": "farmaxia:query:ketamine-temporal-boundary",
+      "expression": "does q-time require external state rather than a representation-only transformation",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:event-source-001"]
+    }
+  ],
+  "unknowns": [
+    "Whether a richer table can amortize its investment under a larger workload",
+    "Whether a relation graph with geometry becomes a general representation rather than a cache",
+    "Whether the local work-unit model predicts real CPU, memory and human costs"
+  ]
+}

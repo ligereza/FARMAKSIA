@@ -1,0 +1,105 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:012-curves-layers-boundary",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_curve_hole_layer_loss_test"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "generates_and_checks_bezier_layer_cases",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:curve-layer-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "C19EBFF5727B907622BE4EB6E3698D5633D9A8BDDC033552D6C15A85EEFC0E22",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:curve-layer-generator",
+      "type": "entity",
+      "path": "generate_cases.py",
+      "sha256": "AA2EFC895B8FD9196BB2961012CEC77D21C0BB2823CFADBBCF799E445675FA0F",
+      "role": "synthetic_curve_generator",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:curve-layer-cases",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "EF67591EF9E8051BA473850F3681A3C7BA262188EB62AD2CB559F7187AB70400",
+      "role": "generated_curve_fixture",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:curve-layer-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "10FBB2CA3C354E3EAA8921A9CE30FDDE08A02806CD2D418F85BB9081256CD69C",
+      "role": "curve_layer_comparison_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:curve-layer-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "436B545026708B00962E95FFB80032910458893C47BFFC29EEA9DEB69D8E9678",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:generate-curve-layer-cases",
+      "type": "activity",
+      "used": ["farmaxia:curve-layer-generator"],
+      "generated": ["farmaxia:curve-layer-cases"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-curve-layer-loss-test",
+      "type": "activity",
+      "used": ["farmaxia:curve-layer-protocol", "farmaxia:curve-layer-cases", "farmaxia:curve-layer-runner"],
+      "generated": ["farmaxia:curve-layer-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-curve-layer-scope",
+      "type": "activity",
+      "used": ["farmaxia:curve-layer-results", "farmaxia:curve-layer-protocol"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:curve-visible-point",
+      "expression": "which layered curved shape is visible at the declared point",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:curve-layer-cases"]
+    },
+    {
+      "id": "farmaxia:query:curve-layer-residue",
+      "expression": "does bounding-box graphification preserve holes, contours, and layer order",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:curve-layer-results"]
+    }
+  ],
+  "unknowns": [
+    "Whether real SVG path semantics introduce further losses",
+    "Whether a scene graph representation preserves layer composition without becoming a known scene graph",
+    "Whether an authorized creative work changes which residue is decision-relevant"
+  ]
+}
