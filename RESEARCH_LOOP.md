@@ -144,12 +144,18 @@ el estado por defecto produce cero eventos, el opt-in acepta únicamente
 eventos abstractos de tarea y el kill test rechaza texto crudo. No se inició
 ningún dispositivo ni se recogieron datos humanos.
 
+El experimento 016 aplicó ese límite a CODE-INE: una traza con clase de acción
+localizó la primera repetición (`c07`) después de la última mejora (`c04`),
+mientras que una vista de actividad conservó solo una señal proxy. La deriva
+quedó no disponible sin una medida de objetivo. CODE-INE continúa como
+descriptor de transición, no como operador ni explicación neuroquímica.
+
 ## Frente activo
 
 El siguiente ciclo construirá tres prototipos sin infraestructura general:
 
-1. CODEINE: instrumentación de una sesión real de desarrollo y señal de
-   rush/mejora frente a repetición/deriva.
+1. CODEINE: probar el envelope opt-in con una sesión manual mínima y verificar
+   si las clases de acción pueden declararse sin capturar contenido personal.
 2. XANAX: una cadena de analogía y búsqueda sobre un problema real pequeño,
    con transferencia y ruptura verificables.
 3. VIZZ: probar el adaptador manual con una sesión local explícitamente

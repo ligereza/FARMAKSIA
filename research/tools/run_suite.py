@@ -49,6 +49,7 @@ def main() -> None:
         "experiments/013-vizz-perceptual-adaptation/provenance.json",
         "experiments/014-vizz-decision-query/provenance.json",
         "experiments/015-vizz-session-contract/provenance.json",
+        "experiments/016-codeine-session-state/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -231,6 +232,35 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 015", python_script("research/tools/validate_provenance.py", provenance[14]), "PROVENANCE_VALID")
+
+    codeine_state = subprocess.run(
+        python_script("experiments/016-codeine-session-state/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if codeine_state.returncode != 0:
+        raise RuntimeError("experiment 016 failed")
+    codeine_state_result = json.loads(codeine_state.stdout)
+    transition = codeine_state_result["transition"]
+    if (
+        codeine_state_result["event_count"],
+        transition["last_significant_improvement"],
+        transition["repetition_entry"],
+        transition["drift"],
+        codeine_state_result["human_data"],
+        codeine_state_result["pharmacological_inference"],
+    ) != (8, "c04", "c07", "unavailable_without_objective_signal", False, False):
+        raise RuntimeError("experiment 016 CODE-INE transition boundary failure")
+    print("PASS experiment 016")
+    command(
+        "kill test CODE-INE state 016",
+        python_script("experiments/016-codeine-session-state/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 016", python_script("research/tools/validate_provenance.py", provenance[15]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

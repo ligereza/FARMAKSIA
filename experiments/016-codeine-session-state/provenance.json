@@ -1,0 +1,109 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:016-codeine-session-state",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_codeine_state_transition_and_limits"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "derives_transition_and_runs_boundary_tests",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:codeine-session-protocol-016",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "F77047CEB89F4C6022724EEB175370379799550AC25D90F174C34BE7DB35921D",
+      "role": "state_transition_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:codeine-session-trace-016",
+      "type": "entity",
+      "path": "trace.json",
+      "sha256": "F09DD36DAC27EC0C2180556CDC4FE2A1DAA0F7B14E4976A4E057FE9E9078846B",
+      "role": "declared_synthetic_task_event_trace",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:codeine-session-runner-016",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "state_transition_measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-session-kill-test-016",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "156891286576F2F5DC95D7DA1497ED65F95E16312354E33B73827A2F5CFEA195",
+      "role": "state_boundary_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-session-results-016",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "C78003BB558204F98F73F8E3FF558E5A8B40EE2DD67959D6998984EB6813017A",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-codeine-session-trace-016",
+      "type": "activity",
+      "used": ["farmaxia:codeine-session-protocol-016", "farmaxia:codeine-session-trace-016"],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-codeine-transition-016",
+      "type": "activity",
+      "used": [
+        "farmaxia:codeine-session-protocol-016",
+        "farmaxia:codeine-session-trace-016",
+        "farmaxia:codeine-session-runner-016"
+      ],
+      "generated": ["farmaxia:codeine-session-results-016"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-codeine-kill-tests-016",
+      "type": "activity",
+      "used": ["farmaxia:codeine-session-results-016", "farmaxia:codeine-session-kill-test-016"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:codeine-repetition-entry",
+      "expression": "where does a repeated action first appear after the last significant improvement",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:codeine-session-trace-016", "farmaxia:codeine-session-results-016"]
+    },
+    {
+      "id": "farmaxia:query:codeine-drift",
+      "expression": "is drift relative to an objective available from the declared event fields",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:codeine-session-trace-016", "farmaxia:codeine-session-results-016"]
+    }
+  ],
+  "unknowns": [
+    "Whether abstract action classes can be logged reliably in a real session",
+    "Whether the transition corresponds to any human-reported experience",
+    "Whether objective distance can be defined without becoming an arbitrary proxy"
+  ]
+}

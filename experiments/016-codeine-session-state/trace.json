@@ -1,0 +1,14 @@
+{
+  "schema": "farmaxia:codeine-session-trace:0.1",
+  "objective": "separate activity, improvement, and repetition using declared task events",
+  "events": [
+    {"event_id": "c01", "t_ms": 0, "action_class": "goal", "gain": 0.0, "errors": 0},
+    {"event_id": "c02", "t_ms": 4000, "action_class": "build", "gain": 0.55, "errors": 0},
+    {"event_id": "c03", "t_ms": 8000, "action_class": "test", "gain": 0.0, "errors": 1},
+    {"event_id": "c04", "t_ms": 12000, "action_class": "verify", "gain": 0.30, "errors": 0},
+    {"event_id": "c05", "t_ms": 16000, "action_class": "maintain", "gain": 0.03, "errors": 0},
+    {"event_id": "c06", "t_ms": 20000, "action_class": "test", "gain": 0.0, "errors": 1},
+    {"event_id": "c07", "t_ms": 24000, "action_class": "maintain", "gain": 0.01, "errors": 0},
+    {"event_id": "c08", "t_ms": 28000, "action_class": "test", "gain": 0.0, "errors": 1}
+  ]
+}
