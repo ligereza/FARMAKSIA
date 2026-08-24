@@ -66,18 +66,18 @@
     }
   }
 
+  function requireWebGazerMethod(api, method) {
+    if (typeof api[method] !== "function") throw new Error(`API incompleta: falta ${method}()`);
+  }
+
   function configureWebGazer() {
-    if (!window.webgazer) throw new Error("WebGazer.js local no está disponible");
+    const api = window.webgazer;
+    if (!api) throw new Error("WebGazer.js local no está disponible");
+    ["saveDataAcrossSessions", "setGazeListener", "begin"].forEach((method) => requireWebGazerMethod(api, method));
     window.saveDataAcrossSessions = false;
-    return window.webgazer
-      .saveDataAcrossSessions(false)
-      .setRegression("ridge")
-      .showVideoPreview(false)
-      .showFaceOverlay(false)
-      .showFaceFeedbackBox(false)
-      .showPredictionPoints(false)
-      .applyKalmanFilter(true)
-      .setGazeListener(onGaze);
+    api.saveDataAcrossSessions(false);
+    api.setGazeListener(onGaze);
+    return api;
   }
 
   async function startTracking() {
@@ -89,18 +89,23 @@
       setStatus("Sirve la carpeta desde localhost o HTTPS; el protocolo file: no es un contexto válido para webcam.", "error");
       return;
     }
+    let stage = "configuración";
     try {
       const webgazer = configureWebGazer();
+      stage = "permiso de cámara";
       setStatus("Solicitando permiso de cámara… no comienza el seguimiento hasta que el navegador lo autorice.", "warn");
       const beginResult = webgazer.begin();
       if (beginResult && typeof beginResult.then === "function") await beginResult;
+      stage = "ajustes visuales";
+      if (typeof webgazer.showVideoPreview === "function") webgazer.showVideoPreview(false);
+      if (typeof webgazer.showPredictionPoints === "function") webgazer.showPredictionPoints(false);
       if (typeof webgazer.removeMouseEventListeners === "function") webgazer.removeMouseEventListeners();
       state.started = true;
       updateControls();
       setStatus("Seguimiento activo en memoria. Completa los nueve puntos de calibración.", "ok");
     } catch (error) {
       await stopTracking();
-      setStatus(`No se pudo iniciar el seguimiento: ${error.message || "permiso o dispositivo no disponible"}`, "error");
+      setStatus(`No se pudo iniciar (${stage}): ${error.message || "permiso o dispositivo no disponible"}`, "error");
     }
   }
 

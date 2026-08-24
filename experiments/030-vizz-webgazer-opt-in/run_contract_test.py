@@ -44,6 +44,8 @@ def main() -> None:
     require('id="consent-checkbox" type="checkbox"' in html, "consent checkbox is missing or not opt-in", failures)
     require('id="start-button" type="button" disabled' in html, "start button is not disabled by default", failures)
     require('id="stop-button" type="button"' in html, "stop button is missing", failures)
+    require('class="topbar"' in html, "controls are not in the top toolbar", failures)
+    require('id="calibration-stage"' in html, "full calibration stage is missing", failures)
     require("connect-src 'self'" in html, "CSP does not allow same-origin bundled resources", failures)
     require("connect-src 'none'" not in html, "CSP blocks WebGazer's same-origin resource loader", failures)
 

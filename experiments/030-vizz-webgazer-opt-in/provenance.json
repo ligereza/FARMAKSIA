@@ -39,7 +39,7 @@
       "id": "farmaxia:webgazer-page-030",
       "type": "entity",
       "path": "index.html",
-      "sha256": "5106453881B52059D8D5E84F24F99E996D075F204DBCA9E650B9CB258BAECF75",
+      "sha256": "C97E74FD939946EB21A7DB490F5DD7B4D479656C5C07711F307D1FAD0615ADF7",
       "role": "local_opt_in_calibration_page",
       "authority": "human_declared_tool"
     },
@@ -47,7 +47,7 @@
       "id": "farmaxia:webgazer-runtime-030",
       "type": "entity",
       "path": "app.js",
-      "sha256": "E3D018886E55EB9A2D9DE60242DC4A285B70BCE2DB7B00524529E0C334F7914C",
+      "sha256": "FB4F3BC7E965867F6DD40E74257DF99F764B16BD694AFA7CA3488B5468E53908",
       "role": "webgazer_lifecycle_and_volatile_marker_adapter",
       "authority": "human_declared_tool"
     },
@@ -55,7 +55,7 @@
       "id": "farmaxia:webgazer-static-audit-030",
       "type": "entity",
       "path": "run_contract_test.py",
-      "sha256": "13BE3F893CA795C890375441D0486C193D2B6F1DE676D0724C36A6CA2CDDE104",
+      "sha256": "9DB6D4B799F13130374C12DCBDDDA2718F6582C758E5E5FAF4145404CB4E4B62",
       "role": "privacy_consent_and_cleanup_static_audit",
       "authority": "human_declared_tool"
     },
