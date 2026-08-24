@@ -215,6 +215,14 @@ produjo `conflict`, el oracle incompleto `unavailable` y el mal formado
 `rejected`. La verificación sigue limitada al fixture: no equivale a una tarea
 humana ni convierte CODE-INE en operador independiente.
 
+El experimento 028 añadió una compuerta de calidad y procedencia para VIZZ. De
+once perfiles sintéticos, solo uno habilitó adaptación: requería consentimiento,
+procesamiento local, transporte sin red, calibración, error y latencia dentro
+del límite del fixture, cobertura completa y pose estable. Tres quedaron
+`blocked`, cinco `unavailable` y dos `rejected`; la transición base `c04 → c07`
+no cambió. WebGazer quedó como candidato solamente y Pupil Core diferido por
+hardware/API de red. No se habilitaron sensores.
+
 La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
@@ -226,15 +234,16 @@ El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
 1. CODEINE: mantener separadas transición base, score declarado, oracle de
    objetivo y estado humano; exigir coincidencia con un oracle completo antes
    de llamar verificada a una secuencia.
-2. VIZZ: extender fixtures sintéticos de cobertura, latencia y contexto antes
-   de evaluar eye tracking; cualquier sesión humana seguirá requiriendo una
+2. VIZZ: conservar la compuerta de calidad gaze-contingent y, antes de evaluar
+   eye tracking real, especificar retención, error, latencia extremo a extremo,
+   apagado y consentimiento; cualquier sesión humana seguirá requiriendo una
    acción explícita de consentimiento.
 
 X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
-`research/literature/006–013`. No se incorporará KETAMINE al prototipo hasta
+`research/literature/006–014`. No se incorporará KETAMINE al prototipo hasta
 que aparezca una experiencia que lo justifique.
 
 ## Regla de honestidad del loop

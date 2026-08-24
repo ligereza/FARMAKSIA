@@ -35,6 +35,7 @@ def main() -> None:
     check((ROOT / "research" / "literature" / "011-vizz-display-conditions.md").is_file(), "display condition literature record is missing", failures)
     check((ROOT / "research" / "literature" / "012-codeine-objective-signal.md").is_file(), "objective signal literature record is missing", failures)
     check((ROOT / "research" / "literature" / "013-codeine-verifiable-objective.md").is_file(), "verifiable objective literature record is missing", failures)
+    check((ROOT / "research" / "literature" / "014-vizz-gaze-quality-tools.md").is_file(), "gaze quality literature record is missing", failures)
 
     required_experiments = [
         "013-vizz-perceptual-adaptation",
@@ -52,6 +53,7 @@ def main() -> None:
         "025-vizz-display-condition-invariance",
         "026-codeine-objective-signal",
         "027-codeine-objective-oracle",
+        "028-vizz-gaze-quality-gate",
     ]
     for experiment in required_experiments:
         directory = ROOT / "experiments" / experiment
@@ -69,6 +71,7 @@ def main() -> None:
         "035-vizz-display-condition-invariance.md",
         "036-codeine-objective-signal.md",
         "037-codeine-objective-oracle.md",
+        "038-vizz-gaze-quality-gate.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

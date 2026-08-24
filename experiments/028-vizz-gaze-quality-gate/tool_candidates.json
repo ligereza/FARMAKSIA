@@ -1,0 +1,43 @@
+{
+  "schema": "farmaxia:vizz-gaze-tool-candidates:0.1",
+  "evaluated_at": "2026-08-24",
+  "policy": {
+    "require_consent": true,
+    "require_local_processing": true,
+    "forbid_network_transport": true,
+    "max_latency_ms": 100,
+    "max_calibration_error_px": 100,
+    "min_coverage_ratio": 1.0,
+    "require_stable_head_pose": true
+  },
+  "candidates": [
+    {
+      "id": "webgazer",
+      "version": "3.5.3",
+      "license": "GPL-3.0; repository also contains an LGPLv3 option",
+      "runtime": "browser",
+      "input": "webcam",
+      "local_inference": true,
+      "network_transport_required_for_selected_adapter": false,
+      "hardware_required": false,
+      "consent_required": true,
+      "maintenance_status": "official_maintenance_ended",
+      "adoption_status": "candidate_only",
+      "source_url": "https://github.com/brownhci/WebGazer"
+    },
+    {
+      "id": "pupil_core",
+      "version": "source/develop",
+      "license": "LGPL-3.0; repository reports GPL-3.0 components",
+      "runtime": "desktop",
+      "input": "Pupil Core wearable headset",
+      "local_inference": true,
+      "network_transport_required_for_selected_adapter": true,
+      "hardware_required": true,
+      "consent_required": true,
+      "maintenance_status": "active_community",
+      "adoption_status": "deferred_hardware_and_network_api",
+      "source_url": "https://github.com/pupil-labs/pupil"
+    }
+  ]
+}

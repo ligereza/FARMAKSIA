@@ -1,0 +1,159 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:028-vizz-gaze-quality-gate",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_gaze_quality_and_tool_adoption_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "evaluates_synthetic_gaze_quality_profiles",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:gaze-protocol-028",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "B05B6CCCE7BEB2CB76B063D8F1B592A81A82E416A7F3F3AEE92CEB514977C1E1",
+      "role": "gaze_quality_gate_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:gaze-cases-028",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "76107AED309DFC47DD2D785ACFADA837C7D2457811AB0DAEB1DF5BD63C24C7F7",
+      "role": "synthetic_consent_quality_profiles",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:gaze-tools-028",
+      "type": "entity",
+      "path": "tool_candidates.json",
+      "sha256": "0F20816D442B997A952B0522477349F9604AFE91514AD59931293D24553995BE",
+      "role": "open_source_tool_capability_and_policy_matrix",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:gaze-source-session-028",
+      "type": "entity",
+      "path": "../022-vizz-codeine-long-bridge/session.json",
+      "sha256": "09304E5A79EE805553D3C4AF186704DFF3D345CE4754E407E3448A588932A52C",
+      "role": "synthetic_vizz_session",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:gaze-bridge-028",
+      "type": "entity",
+      "path": "../020-vizz-codeine-event-bridge/run_experiment.py",
+      "sha256": "96940D7616B9924E226CA35241E2E65A7818B668E3F4A50A7FEA71ED6388B645",
+      "role": "vizz_codeine_normalizer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:gaze-codeine-028",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "base_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:gaze-runner-028",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "D28AB05A8CD4DDC38EB65ACCBD9F2FC83004631B0407EEB62A0103CCE7E1B72E",
+      "role": "gaze_quality_gate_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:gaze-kill-test-028",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "FAF4534EE026072A6B2164B971F8E3B37C449726C0B16088154BACCAEF7A8852",
+      "role": "gaze_quality_gate_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:gaze-results-028",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "1FD8E4EDB39E93193AEC9A24D219C930AD301DEAB8AF9F0AC3145897120BEE95",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:gaze-literature-014",
+      "type": "entity",
+      "path": "../../research/literature/014-vizz-gaze-quality-tools.md",
+      "sha256": "C2D581CEE3CA04B1B53A399ECF659EACF7C391BCCD717E2581A7AE874B11E4EC",
+      "role": "gaze_quality_and_tool_adoption_literature",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-gaze-boundary-028",
+      "type": "activity",
+      "used": [
+        "farmaxia:gaze-protocol-028",
+        "farmaxia:gaze-cases-028",
+        "farmaxia:gaze-tools-028",
+        "farmaxia:gaze-source-session-028",
+        "farmaxia:gaze-bridge-028",
+        "farmaxia:gaze-codeine-028",
+        "farmaxia:gaze-literature-014"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-gaze-boundary-028",
+      "type": "activity",
+      "used": [
+        "farmaxia:gaze-cases-028",
+        "farmaxia:gaze-tools-028",
+        "farmaxia:gaze-source-session-028",
+        "farmaxia:gaze-runner-028"
+      ],
+      "generated": ["farmaxia:gaze-results-028"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-gaze-kill-tests-028",
+      "type": "activity",
+      "used": ["farmaxia:gaze-results-028", "farmaxia:gaze-kill-test-028"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:gaze-quality-gate-028",
+      "expression": "does VIZZ enable gaze-contingent adaptation only when consent, local processing, calibration, latency, coverage, and tool provenance pass",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:gaze-cases-028", "farmaxia:gaze-tools-028", "farmaxia:gaze-results-028"]
+    },
+    {
+      "id": "farmaxia:query:gaze-fail-closed-028",
+      "expression": "do policy, quality, unknown-tool, and malformed-input failures prevent adaptation and preserve the base transition",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:gaze-runner-028", "farmaxia:gaze-kill-test-028", "farmaxia:gaze-results-028"]
+    }
+  ],
+  "unknowns": [
+    "Whether any selected tool meets the declared fixture limits in a real device session",
+    "Whether gaze-contingent adaptation improves comprehension or comfort for a person",
+    "Whether a real prescription, working distance, display luminance, or pupil state changes the useful gaze window",
+    "Whether any ocular or subjective outcome is related to the computational state being modeled"
+  ]
+}
