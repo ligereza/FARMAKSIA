@@ -1,0 +1,148 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:026-codeine-objective-signal",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_objective_signal_and_drift_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_objective_score_profiles_and_transition_gate",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:objective-protocol-026",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "1CF9193EC4C30F30583EE012F0FE50E1D5D46DA431F806308CB49693FBBF7383",
+      "role": "objective_signal_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:objective-cases-026",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "9AA518056912C18C06D82F5AF34DB507848430790B5CD5F0E4E519BC178D3E44",
+      "role": "declared_objective_profiles",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:objective-source-session-026",
+      "type": "entity",
+      "path": "../022-vizz-codeine-long-bridge/session.json",
+      "sha256": "09304E5A79EE805553D3C4AF186704DFF3D345CE4754E407E3448A588932A52C",
+      "role": "synthetic_vizz_session",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:objective-bridge-026",
+      "type": "entity",
+      "path": "../020-vizz-codeine-event-bridge/run_experiment.py",
+      "sha256": "96940D7616B9924E226CA35241E2E65A7818B668E3F4A50A7FEA71ED6388B645",
+      "role": "vizz_codeine_normalizer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:objective-codeine-026",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "base_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:objective-runner-026",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "27B607742778859F28886D745CB7A463296C2972B86F8156AD48A3FCE0653841",
+      "role": "objective_signal_and_drift_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:objective-kill-test-026",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "FA070B1C9B6143E1A99D06F6AFAB0DF21F790A3111F54487369A7C9AE765C044",
+      "role": "objective_signal_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:objective-results-026",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "61BD8899A5940B9EE70BFB9DCBDF9EE7E12052177BBBCD1B4A9F8A902CC831E4",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:objective-literature-012",
+      "type": "entity",
+      "path": "../../research/literature/012-codeine-objective-signal.md",
+      "sha256": "070C6ED93C308E7055AEBD67E17724AA73C5A5011FC458B57D6418F749EDE2A8",
+      "role": "code_comprehension_and_objective_signal_literature",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-objective-026",
+      "type": "activity",
+      "used": [
+        "farmaxia:objective-protocol-026",
+        "farmaxia:objective-cases-026",
+        "farmaxia:objective-source-session-026",
+        "farmaxia:objective-bridge-026",
+        "farmaxia:objective-codeine-026",
+        "farmaxia:objective-literature-012"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-objective-026",
+      "type": "activity",
+      "used": [
+        "farmaxia:objective-cases-026",
+        "farmaxia:objective-source-session-026",
+        "farmaxia:objective-runner-026"
+      ],
+      "generated": ["farmaxia:objective-results-026"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-objective-kill-tests-026",
+      "type": "activity",
+      "used": ["farmaxia:objective-results-026", "farmaxia:objective-kill-test-026"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:objective-availability-026",
+      "expression": "does complete declared objective evidence make drift classification available",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:objective-cases-026", "farmaxia:objective-results-026"]
+    },
+    {
+      "id": "farmaxia:query:objective-boundary-026",
+      "expression": "does missing or invalid objective evidence avoid an invented drift claim",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:objective-runner-026", "farmaxia:objective-kill-test-026", "farmaxia:objective-results-026"]
+    }
+  ],
+  "unknowns": [
+    "Whether a declared score corresponds to an independently verified task outcome",
+    "Whether a person can provide objective evidence without interrupting work",
+    "Whether objective regression corresponds to subjective drift or only task failure"
+  ]
+}

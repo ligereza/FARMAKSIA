@@ -1,0 +1,42 @@
+{
+  "schema": "farmaxia:codeine-objective-signal-cases:0.1",
+  "drift_tolerance": 0.1,
+  "profiles": [
+    {
+      "id": "no_objective",
+      "objective_scores": null,
+      "expected_classification": "unavailable",
+      "expected_drift": "unavailable"
+    },
+    {
+      "id": "stable",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "expected_classification": "available",
+      "expected_drift": "stable"
+    },
+    {
+      "id": "regressed",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.80, "c06": 0.70, "c07": 0.60, "c08": 0.55},
+      "expected_classification": "available",
+      "expected_drift": "regressed"
+    },
+    {
+      "id": "recovered",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.70, "c06": 0.65, "c07": 0.85, "c08": 0.85},
+      "expected_classification": "available",
+      "expected_drift": "recovered"
+    },
+    {
+      "id": "missing_tail_score",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.80, "c06": 0.70, "c07": 0.60},
+      "expected_classification": "unavailable",
+      "expected_drift": "unavailable"
+    },
+    {
+      "id": "out_of_range",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 1.2, "c05": 0.80, "c06": 0.70, "c07": 0.60, "c08": 0.55},
+      "expected_classification": "rejected",
+      "expected_drift": "rejected"
+    }
+  ]
+}

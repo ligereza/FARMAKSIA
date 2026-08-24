@@ -202,6 +202,12 @@ consulta `c04 → c07` aunque pierda contexto anterior, pero un foco sin ancla o
 un campo agregado queda `unavailable`. La condición `night` no se interpreta
 como pupila, melatonina, fatiga, ansiedad, intoxicación ni receta óptica.
 
+El experimento 026 separó la transición base de CODE-INE de una segunda capa
+de objetivo. Con un score completo se distinguieron `stable`, `regressed` y
+`recovered`; sin score completo la deriva quedó `unavailable`, y un valor fuera
+de rango fue rechazado. La señal es declarada por fixture: no demuestra que el
+objetivo sea verdadero ni que exista deriva subjetiva.
+
 La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
@@ -210,8 +216,9 @@ diseño. Los desconocidos humanos permanecen explícitos.
 
 El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
 
-1. CODEINE: mantener separadas transición disponible, entrada rechazada y
-   observación ambigua; no interpretar etiquetas manuales como estado humano.
+1. CODEINE: mantener separadas transición base, señal objetiva declarada y
+   estado humano; exigir una fuente de objetivo antes de llamar deriva a una
+   secuencia.
 2. VIZZ: extender fixtures sintéticos de cobertura, latencia y contexto antes
    de evaluar eye tracking; cualquier sesión humana seguirá requiriendo una
    acción explícita de consentimiento.
@@ -220,7 +227,7 @@ X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
-`research/literature/006–011`. No se incorporará KETAMINE al prototipo hasta
+`research/literature/006–012`. No se incorporará KETAMINE al prototipo hasta
 que aparezca una experiencia que lo justifique.
 
 ## Regla de honestidad del loop
