@@ -1,0 +1,168 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:029-codeine-executable-oracle",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_executable_oracle_and_mutation_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_specification_oracle_and_fixture_mutations",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:executable-oracle-protocol-029",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "4D120021AD890261A728C5A6D9E17B4CBB1B4FD8FBF65992246C3D01440D17B9",
+      "role": "executable_oracle_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:executable-oracle-cases-029",
+      "type": "entity",
+      "path": "cases.json",
+      "sha256": "EE7BAC09B0193181994FFAEA3022D0F44F7803B2EDA23949B2CB87759CE0C0A6",
+      "role": "declared_scores_and_mutation_profiles",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:executable-oracle-spec-029",
+      "type": "entity",
+      "path": "oracle_spec.json",
+      "sha256": "8207C805ECD60D6A8B197376A818312DD1C0701676EBDAF498ABFD94AD85F20A",
+      "role": "independent_task_acceptance_specification",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:executable-oracle-source-session-029",
+      "type": "entity",
+      "path": "../022-vizz-codeine-long-bridge/session.json",
+      "sha256": "09304E5A79EE805553D3C4AF186704DFF3D345CE4754E407E3448A588932A52C",
+      "role": "synthetic_vizz_session",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:executable-oracle-bridge-029",
+      "type": "entity",
+      "path": "../020-vizz-codeine-event-bridge/run_experiment.py",
+      "sha256": "96940D7616B9924E226CA35241E2E65A7818B668E3F4A50A7FEA71ED6388B645",
+      "role": "vizz_codeine_normalizer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:executable-oracle-codeine-029",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "base_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:executable-oracle-implementation-029",
+      "type": "entity",
+      "path": "objective_oracle.py",
+      "sha256": "5C12408160BC4EAE78801CD331A1D73E419474AC10412D83C77C6EB962CB8E27",
+      "role": "score_independent_executable_oracle",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:executable-oracle-runner-029",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "F2B54E23145DF1CDF539DA1041348B10EC02FD1E2B6F1429C67026F2748FBD92",
+      "role": "oracle_score_comparison_and_mutation_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:executable-oracle-kill-test-029",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "64046224AE219F908966241420B7A05AEE72DAD9F638C7EABBED0B19F42E313F",
+      "role": "executable_oracle_mutation_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:executable-oracle-results-029",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "34B8D48C0D0AADAAA2AA7FB12353F2D31777A6AD7F9124FC7D30A16FC14F2773",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:executable-oracle-literature-015",
+      "type": "entity",
+      "path": "../../research/literature/015-codeine-executable-oracle-mutation.md",
+      "sha256": "38FF1679FDF1E9BCBCF35C2F3A341EBEB9016098B88FAA2DE53823878347E734",
+      "role": "oracle_and_mutation_testing_literature",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-executable-oracle-029",
+      "type": "activity",
+      "used": [
+        "farmaxia:executable-oracle-protocol-029",
+        "farmaxia:executable-oracle-cases-029",
+        "farmaxia:executable-oracle-spec-029",
+        "farmaxia:executable-oracle-source-session-029",
+        "farmaxia:executable-oracle-bridge-029",
+        "farmaxia:executable-oracle-codeine-029",
+        "farmaxia:executable-oracle-literature-015"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-executable-oracle-029",
+      "type": "activity",
+      "used": [
+        "farmaxia:executable-oracle-cases-029",
+        "farmaxia:executable-oracle-spec-029",
+        "farmaxia:executable-oracle-source-session-029",
+        "farmaxia:executable-oracle-implementation-029",
+        "farmaxia:executable-oracle-runner-029"
+      ],
+      "generated": ["farmaxia:executable-oracle-results-029"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-executable-oracle-kill-tests-029",
+      "type": "activity",
+      "used": ["farmaxia:executable-oracle-results-029", "farmaxia:executable-oracle-kill-test-029"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:executable-oracle-independence-029",
+      "expression": "does a score-independent executable specification distinguish task regression, recovery, and action mutations",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:executable-oracle-spec-029", "farmaxia:executable-oracle-implementation-029", "farmaxia:executable-oracle-results-029"]
+    },
+    {
+      "id": "farmaxia:query:executable-oracle-fail-closed-029",
+      "expression": "do conflicts, missing events, unknown mutations, and invalid scores avoid verified evidence",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:executable-oracle-runner-029", "farmaxia:executable-oracle-kill-test-029", "farmaxia:executable-oracle-results-029"]
+    }
+  ],
+  "unknowns": [
+    "Whether the executable acceptance specification represents an independent real task outcome",
+    "Whether a consented human or external evaluator would agree with the fixture acceptance rules",
+    "Whether verified objective regression corresponds to subjective drift or any neurochemical state",
+    "Whether an external mutation testing tool would reveal additional oracle weaknesses"
+  ]
+}

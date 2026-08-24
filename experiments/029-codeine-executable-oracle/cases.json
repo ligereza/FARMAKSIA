@@ -1,0 +1,69 @@
+{
+  "schema": "farmaxia:codeine-executable-oracle-cases:0.1",
+  "drift_tolerance": 0.1,
+  "profiles": [
+    {
+      "id": "reference_stable",
+      "mutation": "none",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "expected_evidence_status": "verified",
+      "expected_verified_drift": "stable"
+    },
+    {
+      "id": "task_regressed_matches",
+      "mutation": "tail_failure_sustained",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.80, "c06": 0.70, "c07": 0.60, "c08": 0.55},
+      "expected_evidence_status": "verified",
+      "expected_verified_drift": "regressed"
+    },
+    {
+      "id": "task_recovered_matches",
+      "mutation": "tail_failure_then_recover",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.70, "c06": 0.65, "c07": 0.85, "c08": 0.85},
+      "expected_evidence_status": "verified",
+      "expected_verified_drift": "recovered"
+    },
+    {
+      "id": "score_conflicts_with_regression",
+      "mutation": "tail_failure_sustained",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "expected_evidence_status": "conflict",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "score_conflicts_with_action",
+      "mutation": "wrong_tail_action",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "expected_evidence_status": "conflict",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "missing_task_event",
+      "mutation": "remove_repetition_event",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.80, "c06": 0.70, "c07": 0.60, "c08": 0.55},
+      "expected_evidence_status": "unavailable",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "anchor_rejected",
+      "mutation": "anchor_gain_low",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "expected_evidence_status": "rejected",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "unknown_mutation_rejected",
+      "mutation": "not_a_declared_mutation",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 0.85, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "expected_evidence_status": "rejected",
+      "expected_verified_drift": null
+    },
+    {
+      "id": "invalid_score_rejected",
+      "mutation": "none",
+      "objective_scores": {"c01": 0.0, "c02": 0.55, "c03": 0.55, "c04": 1.2, "c05": 0.84, "c06": 0.84, "c07": 0.84, "c08": 0.84},
+      "expected_evidence_status": "rejected",
+      "expected_verified_drift": null
+    }
+  ]
+}

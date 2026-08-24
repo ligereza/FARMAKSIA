@@ -11,7 +11,7 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 
 | Hipótesis | Estado |
 |---|---|
-| CODE-INE | descriptor provisional de transición y objetivo declarado/verificado 027; interoperable con VIZZ; operador independiente eliminado |
+| CODE-INE | descriptor provisional con oracle ejecutable 029; interoperable con VIZZ; operador independiente eliminado |
 | X-ANA-X | archivado como hipótesis independiente; protocolo de analogía conservado |
 | KETAMINE | en cuarentena; sin prototipo activo ni teoría forzada |
 | VIZZ | compuerta 028 de calidad/procedencia gaze-contingent; instrumentación manual opt-in; sin datos humanos, eficacia desconocida |
@@ -56,6 +56,7 @@ cuando no existe un archivo humano.
 - [Invariancia de condición de display VIZZ](experiments/025-vizz-display-condition-invariance/results.md)
 - [Señal de objetivo CODE-INE](experiments/026-codeine-objective-signal/results.md)
 - [Oráculo de objetivo CODE-INE](experiments/027-codeine-objective-oracle/results.md)
+- [Oracle ejecutable y mutación CODE-INE](experiments/029-codeine-executable-oracle/results.md)
 - [Compuerta de calidad gaze-contingent VIZZ](experiments/028-vizz-gaze-quality-gate/results.md)
 - [Auditoría consolidada de estado](research/decisions/032-laboratory-state-audit.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
@@ -64,6 +65,8 @@ cuando no existe un archivo humano.
 - [Literatura de condiciones de display VIZZ](research/literature/011-vizz-display-conditions.md)
 - [Literatura de señal objetiva CODE-INE](research/literature/012-codeine-objective-signal.md)
 - [Literatura de oráculos verificables CODE-INE](research/literature/013-codeine-verifiable-objective.md)
+- [Literatura de oracle ejecutable y mutation testing CODE-INE](research/literature/015-codeine-executable-oracle-mutation.md)
+- [Decisión de oracle ejecutable CODE-INE](research/decisions/039-codeine-executable-oracle.md)
 - [Literatura de calidad de mirada y herramientas VIZZ](research/literature/014-vizz-gaze-quality-tools.md)
 - [Decisión de compuerta gaze-contingent VIZZ](research/decisions/038-vizz-gaze-quality-gate.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)

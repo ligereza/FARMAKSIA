@@ -62,6 +62,7 @@ def main() -> None:
         "experiments/026-codeine-objective-signal/provenance.json",
         "experiments/027-codeine-objective-oracle/provenance.json",
         "experiments/028-vizz-gaze-quality-gate/provenance.json",
+        "experiments/029-codeine-executable-oracle/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -651,6 +652,40 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 028", python_script("research/tools/validate_provenance.py", provenance[27]), "PROVENANCE_VALID")
+
+    executable_oracle = subprocess.run(
+        python_script("experiments/029-codeine-executable-oracle/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if executable_oracle.returncode != 0:
+        raise RuntimeError("experiment 029 failed")
+    executable_result = json.loads(executable_oracle.stdout)
+    if (
+        executable_result["case_count"],
+        executable_result["evidence_status_counts"],
+        executable_result["all_expected_classifications"],
+        executable_result["baseline_transition"]["last_significant_improvement"],
+        executable_result["baseline_transition"]["repetition_entry"],
+        executable_result["oracle_reads_objective_scores"],
+        executable_result["human_data"],
+        executable_result["devices_started"],
+        executable_result["network_used"],
+        executable_result["raw_capture"],
+        executable_result["pharmacological_inference"],
+        executable_result["neurochemical_inference"],
+    ) != (9, {"verified": 3, "conflict": 2, "unavailable": 1, "rejected": 3}, True, "c04", "c07", False, False, False, False, False, False, False):
+        raise RuntimeError("experiment 029 CODE-INE executable oracle boundary failure")
+    print("PASS experiment 029")
+    command(
+        "kill test CODE-INE executable oracle 029",
+        python_script("experiments/029-codeine-executable-oracle/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 029", python_script("research/tools/validate_provenance.py", provenance[28]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

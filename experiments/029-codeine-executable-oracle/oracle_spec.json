@@ -1,0 +1,15 @@
+{
+  "schema": "farmaxia:codeine-executable-oracle-spec:0.1",
+  "required_event_ids": ["c01", "c02", "c03", "c04", "c05", "c06", "c07", "c08"],
+  "anchor_event_id": "c04",
+  "anchor": {
+    "action_class": "verify",
+    "min_gain": 0.2,
+    "max_errors": 0
+  },
+  "tail": {
+    "allowed_action_classes": ["maintain", "test"],
+    "max_errors": 1
+  },
+  "repetition_event_id": "c07"
+}
