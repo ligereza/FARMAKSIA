@@ -1,0 +1,131 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:022-vizz-codeine-long-bridge",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_long_synthetic_interoperability_control"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_adapter_dry_run_and_codeine_transition",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:long-bridge-protocol-022",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "07778B9477410EBD918BC6DF255B22A48F1692166597D15F301407283350E0C9",
+      "role": "long_sequence_bridge_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:long-bridge-session-022",
+      "type": "entity",
+      "path": "session.json",
+      "sha256": "09304E5A79EE805553D3C4AF186704DFF3D345CE4754E407E3448A588932A52C",
+      "role": "declared_synthetic_long_vizz_session",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:long-bridge-adapter-022",
+      "type": "entity",
+      "path": "../../research/tools/manual_event_adapter.py",
+      "sha256": "ED0D5F3C79A3BCF0077C0EC7231E4DEDD44C0BC16CF5E2C7A668E3967B070EC8",
+      "role": "consent_gated_adapter",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:long-bridge-codeine-022",
+      "type": "entity",
+      "path": "../016-codeine-session-state/run_experiment.py",
+      "sha256": "0F3A7C5EF5513F56C248817D8F409304D7D50D89BD8FC426B91B429B5D4CED22",
+      "role": "codeine_transition_detector",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:long-bridge-runner-022",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "F4CEED818A04D406F9210DF862E2A92EA7A08A47820A4768AD432AB345105181",
+      "role": "long_interoperability_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:long-bridge-kill-test-022",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "50BA502F209ABC6EAAF3CD9DE4EC3DEDAA2BD9EB4B634A93452CD7CD24278950",
+      "role": "long_bridge_boundary_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:long-bridge-results-022",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "1EFC997CE490D50533721448A96907BA86E5FEE17365BD8D75F638F55DC2814C",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-long-vizz-codeine-bridge-022",
+      "type": "activity",
+      "used": [
+        "farmaxia:long-bridge-protocol-022",
+        "farmaxia:long-bridge-session-022",
+        "farmaxia:long-bridge-adapter-022",
+        "farmaxia:long-bridge-codeine-022"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-long-vizz-codeine-bridge-022",
+      "type": "activity",
+      "used": [
+        "farmaxia:long-bridge-session-022",
+        "farmaxia:long-bridge-adapter-022",
+        "farmaxia:long-bridge-codeine-022",
+        "farmaxia:long-bridge-runner-022"
+      ],
+      "generated": ["farmaxia:long-bridge-results-022"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-long-vizz-codeine-kill-tests-022",
+      "type": "activity",
+      "used": ["farmaxia:long-bridge-results-022", "farmaxia:long-bridge-kill-test-022"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:long-bridge-transition",
+      "expression": "does the manual VIZZ envelope preserve the CODE-INE c04-to-c07 transition",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:long-bridge-session-022", "farmaxia:long-bridge-codeine-022", "farmaxia:long-bridge-results-022"]
+    },
+    {
+      "id": "farmaxia:query:long-bridge-gates",
+      "expression": "do missing consent and action class remain unavailable",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:long-bridge-adapter-022", "farmaxia:long-bridge-kill-test-022"]
+    }
+  ],
+  "unknowns": [
+    "Whether manual event entry is feasible during a real task",
+    "Whether a person would label c04-to-c07 as repetition",
+    "Whether objective signals are needed to distinguish repetition from drift"
+  ]
+}

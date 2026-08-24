@@ -178,6 +178,11 @@ antes de escribir, con dry-run valida tres eventos sin crear sesión y protege
 salidas existentes. No se activó ninguna sesión real; consentimiento y utilidad
 humana siguen fuera de la evidencia computacional.
 
+El experimento 022 pasó ocho eventos sintéticos por el adaptador en dry-run y
+recuperó `c04 → c07` en CODE-INE sin escribir una sesión. Esto demuestra que el
+contrato puede expresar la transición buscada; no demuestra percepción humana,
+repetición subjetiva ni deriva.
+
 ## Frente activo
 
 El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:

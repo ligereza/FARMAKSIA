@@ -55,6 +55,7 @@ def main() -> None:
         "experiments/019-xanax-provenance-archive-audit/provenance.json",
         "experiments/020-vizz-codeine-event-bridge/provenance.json",
         "experiments/021-manual-adapter-gate/provenance.json",
+        "experiments/022-vizz-codeine-long-bridge/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -412,6 +413,38 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 021", python_script("research/tools/validate_provenance.py", provenance[20]), "PROVENANCE_VALID")
+
+    long_bridge = subprocess.run(
+        python_script("experiments/022-vizz-codeine-long-bridge/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if long_bridge.returncode != 0:
+        raise RuntimeError("experiment 022 failed")
+    long_bridge_result = json.loads(long_bridge.stdout)
+    transition = long_bridge_result["transition"]
+    if (
+        long_bridge_result["vizz_event_count"],
+        long_bridge_result["codeine_event_count"],
+        transition["last_significant_improvement"],
+        transition["repetition_entry"],
+        long_bridge_result["dry_run_valid"],
+        long_bridge_result["session_written"],
+        long_bridge_result["human_data"],
+        long_bridge_result["pharmacological_inference"],
+        long_bridge_result["raw_capture"],
+    ) != (8, 8, "c04", "c07", True, False, False, False, False):
+        raise RuntimeError("experiment 022 long VIZZ-CODE-INE bridge failure")
+    print("PASS experiment 022")
+    command(
+        "kill test long VIZZ-CODE-INE bridge 022",
+        python_script("experiments/022-vizz-codeine-long-bridge/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 022", python_script("research/tools/validate_provenance.py", provenance[21]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
