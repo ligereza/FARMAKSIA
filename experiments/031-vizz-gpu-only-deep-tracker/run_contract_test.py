@@ -37,6 +37,7 @@ def main() -> None:
     require("script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'" in html, "CSP does not allow local WASM runtime", failures)
     require("connect-src 'self'" in html, "CSP does not allow same-origin model assets", failures)
     require("https://" not in html and "http://" not in html, "HTML contains a remote runtime URL", failures)
+    require("vision_bundle.js" in js and "vision_bundle.mjs" not in js, "MediaPipe module uses an HTTP-server-safe JavaScript extension", failures)
 
     required_tokens = [
         'navigator.gpu.requestAdapter({ powerPreference: "low-power" })',
@@ -60,7 +61,7 @@ def main() -> None:
 
     required_files = [
         "vendor/ort.webgpu.min.js",
-        "vendor/tasks-vision/vision_bundle.mjs",
+        "vendor/tasks-vision/vision_bundle.js",
         "vendor/tasks-vision/wasm/vision_wasm_internal.js",
         "vendor/tasks-vision/wasm/vision_wasm_internal.wasm",
         "vendor/tasks-vision/wasm/vision_wasm_nosimd_internal.js",

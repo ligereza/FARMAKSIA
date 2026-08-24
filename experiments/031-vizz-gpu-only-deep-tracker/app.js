@@ -1,4 +1,4 @@
-import { FaceLandmarker, FilesetResolver } from "./vendor/tasks-vision/vision_bundle.mjs";
+import { FaceLandmarker, FilesetResolver } from "./vendor/tasks-vision/vision_bundle.js";
 
 const $ = (id) => document.getElementById(id);
 const ui = {

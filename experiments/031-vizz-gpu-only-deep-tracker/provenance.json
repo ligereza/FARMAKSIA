@@ -47,7 +47,7 @@
       "id": "farmaxia:vizz-031-runtime",
       "type": "entity",
       "path": "app.js",
-      "sha256": "CF7EAA7F3385173C8F1B100EC60790BED614B4FDF4D5115BCC916237CA477511",
+      "sha256": "D76B371B4CBE3DA1C997648FFCEEB0F16B89219EA6A900F123102EDC22CC3093",
       "role": "gpu_gate_landmarker_encoder_and_cleanup",
       "authority": "human_declared_tool"
     },
@@ -55,7 +55,7 @@
       "id": "farmaxia:vizz-031-contract",
       "type": "entity",
       "path": "run_contract_test.py",
-      "sha256": "A407EE5985A015ADE868BDA6875DB2F09DD17A1F301E99711E94F6F432979B25",
+      "sha256": "6B4740FDF81E4DBEC2D8DAB2A91B1EF20B67F344E44EF481FDB17B4F0B628ADF",
       "role": "static_gpu_only_privacy_and_asset_audit",
       "authority": "human_declared_tool"
     },
@@ -102,7 +102,7 @@
     {
       "id": "farmaxia:vizz-031-mediapipe-bundle",
       "type": "entity",
-      "path": "vendor/tasks-vision/vision_bundle.mjs",
+      "path": "vendor/tasks-vision/vision_bundle.js",
       "sha256": "D885630C297C0B20B1FE86096CB06291C4C8080876F27852E724F24AC603713F",
       "role": "pinned_mediapipe_tasks_vision_bundle",
       "authority": "human_declared_tool"
