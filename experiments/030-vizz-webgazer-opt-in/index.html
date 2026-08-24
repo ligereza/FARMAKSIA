@@ -49,6 +49,11 @@
       .calibration-dot:hover:not(:disabled) { transform: scale(1.12); }
       .calibration-dot.visited { background: var(--accent); border-color: #e4fff7; opacity: 1; box-shadow: 0 0 0 7px #75e0c133, 0 0 24px #75e0c188; }
       .calibration-dot:focus-visible { outline: 3px solid var(--warn); outline-offset: 6px; }
+      #webgazerVideoContainer,
+      #webgazerVideoFeed,
+      #webgazerVideoCanvas,
+      #webgazerFaceOverlay,
+      #webgazerFaceFeedbackBox { pointer-events: none !important; }
       .dot-1 { left: 7%; top: 9%; } .dot-2 { left: 50%; top: 9%; } .dot-3 { left: 93%; top: 9%; }
       .dot-4 { left: 7%; top: 50%; } .dot-5 { left: 50%; top: 50%; } .dot-6 { left: 93%; top: 50%; }
       .dot-7 { left: 7%; top: 91%; } .dot-8 { left: 50%; top: 91%; } .dot-9 { left: 93%; top: 91%; }

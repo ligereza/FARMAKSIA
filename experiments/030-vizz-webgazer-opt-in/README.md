@@ -22,6 +22,8 @@ ocular. El marcador no es una medición clínica ni una receta óptica.
   Emscripten vendorizado requiere `unsafe-eval` para `Function()` y
   `wasm-unsafe-eval` para WebAssembly; esta excepción queda limitada a este
   sandbox local y no autoriza orígenes externos.
+- El preview oculto que WebGazer crea sobre la esquina superior izquierda no
+  recibe eventos de puntero; así no bloquea el primer objetivo de calibración.
 - `saveDataAcrossSessions(false)` se fija antes de iniciar. El adaptador no
   guarda vídeo ni coordenadas; solo mantiene el último punto y un contador en
   memoria para la visualización.

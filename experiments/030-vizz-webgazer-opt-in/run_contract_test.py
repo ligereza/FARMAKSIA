@@ -71,6 +71,7 @@ def main() -> None:
     require("script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'" in html, "CSP does not allow the local MediaPipe runtime", failures)
     require("connect-src 'self'" in html, "CSP does not allow same-origin bundled resources", failures)
     require("connect-src 'none'" not in html, "CSP blocks WebGazer's same-origin resource loader", failures)
+    require("#webgazerVideoContainer" in html and "pointer-events: none" in html, "hidden WebGazer overlay can intercept calibration clicks", failures)
 
     required_tokens = [
         "window.saveDataAcrossSessions = false",

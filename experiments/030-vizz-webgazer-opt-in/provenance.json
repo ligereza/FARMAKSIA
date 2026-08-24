@@ -23,7 +23,7 @@
       "id": "farmaxia:webgazer-protocol-030",
       "type": "entity",
       "path": "README.md",
-      "sha256": "BAE5AC162D50A79B422438F935598B8A4E6F5E50D45D95A5FD1F76EB87F480B7",
+      "sha256": "6B239AB5B5A9CA8CAE2D578D8E426991ECC71025A9EC7891AE726E02E9200117",
       "role": "real_webcam_opt_in_experiment_contract",
       "authority": "human_reviewed_record"
     },
@@ -39,7 +39,7 @@
       "id": "farmaxia:webgazer-page-030",
       "type": "entity",
       "path": "index.html",
-      "sha256": "6DB10D6D6DC946B30D36665BF0D365FA09E73888AC9C0D259ADD9BAB0ABF0287",
+      "sha256": "35BFF33D933CD873528A91475179B22B692FE49CE384908C7DB87E212BF59C14",
       "role": "local_opt_in_calibration_page",
       "authority": "human_declared_tool"
     },
@@ -55,7 +55,7 @@
       "id": "farmaxia:webgazer-static-audit-030",
       "type": "entity",
       "path": "run_contract_test.py",
-      "sha256": "EADBDD8F70E58F7EA7673F5EBB3C54CE79048E5EDBB2589A6E18DE0A837A43A6",
+      "sha256": "358372C3856EC0B1F76DA63E5312A46EFFCA05CDD9B0D9E3C84295322D710292",
       "role": "privacy_consent_and_cleanup_static_audit",
       "authority": "human_declared_tool"
     },
@@ -63,7 +63,7 @@
       "id": "farmaxia:webgazer-results-030",
       "type": "entity",
       "path": "results.md",
-      "sha256": "5BA5D87E556B15B5E293ACCDA8ED14A45A162F1F92A9CA8C9A36B3875858E2CA",
+      "sha256": "9286653281BBCE47DFF2F3199E1AE981C34811B42415AD77B79EE2E7B88429CC",
       "role": "static_contract_measurement_record",
       "authority": "human_reviewed_record"
     },
