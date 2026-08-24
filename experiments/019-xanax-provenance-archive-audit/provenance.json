@@ -1,0 +1,122 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:019-xanax-provenance-archive-audit",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_final_xanax_novelty_control"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "compares_custody_analogy_with_direct_validator",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:xanax-archive-protocol-019",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "2971944EE09C6122065559C92B67C42D67842C8433D5526DFC0DAA3A515D538A",
+      "role": "final_novelty_kill_test_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:xanax-archive-source-card-019",
+      "type": "entity",
+      "path": "source_card.json",
+      "sha256": "B140291FAE7C5AA1D11D88A62D26F1A9C610087E8BB6DD383DB2700465372C33",
+      "role": "declared_custody_analogy",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-archive-target-validator-019",
+      "type": "entity",
+      "path": "../../research/tools/validate_provenance.py",
+      "sha256": "0AB070BFA8B39044331E430FC01115C5F839B67A1839B4897A84D96643F91632",
+      "role": "real_repository_validator_target",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-archive-runner-019",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "EF36B6352C9BE2ADD54AE59DD2B2AB03AA049D31431E7D0C45FC231D1616738F",
+      "role": "direct_and_analogy_comparison_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-archive-kill-test-019",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "C1ADACF8EF624D761FFBBE0213D692A29452284D5EA1884D18E3FB5E88BB58FB",
+      "role": "final_novelty_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-archive-results-019",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "D45F55ED846537B99EF101FD13D3942F6721C617C8641899045C930498153D12",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-xanax-archive-audit-019",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-archive-protocol-019",
+        "farmaxia:xanax-archive-source-card-019",
+        "farmaxia:xanax-archive-target-validator-019"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-xanax-archive-audit-019",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-archive-protocol-019",
+        "farmaxia:xanax-archive-source-card-019",
+        "farmaxia:xanax-archive-target-validator-019",
+        "farmaxia:xanax-archive-runner-019"
+      ],
+      "generated": ["farmaxia:xanax-archive-results-019"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-xanax-archive-kill-tests-019",
+      "type": "activity",
+      "used": ["farmaxia:xanax-archive-results-019", "farmaxia:xanax-archive-kill-test-019"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:xanax-final-unique-state",
+      "expression": "does custody analogy produce a validator state not produced by direct validation",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-archive-target-validator-019", "farmaxia:xanax-archive-results-019"]
+    },
+    {
+      "id": "farmaxia:query:xanax-archive-gate",
+      "expression": "do broken seals, missing handoffs, and absent objects fail direct validation",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-archive-target-validator-019", "farmaxia:xanax-archive-kill-test-019"]
+    }
+  ],
+  "unknowns": [
+    "Whether any human gains comprehension from the analogy after the independent hypothesis is archived",
+    "Whether the protocol is useful as a documentation technique despite no unique computation",
+    "Whether future evidence could justify reopening the archived hypothesis"
+  ]
+}

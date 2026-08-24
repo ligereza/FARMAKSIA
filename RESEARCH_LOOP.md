@@ -162,18 +162,23 @@ mismos hechos y la misma decisión. X-ANA-X no añadió capacidad en ese caso y
 queda bajo una última compuerta de novedad antes de considerar su fusión con
 reformulación/state augmentation.
 
+El experimento 019 repitió el control en procedencia: una analogía de cadena de
+custodia y el validador directo coincidieron en manifiesto válido, hash roto,
+referencia desconocida y archivo ausente. La decisión 028 archiva X-ANA-X como
+hipótesis independiente y conserva la analogía solo como técnica documental.
+
 ## Frente activo
 
-El siguiente ciclo construirá tres prototipos sin infraestructura general:
+El siguiente ciclo mantendrá dos frentes activos sin infraestructura general:
 
 1. CODEINE: probar el envelope opt-in con una sesión manual mínima y verificar
    si las clases de acción pueden declararse sin capturar contenido personal.
-2. XANAX: buscar un último caso con una relación transferible no reducible a
-   reformulación; si el control directo vuelve a coincidir, archivar la
-   hipótesis independiente y conservar solo el protocolo de procedencia.
-3. VIZZ: probar el adaptador manual con una sesión local explícitamente
+2. VIZZ: probar el adaptador manual con una sesión local explícitamente
    consentida, sin contenido personal, y verificar que sus eventos permitan
    repetir el contrato 014; solo si la medición lo exige, evaluar eye tracking.
+
+X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
+control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
 `research/literature/006–009`. No se incorporará KETAMINE al prototipo hasta

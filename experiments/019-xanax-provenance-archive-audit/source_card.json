@@ -1,0 +1,18 @@
+{
+  "schema": "farmaxia:xanax-source-card:0.1",
+  "id": "chain-of-custody",
+  "domain": "chain of custody",
+  "authority": "human_declared_fixture",
+  "relations": [
+    "object_has_seal",
+    "handoff_requires_known_recipient",
+    "broken_seal_stops_handoff"
+  ],
+  "mapping": {
+    "object": "provenance entity",
+    "seal": "sha256 file hash",
+    "handoff": "derived or required entity reference",
+    "broken_seal": "hash mismatch or missing file"
+  },
+  "prediction": "invalid seal or unknown handoff must make the manifest unavailable"
+}

@@ -52,6 +52,7 @@ def main() -> None:
         "experiments/016-codeine-session-state/provenance.json",
         "experiments/017-xanax-analogy-chain/provenance.json",
         "experiments/018-xanax-reformulation-control/provenance.json",
+        "experiments/019-xanax-provenance-archive-audit/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -321,6 +322,34 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 018", python_script("research/tools/validate_provenance.py", provenance[17]), "PROVENANCE_VALID")
+
+    xanax_archive = subprocess.run(
+        python_script("experiments/019-xanax-provenance-archive-audit/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if xanax_archive.returncode != 0:
+        raise RuntimeError("experiment 019 failed")
+    xanax_archive_result = json.loads(xanax_archive.stdout)
+    if (
+        xanax_archive_result["comparison"]["same_statuses"],
+        xanax_archive_result["comparison"]["unique_analogy_decision"],
+        xanax_archive_result["comparison"]["novelty_status"],
+        xanax_archive_result["human_data"],
+        xanax_archive_result["network_used"],
+        xanax_archive_result["arbitrary_corpus"],
+    ) != (True, False, "not_demonstrated", False, False, False):
+        raise RuntimeError("experiment 019 X-ANA-X archive audit failure")
+    print("PASS experiment 019")
+    command(
+        "kill test X-ANA-X archive 019",
+        python_script("experiments/019-xanax-provenance-archive-audit/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 019", python_script("research/tools/validate_provenance.py", provenance[18]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
