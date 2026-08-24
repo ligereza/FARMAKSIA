@@ -62,7 +62,7 @@ pequeño, real, reproducible y capaz de mostrar qué gana y qué pierde.
 
 ## Estado histórico y nueva frontera
 
-Fecha de corte: 2026-08-23.
+Fecha de corte: 2026-08-24.
 
 Los ciclos 001–012 quedan como archivo técnico de representación,
 procedencia, composición y diseño experimental. Sus resultados no deciden por
@@ -123,6 +123,15 @@ El experimento 012 llevó el control a curvas Bézier cerradas con agujeros y
 capas: la tabla conservó visibilidad en 20/20 y los bounding boxes fallaron en
 20/20. El residuo compositivo queda explícito.
 
+El experimento 013 convirtió VIZZ en un prototipo local: una misma traza de
+desarrollo se expone como texto, timeline, foco local y campo agregado. La
+interfaz cambia luminancia, contraste y ventana de foco sin cambiar los datos.
+El texto conserva acción y secuencia; el timeline conserva secuencia y estado
+pero pierde detalle; el foco conserva detalle local y pierde contexto; el
+campo conserva señales agregadas y pierde identidad y orden de acciones.
+Estas son diferencias de exposición computacional, no evidencia de confort o
+comprensión humana.
+
 ## Frente activo
 
 El siguiente ciclo construirá tres prototipos sin infraestructura general:
@@ -131,9 +140,8 @@ El siguiente ciclo construirá tres prototipos sin infraestructura general:
    rush/mejora frente a repetición/deriva.
 2. XANAX: una cadena de analogía y búsqueda sobre un problema real pequeño,
    con transferencia y ruptura verificables.
-3. VIZZ: una misma traza informática en varias representaciones, primero con
-   luminancia, contraste, densidad y foco simulado; luego se evaluará eye
-   tracking si la pregunta lo exige.
+3. VIZZ: extender el prototipo 013 con una tarea de decisión reproducible y,
+   solo si la medición lo exige, evaluar eye tracking.
 
 Las herramientas candidatas y la investigación científica están registradas en
 `research/literature/006–009`. No se incorporará KETAMINE al prototipo hasta

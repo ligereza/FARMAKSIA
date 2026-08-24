@@ -1,0 +1,113 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/"
+  ],
+  "experiment": "farmaxia:experiment:013-vizz-perceptual-adaptation",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_perceptual_representation_contract"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "checks_trace_and_query_availability",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-protocol",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "FFB68CED6382B29F742501DA58D2E2467D802980C1C41DFBAC2A98E83289AAC4",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-trace",
+      "type": "entity",
+      "path": "trace.json",
+      "sha256": "0D5C4D7B7A9082F29FABDA11F4520A19D5FD05EE936E52BB7967A30B791FB4F6",
+      "role": "declared_synthetic_trace",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "DE5BCA6217668A741ED978EE3A48B90811CB1A1B49E153B6C6FB362DBE64B2EF",
+      "role": "query_availability_measurement_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-verifier",
+      "type": "entity",
+      "path": "verify_vizz.py",
+      "sha256": "F05693A6848D8C90A3F8B02DB74680B2A4D3CBC78B3E0C40C441D2D33FBA4F18",
+      "role": "prototype_contract_verifier",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-display",
+      "type": "entity",
+      "path": "vizz.html",
+      "sha256": "56C7550587A0E061487D35DB720484AA50D3A4A5C9ADC652855566682C2D407C",
+      "role": "interactive_representation",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-results",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "06CDD51C0EF82A5DED99850B6F4F4A85BF9AD771F9C17B4D6C9AE1BC0A3B2319",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-vizz-trace",
+      "type": "activity",
+      "used": ["farmaxia:vizz-protocol"],
+      "generated": ["farmaxia:vizz-trace"],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-vizz-query-measurement",
+      "type": "activity",
+      "used": ["farmaxia:vizz-protocol", "farmaxia:vizz-trace", "farmaxia:vizz-runner"],
+      "generated": ["farmaxia:vizz-results"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:verify-vizz-display",
+      "type": "activity",
+      "used": ["farmaxia:vizz-trace", "farmaxia:vizz-display", "farmaxia:vizz-verifier"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:vizz-exact-action",
+      "expression": "which exact action occurred at a declared event",
+      "authority": "human_declared",
+      "required_entities": ["farmaxia:vizz-trace"]
+    },
+    {
+      "id": "farmaxia:query:vizz-state-tail",
+      "expression": "is there low-gain activity after the last significant improvement",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-trace", "farmaxia:vizz-results"]
+    }
+  ],
+  "unknowns": [
+    "Whether a human detects the declared state faster in timeline or field mode",
+    "Whether gaze-contingent focus reduces irrelevant visual load without hiding useful context",
+    "Whether luminance and spectral changes alter comfort or sleep in this task"
+  ]
+}

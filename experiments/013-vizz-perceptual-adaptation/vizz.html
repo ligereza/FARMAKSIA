@@ -1,0 +1,126 @@
+<div id="farmaxia-vizz-013">
+  <style>
+    #farmaxia-vizz-013 { --bg: #f2f2ef; --ink: #171a1d; --muted: #5f666d; --line: #c7c9c7; --accent: #085c9e; --warn: #a64122; font: 400 15px/1.45 system-ui, sans-serif; color: var(--ink); background: var(--bg); padding: 18px; max-width: 920px; margin: 0 auto; }
+    #farmaxia-vizz-013 h1 { font-size: 1.25rem; font-weight: 500; margin: 0 0 4px; }
+    #farmaxia-vizz-013 p { margin: 0 0 14px; color: var(--muted); }
+    #farmaxia-vizz-013 .controls { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; margin-bottom: 14px; }
+    #farmaxia-vizz-013 label { display: grid; gap: 4px; color: var(--muted); }
+    #farmaxia-vizz-013 select, #farmaxia-vizz-013 input { color: var(--ink); background: var(--bg); border: 1px solid var(--line); padding: 5px; }
+    #farmaxia-vizz-013 button { color: var(--ink); background: transparent; border: 1px solid var(--line); padding: 6px 9px; cursor: pointer; }
+    #farmaxia-vizz-013 button[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+    #farmaxia-vizz-013 .summary { color: var(--muted); min-height: 1.5em; margin: 0 0 10px; }
+    #farmaxia-vizz-013 .plot { border: 1px solid var(--line); min-height: 280px; overflow: hidden; }
+    #farmaxia-vizz-013 svg { display: block; width: 100%; height: auto; }
+    #farmaxia-vizz-013 .axis, #farmaxia-vizz-013 .small { fill: var(--muted); font-size: 12px; }
+    #farmaxia-vizz-013 .label { fill: var(--ink); font-size: 13px; }
+    #farmaxia-vizz-013 .gain { fill: var(--accent); }
+    #farmaxia-vizz-013 .error { fill: var(--warn); }
+    #farmaxia-vizz-013 .quiet { opacity: .28; }
+    #farmaxia-vizz-013 .focus-ring { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 4 4; }
+    #farmaxia-vizz-013 .grid { stroke: var(--line); stroke-width: 1; }
+    #farmaxia-vizz-013 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    #farmaxia-vizz-013 th, #farmaxia-vizz-013 td { text-align: left; border-bottom: 1px solid var(--line); padding: 6px 4px; }
+    #farmaxia-vizz-013 th { color: var(--muted); font-weight: 500; }
+    @media (prefers-color-scheme: dark) {
+      #farmaxia-vizz-013 { --bg: #171a1d; --ink: #eef0ee; --muted: #aab0b5; --line: #4f5559; --accent: #72b7ed; --warn: #ed9a78; }
+    }
+    @media (prefers-reduced-motion: reduce) { #farmaxia-vizz-013 * { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+  <h1>VIZZ 013 — una traza, cuatro exposiciones</h1>
+  <p>La misma sesión cambia de forma; los datos y el objetivo no cambian.</p>
+  <div class="controls" aria-label="Controles de representación">
+    <label>Representación
+      <select id="representation">
+        <option value="text">Texto</option>
+        <option value="timeline">Timeline</option>
+        <option value="focus">Foco local</option>
+        <option value="field">Campo agregado</option>
+      </select>
+    </label>
+    <label>Luminancia
+      <select id="luminance">
+        <option value="day">Día</option>
+        <option value="evening">Tarde</option>
+        <option value="night">Noche</option>
+      </select>
+    </label>
+    <label>Contraste
+      <input id="contrast" type="range" min="70" max="140" value="100" aria-label="Contraste de display">
+    </label>
+    <label>Ventana de foco
+      <input id="focus_window" type="range" min="4" max="24" value="16" aria-label="Ventana temporal de foco">
+    </label>
+  </div>
+  <div id="summary" class="summary" aria-live="polite"></div>
+  <div id="plot" class="plot" role="img" aria-label="Representación VIZZ de una traza de desarrollo"></div>
+  <table aria-label="Consultas disponibles por representación">
+    <thead><tr><th>Modo</th><th>Acción exacta</th><th>Secuencia global</th><th>Señal de estado</th></tr></thead>
+    <tbody id="query-table"></tbody>
+  </table>
+  <script>
+    const root = document.getElementById('farmaxia-vizz-013');
+    const trace = {
+      focusTime: 38,
+      events: [
+        {id:'e01',t:0,phase:'goal',action:'define target',gain:.20,errors:0},
+        {id:'e02',t:4,phase:'search',action:'lookup reference',gain:.05,errors:0},
+        {id:'e03',t:8,phase:'build',action:'write parser',gain:.50,errors:0},
+        {id:'e04',t:13,phase:'test',action:'fail fixture',gain:0,errors:2},
+        {id:'e05',t:17,phase:'build',action:'fix parser',gain:.60,errors:0},
+        {id:'e06',t:25,phase:'verify',action:'validate output',gain:.40,errors:0},
+        {id:'e07',t:33,phase:'maintain',action:'refactor helper',gain:.03,errors:0},
+        {id:'e08',t:38,phase:'maintain',action:'rerun same test',gain:0,errors:1},
+        {id:'e09',t:44,phase:'maintain',action:'tweak output',gain:.01,errors:0},
+        {id:'e10',t:51,phase:'verify',action:'confirm suite',gain:.10,errors:0}
+      ]
+    };
+    const modes = {
+      text: {label:'Texto', action:true, sequence:true, state:true},
+      timeline: {label:'Timeline', action:false, sequence:true, state:true},
+      focus: {label:'Foco local', action:true, sequence:false, state:true},
+      field: {label:'Campo agregado', action:false, sequence:false, state:true}
+    };
+    const el = id => document.getElementById(id);
+    const escapeText = value => String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));
+    function palette() {
+      const light = el('luminance').value;
+      const values = light === 'night' ? ['#111417','#e9edf0'] : light === 'evening' ? ['#2a2925','#f0e9d7'] : ['#f2f2ef','#171a1d'];
+      root.style.setProperty('--bg', values[0]);
+      root.style.setProperty('--ink', values[1]);
+      root.style.filter = `contrast(${el('contrast').value}%)`;
+    }
+    function svgFrame(body, label) { return `<svg viewBox="0 0 880 330" role="img" aria-label="${escapeText(label)}"><title>${escapeText(label)}</title>${body}</svg>`; }
+    function drawText() {
+      const rows = trace.events.map((event, index) => `<text class="label" x="18" y="${28 + index * 28}">${escapeText(event.id)}  ${escapeText(event.t)}m  ${escapeText(event.phase)}  ${escapeText(event.action)}  gain ${event.gain.toFixed(2)}  errors ${event.errors}</text>`).join('');
+      return svgFrame(`<text class="axis" x="18" y="15">full detail / chronological order</text>${rows}`, 'Texto completo de la traza');
+    }
+    function drawTimeline() {
+      const width = 820, left = 30, top = 42, span = 760;
+      const marks = trace.events.map(event => { const x = left + event.t / 51 * span; const color = event.errors ? 'error' : event.gain >= .2 ? 'gain' : 'quiet'; return `<line class="grid" x1="${x}" y1="${top}" x2="${x}" y2="295"/><circle class="${color}" cx="${x}" cy="${top + 80 - event.gain * 70}" r="7"/><text class="small" x="${x - 9}" y="315">${event.t}m</text><text class="label" transform="translate(${x - 3},${top + 112}) rotate(-65)">${escapeText(event.phase)}</text>`; }).join('');
+      return svgFrame(`<text class="axis" x="30" y="18">phase / gain / errors; action detail compressed</text><line class="grid" x1="30" y1="${top + 80}" x2="790" y2="${top + 80}"/>${marks}`, 'Timeline comprimido de la traza');
+    }
+    function drawFocus(windowSize) {
+      const visible = trace.events.filter(event => Math.abs(event.t - trace.focusTime) <= windowSize);
+      const rows = visible.map((event, index) => `<text class="label" x="40" y="${55 + index * 42}">${escapeText(event.id)}  ${escapeText(event.t)}m  ${escapeText(event.action)}  gain ${event.gain.toFixed(2)}  errors ${event.errors}</text>`).join('');
+      return svgFrame(`<text class="axis" x="40" y="20">focus ${trace.focusTime}m ± ${windowSize}m / ${visible.length} of ${trace.events.length} events</text><rect class="focus-ring" x="25" y="35" width="820" height="${Math.max(80, 36 + visible.length * 42)}"/>${rows}`, 'Ventana local de foco');
+    }
+    function drawField() {
+      const bins = Array.from({length:5}, (_, index) => { const start = index * 10.2; const end = index === 4 ? 52 : (index + 1) * 10.2; const group = trace.events.filter(event => event.t >= start && event.t < end); return {start,end,activity:group.length,gain:group.reduce((sum,event)=>sum+event.gain,0),errors:group.reduce((sum,event)=>sum+event.errors,0)}; });
+      const marks = bins.map((bin, index) => { const x = 100 + index * 160; const radius = 18 + bin.activity * 8; const height = Math.max(8, bin.gain * 120); return `<circle class="${bin.errors ? 'error' : 'gain'}" cx="${x}" cy="150" r="${radius}" opacity=".65"/><rect class="${bin.errors ? 'error' : 'gain'}" x="${x - 8}" y="${270 - height}" width="16" height="${height}"/><text class="label" x="${x - 28}" y="300">${bin.start.toFixed(0)}–${bin.end.toFixed(0)}m</text><text class="small" x="${x - 20}" y="${150 + radius + 18}">n=${bin.activity} e=${bin.errors}</text>`; }).join('');
+      return svgFrame(`<text class="axis" x="40" y="20">aggregate field / circle = activity / bar = gain</text><line class="grid" x1="45" y1="270" x2="815" y2="270"/>${marks}`, 'Campo agregado de actividad, ganancia y errores');
+    }
+    function render() {
+      const mode = el('representation').value;
+      const windowSize = Number(el('focus_window').value);
+      palette();
+      const visual = mode === 'text' ? drawText() : mode === 'timeline' ? drawTimeline() : mode === 'focus' ? drawFocus(windowSize) : drawField();
+      el('plot').innerHTML = visual;
+      const state = trace.events.filter(event => event.gain >= .2).slice(-1)[0];
+      const tail = trace.events.filter(event => event.t > state.t);
+      el('summary').textContent = `${modes[mode].label}: ${tail.length} eventos después de la última mejora significativa (${state.id}); ganancia posterior ${tail.reduce((sum,event)=>sum+event.gain,0).toFixed(2)}.`;
+      el('query-table').innerHTML = Object.entries(modes).map(([key, value]) => `<tr><td>${value.label}</td><td>${value.action ? 'sí' : 'no'}</td><td>${value.sequence ? 'sí' : 'no'}</td><td>${value.state ? 'sí' : 'sí, agregado'}</td></tr>`).join('');
+    }
+    ['representation','luminance','contrast','focus_window'].forEach(id => el(id).addEventListener('input', render));
+    render();
+  </script>
+</div>

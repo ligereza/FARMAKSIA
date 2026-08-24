@@ -14,7 +14,7 @@ compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 | CODE-INE | operador independiente eliminado provisionalmente; vocabulario de política opcional |
 | X-ANA-X | contrato provisional; la temporalidad exige entrada externa, novedad aún no demostrada |
 | KETAMINE | contrato provisional; novedad muy debilitada frente a índices y pérdidas geométricas/compositivas conocidas |
-| VIZZ | piloto 0.2 contrabalanceado preparado; sin datos humanos, eficacia desconocida |
+| VIZZ | prototipo 013 de exposición perceptual; sin datos humanos, eficacia desconocida |
 
 No se implementan operadores como API ni se fija arquitectura mientras sus
 kill tests sigan abiertos.
@@ -41,6 +41,7 @@ cuando no existe un archivo humano.
 - [Piloto VIZZ contrabalanceado](experiments/009-vizz-counterbalanced/results.md)
 - [Kill test poligonal de KETAMINE](experiments/011-nonrectangular-boundary/results.md)
 - [Kill test de curvas y capas](experiments/012-curves-layers-boundary/results.md)
+- [Prototipo VIZZ de adaptación perceptual](experiments/013-vizz-perceptual-adaptation/results.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
 - [Compuerta de adopción de herramientas](research/decisions/011-tool-adoption-gate.md)

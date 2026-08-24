@@ -1,0 +1,18 @@
+{
+  "schema": "farmaxia:vizz-trace:0.1",
+  "objective": "implement a reliable parser and verify its behavior",
+  "focus_time": 38,
+  "focus_window": 16,
+  "events": [
+    {"id": "e01", "t": 0, "phase": "goal", "action": "define target", "gain": 0.20, "errors": 0, "detail": "write objective and acceptance condition"},
+    {"id": "e02", "t": 4, "phase": "search", "action": "lookup reference", "gain": 0.05, "errors": 0, "detail": "inspect a known parser pattern"},
+    {"id": "e03", "t": 8, "phase": "build", "action": "write parser", "gain": 0.50, "errors": 0, "detail": "implement token and node extraction"},
+    {"id": "e04", "t": 13, "phase": "test", "action": "fail fixture", "gain": 0.00, "errors": 2, "detail": "nested input exposes a missing branch"},
+    {"id": "e05", "t": 17, "phase": "build", "action": "fix parser", "gain": 0.60, "errors": 0, "detail": "add branch and preserve source location"},
+    {"id": "e06", "t": 25, "phase": "verify", "action": "validate output", "gain": 0.40, "errors": 0, "detail": "compare parsed structure with expected fixture"},
+    {"id": "e07", "t": 33, "phase": "maintain", "action": "refactor helper", "gain": 0.03, "errors": 0, "detail": "rename and split a helper without changing behavior"},
+    {"id": "e08", "t": 38, "phase": "maintain", "action": "rerun same test", "gain": 0.00, "errors": 1, "detail": "repeat validation after a low-value change"},
+    {"id": "e09", "t": 44, "phase": "maintain", "action": "tweak output", "gain": 0.01, "errors": 0, "detail": "adjust formatting without a new acceptance check"},
+    {"id": "e10", "t": 51, "phase": "verify", "action": "confirm suite", "gain": 0.10, "errors": 0, "detail": "run the full local verification command"}
+  ]
+}

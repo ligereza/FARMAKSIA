@@ -46,6 +46,7 @@ def main() -> None:
         "experiments/010-metamorphic-boundary/provenance.json",
         "experiments/011-nonrectangular-boundary/provenance.json",
         "experiments/012-curves-layers-boundary/provenance.json",
+        "experiments/013-vizz-perceptual-adaptation/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -154,6 +155,24 @@ def main() -> None:
         raise RuntimeError("experiment 012 curve/layer property failure")
     print("PASS experiment 012")
     command("provenance 012", python_script("research/tools/validate_provenance.py", provenance[11]), "PROVENANCE_VALID")
+
+    vizz = subprocess.run(
+        python_script("experiments/013-vizz-perceptual-adaptation/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if vizz.returncode != 0:
+        raise RuntimeError("experiment 013 failed")
+    vizz_result = json.loads(vizz.stdout)
+    modes = {item["representation"] for item in vizz_result["representations"]}
+    if vizz_result["event_count"] != 10 or modes != {"text", "timeline", "focus", "field"} or vizz_result["human_data"]:
+        raise RuntimeError("experiment 013 VIZZ contract failure")
+    print("PASS experiment 013")
+    command("verify VIZZ 013", python_script("experiments/013-vizz-perceptual-adaptation/verify_vizz.py"), "VIZZ_PROTOTYPE_VALID")
+    command("provenance 013", python_script("research/tools/validate_provenance.py", provenance[12]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
