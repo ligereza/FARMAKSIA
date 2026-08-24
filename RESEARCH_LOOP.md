@@ -156,14 +156,21 @@ ruptura geométrica explícita. La fuente de intervalos predijo `left-region` en
 `t=0.25`; no pudo inventar `right_of_center` cuando esa relación no estaba
 declarada. La novedad frente a reformulación sigue sin demostrarse.
 
+El experimento 018 comparó la cadena con una lectura directa del AST de un
+problema real: la guarda que protege `SUITE_VALID`. Ambas rutas produjeron los
+mismos hechos y la misma decisión. X-ANA-X no añadió capacidad en ese caso y
+queda bajo una última compuerta de novedad antes de considerar su fusión con
+reformulación/state augmentation.
+
 ## Frente activo
 
 El siguiente ciclo construirá tres prototipos sin infraestructura general:
 
 1. CODEINE: probar el envelope opt-in con una sesión manual mínima y verificar
    si las clases de acción pueden declararse sin capturar contenido personal.
-2. XANAX: repetir la cadena sobre un problema pequeño real del repositorio con
-   una fuente documental primaria explícita y comparar contra reformulación.
+2. XANAX: buscar un último caso con una relación transferible no reducible a
+   reformulación; si el control directo vuelve a coincidir, archivar la
+   hipótesis independiente y conservar solo el protocolo de procedencia.
 3. VIZZ: probar el adaptador manual con una sesión local explícitamente
    consentida, sin contenido personal, y verificar que sus eventos permitan
    repetir el contrato 014; solo si la medición lo exige, evaluar eye tracking.

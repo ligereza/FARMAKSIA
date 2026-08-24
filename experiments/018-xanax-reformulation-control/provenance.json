@@ -1,0 +1,123 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://www.w3.org/TR/prov-o/",
+    "https://pubmed.ncbi.nlm.nih.gov/27012301/"
+  ],
+  "experiment": "farmaxia:experiment:018-xanax-reformulation-control",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_direct_control_and_novelty_criterion"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "parses_target_ast_and_compares_routes",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:xanax-control-protocol-018",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "C39C4F4E4A95B062484D15819E6AAA87FE541B1C74B6C3DCBC721B13BB97979E",
+      "role": "direct_control_and_kill_test_contract",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:xanax-control-source-card-018",
+      "type": "entity",
+      "path": "source_card.json",
+      "sha256": "C59CEA670F1794001772ED677A7397B089DC8F0B259A66F58383E3A85101D69F",
+      "role": "declared_analogy_source",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-control-target-suite-018",
+      "type": "entity",
+      "path": "../../research/tools/run_suite.py",
+      "sha256": "85945E0A1DC463E19665BE39641D2E675FF95335B008B8B34117FA1CD16E7CEC",
+      "role": "real_repository_target_source",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-control-runner-018",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "81BFB36E4D11F3268257325B06DFFD1ED0D25B2135150A8A51E2F3F68E7C109F",
+      "role": "direct_and_analogy_route_comparison_code",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-control-kill-test-018",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "34B99EEA26AFCBCAD967FD6D74B3A586CEB485A2A37B0229902CB508DB63A818",
+      "role": "route_and_source_boundary_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-control-results-018",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "A021539F228209C2B78C3DF607FAB9DFFD36DFBFAE025AAC0256A62799214C1E",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-xanax-control-018",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-control-protocol-018",
+        "farmaxia:xanax-control-source-card-018",
+        "farmaxia:xanax-control-target-suite-018"
+      ],
+      "generated": [],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-xanax-control-018",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-control-protocol-018",
+        "farmaxia:xanax-control-source-card-018",
+        "farmaxia:xanax-control-target-suite-018",
+        "farmaxia:xanax-control-runner-018"
+      ],
+      "generated": ["farmaxia:xanax-control-results-018"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-xanax-control-kill-tests-018",
+      "type": "activity",
+      "used": ["farmaxia:xanax-control-results-018", "farmaxia:xanax-control-kill-test-018"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:xanax-unique-decision",
+      "expression": "does analogy produce a decision unavailable to direct reformulation",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-control-target-suite-018", "farmaxia:xanax-control-results-018"]
+    },
+    {
+      "id": "farmaxia:query:xanax-control-sensitivity",
+      "expression": "does the direct route detect inverted guards and removed terminal markers",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-control-target-suite-018", "farmaxia:xanax-control-kill-test-018"]
+    }
+  ],
+  "unknowns": [
+    "Whether another target problem contains a nontrivial transferable relation",
+    "Whether any unique relation would remain after a stronger direct control",
+    "Whether a person benefits from the analogy when the direct route is available"
+  ]
+}

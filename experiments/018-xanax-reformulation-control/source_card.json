@@ -1,0 +1,18 @@
+{
+  "schema": "farmaxia:xanax-source-card:0.1",
+  "id": "gated-pipeline",
+  "domain": "gated production pipeline",
+  "authority": "human_declared_fixture",
+  "relations": [
+    "stage_produces_status",
+    "failed_status_stops_pipeline",
+    "release_marker_requires_prior_gates"
+  ],
+  "mapping": {
+    "stage": "suite command",
+    "failed_status": "nonzero returncode",
+    "stop_pipeline": "raise RuntimeError",
+    "release_marker": "SUITE_VALID"
+  },
+  "prediction": "the reusable command wrapper must raise before a failed stage can reach the final marker"
+}

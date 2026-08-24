@@ -51,6 +51,7 @@ def main() -> None:
         "experiments/015-vizz-session-contract/provenance.json",
         "experiments/016-codeine-session-state/provenance.json",
         "experiments/017-xanax-analogy-chain/provenance.json",
+        "experiments/018-xanax-reformulation-control/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -290,6 +291,36 @@ def main() -> None:
         "KILL_TESTS_VALID",
     )
     command("provenance 017", python_script("research/tools/validate_provenance.py", provenance[16]), "PROVENANCE_VALID")
+
+    xanax_control = subprocess.run(
+        python_script("experiments/018-xanax-reformulation-control/run_experiment.py"),
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        check=False,
+    )
+    if xanax_control.returncode != 0:
+        raise RuntimeError("experiment 018 failed")
+    xanax_control_result = json.loads(xanax_control.stdout)
+    comparison = xanax_control_result["comparison"]
+    if (
+        comparison["same_facts"],
+        comparison["same_decision"],
+        comparison["unique_analogy_decision"],
+        comparison["novelty_status"],
+        xanax_control_result["human_data"],
+        xanax_control_result["network_used"],
+        xanax_control_result["arbitrary_corpus"],
+    ) != (True, True, False, "not_demonstrated", False, False, False):
+        raise RuntimeError("experiment 018 X-ANA-X reformulation control failure")
+    print("PASS experiment 018")
+    command(
+        "kill test X-ANA-X control 018",
+        python_script("experiments/018-xanax-reformulation-control/run_kill_test.py"),
+        "KILL_TESTS_VALID",
+    )
+    command("provenance 018", python_script("research/tools/validate_provenance.py", provenance[17]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
