@@ -28,14 +28,22 @@
   ],
   "assumptions": [
     "The three eyes are conceptual optical models, not three anatomical eyes.",
-    "The thin-lens model is illustrative and does not represent a clinical prescription.",
+    "The thin-lens model uses paraxial ray slopes and is illustrative; it does not represent a clinical prescription.",
     "The screen is flat in this first prototype and can move in x, y and z.",
-    "The retina receives an inverted optical image before a conceptual perceptual reconstruction."
+    "The retina receives an inverted optical image before a conceptual perceptual reconstruction.",
+    "The axial object distance is used for the paraxial lens equation; exact 3D screen-to-eye distances are shown separately."
   ],
   "kill_tests": [
     "If screen movement does not alter all three ray bundles, reject the shared-screen implementation.",
-    "If the astigmatism model has only one focus, reject the two-meridian implementation.",
+    "If aperture rays do not meet at the same calculated paraxial focus, reject the ray-slope implementation.",
+    "If the astigmatism model has only one image distance across its two meridians, reject the two-meridian implementation.",
     "Do not infer a person’s refractive error or visual health from this sketch."
+  ],
+  "research": [
+    "https://openstax.org/books/college-physics/pages/25-6-image-formation-by-lenses",
+    "https://openstax.org/books/university-physics-volume-3/pages/2-4-thin-lenses",
+    "https://www.nei.nih.gov/eye-health-information/eye-conditions-and-diseases/refractive-errors/types-refractive-errors",
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC6597540/"
   ],
   "unknowns": [
     "How a real user perceives the alignment of the screen model.",

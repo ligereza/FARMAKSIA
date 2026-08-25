@@ -20,24 +20,37 @@ def main() -> None:
     pose_a = module.ScreenPose()
     pose_b = module.ScreenPose(x=0.12, y=-0.08, z=0.9)
 
-    # One shared screen must move the source point seen by every optical model.
+    # The thin-lens equation must reproduce a normal reference eye at the
+    # default distance when its focal length is chosen from the retina plane.
+    normal_focal = 1.0 / (1.0 / (pose_a.z - module.LENS_Z) + 1.0 / 0.017)
+    normal_image = module.thin_lens_image_distance(normal_focal, pose_a.z - module.LENS_Z)
+    assert math.isclose(normal_image, 0.017, rel_tol=1e-9)
+
+    # One shared screen must change the spatial path seen by every model.
     for model_index, model in enumerate(module.EYE_MODELS):
         eye = module.eye_position(model_index)
-        trace_a = module.trace_eye(model, eye, pose_a, (0.68, 0.30))
-        trace_b = module.trace_eye(model, eye, pose_b, (0.68, 0.30))
+        trace_a = module.spatial_trace(pose_a, eye, (0.0, 0.0))
+        trace_b = module.spatial_trace(pose_b, eye, (0.0, 0.0))
         assert trace_a.source != trace_b.source
-        assert trace_a.object_distance < trace_b.object_distance
+        assert trace_a.distance != trace_b.distance
 
-        # A positive screen y is represented by a negative retinal y: optical
-        # projection is inverted before the conceptual brain reconstruction.
-        # The y-meridian carries the vertical sample; its retinal image is
-        # inverted even when the x-meridian is used for the other focus line.
-        assert trace_a.retina_y.y < eye.y
+        # A positive object height is inverted on the retinal plane.  All
+        # aperture rays must meet at the same calculated paraxial focus.
+        vertical = module.eye_meridian_trace(model, eye, pose_a, "vertical")
+        assert vertical.object_height == 0.0
+        off_axis = module.trace_paraxial(0.02, vertical.object_distance, model.focal_y, model.retina)
+        assert off_axis.focus_height < 0.0
+        assert all(
+            math.isclose(ray.focus_height, off_axis.focus_height, rel_tol=1e-9, abs_tol=1e-9)
+            for ray in off_axis.rays
+        )
 
     astig = module.EYE_MODELS[2]
-    astig_trace = module.trace_eye(astig, module.eye_position(2), pose_a, (0.68, 0.30))
-    assert abs(astig_trace.focus_x.z - astig_trace.focus_y.z) > 1e-6
-    assert module.focus_state(astig, astig_trace) == "dos focos"
+    astig_vertical = module.eye_meridian_trace(astig, module.eye_position(2), pose_a, "vertical")
+    astig_horizontal = module.eye_meridian_trace(astig, module.eye_position(2), pose_a, "horizontal")
+    assert not math.isclose(astig_vertical.image_distance, astig_horizontal.image_distance)
+    assert module.focus_state(astig_vertical.image_distance, astig.retina) == "detrás de retina"
+    assert module.focus_state(astig_horizontal.image_distance, astig.retina) == "antes de retina"
 
     dx, dy, dz = module.classify_screen_motion(pose_a, pose_b)
     assert math.isclose(dx, 0.12)
@@ -45,6 +58,7 @@ def main() -> None:
     assert math.isclose(dz, 0.18)
     assert len(module.EYE_MODELS) == 3
     assert len(module.SCREEN_SAMPLES) == 3
+    assert len(module.APERTURE_SAMPLES) == 3
     print("VIZZ_042_CONTRACT_VALID")
 
 
