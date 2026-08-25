@@ -45,11 +45,23 @@ pretrained_gaze_valid
 pretrained_gaze_unknown_reason
 binocular_gaze_deg
 raw_model_angle_delta_deg
+keyboard_event_count
+keyboard_active
+keyboard_last_event_age_ms
 ```
 
 El encabezado declara `mouse_is_ground_truth=false`, `raw_video=false` y
 `screen_content=false`. Una muestra sin gaze conserva la posición del mouse para
 no confundir ausencia ocular con ausencia de interacción.
+
+La actividad de teclado es una señal opt-in y count-only. `keyboard_event_count`
+cuenta eventos de pulsación dentro del intervalo de muestreo, mientras
+`keyboard_active` indica que hubo actividad en ese intervalo y
+`keyboard_last_event_age_ms` conserva sólo la antigüedad del último evento. No se
+leen ni persisten códigos de tecla, caracteres, palabras, texto, ventana activa
+ni contenido de pantalla. La señal sirve como covariable temporal para contrastar
+"estoy escribiendo" con la mirada estimada; no etiqueta gaze ni demuestra que la
+persona haya leído el texto.
 
 La señal de MobileOne y `raw_model_angle_delta_deg` son una auditoría de
 concordancia entre modelos en el espacio de ángulos. No son error de pantalla,
@@ -72,3 +84,7 @@ observaciones independientes.
   la recolección y se conserva sólo el análisis posterior.
 - Si una sesión naturalista no tiene timestamps alineables, queda como
   cobertura cualitativa y no como validación de precisión.
+- Si aparece cualquier valor de tecla, carácter o texto en la traza, se invalida
+  el contrato de privacidad y se elimina la opción de captura.
+- Si el hook se activa sin la bandera opt-in `--keyboard-trace`, se considera un
+  fallo de consentimiento técnico y el runtime debe detenerse.

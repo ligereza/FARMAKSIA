@@ -1,0 +1,75 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:041-vizz-keyboard-activity-trace",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_keyboard_trace_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-041-keyboard-hook",
+      "type": "entity",
+      "path": "../033-vizz-python-headless-runtime/keyboard_activity.py",
+      "role": "windows_count_only_keyboard_hook",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-041-trace",
+      "type": "entity",
+      "path": "../033-vizz-python-headless-runtime/interaction_trace.py",
+      "role": "privacy_declared_interaction_trace",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-041-auditor",
+      "type": "entity",
+      "path": "keyboard_trace_audit.py",
+      "role": "count_only_privacy_auditor",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-041-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "synthetic_contract_record",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-041-contract-activity",
+      "type": "activity",
+      "label": "verify opt-in count-only keyboard activity trace",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-041-keyboard-hook",
+        "farmaxia:vizz-041-trace",
+        "farmaxia:vizz-041-auditor"
+      ],
+      "generated": ["farmaxia:vizz-041-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-041-query",
+      "question": "Can VIZZ log keyboard activity as a timestamped count-only covariate without retaining key identity or text?",
+      "source": "https://learn.microsoft.com/en-us/windows/win32/winmsg/lowlevel-keyboard-hook",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-041-keyboard-hook",
+        "farmaxia:vizz-041-trace",
+        "farmaxia:vizz-041-auditor"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Keyboard activity is not evidence that text was visually read or understood.",
+    "A global low-level hook may be unavailable under some Windows security policies.",
+    "The synthetic contract does not measure naturalistic gaze/typing alignment.",
+    "No keystroke identity or text should be recoverable from the persisted trace."
+  ]
+}

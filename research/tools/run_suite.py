@@ -74,6 +74,7 @@ def main() -> None:
         "experiments/038-vizz-naturalistic-trace/provenance.json",
         "experiments/039-vizz-github-pretrained-gaze/provenance.json",
         "experiments/040-vizz-naturalistic-trace-audit/provenance.json",
+        "experiments/041-vizz-keyboard-activity-trace/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -790,6 +791,17 @@ def main() -> None:
         "CONTRACT_TESTS_VALID",
     )
     command("provenance 040", python_script("research/tools/validate_provenance.py", provenance[39]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ keyboard activity trace 041",
+        python_script("experiments/041-vizz-keyboard-activity-trace/run_experiment.py"),
+        "KEYBOARD_TRACE_VALID",
+    )
+    command(
+        "contract test VIZZ keyboard activity trace 041",
+        python_script("experiments/041-vizz-keyboard-activity-trace/run_contract_test.py"),
+        "CONTRACT_TESTS_VALID",
+    )
+    command("provenance 041", python_script("research/tools/validate_provenance.py", provenance[40]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

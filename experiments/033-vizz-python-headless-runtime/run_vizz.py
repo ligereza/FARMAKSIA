@@ -12,6 +12,7 @@ import cv2
 from content_overlay import FocusOverlay
 from gpu_tracker import GpuTracker, GpuUnavailable
 from interaction_trace import InteractionTrace, read_pointer_position
+from keyboard_activity import KeyboardActivity
 from profile_model import load_profile, load_samples_for_merge, seal_profile
 
 
@@ -86,21 +87,29 @@ def run_headless(
     radius: int,
     trace_path: Path | None = None,
     trace_hz: float = 20.0,
+    keyboard_trace: bool = False,
 ) -> None:
     profile, mapper = load_profile(profile_path)
     width, height = [int(value) for value in profile["screen_size"]]
-    trace = InteractionTrace(trace_path, (width, height), trace_hz) if trace_path is not None else None
-    next_trace_at = time.monotonic()
-    with FocusOverlay(width, height, alpha=alpha, radius_px=radius) as overlay:
-        logging.info("headless runtime active; visible_interface=False")
-        try:
+    trace = (
+        InteractionTrace(trace_path, (width, height), trace_hz, keyboard_activity_only=keyboard_trace)
+        if trace_path is not None
+        else None
+    )
+    keyboard = KeyboardActivity() if trace is not None and keyboard_trace else None
+    try:
+        if keyboard is not None:
+            keyboard.start()
+        next_trace_at = time.monotonic()
+        with FocusOverlay(width, height, alpha=alpha, radius_px=radius) as overlay:
+            logging.info("headless runtime active; visible_interface=False")
             while True:
                 now = time.monotonic()
                 ok, frame = capture.read()
                 if not ok:
                     overlay.hide()
                     if trace is not None and now >= next_trace_at:
-                        trace.write_sample(now, None, None, read_pointer_position())
+                        trace.write_sample(now, None, None, read_pointer_position(), keyboard.snapshot(now) if keyboard else None)
                         next_trace_at = now + 1.0 / trace.sample_hz
                     time.sleep(0.05)
                     continue
@@ -108,21 +117,22 @@ def run_headless(
                 if sample is None or sample.quality < 0.50:
                     overlay.hide()
                     if trace is not None and now >= next_trace_at:
-                        trace.write_sample(now, sample, None, read_pointer_position())
+                        trace.write_sample(now, sample, None, read_pointer_position(), keyboard.snapshot(now) if keyboard else None)
                         next_trace_at = now + 1.0 / trace.sample_hz
                     continue
                 point = mapper.predict(sample.features)
                 overlay.set_focus(*point)
                 if trace is not None and now >= next_trace_at:
-                    trace.write_sample(now, sample, point, read_pointer_position())
+                    trace.write_sample(now, sample, point, read_pointer_position(), keyboard.snapshot(now) if keyboard else None)
                     next_trace_at = now + 1.0 / trace.sample_hz
                 time.sleep(0.01)
-        except KeyboardInterrupt:
-            logging.info("headless runtime stopped")
-        finally:
-            overlay.hide()
-            if trace is not None:
-                trace.close()
+    except KeyboardInterrupt:
+        logging.info("headless runtime stopped")
+    finally:
+        if trace is not None:
+            trace.close()
+        if keyboard is not None:
+            keyboard.close()
 
 
 def parse_args() -> argparse.Namespace:
@@ -159,6 +169,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--focus-radius", type=int, default=260)
     parser.add_argument("--trace", type=Path, default=None, help="opt-in timestamp trace without video or screen content")
     parser.add_argument("--trace-hz", type=float, default=20.0, help="interaction trace rate")
+    parser.add_argument(
+        "--keyboard-trace",
+        action="store_true",
+        help="opt-in count-only keyboard activity; never stores key values or text",
+    )
     return parser.parse_args()
 
 
@@ -195,7 +210,16 @@ def main() -> int:
                     args.merge_existing,
                     args.existing_condition,
                 )
-            run_headless(tracker, capture, args.profile, args.overlay_alpha, args.focus_radius, args.trace, args.trace_hz)
+            run_headless(
+                tracker,
+                capture,
+                args.profile,
+                args.overlay_alpha,
+                args.focus_radius,
+                args.trace,
+                args.trace_hz,
+                args.keyboard_trace,
+            )
         finally:
             capture.release()
     except (FileNotFoundError, GpuUnavailable, RuntimeError, ValueError) as exc:

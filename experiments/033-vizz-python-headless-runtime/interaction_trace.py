@@ -32,11 +32,18 @@ def _finite_vector(value: Any, length: int) -> list[float] | None:
 class InteractionTrace:
     """Append timestamp-aligned summaries; never writes pixels or screen content."""
 
-    def __init__(self, path: Path, screen_size: tuple[int, int], sample_hz: float = 20.0) -> None:
+    def __init__(
+        self,
+        path: Path,
+        screen_size: tuple[int, int],
+        sample_hz: float = 20.0,
+        keyboard_activity_only: bool = False,
+    ) -> None:
         if sample_hz <= 0.0 or not math.isfinite(sample_hz):
             raise ValueError("trace sample_hz must be finite and positive")
         self.path = path
         self.sample_hz = float(sample_hz)
+        self.keyboard_activity_only = bool(keyboard_activity_only)
         self._stream = path.open("w", encoding="utf-8")
         self._count = 0
         self._write(
@@ -51,6 +58,9 @@ class InteractionTrace:
                 "mouse_is_ground_truth": False,
                 "pretrained_gaze_model": "github:yakhyo/gaze-estimation:mobileone_s0_gaze.onnx",
                 "pretrained_gaze_preflight": "cuda_zero_tensor",
+                "keyboard_activity_only": self.keyboard_activity_only,
+                "key_values_persisted": False,
+                "text_persisted": False,
             }
         )
 
@@ -64,6 +74,7 @@ class InteractionTrace:
         sample: Any | None,
         gaze_screen: tuple[float, float] | None,
         pointer: tuple[int, int] | None,
+        keyboard: dict[str, Any] | None = None,
     ) -> None:
         if not math.isfinite(timestamp):
             raise ValueError("trace timestamp must be finite")
@@ -85,6 +96,9 @@ class InteractionTrace:
             "pretrained_gaze_unknown_reason": None,
             "binocular_gaze_deg": None,
             "raw_model_angle_delta_deg": None,
+            "keyboard_event_count": 0,
+            "keyboard_active": False,
+            "keyboard_last_event_age_ms": None,
         }
         if sample is not None:
             payload["quality"] = float(sample.quality) if math.isfinite(float(sample.quality)) else None
@@ -101,12 +115,18 @@ class InteractionTrace:
             delta = getattr(sample, "raw_model_angle_delta_deg", None)
             if delta is not None and math.isfinite(float(delta)) and float(delta) >= 0.0:
                 payload["raw_model_angle_delta_deg"] = float(delta)
-            distance = getattr(sample, "eye_centric_distance_px", None)
-            if distance is not None and math.isfinite(float(distance)) and float(distance) > 0.0:
-                payload["eye_centric_distance_px"] = float(distance)
-            roll = getattr(sample, "eye_centric_roll_rad", None)
-            if roll is not None and math.isfinite(float(roll)):
-                payload["eye_centric_roll_rad"] = float(roll)
+        if keyboard is not None:
+            payload["keyboard_event_count"] = int(keyboard.get("keyboard_event_count", 0))
+            payload["keyboard_active"] = bool(keyboard.get("keyboard_active", False))
+            age_ms = keyboard.get("keyboard_last_event_age_ms")
+            if age_ms is not None and math.isfinite(float(age_ms)) and float(age_ms) >= 0.0:
+                payload["keyboard_last_event_age_ms"] = float(age_ms)
+        distance = getattr(sample, "eye_centric_distance_px", None)
+        if distance is not None and math.isfinite(float(distance)) and float(distance) > 0.0:
+            payload["eye_centric_distance_px"] = float(distance)
+        roll = getattr(sample, "eye_centric_roll_rad", None)
+        if roll is not None and math.isfinite(float(roll)):
+            payload["eye_centric_roll_rad"] = float(roll)
         payload["gaze_valid"] = payload["gaze_screen"] is not None and payload["quality"] is not None
         self._write(payload)
         self._count += 1
