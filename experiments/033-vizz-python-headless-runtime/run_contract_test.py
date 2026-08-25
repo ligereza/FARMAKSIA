@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from calibration_capture import CaptureConfig, StableCapture
+
 
 HERE = Path(__file__).parent
 
@@ -35,8 +37,11 @@ def main() -> None:
     require("root.attributes(\"-fullscreen\", True)" in calibration, "calibration is not fullscreen", failures)
     require('text="Iniciar calibración"' in calibration and "command=self._start" in calibration, "calibration starts without explicit click", failures)
     require('canvas.bind("<Button-1>", self._on_canvas_click)' in calibration, "calibration points are not click-confirmed", failures)
-    require("if len(self.point_samples) < SAMPLES_PER_POINT" in calibration, "calibration accepts points without enough samples", failures)
-    require("self.point_index += 1" in calibration and "self._on_canvas_click" in calibration, "point advancement is not click-gated", failures)
+    require("StableCapture" in calibration and "CaptureConfig" in calibration, "calibration lacks a temporal capture policy", failures)
+    require('self._draw_point(show_status=False)' in calibration, "status text is not hidden during capture", failures)
+    require('"method": "stable_fixed_window"' in calibration, "calibration provenance does not identify the fixed-window method", failures)
+    require("self.point_index += 1" in calibration and "self.point_state = \"capturing\"" in calibration, "point capture is not click-armed", failures)
+    require("point_samples" not in calibration, "calibration still accumulates an unbounded pre-click point buffer", failures)
     require("tkinter" not in runtime.lower(), "headless runner imports a UI toolkit", failures)
     require("tkinter" not in tracker.lower(), "GPU tracker imports a UI toolkit", failures)
     require("providers=[\"CUDAExecutionProvider\"]" in tracker, "tracker does not request CUDA only", failures)
@@ -51,6 +56,44 @@ def main() -> None:
     require("capture = open_camera(args.camera)" in runtime, "camera lifecycle is unclear", failures)
     require(runtime.index("tracker = GpuTracker") < runtime.index("capture = open_camera"), "camera opens before CUDA models", failures)
     require("camera" in (HERE / "README.md").read_text(encoding="utf-8"), "camera boundary is undocumented", failures)
+    require("calibration_protocol" in profile and "0.3" in profile, "profile schema was not versioned for the new capture policy", failures)
+
+    class SyntheticSample:
+        def __init__(self, features: tuple[float, ...], quality: float = 0.90) -> None:
+            self.features = features
+            self.quality = quality
+
+    stable = StableCapture(
+        CaptureConfig(
+            settle_seconds=0.20,
+            window_seconds=1.00,
+            min_valid_samples=3,
+            max_feature_mad=0.08,
+        )
+    )
+    stable.arm(0.0)
+    stable.push(0.10, SyntheticSample((0.8, 0.8, 0.8, 0.8, 0.8, 0.8)))
+    require(len(stable.samples) == 0, "settling samples were not discarded", failures)
+    stable.push(0.30, SyntheticSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
+    stable.push(0.55, SyntheticSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
+    stable.push(0.80, SyntheticSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
+    stable_result = stable.push(1.25, None)
+    require(stable_result is not None and stable_result.accepted, "stable fixed window was not accepted", failures)
+
+    unstable = StableCapture(
+        CaptureConfig(
+            settle_seconds=0.0,
+            window_seconds=1.00,
+            min_valid_samples=3,
+            max_feature_mad=0.08,
+        )
+    )
+    unstable.arm(0.0)
+    unstable.push(0.10, SyntheticSample((0.0, 0.0, 0.0, 0.0, 0.0, 0.0)))
+    unstable.push(0.20, SyntheticSample((0.2, 0.2, 0.2, 0.2, 0.2, 0.2)))
+    unstable.push(0.30, SyntheticSample((0.4, 0.4, 0.4, 0.4, 0.4, 0.4)))
+    unstable_result = unstable.push(1.10, None)
+    require(unstable_result is not None and not unstable_result.accepted, "unstable feature window was accepted", failures)
     json.dumps(policy)
 
     if failures:

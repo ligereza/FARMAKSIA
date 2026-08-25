@@ -6,6 +6,7 @@ import time
 import tkinter as tk
 from collections.abc import Callable
 
+from calibration_capture import CaptureConfig, CaptureResult, StableCapture
 from gpu_tracker import GazeSample
 
 
@@ -23,7 +24,14 @@ CALIBRATION_POINTS: tuple[tuple[float, float], ...] = (
     (0.50, 0.92),
     (0.92, 0.92),
 )
-SAMPLES_PER_POINT = 16
+CAPTURE_CONFIG = CaptureConfig(
+    settle_seconds=0.30,
+    window_seconds=0.90,
+    min_valid_samples=12,
+    min_quality=0.50,
+    max_feature_mad=0.08,
+)
+SAMPLES_PER_POINT = CAPTURE_CONFIG.min_valid_samples
 CLICK_TARGET_RADIUS_PX = 100
 
 
@@ -52,12 +60,11 @@ class CalibrationWindow:
         self.height = max(1, self.root.winfo_screenheight())
         self.point_index = 0
         self.samples: list[dict[str, object]] = []
-        self.point_samples: list[tuple[float, ...]] = []
-        self.started_at = 0.0
+        self.capture: StableCapture | None = None
         self.dot_id: int | None = None
         self.status_id: int | None = None
         self.started = False
-        self.point_active = False
+        self.point_state = "idle"
         self.start_window: int | None = None
         self.canvas.bind("<Button-1>", self._on_canvas_click)
         self._draw_landing()
@@ -122,63 +129,101 @@ class CalibrationWindow:
         if self.point_index >= len(CALIBRATION_POINTS):
             self._finish()
             return
-        self.point_samples = []
-        self.point_active = True
-        self.started_at = time.monotonic()
-        self._draw_point()
+        self.capture = None
+        self.point_state = "waiting_for_click"
+        self._draw_point(show_status=True)
         self.root.after(50, self._tick)
 
-    def _draw_point(self) -> None:
+    def _draw_point(self, *, show_status: bool) -> None:
         self.canvas.delete("all")
+        self.status_id = None
         target_x, target_y = CALIBRATION_POINTS[self.point_index]
         x = int(round(target_x * self.width))
         y = int(round(target_y * self.height))
         self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#d62027", outline="#ffffff", width=2)
         self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
-        self.status_id = self.canvas.create_text(
-            18,
-            18,
-            anchor="nw",
-            text=f"Mira el punto y haz clic sobre él cuando estés listo · {self.point_index + 1}/{len(CALIBRATION_POINTS)} · Esc cancela",
-            fill="#d0d0d0",
-            font=("Segoe UI", 12),
-        )
+        if show_status:
+            self.status_id = self.canvas.create_text(
+                18,
+                18,
+                anchor="nw",
+                text=f"Mira el punto, lleva el cursor sobre él y haz clic para capturar · {self.point_index + 1}/{len(CALIBRATION_POINTS)} · Esc cancela",
+                fill="#d0d0d0",
+                font=("Segoe UI", 12),
+            )
+
+    def _set_status(self, message: str) -> None:
+        if self.status_id is None:
+            self.status_id = self.canvas.create_text(
+                18,
+                18,
+                anchor="nw",
+                text=message,
+                fill="#d0d0d0",
+                font=("Segoe UI", 12),
+            )
+        else:
+            self.canvas.itemconfig(self.status_id, text=message)
 
     def _tick(self) -> None:
-        if not self.root.winfo_exists() or not self.point_active:
+        if not self.root.winfo_exists() or self.point_state == "idle":
             return
-        sample = self.sample_provider()
-        if sample is not None and sample.quality >= 0.50:
-            self.point_samples.append(sample.features)
-        if self.status_id is not None:
-            self.canvas.itemconfig(
-                self.status_id,
-                text=f"Mira el punto y haz clic sobre él cuando estés listo · muestras {len(self.point_samples)}/{SAMPLES_PER_POINT} · Esc cancela",
-            )
+        if self.point_state == "capturing" and self.capture is not None:
+            sample = self.sample_provider()
+            result = self.capture.push(time.monotonic(), sample)
+            if result is None and self.capture.deadline is not None and time.monotonic() >= self.capture.deadline:
+                result = self.capture.finish()
+            if result is not None:
+                self._handle_capture_result(result)
         self.root.after(50, self._tick)
 
     def _on_canvas_click(self, event: tk.Event[tk.Misc]) -> None:
-        if not self.started or not self.point_active:
+        if not self.started or self.point_state != "waiting_for_click":
             return
         target_x, target_y = CALIBRATION_POINTS[self.point_index]
         target_px = target_x * self.width
         target_py = target_y * self.height
         distance = ((event.x - target_px) ** 2 + (event.y - target_py) ** 2) ** 0.5
         if distance > CLICK_TARGET_RADIUS_PX:
-            if self.status_id is not None:
-                self.canvas.itemconfig(self.status_id, text="Haz clic sobre el punto rojo para confirmar esta muestra")
+            self._set_status("Lleva el cursor sobre el punto rojo y haz clic para iniciar la captura")
             return
-        if len(self.point_samples) < SAMPLES_PER_POINT:
-            if self.status_id is not None:
-                self.canvas.itemconfig(
-                    self.status_id,
-                    text=f"Aún faltan muestras válidas ({len(self.point_samples)}/{SAMPLES_PER_POINT}); mantén la mirada y vuelve a hacer clic",
-                )
+        # The mouse is only a scheduler. It arms a fixed window; it is never
+        # stored as a gaze label and samples are not collected before this
+        # event. The status text is removed before camera sampling begins.
+        self.capture = StableCapture(CAPTURE_CONFIG)
+        self.capture.arm(time.monotonic())
+        self.point_state = "capturing"
+        self._draw_point(show_status=False)
+
+    def _handle_capture_result(self, result: CaptureResult) -> None:
+        if not result.accepted or result.features is None:
+            self.point_state = "waiting_for_click"
+            self.capture = None
+            messages = {
+                "insufficient_valid_samples": "No hubo suficientes muestras válidas. Mira el punto y vuelve a hacer clic.",
+                "unstable_feature_window": "La mirada se movió durante la captura. Mira el punto y vuelve a hacer clic.",
+            }
+            self._draw_point(show_status=True)
+            self._set_status(messages.get(result.reason, "Captura rechazada. Vuelve a intentarlo."))
             return
-        feature_count = len(self.point_samples)
-        mean_features = tuple(sum(values[index] for values in self.point_samples) / feature_count for index in range(6))
-        self.samples.append({"features": list(mean_features), "target": [target_x, target_y]})
-        self.point_active = False
+        target_x, target_y = CALIBRATION_POINTS[self.point_index]
+        self.samples.append(
+            {
+                "features": list(result.features),
+                "target": [target_x, target_y],
+                "phase": "static",
+                "capture": {
+                    "method": "stable_fixed_window",
+                    "valid_count": result.valid_count,
+                    "quality_mean": result.quality_mean,
+                    "max_feature_mad": result.max_feature_mad,
+                    "settle_seconds": CAPTURE_CONFIG.settle_seconds,
+                    "window_seconds": CAPTURE_CONFIG.window_seconds,
+                },
+            }
+        )
+        self.point_state = "complete"
+        self.capture = None
         self.point_index += 1
         self.root.after(220, self._begin_point)
 

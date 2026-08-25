@@ -11,10 +11,13 @@ GPU sessions -> camera -> CALIBRATION_UI -> local profile -> headless camera
 
 El único momento con interfaz es `--calibrate`. Primero aparece una pantalla
 completa con el botón `Iniciar calibración`; los 12 puntos no empiezan hasta
-que el usuario hace clic. Cada punto permanece quieto y solo avanza cuando el
-usuario hace clic sobre él después de mantener la mirada y reunir muestras
-válidas. No hay vista previa de cámara. Al sellar el perfil se cierra Tk y el
-proceso pasa al runtime de fondo. El runtime no importa Tkinter,
+que el usuario hace clic. Para cada punto, el cursor solo arma la captura: se
+descarta el periodo de estabilización y luego se recoge una ventana fija de
+muestras válidas. La ventana se acepta únicamente si tiene suficientes
+muestras y baja dispersión robusta; el mouse nunca se guarda como verdad de la
+mirada. El texto de estado desaparece durante la captura para no contaminar la
+etiqueta visual. No hay vista previa de cámara. Al sellar el perfil se cierra
+Tk y el proceso pasa al runtime de fondo. El runtime no importa Tkinter,
 no crea paneles ni botones y no dibuja un marcador VIZZ: modifica el contenido
 normal con una capa nativa transparente, click-through, que atenúa suavemente
 lo que queda fuera de la zona de mirada.
@@ -42,6 +45,18 @@ se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
 `.vizz-runtime.log`; no se abre una interfaz de error VIZZ.
 
 ## Evidencia y límites
+
+- El perfil actual es `farmaxia:vizz-calibration-profile:0.3` y declara el
+  protocolo `static-stable-window-v3`. Los perfiles anteriores se rechazan
+  deliberadamente porque podían contener muestras acumuladas antes del click.
+- Esta versión implementa la primera corrección de la arquitectura híbrida:
+  puntos estáticos con ventanas temporales estables. La trayectoria móvil y la
+  cabeza neuronal personalizada permanecen como fases posteriores; no se
+  entrenan con los 12 promedios de esta calibración.
+- Los valores iniciales de estabilización (300 ms), captura (900 ms), mínimo
+  (12 muestras) y MAD máximo (0.08 por característica normalizada) son
+  hiperparámetros de ingeniería. Deben validarse con sesiones independientes y
+  no se presentan como constantes fisiológicas.
 
 - ONNX Runtime 1.29.0 se configura con `CUDAExecutionProvider` y
   `session.disable_cpu_ep_fallback=1`; si la sesión CUDA no se crea, no se

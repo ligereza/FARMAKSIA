@@ -9,9 +9,10 @@ from typing import Iterable
 import numpy as np
 
 
-PROFILE_SCHEMA = "farmaxia:vizz-calibration-profile:0.2"
+PROFILE_SCHEMA = "farmaxia:vizz-calibration-profile:0.3"
 MINIMUM_SAMPLES = 12
 FEATURE_COUNT = 6
+CALIBRATION_PROTOCOL = "static-stable-window-v3"
 
 
 def design_row(features: Iterable[float]) -> np.ndarray:
@@ -57,6 +58,7 @@ def seal_profile(
     x_coefficients, y_coefficients = fit_mapping(materialized)
     payload = {
         "schema": PROFILE_SCHEMA,
+        "calibration_protocol": CALIBRATION_PROTOCOL,
         "screen_size": [int(screen_size[0]), int(screen_size[1])],
         "sample_count": len(materialized),
         "model_sha256": model_sha256,
@@ -91,7 +93,11 @@ class ScreenMapper:
 
 def load_profile(path: Path) -> tuple[dict[str, object], ScreenMapper]:
     profile = json.loads(path.read_text(encoding="utf-8"))
-    if profile.get("schema") != PROFILE_SCHEMA or profile.get("raw_video") is not False:
+    if (
+        profile.get("schema") != PROFILE_SCHEMA
+        or profile.get("calibration_protocol") != CALIBRATION_PROTOCOL
+        or profile.get("raw_video") is not False
+    ):
         raise ValueError("profile schema or raw-video policy is invalid")
     samples = profile.get("samples")
     if not isinstance(samples, list) or len(samples) < MINIMUM_SAMPLES:
