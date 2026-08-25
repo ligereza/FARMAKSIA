@@ -59,6 +59,8 @@ def main() -> None:
     require("CPUExecutionProvider" not in tracker, "tracker names a CPU provider", failures)
     require("pose" in tracker and "eye_roll" in tracker and "def height" in tracker, "tracker does not expose complete pose diagnostics", failures)
     require("binocular_ray_proxy" in tracker and "build_binocular_ray_proxy" in tracker, "tracker does not expose explicit binocular rays", failures)
+    require("left_center_px=" in tracker and "right_center_px=" in tracker, "tracker uses an incompatible ray adapter signature", failures)
+    require("left_center=" not in tracker and "right_center=" not in tracker, "tracker retained the incompatible ray adapter keywords", failures)
     require("camera_proxy_normalized_v1" in ray_proxy and "VALID_RELATIVE_PROXY" in ray_proxy, "ray proxy frame is not versioned and relative-only", failures)
     require("metric world ray" in ray_proxy, "ray proxy does not document its metric limitation", failures)
     require('"raw_video": False' in profile, "profile permits raw video persistence", failures)

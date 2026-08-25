@@ -320,8 +320,8 @@ class GpuTracker:
         pretrained_gaze_deg, pretrained_unknown_reason = self._predict_pretrained_gaze(frame, face)
         binocular_gaze_deg = ((left_yaw + right_yaw) * 0.5, (left_pitch + right_pitch) * 0.5)
         binocular_ray_proxy, binocular_ray_unknown_reason = build_binocular_ray_proxy(
-            left_center=(float(left_center[0]), float(left_center[1])),
-            right_center=(float(right_center[0]), float(right_center[1])),
+            left_center_px=(float(left_center[0]), float(left_center[1])),
+            right_center_px=(float(right_center[0]), float(right_center[1])),
             left_yaw_deg=left_yaw,
             left_pitch_deg=left_pitch,
             right_yaw_deg=right_yaw,
