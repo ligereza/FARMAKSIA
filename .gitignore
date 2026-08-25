@@ -5,6 +5,7 @@ __pycache__/
 venv/
 .vizz-models/
 .vizz-calibration.json
+.vizz-calibration-*.json
 .vizz-validation*.json
 .vizz-pretrained-probe.json
 .vizz-dual-audit.json
