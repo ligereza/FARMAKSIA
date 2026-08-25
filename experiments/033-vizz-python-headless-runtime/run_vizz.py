@@ -11,13 +11,17 @@ import cv2
 
 from content_overlay import FocusOverlay
 from gpu_tracker import GpuTracker, GpuUnavailable
-from profile_model import load_profile, seal_profile
+from profile_model import load_profile, load_samples_for_merge, seal_profile
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MODEL_DIR = REPO_ROOT / ".vizz-models"
 DEFAULT_PROFILE = REPO_ROOT / ".vizz-calibration.json"
 LOG_PATH = REPO_ROOT / ".vizz-runtime.log"
+CONDITION_LABELS = {
+    "with_glasses": "con lentes",
+    "without_glasses": "sin lentes",
+}
 
 
 def open_camera(index: int) -> cv2.VideoCapture:
@@ -30,11 +34,27 @@ def open_camera(index: int) -> cv2.VideoCapture:
     return capture
 
 
-def run_calibration(tracker: GpuTracker, capture: cv2.VideoCapture, profile_path: Path) -> None:
+def run_calibration(
+    tracker: GpuTracker,
+    capture: cv2.VideoCapture,
+    profile_path: Path,
+    conditions: tuple[tuple[str, str], ...],
+    merge_existing: Path | None,
+    existing_condition: str | None,
+) -> None:
     # Import the UI lazily so headless execution never imports a UI toolkit.
     from calibration_ui import CalibrationWindow
 
     result: dict[str, object] = {}
+    existing_samples: list[dict[str, object]] = []
+    existing_profile: dict[str, object] | None = None
+    if merge_existing is not None:
+        existing_profile, existing_samples = load_samples_for_merge(
+            merge_existing,
+            existing_condition=existing_condition,
+        )
+        if existing_profile.get("model_sha256") != tracker.face_model_sha256:
+            raise ValueError("existing profile was created with a different face model")
 
     def sample_provider():
         ok, frame = capture.read()
@@ -43,10 +63,15 @@ def run_calibration(tracker: GpuTracker, capture: cv2.VideoCapture, profile_path
         return tracker.sample(frame)
 
     def complete(samples: list[dict[str, object]], screen_size: tuple[int, int]) -> None:
-        seal_profile(profile_path, screen_size, samples, tracker.face_model_sha256)
+        merged_samples = list(existing_samples) + list(samples)
+        if existing_profile is not None:
+            previous_size = tuple(int(value) for value in existing_profile["screen_size"])
+            if previous_size != screen_size:
+                raise ValueError("existing profile and new calibration use different screen sizes")
+        seal_profile(profile_path, screen_size, merged_samples, tracker.face_model_sha256)
         result["screen_size"] = screen_size
 
-    CalibrationWindow(sample_provider, complete).run()
+    CalibrationWindow(sample_provider, complete, conditions=conditions).run()
     if "screen_size" not in result:
         raise RuntimeError("calibration did not seal a profile")
 
@@ -80,6 +105,24 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="FARMAKSIA VIZZ Python runtime")
     parser.add_argument("--calibrate", action="store_true", help="show the one-shot calibration UI first")
     parser.add_argument("--profile", type=Path, default=DEFAULT_PROFILE)
+    parser.add_argument(
+        "--condition",
+        choices=tuple(CONDITION_LABELS),
+        default="without_glasses",
+        help="condition captured when --merge-existing is used",
+    )
+    parser.add_argument(
+        "--merge-existing",
+        type=Path,
+        default=None,
+        help="append this existing calibration and refit one combined profile",
+    )
+    parser.add_argument(
+        "--existing-condition",
+        choices=tuple(CONDITION_LABELS),
+        default=None,
+        help="condition represented by a legacy profile being merged",
+    )
     parser.add_argument("--model-dir", type=Path, default=DEFAULT_MODEL_DIR)
     parser.add_argument("--camera", type=int, default=0)
     parser.add_argument("--overlay-alpha", type=int, default=30)
@@ -93,6 +136,10 @@ def main() -> int:
     face_model = args.model_dir / "retinaface.onnx"
     gaze_model = args.model_dir / "gaze.onnx"
     try:
+        if args.merge_existing is not None and not args.calibrate:
+            raise ValueError("--merge-existing requires --calibrate")
+        if args.merge_existing is not None and args.existing_condition is None:
+            raise ValueError("--existing-condition is required when merging a legacy profile")
         if not args.calibrate:
             # A headless launch with a missing/invalid profile must fail before
             # it requests camera access.
@@ -101,7 +148,21 @@ def main() -> int:
         capture = open_camera(args.camera)
         try:
             if args.calibrate:
-                run_calibration(tracker, capture, args.profile)
+                if args.merge_existing is None:
+                    conditions = (
+                        ("with_glasses", CONDITION_LABELS["with_glasses"]),
+                        ("without_glasses", CONDITION_LABELS["without_glasses"]),
+                    )
+                else:
+                    conditions = ((args.condition, CONDITION_LABELS[args.condition]),)
+                run_calibration(
+                    tracker,
+                    capture,
+                    args.profile,
+                    conditions,
+                    args.merge_existing,
+                    args.existing_condition,
+                )
             run_headless(tracker, capture, args.profile, args.overlay_alpha, args.focus_radius)
         finally:
             capture.release()

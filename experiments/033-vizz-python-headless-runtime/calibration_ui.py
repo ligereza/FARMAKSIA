@@ -48,9 +48,13 @@ class CalibrationWindow:
         self,
         sample_provider: Callable[[], GazeSample | None],
         on_complete: Callable[[list[dict[str, object]], tuple[int, int]], None],
+        conditions: tuple[tuple[str, str], ...] = CALIBRATION_CONDITIONS,
     ) -> None:
+        if not conditions:
+            raise ValueError("at least one calibration condition is required")
         self.sample_provider = sample_provider
         self.on_complete = on_complete
+        self.conditions = conditions
         self.root = tk.Tk()
         self.root.title("FARMAKSIA — calibración")
         self.root.attributes("-fullscreen", True)
@@ -134,7 +138,7 @@ class CalibrationWindow:
     def _begin_condition(self) -> None:
         if not self.started:
             return
-        if self.condition_index >= len(CALIBRATION_CONDITIONS):
+        if self.condition_index >= len(self.conditions):
             self._finish()
             return
         self.point_index = 0
@@ -152,7 +156,7 @@ class CalibrationWindow:
         self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#d62027", outline="#ffffff", width=2)
         self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
         if show_status:
-            condition_label = CALIBRATION_CONDITIONS[self.condition_index][1]
+            condition_label = self.conditions[self.condition_index][1]
             self.status_id = self.canvas.create_text(
                 18,
                 18,
@@ -217,7 +221,7 @@ class CalibrationWindow:
             self._set_status(messages.get(result.reason, "Captura rechazada. Vuelve a intentarlo."))
             return
         target_x, target_y = CALIBRATION_POINTS[self.point_index]
-        condition_key, _condition_label = CALIBRATION_CONDITIONS[self.condition_index]
+        condition_key, _condition_label = self.conditions[self.condition_index]
         self.samples.append(
             {
                 "features": list(result.features),
@@ -249,13 +253,13 @@ class CalibrationWindow:
         self._draw_point(show_status=True)
 
     def _show_condition_transition(self) -> None:
-        if self.condition_index + 1 >= len(CALIBRATION_CONDITIONS):
+        if self.condition_index + 1 >= len(self.conditions):
             self._finish()
             return
         self.point_state = "between_conditions"
         self.canvas.delete("all")
         self.status_id = None
-        next_label = CALIBRATION_CONDITIONS[self.condition_index + 1][1]
+        next_label = self.conditions[self.condition_index + 1][1]
         self.canvas.create_text(
             self.width // 2,
             self.height // 2 - 100,
@@ -294,7 +298,7 @@ class CalibrationWindow:
         self.root.after(300, self._begin_condition)
 
     def _finish(self) -> None:
-        expected_samples = len(CALIBRATION_POINTS) * len(CALIBRATION_CONDITIONS)
+        expected_samples = len(CALIBRATION_POINTS) * len(self.conditions)
         if len(self.samples) < expected_samples:
             self.root.destroy()
             raise CalibrationAborted("calibration did not obtain a valid sample for every point")

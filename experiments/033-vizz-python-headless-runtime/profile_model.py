@@ -10,6 +10,7 @@ import numpy as np
 
 
 PROFILE_SCHEMA = "farmaxia:vizz-calibration-profile:0.4"
+LEGACY_PROFILE_SCHEMA = "farmaxia:vizz-calibration-profile:0.3"
 MINIMUM_SAMPLES = 24
 FEATURE_COUNT = 6
 CALIBRATION_PROTOCOL = "static-stable-window-v3-multicondition"
@@ -65,6 +66,11 @@ def seal_profile(
         "schema": PROFILE_SCHEMA,
         "calibration_protocol": CALIBRATION_PROTOCOL,
         "calibration_conditions": sorted(REQUIRED_CONDITIONS),
+        "calibration_aggregation": {
+            "method": "pooled_observations_refit",
+            "coefficient_average": False,
+            "session_count": len(REQUIRED_CONDITIONS),
+        },
         "screen_size": [int(screen_size[0]), int(screen_size[1])],
         "sample_count": len(materialized),
         "model_sha256": model_sha256,
@@ -77,6 +83,43 @@ def seal_profile(
     temporary.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     temporary.replace(path)
     return path
+
+
+def load_samples_for_merge(
+    path: Path,
+    existing_condition: str | None = None,
+) -> tuple[dict[str, object], list[dict[str, object]]]:
+    """Load persisted point representatives for a later pooled refit.
+
+    Version 0.3 did not persist the visual condition. It can be upgraded only
+    when the caller states that condition explicitly; this avoids silently
+    guessing whether an old calibration used glasses.
+    """
+
+    profile = json.loads(path.read_text(encoding="utf-8"))
+    schema = profile.get("schema")
+    if schema not in {LEGACY_PROFILE_SCHEMA, PROFILE_SCHEMA} or profile.get("raw_video") is not False:
+        raise ValueError("profile is not mergeable or violates raw-video policy")
+    samples = profile.get("samples")
+    if not isinstance(samples, list) or not samples:
+        raise ValueError("profile has no calibration samples")
+    if schema == LEGACY_PROFILE_SCHEMA and existing_condition not in REQUIRED_CONDITIONS:
+        raise ValueError("legacy profile merge requires an explicit existing condition")
+    materialized: list[dict[str, object]] = []
+    for sample in samples:
+        if not isinstance(sample, dict):
+            raise ValueError("profile contains an invalid sample")
+        upgraded = dict(sample)
+        if schema == LEGACY_PROFILE_SCHEMA:
+            upgraded["condition"] = existing_condition
+        elif upgraded.get("condition") not in REQUIRED_CONDITIONS:
+            raise ValueError("profile sample has no recognized calibration condition")
+        design_row(upgraded["features"])
+        target = np.asarray(upgraded["target"], dtype=np.float64)
+        if target.shape != (2,) or not np.all(np.isfinite(target)):
+            raise ValueError("profile contains an invalid target")
+        materialized.append(upgraded)
+    return profile, materialized
 
 
 class ScreenMapper:

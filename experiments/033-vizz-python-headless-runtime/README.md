@@ -11,8 +11,11 @@ GPU sessions -> camera -> CALIBRATION_UI -> local profile -> headless camera
 
 El único momento con interfaz es `--calibrate`. Primero aparece una pantalla
 completa con el botón `Iniciar calibración`; los 12 puntos no empiezan hasta
-que el usuario hace clic. El flujo recorre dos condiciones, primero con lentes
-y luego sin lentes, pero sella sus 24 puntos en un único perfil. Para cada
+que el usuario hace clic. En una calibración nueva, el flujo recorre dos
+condiciones, primero con lentes y luego sin lentes, y sella sus 24 puntos en un
+único perfil. Si ya existe un perfil `0.3` de una sola condición, no es
+necesario repetir esa sesión: se puede capturar sólo la condición faltante y
+fusionar sus observaciones con un refit conjunto. Para cada
 punto, el cursor solo arma la captura: se descarta el periodo de estabilización
 y luego se recoge una ventana fija de muestras válidas. La ventana se acepta
 únicamente si tiene suficientes muestras y baja dispersión robusta; el mouse
@@ -41,6 +44,18 @@ Para iniciar después sin mostrar la calibración:
 ```powershell
 .\.venv\Scripts\pythonw.exe experiments/033-vizz-python-headless-runtime/run_vizz.py
 ```
+
+Para añadir la condición sin lentes a una calibración anterior hecha con
+lentes, conservando ambas en un único perfil:
+
+```powershell
+.\.venv\Scripts\python.exe experiments/033-vizz-python-headless-runtime/run_vizz.py --calibrate --condition without_glasses --merge-existing .\.vizz-calibration.json --existing-condition with_glasses
+```
+
+La fusión no promedia coeficientes de dos modelos. Pone en común las
+observaciones por punto, asigna explícitamente la condición del perfil legado y
+vuelve a ajustar una sola transformación regularizada. Esto es auditable y
+permite añadir futuras sesiones sin depender de un selector de perfil.
 
 Para detener el proceso headless se usa `Ctrl+C` si se inició con `python`, o
 se cierra su proceso si se inició con `pythonw`. Los fallos se registran en

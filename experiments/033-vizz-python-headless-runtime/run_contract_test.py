@@ -7,7 +7,7 @@ import tempfile
 from pathlib import Path
 
 from calibration_capture import CaptureConfig, StableCapture
-from profile_model import load_profile, seal_profile
+from profile_model import load_profile, load_samples_for_merge, seal_profile
 
 
 HERE = Path(__file__).parent
@@ -58,6 +58,7 @@ def main() -> None:
     require("ctypes.c_ssize_t" in overlay and "DefWindowProcW.argtypes" in overlay, "Win64 window callback signature is unsafe", failures)
     require("FocusOverlay" in runtime and "overlay.set_focus" in runtime, "normal content is not modified by the overlay", failures)
     require("capture = open_camera(args.camera)" in runtime, "camera lifecycle is unclear", failures)
+    require("--merge-existing" in runtime and "--existing-condition" in runtime and "load_samples_for_merge" in runtime, "runtime lacks incremental calibration merge", failures)
     require(runtime.index("tracker = GpuTracker") < runtime.index("capture = open_camera"), "camera opens before CUDA models", failures)
     require("camera" in (HERE / "README.md").read_text(encoding="utf-8"), "camera boundary is undocumented", failures)
     require("calibration_protocol" in profile and "0.4" in profile and "REQUIRED_CONDITIONS" in profile, "profile schema was not versioned for the combined calibration policy", failures)
@@ -132,6 +133,24 @@ def main() -> None:
         combined_profile, _mapper = load_profile(combined_path)
         require(combined_profile["sample_count"] == 24, "combined profile did not seal 24 samples", failures)
         require(combined_profile["calibration_conditions"] == ["with_glasses", "without_glasses"], "combined profile lost condition metadata", failures)
+
+        legacy_path = Path(temporary) / "legacy.json"
+        legacy_samples = [{key: value for key, value in sample.items() if key != "condition"} for sample in combined_samples[:12]]
+        legacy_path.write_text(
+            json.dumps(
+                {
+                    "schema": "farmaxia:vizz-calibration-profile:0.3",
+                    "screen_size": [1707, 960],
+                    "samples": legacy_samples,
+                    "model_sha256": "TEST_MODEL_HASH",
+                    "raw_video": False,
+                }
+            ),
+            encoding="utf-8",
+        )
+        _legacy_profile, upgraded_samples = load_samples_for_merge(legacy_path, existing_condition="with_glasses")
+        require(len(upgraded_samples) == 12, "legacy profile merge lost samples", failures)
+        require(all(sample["condition"] == "with_glasses" for sample in upgraded_samples), "legacy condition was not assigned explicitly", failures)
     json.dumps(policy)
 
     if failures:

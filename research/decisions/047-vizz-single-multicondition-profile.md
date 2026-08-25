@@ -16,6 +16,12 @@ Cada condición repite los 12 puntos, para un total de 24 observaciones
 agregadas. El perfil resultante se sella una sola vez y el runtime utiliza ese
 perfil sin pedir al usuario que seleccione la condición.
 
+Si ya existe un perfil `0.3` de una sola condición, el flujo incremental
+captura únicamente la condición faltante. El perfil legado se carga con su
+condición declarada explícitamente, se concatenan las observaciones por punto
+y se vuelve a ajustar un único mapper. No se promedian coeficientes de dos
+modelos, porque eso no equivale en general al ajuste sobre los datos reunidos.
+
 La condición queda registrada como metadato de auditoría, pero no se entrega
 como entrada al mapper: en funcionamiento normal VIZZ no debe depender de que
 el sistema conozca si el usuario lleva lentes. El modelo aprende una
@@ -35,6 +41,9 @@ no se resolverá ocultando el problema mediante dos perfiles seleccionables.
 - Las dos sesiones usan la misma cámara, pantalla y protocolo temporal.
 - La UI solicita explícitamente retirar o mantener los lentes antes de la
   segunda sesión.
+- Una sesión legado puede actualizarse con `--merge-existing` sin repetirse.
+- Un perfil legado sin condición explícita no se fusiona: el sistema exige que
+  el operador declare si fue `with_glasses` o `without_glasses`.
 - El runtime sigue siendo headless y utiliza un único archivo.
 - La validación debe reportar error separado por condición y error conjunto.
 
