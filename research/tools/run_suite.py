@@ -82,6 +82,7 @@ def main() -> None:
         "experiments/048-vizz-passive-observer/provenance.json",
         "experiments/049-vizz-runtime-geometry-bridge/provenance.json",
         "experiments/050-vizz-windows-display-layout-probe/provenance.json",
+        "experiments/051-vizz-physical-monitor-calibration/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -876,6 +877,17 @@ def main() -> None:
         "VIZZ_050_WINDOWS_DISPLAY_LAYOUT_PROBE_VALID",
     )
     command("provenance 050", python_script("research/tools/validate_provenance.py", provenance[47]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ physical monitor calibration 051",
+        python_script("experiments/051-vizz-physical-monitor-calibration/run_experiment.py"),
+        '"contract": "VIZZ_051_PHYSICAL_CALIBRATION_CONTRACT_VALID"',
+    )
+    command(
+        "contract test VIZZ physical monitor calibration 051",
+        python_script("experiments/051-vizz-physical-monitor-calibration/run_contract_test.py"),
+        "VIZZ_051_PHYSICAL_CALIBRATION_CONTRACT_VALID",
+    )
+    command("provenance 051", python_script("research/tools/validate_provenance.py", provenance[48]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

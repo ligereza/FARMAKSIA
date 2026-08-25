@@ -1,0 +1,87 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:051-vizz-physical-monitor-calibration",
+  "status": "exploratory",
+  "purpose": "Convert measured monitor dimensions and validated pose into 046-compatible physical planes while rejecting pixel-only scale.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_physical_geometry_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-051-calibration",
+      "type": "software",
+      "path": "physical_calibration.py",
+      "role": "measured_physical_monitor_specification_and_plane_builder",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-051-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "synthetic_two_monitor_calibration_fixture",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-051-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "physical_scale_and_logical_layout_kill_tests",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-051-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "human_reviewed_experiment_protocol",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-051-contract-activity",
+      "type": "activity",
+      "label": "build physical monitor planes from measured inputs and reject pixel-only scale",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-051-calibration",
+        "farmaxia:vizz-051-runner",
+        "farmaxia:vizz-051-contract"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-051-query",
+      "question": "Can VIZZ build monitor planes only from explicit metric dimensions and pose, refusing Windows pixels as physical scale?",
+      "source": "https://docs.opencv.org/5.0/tutorials/calib3d/camera_calibration_square_chess/camera_calibration_square_chess.html",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-051-calibration",
+        "farmaxia:vizz-051-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The 046 MonitorPlane origin is the physical display centre in a shared metre frame.",
+    "A future manual or marker-based procedure can provide monitor pose in that frame.",
+    "Nine presented targets per monitor are a protocol fixture, not a claim of optimal human calibration."
+  ],
+  "kill_tests": [
+    "Windows pixels, DPI-only data and depth-mask-only data cannot establish metres.",
+    "Missing physical dimensions or pose fails closed.",
+    "Logical monitor changes are observable through the monitor rectangle and version.",
+    "Mouse coordinates never become target truth.",
+    "The contract does not start camera, network or screen mutation."
+  ],
+  "unknowns": [
+    "Which provider will deliver stable metric eye centres and gaze rays on the current webcam.",
+    "The real reprojection error and pose stability of the user desk.",
+    "Whether a flat-plane model is adequate for the user's television."
+  ]
+}
