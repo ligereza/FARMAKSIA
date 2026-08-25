@@ -33,6 +33,7 @@ def main() -> None:
     require(policy["headless_visible"] is False, "headless phase declares a visible interface", failures)
     require("tkinter" in calibration, "calibration UI is not isolated in calibration_ui.py", failures)
     require("root.attributes(\"-fullscreen\", True)" in calibration, "calibration is not fullscreen", failures)
+    require('text="Iniciar calibración"' in calibration and "command=self._start" in calibration, "calibration starts without explicit click", failures)
     require("tkinter" not in runtime.lower(), "headless runner imports a UI toolkit", failures)
     require("tkinter" not in tracker.lower(), "GPU tracker imports a UI toolkit", failures)
     require("providers=[\"CUDAExecutionProvider\"]" in tracker, "tracker does not request CUDA only", failures)

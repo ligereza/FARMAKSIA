@@ -56,7 +56,9 @@ class CalibrationWindow:
         self.started_at = 0.0
         self.dot_id: int | None = None
         self.status_id: int | None = None
-        self.root.after(300, self._begin_point)
+        self.started = False
+        self.start_window: int | None = None
+        self._draw_landing()
 
     def run(self) -> None:
         self.root.mainloop()
@@ -68,8 +70,53 @@ class CalibrationWindow:
     def _on_resize(self, _event: tk.Event[tk.Misc]) -> None:
         self.width = max(1, self.canvas.winfo_width())
         self.height = max(1, self.canvas.winfo_height())
+        if not self.started and self.start_window is not None:
+            self.canvas.coords(self.start_window, self.width // 2, self.height // 2)
+
+    def _draw_landing(self) -> None:
+        self.canvas.delete("all")
+        self.canvas.create_text(
+            self.width // 2,
+            self.height // 2 - 100,
+            text="VIZZ está listo para calibrar",
+            fill="#ffffff",
+            font=("Segoe UI", 24, "bold"),
+        )
+        self.canvas.create_text(
+            self.width // 2,
+            self.height // 2 - 52,
+            text="Presiona el botón cuando estés preparado. Después mira cada punto.",
+            fill="#c8c8c8",
+            font=("Segoe UI", 14),
+        )
+        button = tk.Button(
+            self.root,
+            text="Iniciar calibración",
+            command=self._start,
+            bg="#d62027",
+            fg="#ffffff",
+            activebackground="#f04045",
+            activeforeground="#ffffff",
+            relief="flat",
+            cursor="hand2",
+            padx=28,
+            pady=14,
+            font=("Segoe UI", 15, "bold"),
+        )
+        self.start_window = self.canvas.create_window(self.width // 2, self.height // 2, window=button)
+
+    def _start(self) -> None:
+        if self.started:
+            return
+        self.started = True
+        if self.start_window is not None:
+            self.canvas.delete(self.start_window)
+            self.start_window = None
+        self.root.after(300, self._begin_point)
 
     def _begin_point(self) -> None:
+        if not self.started:
+            return
         if self.point_index >= len(CALIBRATION_POINTS):
             self._finish()
             return

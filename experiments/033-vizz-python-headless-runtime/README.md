@@ -9,8 +9,9 @@ GPU sessions -> camera -> CALIBRATION_UI -> local profile -> headless camera
                                                         └─ click-through focus layer
 ```
 
-El único momento con interfaz es `--calibrate`. Se muestra una pantalla
-completa con 12 puntos; no hay vista previa de cámara. Al sellar el perfil se
+El único momento con interfaz es `--calibrate`. Primero aparece una pantalla
+completa con el botón `Iniciar calibración`; los 12 puntos no empiezan hasta
+que el usuario hace clic. No hay vista previa de cámara. Al sellar el perfil se
 cierra Tk y el proceso pasa al runtime de fondo. El runtime no importa Tkinter,
 no crea paneles ni botones y no dibuja un marcador VIZZ: modifica el contenido
 normal con una capa nativa transparente, click-through, que atenúa suavemente
