@@ -1,0 +1,86 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:050-vizz-windows-display-layout-probe",
+  "status": "exploratory",
+  "purpose": "Read the Windows virtual desktop monitor layout while keeping physical 3-D geometry and screen mutation closed.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_the_read_only_windows_display_probe",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-050-layout-probe",
+      "type": "software",
+      "path": "display_layout.py",
+      "role": "read_only_windows_monitor_layout_probe",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-050-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "probe_output_runner",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-050-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "read_only_and_physical_geometry_boundary",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-050-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "human_reviewed_experiment_protocol",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-050-contract-activity",
+      "type": "activity",
+      "label": "enumerate logical Windows monitor layout without physical inference",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-050-layout-probe",
+        "farmaxia:vizz-050-runner",
+        "farmaxia:vizz-050-contract"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-050-query",
+      "question": "Can VIZZ version the logical Windows monitor layout without claiming that pixel rectangles are physical monitor planes?",
+      "source": "https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-monitorinfo",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-050-layout-probe",
+        "farmaxia:vizz-050-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "Windows virtual-screen rectangles are logical desktop coordinates, not a physical 3-D reconstruction.",
+    "A layout version is sufficient to invalidate a calibration after a logical monitor configuration change.",
+    "DPI and orientation are optional observations and do not establish monitor dimensions or eye distance."
+  ],
+  "kill_tests": [
+    "No camera, network or screen mutation is allowed.",
+    "Non-Windows or API failure returns explicit UNKNOWN.",
+    "Physical monitor size and plane must remain unknown in this probe.",
+    "Coordinates outside the primary origin must be preserved."
+  ],
+  "unknowns": [
+    "Physical dimensions and pose of each monitor on the current desk.",
+    "Eye centers and camera extrinsics needed to intersect a gaze ray with a physical plane.",
+    "Whether logical layout changes correlate with a useful VIZZ perceptual adaptation."
+  ]
+}

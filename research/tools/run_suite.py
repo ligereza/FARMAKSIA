@@ -81,6 +81,7 @@ def main() -> None:
         "experiments/047-vizz-controlled-playback/provenance.json",
         "experiments/048-vizz-passive-observer/provenance.json",
         "experiments/049-vizz-runtime-geometry-bridge/provenance.json",
+        "experiments/050-vizz-windows-display-layout-probe/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -864,6 +865,17 @@ def main() -> None:
         "VIZZ_049_RUNTIME_BRIDGE_CONTRACT_VALID",
     )
     command("provenance 049", python_script("research/tools/validate_provenance.py", provenance[46]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ Windows display layout 050",
+        python_script("experiments/050-vizz-windows-display-layout-probe/run_experiment.py"),
+        '"contract": "VIZZ_050_WINDOWS_DISPLAY_LAYOUT_PROBE_VALID"',
+    )
+    command(
+        "contract test VIZZ Windows display layout 050",
+        python_script("experiments/050-vizz-windows-display-layout-probe/run_contract_test.py"),
+        "VIZZ_050_WINDOWS_DISPLAY_LAYOUT_PROBE_VALID",
+    )
+    command("provenance 050", python_script("research/tools/validate_provenance.py", provenance[47]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
