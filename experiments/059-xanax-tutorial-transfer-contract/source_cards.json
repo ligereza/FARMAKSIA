@@ -1,0 +1,98 @@
+{
+  "maya": {
+    "source_id": "maya-official-python-2025",
+    "uri": "https://help.autodesk.com/cloudhelp/2024/ENU/Maya-Scripting/files/GUID-55B63946-CDC9-42E5-9B6E-45EE45CFC7FC.htm",
+    "retrieved_at": "2026-08-25T00:00:00Z",
+    "source_kind": "official_web",
+    "application": "maya",
+    "application_version": "2025",
+    "locale": "en",
+    "license": "unknown_declared_source_only",
+    "prerequisites": ["scene_open"],
+    "concepts": ["mesh", "object_name", "export"],
+    "steps": [
+      {
+        "id": "maya-create-mesh",
+        "preconditions": ["scene_open"],
+        "action_family": "native_api",
+        "action": "create_or_select_mesh",
+        "expected_observation": "mesh object is present and selected",
+        "postconditions": ["mesh_exists", "object_selected"],
+        "evidence": {"url": "https://help.autodesk.com/cloudhelp/2024/ENU/Maya-Scripting/files/GUID-55B63946-CDC9-42E5-9B6E-45EE45CFC7FC.htm", "section": "using Python in Maya"}
+      },
+      {
+        "id": "maya-export-artifact",
+        "preconditions": ["mesh_exists", "object_selected"],
+        "action_family": "native_api",
+        "action": "export_mesh_as_fbx_or_obj",
+        "expected_observation": "declared artifact exists at the chosen path",
+        "postconditions": ["export_completed", "artifact_exists"],
+        "evidence": {"url": "https://help.autodesk.com/view/MAYADEV/2025/ENU/", "section": "developer documentation"}
+      }
+    ]
+  },
+  "blender": {
+    "source_id": "blender-official-python-api",
+    "uri": "https://docs.blender.org/api/main/info_quickstart.html",
+    "retrieved_at": "2026-08-25T00:00:00Z",
+    "source_kind": "official_web",
+    "application": "blender",
+    "application_version": "current_api",
+    "locale": "en",
+    "license": "unknown_declared_source_only",
+    "prerequisites": ["scene_open"],
+    "concepts": ["mesh", "selection", "modifier_stack"],
+    "steps": [
+      {
+        "id": "blender-import-artifact",
+        "preconditions": ["scene_open", "artifact_exists"],
+        "action_family": "native_api",
+        "action": "import_declared_mesh_artifact",
+        "expected_observation": "mesh object appears in the scene",
+        "postconditions": ["artifact_imported", "mesh_exists", "object_selected"],
+        "evidence": {"url": "https://docs.blender.org/api/main/info_quickstart.html", "section": "Python API"}
+      },
+      {
+        "id": "blender-check-scale",
+        "preconditions": ["artifact_imported", "mesh_exists"],
+        "action_family": "native_api",
+        "action": "read_object_transform_and_confirm_units",
+        "expected_observation": "scale is within the declared bridge assumptions",
+        "postconditions": ["scale_checked"],
+        "evidence": {"url": "https://docs.blender.org/api/current/genindex-R.html", "section": "API reference"}
+      }
+    ]
+  },
+  "incomplete": {
+    "source_id": "incomplete-tutorial-card",
+    "uri": "https://example.invalid/tutorial",
+    "retrieved_at": "2026-08-25T00:00:00Z",
+    "source_kind": "official_web",
+    "application": "unknown",
+    "application_version": "unknown",
+    "locale": "en",
+    "license": "unknown",
+    "prerequisites": [],
+    "concepts": ["ambiguous_action"],
+    "steps": [
+      {
+        "id": "ambiguous-step",
+        "preconditions": [],
+        "action_family": "human_prompt",
+        "action": "do_the_thing",
+        "expected_observation": "it worked",
+        "evidence": {"url": "https://example.invalid/tutorial", "section": "unknown"}
+      }
+    ]
+  },
+  "maya_to_blender_bridge": {
+    "from_application": "maya",
+    "from_state": ["mesh_exists", "object_selected", "export_completed", "artifact_exists"],
+    "artifact_or_transform": "declared_fbx_or_obj_file_with_units_axes_scale",
+    "assumptions": ["file_path_is_explicit", "format_is_supported", "units_are_declared", "up_axis_is_declared"],
+    "to_application": "blender",
+    "to_state": ["artifact_imported", "mesh_exists", "object_selected", "scale_checked"],
+    "verifier": "compare_artifact_exists_object_count_and_declared_transform",
+    "residue": ["materials_and_plugin_specific_nodes_may_not_transfer", "analogy_is_not_equivalence"]
+  }
+}

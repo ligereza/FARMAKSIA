@@ -1,0 +1,108 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "inspired_by": [
+    "https://www.w3.org/TR/prov-primer/",
+    "https://learn.microsoft.com/en-us/windows/win32/winauto/uiauto-uiautomationoverview",
+    "https://playwright.dev/docs/locators",
+    "https://github.com/microsoft/UFO",
+    "https://arxiv.org/abs/2404.07972"
+  ],
+  "experiment": "farmaxia:experiment:059-xanax-tutorial-transfer-contract",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_tutorial_source_and_bridge_contracts"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "checks_source_composition_and_kill_tests"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:xanax-transfer-protocol-059",
+      "type": "entity",
+      "path": "README.md",
+      "sha256": "6F911065A373A5EC576220533B33FCE1A45A53E13CD542C21388A3A0382026BC",
+      "role": "tutorial_transfer_contract_and_limits",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:xanax-transfer-source-cards-059",
+      "type": "entity",
+      "path": "source_cards.json",
+      "sha256": "9D391095E96C11824FBD6C86009D9D07D9F1034B45F67BA74DD269FA2959A160",
+      "role": "local_declared_source_cards_and_bridge",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:xanax-transfer-runner-059",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "sha256": "5DF477BF6884AA1767CDEFA43F746E48C23A45154F265B73A09F01CA69055ABF",
+      "role": "deterministic_contract_runner",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-transfer-kill-test-059",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "sha256": "CE02E5A73F4C865C7331AF61933415E97820E33022243185AE2337CFCD2C91D4",
+      "role": "negative_contract_cases",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:xanax-transfer-results-059",
+      "type": "entity",
+      "path": "results.md",
+      "sha256": "BAF261906992D414A46980198CC924474AF95A04C34CA89C6EF4A372108EC37E",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:run-xanax-transfer-059",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-transfer-protocol-059",
+        "farmaxia:xanax-transfer-source-cards-059",
+        "farmaxia:xanax-transfer-runner-059"
+      ],
+      "generated": ["farmaxia:xanax-transfer-results-059"],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:run-xanax-transfer-kill-tests-059",
+      "type": "activity",
+      "used": [
+        "farmaxia:xanax-transfer-source-cards-059",
+        "farmaxia:xanax-transfer-kill-test-059"
+      ],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:document-is-not-execution",
+      "expression": "does a complete source card remain a teaching draft without live state and an adapter",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-transfer-source-cards-059", "farmaxia:xanax-transfer-results-059"]
+    },
+    {
+      "id": "farmaxia:query:bridge-is-required",
+      "expression": "does composition block when the cross-application bridge is absent or mismatched",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:xanax-transfer-source-cards-059", "farmaxia:xanax-transfer-kill-test-059"]
+    }
+  ],
+  "unknowns": [
+    "Whether official documentation is sufficiently complete for any particular application version",
+    "Whether UI Automation or a native API exposes every state needed by a real tutorial",
+    "Whether a Maya-to-Blender artifact preserves the user's intended semantics, materials, and units",
+    "Whether analogical teaching changes human comprehension or frustration"
+  ]
+}

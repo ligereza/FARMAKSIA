@@ -146,6 +146,8 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Compuerta de privacidad y capacidades sin cámara VIZZ](research/decisions/060-vizz-privacy-capability-gate.md)
 - [Arquetipos open source para la capa adaptativa FARMAKSIA](research/decisions/062-farmaxia-open-source-archetypes.md)
 - [Auditoría consolidada de estado](research/decisions/032-laboratory-state-audit.md)
+- [Arquitectura X-ANA-X para tutoriales transferibles](research/decisions/065-xanax-tutorial-transfer-architecture.md)
+- [Contrato X-ANA-X de tutorial y puente entre aplicaciones](experiments/059-xanax-tutorial-transfer-contract/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)
