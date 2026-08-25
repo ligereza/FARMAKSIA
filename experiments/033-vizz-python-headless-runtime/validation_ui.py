@@ -255,6 +255,12 @@ class ValidationWindow:
                 "target": [target_x, target_y],
                 "features": list(result.features),
                 "pose": list(result.pose) if result.pose is not None else None,
+                "eye_centric": list(result.eye_centric) if result.eye_centric is not None else None,
+                "eye_centric_distance_px": result.eye_centric_distance_px,
+                "eye_centric_roll_rad": result.eye_centric_roll_rad,
+                "eye_centric_valid_count": result.eye_centric_valid_count,
+                "eye_centric_max_mad": result.eye_centric_max_mad,
+                "eye_centric_unknown_reason": result.eye_centric_unknown_reason,
                 "capture": {
                     "method": "stable_fixed_window",
                     "valid_count": result.valid_count,

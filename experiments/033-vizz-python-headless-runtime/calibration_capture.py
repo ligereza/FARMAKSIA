@@ -45,6 +45,12 @@ class CaptureResult:
     reason: str
     pose: tuple[float, ...] | None = None
     max_pose_mad: float = 0.0
+    eye_centric: tuple[float, ...] | None = None
+    eye_centric_valid_count: int = 0
+    eye_centric_max_mad: float = 0.0
+    eye_centric_distance_px: float | None = None
+    eye_centric_roll_rad: float | None = None
+    eye_centric_unknown_reason: str | None = None
 
 
 def _median(values: list[float]) -> float:
@@ -81,6 +87,10 @@ class StableCapture:
         self.deadline: float | None = None
         self.samples: list[tuple[float, ...]] = []
         self.poses: list[tuple[float, ...]] = []
+        self.eye_centric_samples: list[tuple[float, ...]] = []
+        self.eye_centric_distances: list[float] = []
+        self.eye_centric_rolls: list[float] = []
+        self.eye_centric_unknown_reasons: list[str] = []
         self.qualities: list[float] = []
         self.finished = False
 
@@ -96,6 +106,10 @@ class StableCapture:
         self.deadline = self.active_at + self.config.window_seconds
         self.samples = []
         self.poses = []
+        self.eye_centric_samples = []
+        self.eye_centric_distances = []
+        self.eye_centric_rolls = []
+        self.eye_centric_unknown_reasons = []
         self.qualities = []
         self.finished = False
 
@@ -125,6 +139,20 @@ class StableCapture:
         self.samples.append(features)
         if pose_values is not None:
             self.poses.append(pose_values)
+        eye_centric = getattr(sample, "eye_centric", None)
+        if eye_centric is not None:
+            eye_values = tuple(float(value) for value in eye_centric)
+            if eye_values and all(math.isfinite(value) for value in eye_values):
+                self.eye_centric_samples.append(eye_values)
+        distance = getattr(sample, "eye_centric_distance_px", None)
+        if distance is not None and math.isfinite(float(distance)) and float(distance) > 0.0:
+            self.eye_centric_distances.append(float(distance))
+        roll = getattr(sample, "eye_centric_roll_rad", None)
+        if roll is not None and math.isfinite(float(roll)):
+            self.eye_centric_rolls.append(float(roll))
+        unknown_reason = getattr(sample, "eye_centric_unknown_reason", None)
+        if unknown_reason:
+            self.eye_centric_unknown_reasons.append(str(unknown_reason))
         self.qualities.append(float(sample.quality))
         return None
 
@@ -164,6 +192,12 @@ class StableCapture:
         max_pose_mad = 0.0
         if self.poses:
             pose, max_pose_mad = _robust_center(self.poses)
+        eye_centric = None
+        eye_centric_max_mad = 0.0
+        if self.eye_centric_samples:
+            eye_centric, eye_centric_max_mad = _robust_center(self.eye_centric_samples)
+        eye_centric_distance = _median(self.eye_centric_distances) if self.eye_centric_distances else None
+        eye_centric_roll = _median(self.eye_centric_rolls) if self.eye_centric_rolls else None
         return CaptureResult(
             accepted=True,
             features=features,
@@ -173,6 +207,14 @@ class StableCapture:
             reason="accepted",
             pose=pose,
             max_pose_mad=max_pose_mad,
+            eye_centric=eye_centric,
+            eye_centric_valid_count=len(self.eye_centric_samples),
+            eye_centric_max_mad=eye_centric_max_mad,
+            eye_centric_distance_px=eye_centric_distance,
+            eye_centric_roll_rad=eye_centric_roll,
+            eye_centric_unknown_reason=(
+                self.eye_centric_unknown_reasons[0] if not self.eye_centric_samples and self.eye_centric_unknown_reasons else None
+            ),
         )
 
 

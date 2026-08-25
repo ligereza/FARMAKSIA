@@ -40,7 +40,7 @@
       "id": "farmaxia:xanax-control-target-suite-018",
       "type": "entity",
       "path": "../../research/tools/run_suite.py",
-      "sha256": "4CD0724B59AD24F86F0A0B8F47169EF17A2CD57E553DE28CACE317B7B60D7453",
+      "sha256": "9D2D5FBB519B85AF6132A05C6562500829390D79281FEC98426439AF2E12738C",
       "role": "real_repository_target_source",
       "authority": "human_declared_tool"
     },

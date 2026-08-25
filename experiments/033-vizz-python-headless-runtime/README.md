@@ -122,3 +122,9 @@ se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
 - La calidad cae si no se detectan dos ojos, si la discrepancia binocular supera
   45 grados o si el rostro no supera el umbral. En esos casos el overlay se
   oculta: no inventa una coordenada.
+- Desde el incremento 036, cada muestra y cada resumen de ventana conserva,
+  además, `eye_centric`, `eye_centric_distance_px`, `eye_centric_roll_rad` y su
+  razón de `UNKNOWN`. Esos campos se guardan para comparar la nueva
+  representación con las seis features legacy; el mapper productivo continúa
+  leyendo sólo `sample.features` hasta que exista una validación held-out
+  favorable.

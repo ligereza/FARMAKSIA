@@ -49,6 +49,12 @@ class GazeSample:
     # Proxies derived from face/eye geometry; they are diagnostics for now and
     # are not yet fed into the screen mapper.
     pose: tuple[float, float, float, float, float, float] | None = None
+    # Eye-centric diagnostics are captured alongside legacy features but are
+    # not yet used by the screen mapper.
+    eye_centric: tuple[float, ...] | None = None
+    eye_centric_distance_px: float | None = None
+    eye_centric_roll_rad: float | None = None
+    eye_centric_unknown_reason: str | None = None
 
 
 def sha256(path: Path) -> str:
@@ -120,6 +126,38 @@ def _angles_from_eye(eye: np.ndarray) -> tuple[float, float]:
         raise ValueError("gaze vector has zero norm")
     theta_x, theta_y = _angles_from_vec(vector / norm)
     return -theta_y * 180.0 / math.pi, theta_x * 180.0 / math.pi
+
+
+def _eye_centric_geometry(
+    left_points: np.ndarray, right_points: np.ndarray
+) -> tuple[tuple[float, ...], float, float] | tuple[None, None, str]:
+    """Return iris centroids in an interocular frame, or an UNKNOWN reason."""
+
+    if left_points.ndim != 2 or right_points.ndim != 2 or left_points.shape[1] != 3 or right_points.shape[1] != 3:
+        return None, None, "invalid_eye_point_shape"
+    left_center = left_points[:32].mean(axis=0)
+    right_center = right_points[:32].mean(axis=0)
+    delta = right_center[:2] - left_center[:2]
+    distance = float(np.linalg.norm(delta))
+    if not math.isfinite(distance) or distance <= 1e-6:
+        return None, None, "interocular_distance_too_small"
+    roll = float(math.atan2(float(delta[1]), float(delta[0])))
+    cosine = math.cos(roll)
+    sine = math.sin(roll)
+    midpoint = (left_center + right_center) * 0.5
+
+    def iris_in_frame(points: np.ndarray) -> np.ndarray:
+        centered = points[IRIS_IDX_481] - midpoint
+        normalized = np.empty_like(centered, dtype=np.float32)
+        normalized[:, 0] = cosine * centered[:, 0] + sine * centered[:, 1]
+        normalized[:, 1] = -sine * centered[:, 0] + cosine * centered[:, 1]
+        normalized[:, 2] = centered[:, 2]
+        return normalized.mean(axis=0) / distance
+
+    values = tuple(float(value) for value in np.concatenate((iris_in_frame(left_points), iris_in_frame(right_points))))
+    if not all(math.isfinite(value) for value in values):
+        return None, None, "nonfinite_eye_centric_geometry"
+    return values, distance, roll
 
 
 class GpuTracker:
@@ -218,4 +256,25 @@ class GpuTracker:
             eye_center[0] / max(1.0, width),
             eye_center[1] / max(1.0, height),
         )
-        return GazeSample(features, quality, disagreement, pose)
+        eye_centric, eye_centric_distance, eye_centric_roll = _eye_centric_geometry(left_points, right_points)
+        if eye_centric is None:
+            return GazeSample(
+                features,
+                quality,
+                disagreement,
+                pose,
+                None,
+                None,
+                None,
+                eye_centric_roll,
+            )
+        return GazeSample(
+            features,
+            quality,
+            disagreement,
+            pose,
+            eye_centric,
+            eye_centric_distance,
+            eye_centric_roll,
+            None,
+        )
