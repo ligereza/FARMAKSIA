@@ -6,8 +6,8 @@ transparente sobre el escritorio y las aplicaciones existentes.
 
 ## Que cambia
 
-- Ventana Win32 `WS_POPUP` transparente, sin foco y click-through incluso frente
-  a ventanas de otros procesos. La combinación `WS_EX_LAYERED` +
+- Ventana Win32 `WS_POPUP` transparente, sin foco y diseñada para click-through
+  frente a ventanas de otros procesos. La combinación `WS_EX_LAYERED` +
   `WS_EX_TRANSPARENT` se usa sólo para el contrato de entrada; el contenido
   sigue llegando por DirectComposition y una swap chain premultiplicada, no por
   `UpdateLayeredWindow`.
@@ -78,3 +78,11 @@ No se incorpora ningun modelo de deep learning en este renderer. El renderer
 recibe un plan semantico ya decidido; esa separacion permite que VIZZ, X-ANA-X
 y CODE-INE produzcan representaciones distintas sin dar acceso directo de
 ejecucion al compositor.
+
+La aceptación de click-through entre procesos sigue siendo un kill test manual
+pendiente. El patrón de estilos está respaldado por Chromium, pero no se marca
+como evidencia de funcionamiento en esta máquina hasta comprobar que una
+aplicación inferior recibe foco y clic mientras el overlay está visible.
+
+El análisis comparativo y la decisión de arquitectura están en:
+`research/decisions/064-farmaxia-overlay-deep-research.md`.
