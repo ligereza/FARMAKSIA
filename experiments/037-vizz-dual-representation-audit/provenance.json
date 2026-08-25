@@ -1,0 +1,75 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:037-vizz-dual-representation-audit",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "requires_unknown_when_eye_centric_artifact_is_missing"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "audits_existing_calibration_and_validation_artifacts",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-037-audit",
+      "type": "entity",
+      "path": "audit_dual.py",
+      "role": "dual_representation_readiness_audit",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-037-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "unknown_and_no_reconstruction_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-037-readme",
+      "type": "entity",
+      "path": "README.md",
+      "role": "offline_audit_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-037-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "existing_artifact_audit_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-037-audit-existing",
+      "type": "activity",
+      "label": "audit legacy and eye-centric artifact completeness",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-037-audit",
+        "farmaxia:vizz-037-contract",
+        "farmaxia:vizz-037-readme"
+      ],
+      "generated": ["farmaxia:vizz-037-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-037-query-missing-data",
+      "question": "Can an old artifact support eye-centric comparison without persisted eye-centric values?",
+      "source": "https://github.com/PINTO0309/screen-eye-tracking",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-037-audit", "farmaxia:vizz-037-results"]
+    }
+  ],
+  "unknowns": [
+    "A new user validation is required before eye-centric and legacy mappers can be compared.",
+    "No conclusion about screen accuracy follows from the old artifact.",
+    "The audit does not infer missing landmarks from legacy features."
+  ]
+}
