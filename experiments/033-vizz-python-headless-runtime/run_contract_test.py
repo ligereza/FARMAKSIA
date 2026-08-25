@@ -46,6 +46,7 @@ def main() -> None:
     require("style = 0x80000000" in overlay, "overlay is not a borderless popup layer", failures)
     require("extended = 0x00080000" in overlay, "overlay is missing layered click-through flags", failures)
     require("CreateWindowExW" in overlay and "UpdateLayeredWindow" in overlay, "native click-through layer is missing", failures)
+    require("ctypes.c_ssize_t" in overlay and "DefWindowProcW.argtypes" in overlay, "Win64 window callback signature is unsafe", failures)
     require("FocusOverlay" in runtime and "overlay.set_focus" in runtime, "normal content is not modified by the overlay", failures)
     require("capture = open_camera(args.camera)" in runtime, "camera lifecycle is unclear", failures)
     require(runtime.index("tracker = GpuTracker") < runtime.index("capture = open_camera"), "camera opens before CUDA models", failures)

@@ -14,7 +14,9 @@ class OverlayUnavailable(RuntimeError):
 
 
 if os.name == "nt":
-    WNDPROC = ctypes.WINFUNCTYPE(ctypes.c_long, wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM)
+    # LPARAM is 64-bit on this Python/Windows process.  Using c_long here
+    # truncates message data and makes DefWindowProcW reject lParam values.
+    WNDPROC = ctypes.WINFUNCTYPE(ctypes.c_ssize_t, wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM)
 
     class POINT(ctypes.Structure):
         _fields_ = [("x", wintypes.LONG), ("y", wintypes.LONG)]
@@ -72,6 +74,8 @@ class FocusOverlay:
         self.radius_px = max(32, int(radius_px))
         self.user32 = ctypes.windll.user32
         self.gdi32 = ctypes.windll.gdi32
+        self.user32.DefWindowProcW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
+        self.user32.DefWindowProcW.restype = ctypes.c_ssize_t
         self.hinstance = ctypes.windll.kernel32.GetModuleHandleW(None)
         self.class_name = f"FARMAXIA_VIZZ_LAYER_{id(self):x}"
         self._wndproc = WNDPROC(self._window_proc)

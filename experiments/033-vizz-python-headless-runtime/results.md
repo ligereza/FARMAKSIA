@@ -10,6 +10,9 @@
   sin cámara ni datos humanos.
 - El flujo ejecutable tiene una única ventana de calibración y un modificador
   nativo click-through sin controles después del sellado.
+- La ventana Win32 se probó en un smoke test de creación, actualización de
+  bitmap de 1x1 y destrucción; la firma Win64 de `LPARAM` quedó corregida para
+  `DefWindowProcW`.
 
 ## Desconocido
 
