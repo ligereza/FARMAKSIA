@@ -48,7 +48,7 @@ class InteractionTrace:
         self._count = 0
         self._write(
             {
-                "schema": "farmaxia:vizz-interaction-trace:0.2",
+                "schema": "farmaxia:vizz-interaction-trace:0.3",
                 "type": "header",
                 "sample_hz": self.sample_hz,
                 "screen_size": list(screen_size),
@@ -94,8 +94,10 @@ class InteractionTrace:
             "pretrained_gaze_deg": None,
             "pretrained_gaze_valid": False,
             "pretrained_gaze_unknown_reason": None,
-            "binocular_gaze_deg": None,
-            "raw_model_angle_delta_deg": None,
+                "binocular_gaze_deg": None,
+                "raw_model_angle_delta_deg": None,
+                "binocular_ray_proxy": None,
+                "binocular_ray_unknown_reason": None,
             "keyboard_event_count": 0,
             "keyboard_active": False,
             "keyboard_last_event_age_ms": None,
@@ -115,6 +117,10 @@ class InteractionTrace:
             delta = getattr(sample, "raw_model_angle_delta_deg", None)
             if delta is not None and math.isfinite(float(delta)) and float(delta) >= 0.0:
                 payload["raw_model_angle_delta_deg"] = float(delta)
+            ray_proxy = getattr(sample, "binocular_ray_proxy", None)
+            if ray_proxy is not None and hasattr(ray_proxy, "as_dict"):
+                payload["binocular_ray_proxy"] = ray_proxy.as_dict()
+            payload["binocular_ray_unknown_reason"] = getattr(sample, "binocular_ray_unknown_reason", None)
         if keyboard is not None:
             payload["keyboard_event_count"] = int(keyboard.get("keyboard_event_count", 0))
             payload["keyboard_active"] = bool(keyboard.get("keyboard_active", False))

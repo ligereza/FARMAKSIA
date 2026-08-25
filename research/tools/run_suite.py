@@ -84,6 +84,7 @@ def main() -> None:
         "experiments/050-vizz-windows-display-layout-probe/provenance.json",
         "experiments/051-vizz-physical-monitor-calibration/provenance.json",
         "experiments/052-vizz-binocular-auto-geometry/provenance.json",
+        "experiments/053-vizz-gpu-binocular-ray-adapter/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -900,6 +901,17 @@ def main() -> None:
         "VIZZ_052_BINOCULAR_AUTO_GEOMETRY_CONTRACT_VALID",
     )
     command("provenance 052", python_script("research/tools/validate_provenance.py", provenance[49]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ GPU binocular ray adapter 053",
+        python_script("experiments/053-vizz-gpu-binocular-ray-adapter/run_experiment.py"),
+        '"contract": "VIZZ_053_GPU_BINOCULAR_RAY_ADAPTER_CONTRACT_VALID"',
+    )
+    command(
+        "contract test VIZZ GPU binocular ray adapter 053",
+        python_script("experiments/053-vizz-gpu-binocular-ray-adapter/run_contract_test.py"),
+        "VIZZ_053_GPU_BINOCULAR_RAY_ADAPTER_CONTRACT_VALID",
+    )
+    command("provenance 053", python_script("research/tools/validate_provenance.py", provenance[50]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

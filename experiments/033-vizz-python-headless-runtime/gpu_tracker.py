@@ -12,6 +12,7 @@ import numpy as np
 import onnxruntime as ort
 
 from pretrained_gaze import decode_mobileone_angles, preprocess_mobileone_face
+from ray_proxy import BinocularRayProxy, build_binocular_ray_proxy
 
 
 IRIS_IDX_481 = np.asarray([248, 252, 224, 228, 232, 236, 240, 244], dtype=np.int64)
@@ -64,6 +65,11 @@ class GazeSample:
     pretrained_gaze_unknown_reason: str | None = None
     binocular_gaze_deg: tuple[float, float] | None = None
     raw_model_angle_delta_deg: float | None = None
+    # Explicit eye-specific rays in a normalized camera proxy frame.  These
+    # are not metric world rays until intrinsics, eye depth and head pose are
+    # independently solved.
+    binocular_ray_proxy: BinocularRayProxy | None = None
+    binocular_ray_unknown_reason: str | None = None
 
 
 def sha256(path: Path) -> str:
@@ -313,6 +319,17 @@ class GpuTracker:
         eye_centric, eye_centric_distance, eye_centric_roll = _eye_centric_geometry(left_points, right_points)
         pretrained_gaze_deg, pretrained_unknown_reason = self._predict_pretrained_gaze(frame, face)
         binocular_gaze_deg = ((left_yaw + right_yaw) * 0.5, (left_pitch + right_pitch) * 0.5)
+        binocular_ray_proxy, binocular_ray_unknown_reason = build_binocular_ray_proxy(
+            left_center=(float(left_center[0]), float(left_center[1])),
+            right_center=(float(right_center[0]), float(right_center[1])),
+            left_yaw_deg=left_yaw,
+            left_pitch_deg=left_pitch,
+            right_yaw_deg=right_yaw,
+            right_pitch_deg=right_pitch,
+            width=width,
+            height=height,
+            disagreement_deg=disagreement,
+        )
         raw_model_angle_delta_deg = None
         if pretrained_gaze_deg is not None:
             raw_model_angle_delta_deg = math.hypot(
@@ -333,6 +350,8 @@ class GpuTracker:
                 pretrained_unknown_reason,
                 binocular_gaze_deg,
                 raw_model_angle_delta_deg,
+                binocular_ray_proxy,
+                binocular_ray_unknown_reason,
             )
         return GazeSample(
             features,
@@ -347,4 +366,6 @@ class GpuTracker:
             pretrained_unknown_reason,
             binocular_gaze_deg,
             raw_model_angle_delta_deg,
+            binocular_ray_proxy,
+            binocular_ray_unknown_reason,
         )

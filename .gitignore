@@ -13,6 +13,7 @@ venv/
 .vizz-pretrained-probe*.json
 .vizz-dual-audit.json
 .vizz-trace*.jsonl
+.vizz-binocular-quality*.jsonl
 *.log
 dist/
 build/

@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import Protocol
+from typing import Any, Protocol
 
 
 class SampleLike(Protocol):
@@ -51,6 +51,9 @@ class CaptureResult:
     eye_centric_distance_px: float | None = None
     eye_centric_roll_rad: float | None = None
     eye_centric_unknown_reason: str | None = None
+    binocular_ray_proxy: dict[str, object] | None = None
+    binocular_ray_valid_count: int = 0
+    binocular_ray_unknown_reason: str | None = None
 
 
 def _median(values: list[float]) -> float:
@@ -69,6 +72,54 @@ def _robust_center(samples: list[tuple[float, ...]]) -> tuple[tuple[float, ...],
         for index in range(feature_count)
     ]
     return center, max(deviations, default=0.0)
+
+
+RAY_VECTOR_KEYS = ("left_origin", "left_direction", "right_origin", "right_direction")
+
+
+def _ray_payload(value: Any) -> dict[str, object] | None:
+    """Validate a ray proxy without importing the GPU runtime into capture."""
+
+    raw = value.as_dict() if hasattr(value, "as_dict") else value
+    if not isinstance(raw, dict):
+        return None
+    payload: dict[str, object] = {
+        "coordinate_frame": str(raw.get("coordinate_frame", "")),
+        "status": str(raw.get("status", "")),
+        "unknown_reason": raw.get("unknown_reason"),
+    }
+    if not payload["coordinate_frame"] or payload["status"] != "VALID_RELATIVE_PROXY":
+        return None
+    for key in RAY_VECTOR_KEYS:
+        values = raw.get(key)
+        if not isinstance(values, (list, tuple)) or len(values) != 3:
+            return None
+        numeric = [float(item) for item in values]
+        if not all(math.isfinite(item) for item in numeric):
+            return None
+        payload[key] = numeric
+    baseline = raw.get("interocular_baseline_proxy")
+    if baseline is None or not math.isfinite(float(baseline)) or float(baseline) <= 0.0:
+        return None
+    payload["interocular_baseline_proxy"] = float(baseline)
+    return payload
+
+
+def _robust_ray_center(samples: list[dict[str, object]]) -> dict[str, object] | None:
+    if not samples:
+        return None
+    result: dict[str, object] = {
+        "coordinate_frame": samples[0]["coordinate_frame"],
+        "status": "VALID_RELATIVE_PROXY",
+        "unknown_reason": None,
+    }
+    for key in RAY_VECTOR_KEYS:
+        vectors = [sample[key] for sample in samples]
+        numeric_vectors = [tuple(float(item) for item in vector) for vector in vectors]  # type: ignore[arg-type]
+        result[key] = list(_robust_center(numeric_vectors)[0])
+    baselines = [float(sample["interocular_baseline_proxy"]) for sample in samples]
+    result["interocular_baseline_proxy"] = _median(baselines)
+    return result
 
 
 class StableCapture:
@@ -91,6 +142,8 @@ class StableCapture:
         self.eye_centric_distances: list[float] = []
         self.eye_centric_rolls: list[float] = []
         self.eye_centric_unknown_reasons: list[str] = []
+        self.binocular_ray_samples: list[dict[str, object]] = []
+        self.binocular_ray_unknown_reasons: list[str] = []
         self.qualities: list[float] = []
         self.finished = False
 
@@ -110,6 +163,8 @@ class StableCapture:
         self.eye_centric_distances = []
         self.eye_centric_rolls = []
         self.eye_centric_unknown_reasons = []
+        self.binocular_ray_samples = []
+        self.binocular_ray_unknown_reasons = []
         self.qualities = []
         self.finished = False
 
@@ -153,6 +208,12 @@ class StableCapture:
         unknown_reason = getattr(sample, "eye_centric_unknown_reason", None)
         if unknown_reason:
             self.eye_centric_unknown_reasons.append(str(unknown_reason))
+        ray_proxy = _ray_payload(getattr(sample, "binocular_ray_proxy", None))
+        if ray_proxy is not None:
+            self.binocular_ray_samples.append(ray_proxy)
+        ray_unknown_reason = getattr(sample, "binocular_ray_unknown_reason", None)
+        if ray_unknown_reason:
+            self.binocular_ray_unknown_reasons.append(str(ray_unknown_reason))
         self.qualities.append(float(sample.quality))
         return None
 
@@ -198,6 +259,7 @@ class StableCapture:
             eye_centric, eye_centric_max_mad = _robust_center(self.eye_centric_samples)
         eye_centric_distance = _median(self.eye_centric_distances) if self.eye_centric_distances else None
         eye_centric_roll = _median(self.eye_centric_rolls) if self.eye_centric_rolls else None
+        binocular_ray_proxy = _robust_ray_center(self.binocular_ray_samples)
         return CaptureResult(
             accepted=True,
             features=features,
@@ -214,6 +276,13 @@ class StableCapture:
             eye_centric_roll_rad=eye_centric_roll,
             eye_centric_unknown_reason=(
                 self.eye_centric_unknown_reasons[0] if not self.eye_centric_samples and self.eye_centric_unknown_reasons else None
+            ),
+            binocular_ray_proxy=binocular_ray_proxy,
+            binocular_ray_valid_count=len(self.binocular_ray_samples),
+            binocular_ray_unknown_reason=(
+                self.binocular_ray_unknown_reasons[0]
+                if not self.binocular_ray_samples and self.binocular_ray_unknown_reasons
+                else None
             ),
         )
 

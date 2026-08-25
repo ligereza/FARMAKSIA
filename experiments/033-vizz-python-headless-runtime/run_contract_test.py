@@ -8,6 +8,7 @@ from pathlib import Path
 
 from calibration_capture import CaptureConfig, StableCapture
 from profile_model import load_profile, load_samples_for_merge, seal_profile
+from ray_proxy import build_binocular_ray_proxy
 
 
 HERE = Path(__file__).parent
@@ -30,6 +31,7 @@ def main() -> None:
     calibration = (HERE / "calibration_ui.py").read_text(encoding="utf-8")
     runtime = (HERE / "run_vizz.py").read_text(encoding="utf-8")
     tracker = (HERE / "gpu_tracker.py").read_text(encoding="utf-8")
+    ray_proxy = (HERE / "ray_proxy.py").read_text(encoding="utf-8")
     profile = (HERE / "profile_model.py").read_text(encoding="utf-8")
     overlay = (HERE / "content_overlay.py").read_text(encoding="utf-8")
     validation = (HERE / "run_validation.py").read_text(encoding="utf-8")
@@ -56,6 +58,9 @@ def main() -> None:
     require("session.disable_cpu_ep_fallback" in tracker, "CPU fallback kill switch is missing", failures)
     require("CPUExecutionProvider" not in tracker, "tracker names a CPU provider", failures)
     require("pose" in tracker and "eye_roll" in tracker and "def height" in tracker, "tracker does not expose complete pose diagnostics", failures)
+    require("binocular_ray_proxy" in tracker and "build_binocular_ray_proxy" in tracker, "tracker does not expose explicit binocular rays", failures)
+    require("camera_proxy_normalized_v1" in ray_proxy and "VALID_RELATIVE_PROXY" in ray_proxy, "ray proxy frame is not versioned and relative-only", failures)
+    require("metric world ray" in ray_proxy, "ray proxy does not document its metric limitation", failures)
     require('"raw_video": False' in profile, "profile permits raw video persistence", failures)
     require("style = 0x80000000" in overlay, "overlay is not a borderless popup layer", failures)
     require("extended = 0x00080000" in overlay, "overlay is missing layered click-through flags", failures)
@@ -132,6 +137,33 @@ def main() -> None:
     unstable.push(0.30, SyntheticSample((0.4, 0.4, 0.4, 0.4, 0.4, 0.4)))
     unstable_result = unstable.push(1.10, None)
     require(unstable_result is not None and not unstable_result.accepted, "unstable feature window was accepted", failures)
+
+    valid_rays, ray_reason = build_binocular_ray_proxy(
+        left_center_px=(300.0, 240.0),
+        right_center_px=(340.0, 240.0),
+        left_yaw_deg=-3.0,
+        left_pitch_deg=1.0,
+        right_yaw_deg=3.0,
+        right_pitch_deg=1.0,
+        width=640,
+        height=480,
+        disagreement_deg=6.0,
+    )
+    require(valid_rays is not None and ray_reason is None, "valid binocular rays were not built", failures)
+    require(valid_rays is not None and valid_rays.status == "VALID_RELATIVE_PROXY", "ray proxy status is not explicit", failures)
+    require(valid_rays is not None and valid_rays.interocular_baseline_proxy > 0.0, "ray proxy lost interocular baseline", failures)
+    rejected_rays, rejected_reason = build_binocular_ray_proxy(
+        left_center_px=(300.0, 240.0),
+        right_center_px=(340.0, 240.0),
+        left_yaw_deg=-40.0,
+        left_pitch_deg=0.0,
+        right_yaw_deg=40.0,
+        right_pitch_deg=0.0,
+        width=640,
+        height=480,
+        disagreement_deg=80.0,
+    )
+    require(rejected_rays is None and rejected_reason == "binocular_disagreement_too_large", "ray disagreement kill test failed", failures)
 
     combined_samples: list[dict[str, object]] = []
     targets = (

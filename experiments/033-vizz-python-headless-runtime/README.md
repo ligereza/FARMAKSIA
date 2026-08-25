@@ -130,3 +130,15 @@ se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
   representación con las seis features legacy; el mapper productivo continúa
   leyendo sólo `sample.features` hasta que exista una validación held-out
   favorable.
+- Desde el incremento 053, el proveedor CUDA también entrega, cuando la señal
+  es válida, `binocular_ray_proxy`: dos orígenes y dos direcciones explícitas,
+  una por ojo, en `camera_proxy_normalized_v1`. Los orígenes conservan la
+  separación interocular en unidades relativas de imagen y las direcciones
+  provienen de los ángulos individuales del tracker. Esto evita perder la
+  binocularidad al promediar `binocular_gaze_deg`.
+- Este campo no es todavía una medición métrica del mundo: no contiene
+  intrínsecos calibrados, profundidad ocular ni una pose 3-D resuelta. Por eso
+  el contrato marca `VALID_RELATIVE_PROXY` y el futuro mapper físico debe
+  seguir devolviendo `UNKNOWN` si exige metros, orientación de monitor o
+  compensación de cabeza. La traza opcional y las capturas de calibración lo
+  conservan como metadato sin guardar vídeo.

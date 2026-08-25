@@ -261,6 +261,9 @@ class ValidationWindow:
                 "eye_centric_valid_count": result.eye_centric_valid_count,
                 "eye_centric_max_mad": result.eye_centric_max_mad,
                 "eye_centric_unknown_reason": result.eye_centric_unknown_reason,
+                "binocular_ray_proxy": result.binocular_ray_proxy,
+                "binocular_ray_valid_count": result.binocular_ray_valid_count,
+                "binocular_ray_unknown_reason": result.binocular_ray_unknown_reason,
                 "capture": {
                     "method": "stable_fixed_window",
                     "valid_count": result.valid_count,
