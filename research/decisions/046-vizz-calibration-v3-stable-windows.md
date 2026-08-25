@@ -2,7 +2,9 @@
 
 ## Estado
 
-Aceptada para la siguiente iteración experimental.
+Aceptada para la base temporal; ampliada por
+[ADR-047](047-vizz-single-multicondition-profile.md) para el perfil único
+multicondición.
 
 ## Contexto
 

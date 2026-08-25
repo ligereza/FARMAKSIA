@@ -11,13 +11,15 @@ GPU sessions -> camera -> CALIBRATION_UI -> local profile -> headless camera
 
 El único momento con interfaz es `--calibrate`. Primero aparece una pantalla
 completa con el botón `Iniciar calibración`; los 12 puntos no empiezan hasta
-que el usuario hace clic. Para cada punto, el cursor solo arma la captura: se
-descarta el periodo de estabilización y luego se recoge una ventana fija de
-muestras válidas. La ventana se acepta únicamente si tiene suficientes
-muestras y baja dispersión robusta; el mouse nunca se guarda como verdad de la
-mirada. El texto de estado desaparece durante la captura para no contaminar la
-etiqueta visual. No hay vista previa de cámara. Al sellar el perfil se cierra
-Tk y el proceso pasa al runtime de fondo. El runtime no importa Tkinter,
+que el usuario hace clic. El flujo recorre dos condiciones, primero con lentes
+y luego sin lentes, pero sella sus 24 puntos en un único perfil. Para cada
+punto, el cursor solo arma la captura: se descarta el periodo de estabilización
+y luego se recoge una ventana fija de muestras válidas. La ventana se acepta
+únicamente si tiene suficientes muestras y baja dispersión robusta; el mouse
+nunca se guarda como verdad de la mirada. El texto de estado desaparece durante
+la captura para no contaminar la etiqueta visual. No hay vista previa de
+cámara. Al sellar el perfil se cierra Tk y el proceso pasa al runtime de fondo.
+El runtime no importa Tkinter,
 no crea paneles ni botones y no dibuja un marcador VIZZ: modifica el contenido
 normal con una capa nativa transparente, click-through, que atenúa suavemente
 lo que queda fuera de la zona de mirada.
@@ -46,13 +48,14 @@ se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
 
 ## Evidencia y límites
 
-- El perfil actual es `farmaxia:vizz-calibration-profile:0.3` y declara el
-  protocolo `static-stable-window-v3`. Los perfiles anteriores se rechazan
-  deliberadamente porque podían contener muestras acumuladas antes del click.
+- El perfil actual es `farmaxia:vizz-calibration-profile:0.4` y declara el
+  protocolo `static-stable-window-v3-multicondition`. Exige las condiciones
+  `with_glasses` y `without_glasses` en un único perfil; no hay que alternar
+  perfiles durante el runtime.
 - Esta versión implementa la primera corrección de la arquitectura híbrida:
   puntos estáticos con ventanas temporales estables. La trayectoria móvil y la
   cabeza neuronal personalizada permanecen como fases posteriores; no se
-  entrenan con los 12 promedios de esta calibración.
+  entrenan con los 24 promedios de esta calibración.
 - Los valores iniciales de estabilización (300 ms), captura (900 ms), mínimo
   (12 muestras) y MAD máximo (0.08 por característica normalizada) son
   hiperparámetros de ingeniería. Deben validarse con sesiones independientes y

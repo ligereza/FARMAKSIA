@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import json
+import tempfile
 from pathlib import Path
 
 from calibration_capture import CaptureConfig, StableCapture
+from profile_model import load_profile, seal_profile
 
 
 HERE = Path(__file__).parent
@@ -38,6 +40,8 @@ def main() -> None:
     require('text="Iniciar calibración"' in calibration and "command=self._start" in calibration, "calibration starts without explicit click", failures)
     require('canvas.bind("<Button-1>", self._on_canvas_click)' in calibration, "calibration points are not click-confirmed", failures)
     require("StableCapture" in calibration and "CaptureConfig" in calibration, "calibration lacks a temporal capture policy", failures)
+    require("CALIBRATION_CONDITIONS" in calibration and "with_glasses" in calibration and "without_glasses" in calibration, "calibration does not cover both visual conditions", failures)
+    require('"condition": condition_key' in calibration and "_show_condition_transition" in calibration, "calibration conditions are not recorded in one flow", failures)
     require('self._draw_point(show_status=False)' in calibration, "status text is not hidden during capture", failures)
     require('"method": "stable_fixed_window"' in calibration, "calibration provenance does not identify the fixed-window method", failures)
     require("self.point_index += 1" in calibration and "self.point_state = \"capturing\"" in calibration, "point capture is not click-armed", failures)
@@ -56,7 +60,8 @@ def main() -> None:
     require("capture = open_camera(args.camera)" in runtime, "camera lifecycle is unclear", failures)
     require(runtime.index("tracker = GpuTracker") < runtime.index("capture = open_camera"), "camera opens before CUDA models", failures)
     require("camera" in (HERE / "README.md").read_text(encoding="utf-8"), "camera boundary is undocumented", failures)
-    require("calibration_protocol" in profile and "0.3" in profile, "profile schema was not versioned for the new capture policy", failures)
+    require("calibration_protocol" in profile and "0.4" in profile and "REQUIRED_CONDITIONS" in profile, "profile schema was not versioned for the combined calibration policy", failures)
+    require("MINIMUM_SAMPLES = 24" in profile, "combined profile does not require both calibration sessions", failures)
 
     class SyntheticSample:
         def __init__(self, features: tuple[float, ...], quality: float = 0.90) -> None:
@@ -94,6 +99,39 @@ def main() -> None:
     unstable.push(0.30, SyntheticSample((0.4, 0.4, 0.4, 0.4, 0.4, 0.4)))
     unstable_result = unstable.push(1.10, None)
     require(unstable_result is not None and not unstable_result.accepted, "unstable feature window was accepted", failures)
+
+    combined_samples: list[dict[str, object]] = []
+    targets = (
+        (0.08, 0.08),
+        (0.50, 0.08),
+        (0.92, 0.08),
+        (0.08, 0.33),
+        (0.50, 0.33),
+        (0.92, 0.33),
+        (0.08, 0.67),
+        (0.50, 0.67),
+        (0.92, 0.67),
+        (0.08, 0.92),
+        (0.50, 0.92),
+        (0.92, 0.92),
+    )
+    for condition, offset in (("with_glasses", 0.0), ("without_glasses", 0.03)):
+        for target_x, target_y in targets:
+            yaw = (target_x - 0.5) * 2.0 + offset
+            pitch = (target_y - 0.5) * 1.5 - offset * 0.5
+            combined_samples.append(
+                {
+                    "features": [yaw, pitch, yaw + 0.01, yaw - 0.01, 0.5 + target_x * 0.02 + offset, 0.5 + target_y * 0.02 - offset],
+                    "target": [target_x, target_y],
+                    "condition": condition,
+                }
+            )
+    with tempfile.TemporaryDirectory() as temporary:
+        combined_path = Path(temporary) / "combined.json"
+        seal_profile(combined_path, (1707, 960), combined_samples, "TEST_MODEL_HASH")
+        combined_profile, _mapper = load_profile(combined_path)
+        require(combined_profile["sample_count"] == 24, "combined profile did not seal 24 samples", failures)
+        require(combined_profile["calibration_conditions"] == ["with_glasses", "without_glasses"], "combined profile lost condition metadata", failures)
     json.dumps(policy)
 
     if failures:

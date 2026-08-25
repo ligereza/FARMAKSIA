@@ -33,6 +33,10 @@ CAPTURE_CONFIG = CaptureConfig(
 )
 SAMPLES_PER_POINT = CAPTURE_CONFIG.min_valid_samples
 CLICK_TARGET_RADIUS_PX = 100
+CALIBRATION_CONDITIONS: tuple[tuple[str, str], ...] = (
+    ("with_glasses", "con lentes"),
+    ("without_glasses", "sin lentes"),
+)
 
 
 class CalibrationAborted(RuntimeError):
@@ -59,6 +63,7 @@ class CalibrationWindow:
         self.width = max(1, self.root.winfo_screenwidth())
         self.height = max(1, self.root.winfo_screenheight())
         self.point_index = 0
+        self.condition_index = 0
         self.samples: list[dict[str, object]] = []
         self.capture: StableCapture | None = None
         self.dot_id: int | None = None
@@ -66,6 +71,7 @@ class CalibrationWindow:
         self.started = False
         self.point_state = "idle"
         self.start_window: int | None = None
+        self.condition_window: int | None = None
         self.canvas.bind("<Button-1>", self._on_canvas_click)
         self._draw_landing()
 
@@ -81,6 +87,8 @@ class CalibrationWindow:
         self.height = max(1, self.canvas.winfo_height())
         if not self.started and self.start_window is not None:
             self.canvas.coords(self.start_window, self.width // 2, self.height // 2)
+        if self.condition_window is not None:
+            self.canvas.coords(self.condition_window, self.width // 2, self.height // 2 + 100)
 
     def _draw_landing(self) -> None:
         self.canvas.delete("all")
@@ -94,7 +102,7 @@ class CalibrationWindow:
         self.canvas.create_text(
             self.width // 2,
             self.height // 2 - 52,
-            text="Presiona el botón cuando estés preparado. Después mira cada punto.",
+            text="Se calibrarán las dos condiciones y se guardarán en un único perfil.",
             fill="#c8c8c8",
             font=("Segoe UI", 14),
         )
@@ -121,14 +129,15 @@ class CalibrationWindow:
         if self.start_window is not None:
             self.canvas.delete(self.start_window)
             self.start_window = None
-        self.root.after(300, self._begin_point)
+        self.root.after(300, self._begin_condition)
 
-    def _begin_point(self) -> None:
+    def _begin_condition(self) -> None:
         if not self.started:
             return
-        if self.point_index >= len(CALIBRATION_POINTS):
+        if self.condition_index >= len(CALIBRATION_CONDITIONS):
             self._finish()
             return
+        self.point_index = 0
         self.capture = None
         self.point_state = "waiting_for_click"
         self._draw_point(show_status=True)
@@ -143,11 +152,12 @@ class CalibrationWindow:
         self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#d62027", outline="#ffffff", width=2)
         self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
         if show_status:
+            condition_label = CALIBRATION_CONDITIONS[self.condition_index][1]
             self.status_id = self.canvas.create_text(
                 18,
                 18,
                 anchor="nw",
-                text=f"Mira el punto, lleva el cursor sobre él y haz clic para capturar · {self.point_index + 1}/{len(CALIBRATION_POINTS)} · Esc cancela",
+                text=f"{condition_label}: mira el punto, lleva el cursor sobre él y haz clic · {self.point_index + 1}/{len(CALIBRATION_POINTS)} · Esc cancela",
                 fill="#d0d0d0",
                 font=("Segoe UI", 12),
             )
@@ -207,11 +217,13 @@ class CalibrationWindow:
             self._set_status(messages.get(result.reason, "Captura rechazada. Vuelve a intentarlo."))
             return
         target_x, target_y = CALIBRATION_POINTS[self.point_index]
+        condition_key, _condition_label = CALIBRATION_CONDITIONS[self.condition_index]
         self.samples.append(
             {
                 "features": list(result.features),
                 "target": [target_x, target_y],
                 "phase": "static",
+                "condition": condition_key,
                 "capture": {
                     "method": "stable_fixed_window",
                     "valid_count": result.valid_count,
@@ -225,10 +237,65 @@ class CalibrationWindow:
         self.point_state = "complete"
         self.capture = None
         self.point_index += 1
-        self.root.after(220, self._begin_point)
+        if self.point_index < len(CALIBRATION_POINTS):
+            self.root.after(220, self._begin_condition_point)
+        else:
+            self.root.after(220, self._show_condition_transition)
+
+    def _begin_condition_point(self) -> None:
+        if not self.started:
+            return
+        self.point_state = "waiting_for_click"
+        self._draw_point(show_status=True)
+
+    def _show_condition_transition(self) -> None:
+        if self.condition_index + 1 >= len(CALIBRATION_CONDITIONS):
+            self._finish()
+            return
+        self.point_state = "between_conditions"
+        self.canvas.delete("all")
+        self.status_id = None
+        next_label = CALIBRATION_CONDITIONS[self.condition_index + 1][1]
+        self.canvas.create_text(
+            self.width // 2,
+            self.height // 2 - 100,
+            text=f"Primera condición completada. Ahora prepara la condición {next_label}.",
+            fill="#ffffff",
+            font=("Segoe UI", 24, "bold"),
+        )
+        self.canvas.create_text(
+            self.width // 2,
+            self.height // 2 - 48,
+            text="Cuando estés listo, continúa. Se usará el mismo perfil para ambas condiciones.",
+            fill="#c8c8c8",
+            font=("Segoe UI", 14),
+        )
+        button = tk.Button(
+            self.root,
+            text=f"Continuar {next_label}",
+            command=self._start_next_condition,
+            bg="#d62027",
+            fg="#ffffff",
+            activebackground="#f04045",
+            activeforeground="#ffffff",
+            relief="flat",
+            cursor="hand2",
+            padx=28,
+            pady=14,
+            font=("Segoe UI", 15, "bold"),
+        )
+        self.condition_window = self.canvas.create_window(self.width // 2, self.height // 2 + 100, window=button)
+
+    def _start_next_condition(self) -> None:
+        if self.condition_window is not None:
+            self.canvas.delete(self.condition_window)
+            self.condition_window = None
+        self.condition_index += 1
+        self.root.after(300, self._begin_condition)
 
     def _finish(self) -> None:
-        if len(self.samples) < len(CALIBRATION_POINTS):
+        expected_samples = len(CALIBRATION_POINTS) * len(CALIBRATION_CONDITIONS)
+        if len(self.samples) < expected_samples:
             self.root.destroy()
             raise CalibrationAborted("calibration did not obtain a valid sample for every point")
         screen_size = (self.width, self.height)

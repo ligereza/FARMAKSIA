@@ -9,10 +9,11 @@ from typing import Iterable
 import numpy as np
 
 
-PROFILE_SCHEMA = "farmaxia:vizz-calibration-profile:0.3"
-MINIMUM_SAMPLES = 12
+PROFILE_SCHEMA = "farmaxia:vizz-calibration-profile:0.4"
+MINIMUM_SAMPLES = 24
 FEATURE_COUNT = 6
-CALIBRATION_PROTOCOL = "static-stable-window-v3"
+CALIBRATION_PROTOCOL = "static-stable-window-v3-multicondition"
+REQUIRED_CONDITIONS = frozenset({"with_glasses", "without_glasses"})
 
 
 def design_row(features: Iterable[float]) -> np.ndarray:
@@ -55,10 +56,15 @@ def seal_profile(
         target = np.asarray(sample["target"], dtype=np.float64)
         if target.shape != (2,) or not np.all(np.isfinite(target)):
             raise ValueError("invalid normalized target")
+    conditions = {sample.get("condition") for sample in materialized}
+    if not REQUIRED_CONDITIONS.issubset(conditions):
+        missing = sorted(REQUIRED_CONDITIONS.difference(conditions))
+        raise ValueError(f"profile is missing calibration conditions: {missing}")
     x_coefficients, y_coefficients = fit_mapping(materialized)
     payload = {
         "schema": PROFILE_SCHEMA,
         "calibration_protocol": CALIBRATION_PROTOCOL,
+        "calibration_conditions": sorted(REQUIRED_CONDITIONS),
         "screen_size": [int(screen_size[0]), int(screen_size[1])],
         "sample_count": len(materialized),
         "model_sha256": model_sha256,
@@ -102,4 +108,7 @@ def load_profile(path: Path) -> tuple[dict[str, object], ScreenMapper]:
     samples = profile.get("samples")
     if not isinstance(samples, list) or len(samples) < MINIMUM_SAMPLES:
         raise ValueError("profile is incomplete")
+    conditions = profile.get("calibration_conditions")
+    if conditions != sorted(REQUIRED_CONDITIONS):
+        raise ValueError("profile does not contain both calibration conditions")
     return profile, ScreenMapper(profile)
