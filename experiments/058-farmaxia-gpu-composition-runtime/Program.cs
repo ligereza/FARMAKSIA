@@ -391,6 +391,7 @@ internal sealed class OverlayWindow : IDisposable
     private const int CS_HREDRAW = 0x0002;
     private const int CS_VREDRAW = 0x0001;
     private const int WS_POPUP = unchecked((int)0x80000000);
+    private const int WS_EX_LAYERED = 0x00080000;
     private const int WS_EX_NOACTIVATE = 0x08000000;
     private const int WS_EX_TOOLWINDOW = 0x00000080;
     private const int WS_EX_TRANSPARENT = 0x00000020;
@@ -436,7 +437,11 @@ internal sealed class OverlayWindow : IDisposable
         }
 
         Handle = Native.CreateWindowEx(
-            WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_NOREDIRECTIONBITMAP,
+            // WS_EX_LAYERED is intentional here: with WS_EX_TRANSPARENT it makes
+            // the hit-test pass through to windows in other processes. The pixels
+            // still come from the DComp premultiplied flip chain, not from a
+            // legacy CPU-side layered presentation path.
+            WS_EX_LAYERED | WS_EX_NOACTIVATE | WS_EX_TOOLWINDOW | WS_EX_TRANSPARENT | WS_EX_NOREDIRECTIONBITMAP,
             className,
             "FARMAXIA VIZZ composition overlay",
             WS_POPUP,
@@ -471,7 +476,8 @@ internal sealed class OverlayWindow : IDisposable
     {
         return message switch
         {
-            0x0084 => new IntPtr(-1),
+            0x0084 => new IntPtr(-1), // WM_NCHITTEST -> HTTRANSPARENT
+            0x0021 => new IntPtr(3),  // WM_MOUSEACTIVATE -> MA_NOACTIVATE
             0x0010 => IntPtr.Zero,
             _ => Native.DefWindowProc(window, message, wParam, lParam),
         };

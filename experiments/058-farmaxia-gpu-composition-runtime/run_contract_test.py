@@ -19,6 +19,10 @@ required = [
     "DComp.DCompositionCreateDevice",
     "Present(1, PresentFlags.None)",
     "ConcurrentQueue<RenderCommand>",
+    "WS_EX_LAYERED",
+    "WS_EX_TRANSPARENT",
+    "WM_NCHITTEST -> HTTRANSPARENT",
+    "WM_MOUSEACTIVATE -> MA_NOACTIVATE",
 ]
 for marker in required:
     if marker not in SOURCE:

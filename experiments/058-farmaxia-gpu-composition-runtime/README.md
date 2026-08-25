@@ -6,7 +6,11 @@ transparente sobre el escritorio y las aplicaciones existentes.
 
 ## Que cambia
 
-- Ventana Win32 `WS_POPUP` transparente, sin foco y click-through.
+- Ventana Win32 `WS_POPUP` transparente, sin foco y click-through incluso frente
+  a ventanas de otros procesos. La combinación `WS_EX_LAYERED` +
+  `WS_EX_TRANSPARENT` se usa sólo para el contrato de entrada; el contenido
+  sigue llegando por DirectComposition y una swap chain premultiplicada, no por
+  `UpdateLayeredWindow`.
 - Una sola llamada de z-order al mostrarla; no se reordena por frame.
 - Dispositivo D3D11 `Hardware` y shader HLSL de pantalla completa.
 - Swap chain DXGI flip-sequential con alpha premultiplicado.
