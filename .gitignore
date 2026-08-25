@@ -5,6 +5,7 @@ __pycache__/
 venv/
 .vizz-models/
 .vizz-calibration.json
+.vizz-validation*.json
 *.log
 dist/
 build/

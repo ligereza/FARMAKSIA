@@ -67,6 +67,19 @@ La validación realiza tres repeticiones por punto y condición, registra seis
 proxies geométricos de pose y guarda únicamente vectores/metadatos en
 `.vizz-validation.json`. No inicia el overlay ni sobrescribe la calibración.
 
+Para analizar una validación ya capturada sin volver a usar la cámara:
+
+```powershell
+.\.venv\Scripts\python.exe experiments/033-vizz-python-headless-runtime/analyze_validation.py --calibration .\.vizz-calibration.json --validation .\.vizz-validation-smoke.json --output .\.vizz-validation-analysis.json
+```
+
+El auditor usa grupos por target y selección interna de Ridge; nunca divide
+frames consecutivos. `M0` se puede comparar entre calibración y validación.
+`M1` (pose) y `M2` (pose + condición) solo se ejecutan dentro de la sesión de
+validación como diagnóstico si la calibración no persistió pose. En ese caso,
+su comparación entre sesiones queda explícitamente como
+`UNKNOWN_NOT_IDENTIFIABLE`; el auditor no modifica el perfil.
+
 Para detener el proceso headless se usa `Ctrl+C` si se inició con `python`, o
 se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
 `.vizz-runtime.log`; no se abre una interfaz de error VIZZ.

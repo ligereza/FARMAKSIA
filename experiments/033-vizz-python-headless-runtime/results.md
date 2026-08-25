@@ -14,12 +14,42 @@
   bitmap de 1x1 y destrucción; la firma Win64 de `LPARAM` quedó corregida para
   `DefWindowProcW`.
 
+## Evidencia humana exploratoria posterior
+
+Se completó una validación independiente de una repetición por target y
+condición: 24/24 muestras, 12 con lentes y 12 sin lentes. La captura tuvo
+12--14 muestras válidas por punto, calidad media 0.9947, MAD de features máximo
+0.0704 y MAD de pose máximo 0.0013. Esto confirma estabilidad de captura, no
+precisión de mirada.
+
+Al aplicar el perfil combinado existente a esa sesión, el error fue de unos
+668 px de mediana y 1015 px en P95 sobre una pantalla de 1707x960. El
+resultado es exploratorio y no habilita el perfil para precisión de producción.
+La evidencia también muestra un desplazamiento entre las features de
+calibración y validación, pero no permite atribuirlo todavía a lentes, pose o
+etiquetas.
+
+El auditor agrupado por target produjo:
+
+| Modelo y alcance | Mediana | P95 | Estado |
+|---|---:|---:|---|
+| Perfil existente → validación | 668.4 px | 1014.5 px | diagnóstico |
+| M0, calibración → validación | 742.1 px | 1148.9 px | baseline |
+| M0, solo validación | 729.5 px | 872.2 px | diagnóstico |
+| M1, solo validación, pose | 661.3 px | 886.4 px | no aceptado |
+| M2, solo validación, pose + condición | 664.8 px | 886.3 px | no aceptado |
+
+M1 reduce la mediana aproximadamente 9.4% frente a M0, pero empeora el P95;
+M2 reduce la mediana aproximadamente 8.9% y tampoco mejora el P95. Ninguno
+supera el filtro provisional del 10% en mediana y P95, y ambos son solo
+diagnósticos internos porque la calibración no persistió pose.
+
 ## Desconocido
 
-No se ha ejecutado todavía una sesión humana con cámara ni se ha medido
-precisión, FPS, latencia, temperatura, estabilidad con lentes, asimetría entre
-ojos o efecto perceptual. La primera sesión manual debe registrar solo métricas
-de calidad y puede abortarse sin guardar el perfil.
+No se han medido aún precisión clínica, FPS, latencia, temperatura, asimetría
+entre ojos ni efecto perceptual. La calibración persistió features, pero no los
+seis proxies de pose; por eso los modelos pose-aware no son identificables
+entre sesiones y el auditor los marca `UNKNOWN_NOT_IDENTIFIABLE`.
 
 ## Kill tests
 

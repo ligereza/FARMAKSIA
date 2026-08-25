@@ -34,6 +34,7 @@ def main() -> None:
     overlay = (HERE / "content_overlay.py").read_text(encoding="utf-8")
     validation = (HERE / "run_validation.py").read_text(encoding="utf-8")
     validation_ui = (HERE / "validation_ui.py").read_text(encoding="utf-8")
+    analysis = (HERE / "analyze_validation.py").read_text(encoding="utf-8")
 
     require(policy["calibration_visible"] is True, "calibration is not declared visible", failures)
     require(policy["headless_visible"] is False, "headless phase declares a visible interface", failures)
@@ -70,6 +71,7 @@ def main() -> None:
     require("ValidationWindow" in validation and "repetitions" in validation_ui and "pose" in validation_ui, "controlled validation flow is incomplete", failures)
     require('fill="#f0a000"' in validation_ui and "tick_scheduled" in validation_ui and "capture_finish_job" in validation_ui, "validation capture state is not visibly bounded", failures)
     require("validation sample callback failed" in validation_ui and "_handle_capture_failure" in validation_ui, "validation callback errors are not surfaced", failures)
+    require("leave_one_target_out" in analysis and "pose_available_in_calibration" in analysis and "UNKNOWN_NOT_IDENTIFIABLE" in analysis, "validation analysis does not preserve grouped and identifiable-model boundaries", failures)
 
     class SyntheticSample:
         def __init__(self, features: tuple[float, ...], quality: float = 0.90) -> None:

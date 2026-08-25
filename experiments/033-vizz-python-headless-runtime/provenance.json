@@ -58,6 +58,13 @@
       "authority": "computed"
     },
     {
+      "id": "farmaxia:vizz-033-validation-audit",
+      "type": "entity",
+      "path": "analyze_validation.py",
+      "role": "grouped_offline_model_comparison_without_profile_mutation",
+      "authority": "computed"
+    },
+    {
       "id": "farmaxia:vizz-033-results",
       "type": "entity",
       "path": "results.md",
@@ -77,7 +84,8 @@
         "farmaxia:vizz-033-gpu-tracker",
         "farmaxia:vizz-033-profile",
         "farmaxia:vizz-033-overlay",
-        "farmaxia:vizz-033-contract"
+        "farmaxia:vizz-033-contract",
+        "farmaxia:vizz-033-validation-audit"
       ],
       "generated": ["farmaxia:vizz-033-results"]
     }
@@ -99,8 +107,9 @@
     }
   ],
   "unknowns": [
-    "No human camera session has been run in this experiment.",
-    "Accuracy, latency, thermal behavior, glasses effects and binocular asymmetry remain unmeasured.",
+    "One exploratory human validation session exists, but it is not sufficient for production accuracy.",
+    "Pose-aware cross-session models are not identifiable because the calibration artifact did not persist pose proxies.",
+    "Latency, thermal behavior, glasses effects and binocular asymmetry remain unmeasured.",
     "The visual effect is an interaction prototype, not a clinical or fatigue-reduction claim."
   ]
 }
