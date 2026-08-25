@@ -15,6 +15,7 @@ sys.path.insert(0, str(TRACKER_DIR))
 
 from gpu_tracker import GpuTracker, GpuUnavailable
 from interaction_trace import read_pointer_position
+from keyboard_activity import KeyboardActivity
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -43,6 +44,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--pretrained-gaze-model", type=Path, default=MODEL_DIR / "mobileone_s0_gaze.onnx")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--pointer", action="store_true", help="store OS pointer position as an auxiliary covariate")
+    parser.add_argument("--keyboard", action="store_true", help="count keyboard activity without storing key identity or text")
     return parser.parse_args()
 
 
@@ -59,6 +61,13 @@ def main() -> int:
     # fails without requesting camera permission or starting capture.
     tracker = GpuTracker(face_model, gaze_model, args.pretrained_gaze_model)
     capture = open_camera(args.camera, args.width, args.height)
+    keyboard = KeyboardActivity() if args.keyboard else None
+    try:
+        if keyboard is not None:
+            keyboard.start()
+    except BaseException:
+        capture.release()
+        raise
     args.output.parent.mkdir(parents=True, exist_ok=True)
     stream = args.output.open("w", encoding="utf-8")
     started = time.monotonic()
@@ -68,14 +77,17 @@ def main() -> int:
     valid_count = 0
     ray_valid_count = 0
     ray_unknown_count = 0
+    keyboard_event_count_total = 0
+    keyboard_active_sample_count = 0
     stream.write(
         json.dumps(
             {
-                "schema": "farmaxia:vizz-binocular-quality-trace:0.1",
+                "schema": "farmaxia:vizz-binocular-quality-trace:0.2",
                 "type": "header",
                 "sample_hz": args.sample_hz,
                 "camera_size": [args.width, args.height],
                 "pointer_recorded": bool(args.pointer),
+                "keyboard_activity_only": bool(args.keyboard),
                 "raw_video": False,
                 "screen_content": False,
                 "screen_content_mutated": False,
@@ -107,6 +119,13 @@ def main() -> int:
                 ray_valid_count += 1
             else:
                 ray_unknown_count += 1
+            keyboard_state = keyboard.snapshot(timestamp) if keyboard is not None else {
+                "keyboard_event_count": 0,
+                "keyboard_active": False,
+                "keyboard_last_event_age_ms": None,
+            }
+            keyboard_event_count_total += int(keyboard_state["keyboard_event_count"])
+            keyboard_active_sample_count += int(bool(keyboard_state["keyboard_active"]))
             payload = {
                 "type": "sample",
                 "t_monotonic": timestamp,
@@ -123,6 +142,9 @@ def main() -> int:
                 "binocular_ray_proxy": ray_payload,
                 "binocular_ray_unknown_reason": ray_reason,
                 "mouse_screen": list(read_pointer_position()) if args.pointer else None,
+                "keyboard_event_count": keyboard_state["keyboard_event_count"],
+                "keyboard_active": keyboard_state["keyboard_active"],
+                "keyboard_last_event_age_ms": keyboard_state["keyboard_last_event_age_ms"],
             }
             stream.write(json.dumps(payload, separators=(",", ":")) + "\n")
             stream.flush()
@@ -131,6 +153,8 @@ def main() -> int:
         pass
     finally:
         capture.release()
+        if keyboard is not None:
+            keyboard.close()
         stream.write(
             json.dumps(
                 {
@@ -139,6 +163,9 @@ def main() -> int:
                     "valid_sample_count": valid_count,
                     "ray_valid_count": ray_valid_count,
                     "ray_unknown_count": ray_unknown_count,
+                    "keyboard_event_count_total": keyboard_event_count_total,
+                    "keyboard_active_sample_count": keyboard_active_sample_count,
+                    "keyboard_activity_only": bool(args.keyboard),
                     "raw_video": False,
                     "screen_content_mutated": False,
                 },
@@ -155,6 +182,9 @@ def main() -> int:
                 "valid_sample_count": valid_count,
                 "ray_valid_count": ray_valid_count,
                 "ray_unknown_count": ray_unknown_count,
+                "keyboard_event_count_total": keyboard_event_count_total,
+                "keyboard_active_sample_count": keyboard_active_sample_count,
+                "keyboard_activity_only": bool(args.keyboard),
                 "raw_video": False,
                 "screen_content_mutated": False,
             },

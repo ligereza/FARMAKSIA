@@ -80,6 +80,10 @@ def main() -> None:
         failures.append("quality capture opens camera before CUDA preflight")
     if "binocular_ray_proxy" not in capture_script or "mouse_screen" not in capture_script:
         failures.append("quality capture does not persist rays and optional pointer")
+    if "KeyboardActivity" not in capture_script or "keyboard_event_count" not in capture_script:
+        failures.append("quality capture does not expose count-only keyboard activity")
+    if '"key_values_persisted": False' not in capture_script or "text_persisted" not in capture_script:
+        failures.append("quality capture does not declare keyboard/text privacy boundary")
 
     if failures:
         print("CONTRACT_TESTS_INVALID")

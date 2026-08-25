@@ -37,13 +37,15 @@ python experiments/053-vizz-gpu-binocular-ray-adapter/run_contract_test.py
 Cuando quieras hacer la primera captura real, desde la raíz del repositorio:
 
 ```powershell
-.\.venv\Scripts\python.exe experiments/053-vizz-gpu-binocular-ray-adapter/run_quality_capture.py --seconds 60 --pointer
+.\.venv\Scripts\python.exe experiments/053-vizz-gpu-binocular-ray-adapter/run_quality_capture.py --seconds 60 --pointer --keyboard
 ```
 
 Durante 60 segundos no aparecerá una ventana VIZZ ni un preview. Puedes
 trabajar con movimientos naturales; no necesitas mirar puntos ni recalibrar.
 `Ctrl+C` termina antes. El archivo `.vizz-binocular-quality.jsonl` guarda sólo
-resúmenes temporales, rayos relativos, calidad, pose proxy y cursor opcional.
+resúmenes temporales, rayos relativos, calidad, pose proxy, cursor opcional y
+conteo agregado de actividad de teclado. Nunca guarda identidad de teclas ni
+texto escrito.
 
 ## Kill tests
 
