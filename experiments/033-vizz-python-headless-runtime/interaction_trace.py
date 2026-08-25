@@ -50,6 +50,7 @@ class InteractionTrace:
                 "screen_content": False,
                 "mouse_is_ground_truth": False,
                 "pretrained_gaze_model": "github:yakhyo/gaze-estimation:mobileone_s0_gaze.onnx",
+                "pretrained_gaze_preflight": "cuda_zero_tensor",
             }
         )
 
@@ -82,6 +83,8 @@ class InteractionTrace:
             "pretrained_gaze_deg": None,
             "pretrained_gaze_valid": False,
             "pretrained_gaze_unknown_reason": None,
+            "binocular_gaze_deg": None,
+            "raw_model_angle_delta_deg": None,
         }
         if sample is not None:
             payload["quality"] = float(sample.quality) if math.isfinite(float(sample.quality)) else None
@@ -94,6 +97,10 @@ class InteractionTrace:
             payload["pretrained_gaze_deg"] = _finite_vector(getattr(sample, "pretrained_gaze_deg", None), 2)
             payload["pretrained_gaze_valid"] = payload["pretrained_gaze_deg"] is not None
             payload["pretrained_gaze_unknown_reason"] = getattr(sample, "pretrained_gaze_unknown_reason", None)
+            payload["binocular_gaze_deg"] = _finite_vector(getattr(sample, "binocular_gaze_deg", None), 2)
+            delta = getattr(sample, "raw_model_angle_delta_deg", None)
+            if delta is not None and math.isfinite(float(delta)) and float(delta) >= 0.0:
+                payload["raw_model_angle_delta_deg"] = float(delta)
             distance = getattr(sample, "eye_centric_distance_px", None)
             if distance is not None and math.isfinite(float(distance)) and float(distance) > 0.0:
                 payload["eye_centric_distance_px"] = float(distance)

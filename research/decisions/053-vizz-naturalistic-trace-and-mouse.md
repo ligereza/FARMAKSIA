@@ -43,11 +43,18 @@ disagreement_deg
 pretrained_gaze_deg
 pretrained_gaze_valid
 pretrained_gaze_unknown_reason
+binocular_gaze_deg
+raw_model_angle_delta_deg
 ```
 
 El encabezado declara `mouse_is_ground_truth=false`, `raw_video=false` y
 `screen_content=false`. Una muestra sin gaze conserva la posición del mouse para
 no confundir ausencia ocular con ausencia de interacción.
+
+La señal de MobileOne y `raw_model_angle_delta_deg` son una auditoría de
+concordancia entre modelos en el espacio de ángulos. No son error de pantalla,
+verdad ocular ni criterio clínico; si la convención angular no es identificable,
+la diferencia queda como UNKNOWN.
 
 ## Recomendación práctica
 

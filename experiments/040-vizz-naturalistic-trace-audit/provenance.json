@@ -1,0 +1,59 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:040-vizz-naturalistic-trace-audit",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_trace_audit",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-040-trace",
+      "type": "entity",
+      "path": "../033-vizz-python-headless-runtime/interaction_trace.py",
+      "role": "timestamped_dual_model_trace",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-040-auditor",
+      "type": "entity",
+      "path": "trace_audit.py",
+      "role": "no-video-trace-auditor",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-040-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "synthetic_audit_record",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-040-audit-activity",
+      "type": "activity",
+      "label": "audit naturalistic dual-model trace boundary",
+      "agent": "farmaxia:python-runner",
+      "used": ["farmaxia:vizz-040-trace", "farmaxia:vizz-040-auditor"],
+      "generated": ["farmaxia:vizz-040-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-040-query",
+      "question": "Can VIZZ verify a real CUDA model preflight and audit dual-model trace metadata without turning model disagreement into screen truth?",
+      "source": "https://github.com/yakhyo/gaze-estimation",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-040-trace", "farmaxia:vizz-040-auditor"]
+    }
+  ],
+  "unknowns": [
+    "Raw angular disagreement may include coordinate-convention mismatch.",
+    "No screen accuracy follows until the second model has a held-out monitor calibration.",
+    "The synthetic audit does not measure naturalistic human robustness."
+  ]
+}

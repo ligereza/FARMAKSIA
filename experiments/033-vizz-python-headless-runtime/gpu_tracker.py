@@ -62,6 +62,8 @@ class GazeSample:
     # this representation; it is never silently converted to screen pixels.
     pretrained_gaze_deg: tuple[float, float] | None = None
     pretrained_gaze_unknown_reason: str | None = None
+    binocular_gaze_deg: tuple[float, float] | None = None
+    raw_model_angle_delta_deg: float | None = None
 
 
 def sha256(path: Path) -> str:
@@ -201,6 +203,15 @@ class GpuTracker:
                 raise GpuUnavailable("unexpected MobileOne output signature")
             self.pretrained_yaw_output = outputs["yaw"]
             self.pretrained_pitch_output = outputs["pitch"]
+            try:
+                zero_tensor = np.zeros((1, 3, 448, 448), dtype=np.float32)
+                zero_outputs = self.pretrained_gaze.run(
+                    [self.pretrained_yaw_output.name, self.pretrained_pitch_output.name],
+                    {self.pretrained_input.name: zero_tensor},
+                )
+                decode_mobileone_angles(zero_outputs[0], zero_outputs[1])
+            except Exception as exc:
+                raise GpuUnavailable(f"MobileOne CUDA preflight failed: {exc}") from exc
 
     def _predict_pretrained_gaze(
         self, frame: np.ndarray, face: Detection
@@ -301,6 +312,13 @@ class GpuTracker:
         )
         eye_centric, eye_centric_distance, eye_centric_roll = _eye_centric_geometry(left_points, right_points)
         pretrained_gaze_deg, pretrained_unknown_reason = self._predict_pretrained_gaze(frame, face)
+        binocular_gaze_deg = ((left_yaw + right_yaw) * 0.5, (left_pitch + right_pitch) * 0.5)
+        raw_model_angle_delta_deg = None
+        if pretrained_gaze_deg is not None:
+            raw_model_angle_delta_deg = math.hypot(
+                binocular_gaze_deg[0] - pretrained_gaze_deg[0],
+                binocular_gaze_deg[1] - pretrained_gaze_deg[1],
+            )
         if eye_centric is None:
             return GazeSample(
                 features,
@@ -313,6 +331,8 @@ class GpuTracker:
                 eye_centric_roll,
                 pretrained_gaze_deg,
                 pretrained_unknown_reason,
+                binocular_gaze_deg,
+                raw_model_angle_delta_deg,
             )
         return GazeSample(
             features,
@@ -325,4 +345,6 @@ class GpuTracker:
             None,
             pretrained_gaze_deg,
             pretrained_unknown_reason,
+            binocular_gaze_deg,
+            raw_model_angle_delta_deg,
         )
