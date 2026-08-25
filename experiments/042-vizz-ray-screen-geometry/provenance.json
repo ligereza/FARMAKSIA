@@ -1,0 +1,45 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:042-vizz-ray-screen-geometry",
+  "status": "exploratory",
+  "purpose": "Represent one shared movable screen and three conceptual optical models with explicit ray recomputation.",
+  "entities": [
+    {
+      "id": "farmaxia:vizz-042-simulator",
+      "type": "software",
+      "path": "ray_screen_simulator.py",
+      "role": "interactive_screen_eye_ray_sketch",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-042-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "offline_geometry_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-042-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "human_reviewed_experiment_protocol",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "assumptions": [
+    "The three eyes are conceptual optical models, not three anatomical eyes.",
+    "The thin-lens model is illustrative and does not represent a clinical prescription.",
+    "The screen is flat in this first prototype and can move in x, y and z.",
+    "The retina receives an inverted optical image before a conceptual perceptual reconstruction."
+  ],
+  "kill_tests": [
+    "If screen movement does not alter all three ray bundles, reject the shared-screen implementation.",
+    "If the astigmatism model has only one focus, reject the two-meridian implementation.",
+    "Do not infer a person’s refractive error or visual health from this sketch."
+  ],
+  "unknowns": [
+    "How a real user perceives the alignment of the screen model.",
+    "Whether a future perceptual calibration improves comfort or task performance.",
+    "How curved and independently angled monitors should be represented in the production geometry."
+  ]
+}
