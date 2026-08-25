@@ -317,10 +317,32 @@ class EyeCameraSimulator:
         self.status.set("Rayos visibles." if self.show_rays.get() else "Rayos ocultos; la proyección sigue calculándose.")
         self.draw()
 
-    def _project_xz(self, z: float, transverse: float, bounds: tuple[float, float, float, float], z_max: float) -> tuple[float, float]:
+    def _project_xz(
+        self,
+        z: float,
+        transverse: float,
+        bounds: tuple[float, float, float, float],
+        screen_distance: float,
+    ) -> tuple[float, float]:
+        """Project an optical cut with separate scene and eye scales.
+
+        The screen-to-eye distance and the lens-to-retina distance differ by
+        roughly two orders of magnitude.  A single metric canvas scale makes
+        the retina disappear beside the lens, so this view is deliberately a
+        schematic: screen, lens and retina keep their order while each ray
+        segment is drawn in its own readable interval.
+        """
+
         left, top, width, height = bounds
-        z_min = -0.045
-        px = left + 34 + (z - z_min) / (z_max - z_min) * (width - 52)
+        screen_x = left + width * 0.14
+        lens_x = left + width * 0.50
+        retina_x = left + width * 0.86
+        if z >= 0.0:
+            scene_fraction = min(1.0, max(0.0, z / max(screen_distance, 1e-9)))
+            px = lens_x + scene_fraction * (screen_x - lens_x)
+        else:
+            eye_fraction = -z / DEFAULT_RETINA
+            px = lens_x + eye_fraction * (retina_x - lens_x)
         py = top + height * 0.55 - transverse * min(170.0, (height - 70.0) / 0.28)
         return px, py
 
@@ -330,35 +352,38 @@ class EyeCameraSimulator:
         object_height = source.x if meridian == "horizontal" else source.y
         focal = optics.focal_x if meridian == "horizontal" else optics.focal_y
         trace = trace_meridian(object_height, pose.z, focal, optics.retina, self.pupil_radius.get())
-        z_max = max(1.08, pose.z + 0.08)
         axis_y = top + height * 0.55
         self.canvas.create_rectangle(left, top, left + width, top + height, outline="#1e3a5f")
         self.canvas.create_text(left + 8, top + 8, text=f"{meridian.upper()} · luz → retina", fill="#e2e8f0", anchor="nw", font=("Segoe UI", 9, "bold"))
         self.canvas.create_line(left + 10, axis_y, left + width - 10, axis_y, fill="#334155", dash=(2, 4))
-        screen_x, _ = self._project_xz(pose.z, 0.0, bounds, z_max)
-        lens_x, _ = self._project_xz(0.0, 0.0, bounds, z_max)
-        retina_x, _ = self._project_xz(-optics.retina, 0.0, bounds, z_max)
+        screen_x, _ = self._project_xz(pose.z, 0.0, bounds, pose.z)
+        lens_x, _ = self._project_xz(0.0, 0.0, bounds, pose.z)
+        retina_x, _ = self._project_xz(-optics.retina, 0.0, bounds, pose.z)
+        self.canvas.create_oval(lens_x - 16, top + 48, retina_x + 18, top + height - 34, outline="#334155", dash=(5, 3))
+        self.canvas.create_arc(lens_x - 15, axis_y - 28, lens_x + 7, axis_y + 28, start=270, extent=180, outline="#cbd5e1", width=2)
         self.canvas.create_line(screen_x, top + 35, screen_x, top + height - 18, fill="#60a5fa", width=2)
         self.canvas.create_line(lens_x, top + 35, lens_x, top + height - 18, fill="#f8fafc", width=2)
         self.canvas.create_oval(lens_x - 7, axis_y - 25, lens_x + 7, axis_y + 25, outline="#f8fafc", width=2)
         self.canvas.create_line(retina_x, top + 35, retina_x, top + height - 18, fill="#f87171", width=2)
         self.canvas.create_text(screen_x, top + height - 3, text="pantalla", fill="#93c5fd", anchor="s", font=("Segoe UI", 7))
-        self.canvas.create_text(lens_x, top + height - 3, text="pupila+lente", fill="#e2e8f0", anchor="s", font=("Segoe UI", 7))
+        self.canvas.create_text(lens_x, top + height - 3, text="pupila + lente", fill="#e2e8f0", anchor="s", font=("Segoe UI", 7))
         self.canvas.create_text(retina_x, top + height - 3, text="retina", fill="#fca5a5", anchor="s", font=("Segoe UI", 7))
+        self.canvas.create_text(lens_x + 10, top + 44, text="ojo reducido", fill="#94a3b8", anchor="sw", font=("Segoe UI", 7))
 
         source_y = axis_y - object_height * min(170.0, (height - 70.0) / 0.28)
         self.canvas.create_oval(screen_x - 5, source_y - 5, screen_x + 5, source_y + 5, fill="#ffffff", outline="#60a5fa")
         self.canvas.create_text(screen_x, source_y - 10, text="S", fill="#f8fafc", font=("Segoe UI", 8))
         focus_z = trace.image_distance
-        focus_x, focus_y = self._project_xz(-focus_z, trace.focus_height, bounds, z_max)
+        focus_x, focus_y = self._project_xz(-focus_z, trace.focus_height, bounds, pose.z)
         if self.show_rays.get():
             for ray in trace.rays:
                 aperture_y = axis_y - ray.aperture_height * min(170.0, (height - 70.0) / 0.28)
                 retina_y = axis_y - ray.retina_height * min(170.0, (height - 70.0) / 0.28)
                 focus_ray_y = axis_y - ray.focus_height * min(170.0, (height - 70.0) / 0.28)
                 self.canvas.create_line(screen_x, source_y, lens_x, aperture_y, fill="#7dd3fc", width=1, arrow=tk.LAST)
-                self.canvas.create_line(lens_x, aperture_y, retina_x, retina_y, fill=optics.color, width=2)
-                self.canvas.create_line(retina_x, retina_y, focus_x, focus_ray_y, fill=optics.color, width=1, dash=(3, 3))
+                self.canvas.create_line(lens_x, aperture_y, retina_x, retina_y, fill=optics.color, width=2, arrow=tk.LAST)
+                if focus_z > optics.retina + 1e-9:
+                    self.canvas.create_line(retina_x, retina_y, focus_x, focus_ray_y, fill=optics.color, width=1, dash=(3, 3))
         self.canvas.create_oval(focus_x - 5, focus_y - 5, focus_x + 5, focus_y + 5, fill=optics.color, outline="#ffffff")
         self.canvas.create_text(focus_x, top + 8, text=f"foco {focus_z * 1000:.2f} mm", fill=optics.color, anchor="ne", font=("Consolas", 7))
         self.canvas.create_text(left + width - 8, top + 8, text=focus_state(focus_z, optics.retina), fill=optics.color, anchor="ne", font=("Segoe UI", 8, "bold"))
@@ -392,6 +417,19 @@ class EyeCameraSimulator:
                 y = cy - trace.centroid.y * scale
                 self.canvas.create_oval(x - 2, y - 2, x + 2, y + 2, fill="#ffffff", outline=optics.color)
             self.canvas.create_line(cx, cy - 25, cx, cy + 25, fill="#f8fafc", width=2, arrow=tk.LAST)
+        marker_u, marker_v = -0.55, 0.55
+        marker_x = cx + marker_u * side / 2.0
+        marker_y = cy - marker_v * side * pose.height / pose.width / 2.0
+        if retinal:
+            marker_trace = trace_screen_point(
+                optics,
+                screen_point(pose, marker_u, marker_v),
+                self.pupil_radius.get(),
+            )
+            marker_x = cx + marker_trace.centroid.x * scale
+            marker_y = cy - marker_trace.centroid.y * scale
+        self.canvas.create_oval(marker_x - 12, marker_y - 12, marker_x + 12, marker_y + 12, outline="#f8fafc", width=2)
+        self.canvas.create_text(marker_x, marker_y, text="A", fill="#f8fafc", font=("Segoe UI", 13, "bold"))
         self.canvas.create_text(cx, top + height - 4, text="↑ arriba en pantalla" if not retinal else "↓ orientación óptica retinal", fill="#cbd5e1", anchor="s", font=("Segoe UI", 7))
 
     def draw(self) -> None:
