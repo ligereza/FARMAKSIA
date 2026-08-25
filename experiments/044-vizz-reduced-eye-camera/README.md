@@ -1,5 +1,9 @@
 # VIZZ 044 — ojo reducido como cámara óptica
 
+> **Estado:** prototipo histórico. El modelo de referencia es [VIZZ
+> 045](../045-vizz-single-eye-camera/README.md), que dibuja explícitamente la
+> cámara, el punto focal, el sensor y la imagen retinal en una escena única.
+
 Este es el primer modelo que debe preceder a la binocularidad. Representa una
 sola pantalla como fuente luminosa y traza una imagen completa hacia una
 retina reducida.

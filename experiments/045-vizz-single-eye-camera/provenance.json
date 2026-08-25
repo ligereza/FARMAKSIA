@@ -1,0 +1,72 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:045-vizz-single-eye-camera",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_single_eye_camera_optical_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-045-simulator",
+      "type": "entity",
+      "path": "eye_camera_complete.py",
+      "role": "explicit_camera_lens_sensor_ray_scene",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-045-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "source_ray_inversion_focus_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-045-readme",
+      "type": "entity",
+      "path": "README.md",
+      "role": "single_eye_optics_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-045-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "synthetic_contract_record",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-045-contract-activity",
+      "type": "activity",
+      "label": "verify explicit camera, focal point and retinal inversion",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-045-simulator",
+        "farmaxia:vizz-045-contract"
+      ],
+      "generated": ["farmaxia:vizz-045-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-045-query",
+      "question": "Does one coherent optical scene visibly connect a screen source, finite aperture, lens, focal point and inverted sensor/retinal image?",
+      "source": "https://openstax.org/books/college-physics/pages/25-6-image-formation-by-lenses",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-045-simulator",
+        "farmaxia:vizz-045-contract"
+      ]
+    }
+  ],
+  "unknowns": [
+    "How well this reduced scene predicts a particular person's retinal optics.",
+    "How a curved retina and real corneal/crystalline surfaces alter peripheral projection.",
+    "Whether a future binocular display can improve a perceptual experience without vergence-accommodation discomfort."
+  ]
+}

@@ -76,6 +76,7 @@ def main() -> None:
         "experiments/040-vizz-naturalistic-trace-audit/provenance.json",
         "experiments/041-vizz-keyboard-activity-trace/provenance.json",
         "experiments/044-vizz-reduced-eye-camera/provenance.json",
+        "experiments/045-vizz-single-eye-camera/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -809,6 +810,12 @@ def main() -> None:
         "VIZZ_044_OPTICAL_CONTRACT_VALID",
     )
     command("provenance 044", python_script("research/tools/validate_provenance.py", provenance[41]), "PROVENANCE_VALID")
+    command(
+        "contract test VIZZ single eye camera 045",
+        python_script("experiments/045-vizz-single-eye-camera/run_contract_test.py"),
+        "VIZZ_045_CAMERA_OPTICAL_CONTRACT_VALID",
+    )
+    command("provenance 045", python_script("research/tools/validate_provenance.py", provenance[42]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
