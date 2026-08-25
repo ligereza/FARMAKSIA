@@ -1,0 +1,48 @@
+{
+  "schema": "farmaxia:vizz-python-flow-split:0.1",
+  "experiment": "farmaxia:experiment:032-vizz-python-flow-split",
+  "phases": {
+    "calibration_ui": {
+      "visible_interface": true,
+      "owns_buttons_and_instructions": true,
+      "camera_allowed": true,
+      "ends_with": "profile_sealed"
+    },
+    "headless_runtime": {
+      "visible_interface": false,
+      "owns_window": false,
+      "owns_buttons": false,
+      "camera_allowed_after_cuda_gate": true,
+      "content_output": "transparent_modifier_only"
+    }
+  },
+  "gpu_policy": {
+    "runtime": "onnxruntime-gpu",
+    "provider": "CUDAExecutionProvider",
+    "requested_providers": ["CUDAExecutionProvider"],
+    "cpu_fallback": false,
+    "fail_closed_code": "cuda_unavailable"
+  },
+  "privacy": {
+    "consent_required": true,
+    "camera_default": "off",
+    "raw_video_persistence": "none",
+    "calibration_profile_persistence": "local_explicit_profile_only",
+    "network_required": false,
+    "clear_runtime_memory_on_stop": true
+  },
+  "content_modifier": {
+    "window_type": "transparent_click_through_overlay",
+    "vizz_ui_visible_after_calibration": false,
+    "initial_effects": ["focus_region", "contrast_or_tint"],
+    "effect_claims": "interaction_experiment_only"
+  },
+  "not_claimed": [
+    "gaze_accuracy",
+    "clinical_effect",
+    "attention_or_fatigue_inference",
+    "anxiety_or_neurotransmitter_inference",
+    "intoxication_detection",
+    "thermal_reduction_without_measurement"
+  ]
+}

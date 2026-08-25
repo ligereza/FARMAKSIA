@@ -1,0 +1,106 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:033-vizz-python-headless-runtime",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "defines_visible_calibration_and_normal_content_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_static_contract_and_cuda_probe",
+      "version": "3.13.15"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-033-runner",
+      "type": "entity",
+      "path": "run_vizz.py",
+      "role": "calibration_then_headless_lifecycle",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-033-calibration",
+      "type": "entity",
+      "path": "calibration_ui.py",
+      "role": "only_visible_surface",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-033-gpu-tracker",
+      "type": "entity",
+      "path": "gpu_tracker.py",
+      "role": "cuda_only_face_and_gaze_inference",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-033-profile",
+      "type": "entity",
+      "path": "profile_model.py",
+      "role": "local_calibration_mapping_without_video",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-033-overlay",
+      "type": "entity",
+      "path": "content_overlay.py",
+      "role": "native_click_through_content_modifier",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-033-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "standard_library_flow_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-033-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "evidence_limits_and_kill_tests",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-033-contract-run",
+      "type": "activity",
+      "label": "verify visible calibration and headless content boundary",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-033-runner",
+        "farmaxia:vizz-033-calibration",
+        "farmaxia:vizz-033-gpu-tracker",
+        "farmaxia:vizz-033-profile",
+        "farmaxia:vizz-033-overlay",
+        "farmaxia:vizz-033-contract"
+      ],
+      "generated": ["farmaxia:vizz-033-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-033-query-open-source",
+      "question": "Which open-source desktop architecture supplies the model and projection pattern?",
+      "source": "https://github.com/PINTO0309/screen-eye-tracking",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-033-gpu-tracker", "farmaxia:vizz-033-overlay"]
+    },
+    {
+      "id": "farmaxia:vizz-033-query-cuda-fallback",
+      "question": "Can ORT disable CPU assignment while requesting CUDA only?",
+      "source": "https://github.com/microsoft/onnxruntime/blob/main/include/onnxruntime/core/session/onnxruntime_session_options_config_keys.h",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-033-gpu-tracker"]
+    }
+  ],
+  "unknowns": [
+    "No human camera session has been run in this experiment.",
+    "Accuracy, latency, thermal behavior, glasses effects and binocular asymmetry remain unmeasured.",
+    "The visual effect is an interaction prototype, not a clinical or fatigue-reduction claim."
+  ]
+}

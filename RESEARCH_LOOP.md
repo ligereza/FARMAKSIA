@@ -257,10 +257,12 @@ respetan la auditoría 040:
 1. CODEINE: mantener separadas transición base, score declarado, oracle
    ejecutable y estado humano; exigir que las mutaciones relevantes sean
    detectables antes de llamar verificada a una secuencia.
-2. VIZZ: usar el adaptador WebGazer únicamente para una sesión humana futura
-   y explícitamente consentida; medir retención, error frente a referencia,
-   latencia extremo a extremo, apagado y límites ópticos antes de inferir
-   utilidad. La automatización no inicia esa sesión ni aporta datos humanos.
+2. VIZZ: el experimento 032 separó la calibración visible del runtime y el
+   experimento 033 adoptó un pipeline Python CUDA con RetinaFace + gaze ONNX y
+   una capa click-through sobre el contenido normal. El siguiente paso humano,
+   solo con consentimiento explícito, es medir retención, error frente a
+   referencia, latencia extremo a extremo, apagado, lentes y asimetría entre
+   ojos. La automatización no inicia esa sesión ni aporta datos humanos.
 
 X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.

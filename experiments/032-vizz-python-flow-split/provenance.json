@@ -1,0 +1,105 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:032-vizz-python-flow-split",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "defines_visible_calibration_and_invisible_runtime_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_contract_without_camera_or_human_data",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-032-readme",
+      "type": "entity",
+      "path": "README.md",
+      "role": "two_phase_architecture",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-032-policy",
+      "type": "entity",
+      "path": "runtime_policy.json",
+      "role": "phase_gpu_privacy_and_content_boundary",
+      "authority": "human_declared_control"
+    },
+    {
+      "id": "farmaxia:vizz-032-flow",
+      "type": "entity",
+      "path": "flow_contract.py",
+      "role": "executable_phase_state_machine",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-032-calibration",
+      "type": "entity",
+      "path": "calibration_ui.py",
+      "role": "visible_calibration_profile_seal_boundary",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-032-runtime",
+      "type": "entity",
+      "path": "runtime.py",
+      "role": "headless_cuda_only_runtime_boundary",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-032-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "phase_and_privacy_static_test",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-032-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "evidence_and_unknowns_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-032-contract-run",
+      "type": "activity",
+      "label": "run visible-to-headless flow contract",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-032-policy",
+        "farmaxia:vizz-032-flow",
+        "farmaxia:vizz-032-calibration",
+        "farmaxia:vizz-032-runtime",
+        "farmaxia:vizz-032-contract"
+      ],
+      "generated": ["farmaxia:vizz-032-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-032-query-cuda",
+      "question": "Can Python request ONNX Runtime CUDA as its only execution provider?",
+      "source": "https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-032-runtime", "farmaxia:vizz-032-policy"]
+    },
+    {
+      "id": "farmaxia:vizz-032-query-mediapipe-windows",
+      "question": "Is the MediaPipe Python GPU delegate a dependable Windows implementation?",
+      "source": "https://github.com/google-ai-edge/mediapipe/issues/5126",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-032-readme", "farmaxia:vizz-032-runtime"]
+    }
+  ],
+  "unknowns": [
+    "CUDA package installation and provider availability have not been tested in the clean Python 3.13 environment.",
+    "The ocular ONNX model and transparent content modifier are not implemented in this contract milestone.",
+    "No human data or camera session was used."
+  ]
+}

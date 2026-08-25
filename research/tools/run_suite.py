@@ -65,6 +65,8 @@ def main() -> None:
         "experiments/029-codeine-executable-oracle/provenance.json",
         "experiments/030-vizz-webgazer-opt-in/provenance.json",
         "experiments/031-vizz-gpu-only-deep-tracker/provenance.json",
+        "experiments/032-vizz-python-flow-split/provenance.json",
+        "experiments/033-vizz-python-headless-runtime/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -702,6 +704,18 @@ def main() -> None:
         "CONTRACT_TESTS_VALID",
     )
     command("provenance 031", python_script("research/tools/validate_provenance.py", provenance[30]), "PROVENANCE_VALID")
+    command(
+        "contract test VIZZ Python flow split 032",
+        python_script("experiments/032-vizz-python-flow-split/run_contract_test.py"),
+        "CONTRACT_TESTS_VALID",
+    )
+    command("provenance 032", python_script("research/tools/validate_provenance.py", provenance[31]), "PROVENANCE_VALID")
+    command(
+        "contract test VIZZ Python headless runtime 033",
+        python_script("experiments/033-vizz-python-headless-runtime/run_contract_test.py"),
+        "CONTRACT_TESTS_VALID",
+    )
+    command("provenance 033", python_script("research/tools/validate_provenance.py", provenance[32]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

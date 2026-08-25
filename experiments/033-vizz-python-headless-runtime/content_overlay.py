@@ -1,0 +1,158 @@
+"""Native click-through focus layer; it has no controls or VIZZ chrome."""
+
+from __future__ import annotations
+
+import ctypes
+import os
+from ctypes import wintypes
+
+import numpy as np
+
+
+class OverlayUnavailable(RuntimeError):
+    pass
+
+
+if os.name == "nt":
+    WNDPROC = ctypes.WINFUNCTYPE(ctypes.c_long, wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM)
+
+    class POINT(ctypes.Structure):
+        _fields_ = [("x", wintypes.LONG), ("y", wintypes.LONG)]
+
+    class SIZE(ctypes.Structure):
+        _fields_ = [("cx", wintypes.LONG), ("cy", wintypes.LONG)]
+
+    class BLENDFUNCTION(ctypes.Structure):
+        _fields_ = [("BlendOp", ctypes.c_ubyte), ("BlendFlags", ctypes.c_ubyte), ("SourceConstantAlpha", ctypes.c_ubyte), ("AlphaFormat", ctypes.c_ubyte)]
+
+    class WNDCLASSW(ctypes.Structure):
+        _fields_ = [
+            ("style", wintypes.UINT),
+            ("lpfnWndProc", WNDPROC),
+            ("cbClsExtra", ctypes.c_int),
+            ("cbWndExtra", ctypes.c_int),
+            ("hInstance", wintypes.HINSTANCE),
+            ("hIcon", ctypes.c_void_p),
+            ("hCursor", ctypes.c_void_p),
+            ("hbrBackground", ctypes.c_void_p),
+            ("lpszMenuName", wintypes.LPCWSTR),
+            ("lpszClassName", wintypes.LPCWSTR),
+        ]
+
+    class BITMAPINFOHEADER(ctypes.Structure):
+        _fields_ = [
+            ("biSize", wintypes.DWORD),
+            ("biWidth", wintypes.LONG),
+            ("biHeight", wintypes.LONG),
+            ("biPlanes", wintypes.WORD),
+            ("biBitCount", wintypes.WORD),
+            ("biCompression", wintypes.DWORD),
+            ("biSizeImage", wintypes.DWORD),
+            ("biXPelsPerMeter", wintypes.LONG),
+            ("biYPelsPerMeter", wintypes.LONG),
+            ("biClrUsed", wintypes.DWORD),
+            ("biClrImportant", wintypes.DWORD),
+        ]
+
+    class BITMAPINFO(ctypes.Structure):
+        _fields_ = [("bmiHeader", BITMAPINFOHEADER), ("bmiColors", wintypes.DWORD * 3)]
+
+
+class FocusOverlay:
+    """A black translucent vignette that leaves a gaze-centered region clear."""
+
+    def __init__(self, width: int, height: int, alpha: int = 30, radius_px: int = 260) -> None:
+        if os.name != "nt":
+            raise OverlayUnavailable("the native click-through layer currently targets Windows")
+        if width <= 0 or height <= 0:
+            raise ValueError("overlay dimensions must be positive")
+        self.width = int(width)
+        self.height = int(height)
+        self.alpha = max(0, min(255, int(alpha)))
+        self.radius_px = max(32, int(radius_px))
+        self.user32 = ctypes.windll.user32
+        self.gdi32 = ctypes.windll.gdi32
+        self.hinstance = ctypes.windll.kernel32.GetModuleHandleW(None)
+        self.class_name = f"FARMAXIA_VIZZ_LAYER_{id(self):x}"
+        self._wndproc = WNDPROC(self._window_proc)
+        window_class = WNDCLASSW()
+        window_class.lpfnWndProc = self._wndproc
+        window_class.hInstance = self.hinstance
+        window_class.lpszClassName = self.class_name
+        if not self.user32.RegisterClassW(ctypes.byref(window_class)):
+            raise OverlayUnavailable("could not register the transparent layer")
+        style = 0x80000000  # WS_POPUP
+        extended = 0x00080000 | 0x00000020 | 0x00000080 | 0x08000000  # layered, transparent, tool, no activate
+        self.hwnd = self.user32.CreateWindowExW(extended, self.class_name, "FARMAXIA_CONTENT_LAYER", style, 0, 0, self.width, self.height, None, None, self.hinstance, None)
+        if not self.hwnd:
+            self.user32.UnregisterClassW(self.class_name, self.hinstance)
+            raise OverlayUnavailable("could not create the content layer")
+        self.memdc = self.gdi32.CreateCompatibleDC(None)
+        if not self.memdc:
+            self.destroy()
+            raise OverlayUnavailable("could not create the overlay drawing context")
+        bitmap_info = BITMAPINFO()
+        bitmap_info.bmiHeader.biSize = ctypes.sizeof(BITMAPINFOHEADER)
+        bitmap_info.bmiHeader.biWidth = self.width
+        bitmap_info.bmiHeader.biHeight = -self.height
+        bitmap_info.bmiHeader.biPlanes = 1
+        bitmap_info.bmiHeader.biBitCount = 32
+        bitmap_info.bmiHeader.biCompression = 0
+        bits = ctypes.c_void_p()
+        self.bitmap = self.gdi32.CreateDIBSection(self.memdc, ctypes.byref(bitmap_info), 0, ctypes.byref(bits), None, 0)
+        if not self.bitmap or not bits.value:
+            self.destroy()
+            raise OverlayUnavailable("could not allocate the overlay bitmap")
+        self.gdi32.SelectObject(self.memdc, self.bitmap)
+        self.bits = bits
+        self._blend = BLENDFUNCTION(0, 0, 255, 1)
+        self._visible = False
+
+    def _window_proc(self, hwnd: int, message: int, wparam: int, lparam: int) -> int:
+        return self.user32.DefWindowProcW(hwnd, message, wparam, lparam)
+
+    def set_focus(self, x_norm: float, y_norm: float) -> None:
+        x = float(np.clip(x_norm, 0.0, 1.0)) * (self.width - 1)
+        y = float(np.clip(y_norm, 0.0, 1.0)) * (self.height - 1)
+        yy, xx = np.ogrid[: self.height, : self.width]
+        distance2 = (xx - x) ** 2 + (yy - y) ** 2
+        clear = np.exp(-distance2 / (2.0 * self.radius_px**2))
+        alpha = np.asarray(np.rint(self.alpha * (1.0 - clear)), dtype=np.uint8)
+        image = np.zeros((self.height, self.width, 4), dtype=np.uint8)
+        image[:, :, 3] = alpha
+        ctypes.memmove(self.bits, image.ctypes.data, image.nbytes)
+        destination = POINT(0, 0)
+        size = SIZE(self.width, self.height)
+        source = POINT(0, 0)
+        if not self.user32.UpdateLayeredWindow(self.hwnd, None, ctypes.byref(destination), ctypes.byref(size), self.memdc, ctypes.byref(source), 0, ctypes.byref(self._blend), 2):
+            raise OverlayUnavailable("UpdateLayeredWindow failed")
+        if not self._visible:
+            flags = 0x0010 | 0x0040 | 0x0080  # SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOOWNERZORDER
+            self.user32.SetWindowPos(self.hwnd, -1, 0, 0, self.width, self.height, flags)
+            self._visible = True
+
+    def hide(self) -> None:
+        if self._visible:
+            self.user32.ShowWindow(self.hwnd, 0)
+            self._visible = False
+
+    def destroy(self) -> None:
+        if os.name != "nt":
+            return
+        if getattr(self, "hwnd", None):
+            self.user32.DestroyWindow(self.hwnd)
+            self.hwnd = None
+        if getattr(self, "bitmap", None):
+            self.gdi32.DeleteObject(self.bitmap)
+            self.bitmap = None
+        if getattr(self, "memdc", None):
+            self.gdi32.DeleteDC(self.memdc)
+            self.memdc = None
+        if getattr(self, "hinstance", None):
+            self.user32.UnregisterClassW(self.class_name, self.hinstance)
+
+    def __enter__(self) -> "FocusOverlay":
+        return self
+
+    def __exit__(self, *_: object) -> None:
+        self.destroy()
