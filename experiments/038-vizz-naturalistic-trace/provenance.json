@@ -1,0 +1,82 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:038-vizz-naturalistic-trace",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "defines_naturalistic_trace_and_mouse_covariate_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_trace_contract_without_devices",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-038-trace",
+      "type": "entity",
+      "path": "../033-vizz-python-headless-runtime/interaction_trace.py",
+      "role": "opt_in_timestamped_mouse_and_gaze_trace",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-038-runner",
+      "type": "entity",
+      "path": "../033-vizz-python-headless-runtime/run_vizz.py",
+      "role": "headless_trace_integration",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-038-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "no_video_no_content_no_mouse_ground_truth_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-038-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "synthetic_trace_record",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-038-trace-contract",
+      "type": "activity",
+      "label": "verify opt-in naturalistic trace boundary",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-038-trace",
+        "farmaxia:vizz-038-runner",
+        "farmaxia:vizz-038-contract"
+      ],
+      "generated": ["farmaxia:vizz-038-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-038-query-mouse-covariate",
+      "question": "Can mouse position be recorded as a timestamped interaction covariate without making it gaze ground truth?",
+      "source": "https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/petmei2014-eye-mouse-cameraready-copyright.pdf",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-038-trace", "farmaxia:vizz-038-contract"]
+    },
+    {
+      "id": "farmaxia:vizz-038-query-timestamps",
+      "question": "Which timestamp and stream-alignment fields are needed for gaze and event traces?",
+      "source": "https://docs.pupil-labs.com/core/software/recording-format/",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-038-trace"]
+    }
+  ],
+  "unknowns": [
+    "A real work session may contain application and multi-monitor context not represented by the trace.",
+    "Mouse/gaze lag and coupling must be estimated from real timestamped sessions.",
+    "Naturalistic robustness does not replace target-known screen validation."
+  ]
+}

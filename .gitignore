@@ -9,6 +9,7 @@ venv/
 .vizz-validation*.json
 .vizz-pretrained-probe.json
 .vizz-dual-audit.json
+.vizz-trace*.jsonl
 *.log
 dist/
 build/

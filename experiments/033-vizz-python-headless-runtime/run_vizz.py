@@ -11,6 +11,7 @@ import cv2
 
 from content_overlay import FocusOverlay
 from gpu_tracker import GpuTracker, GpuUnavailable
+from interaction_trace import InteractionTrace, read_pointer_position
 from profile_model import load_profile, load_samples_for_merge, seal_profile
 
 
@@ -76,29 +77,51 @@ def run_calibration(
         raise RuntimeError("calibration did not seal a profile")
 
 
-def run_headless(tracker: GpuTracker, capture: cv2.VideoCapture, profile_path: Path, alpha: int, radius: int) -> None:
+def run_headless(
+    tracker: GpuTracker,
+    capture: cv2.VideoCapture,
+    profile_path: Path,
+    alpha: int,
+    radius: int,
+    trace_path: Path | None = None,
+    trace_hz: float = 20.0,
+) -> None:
     profile, mapper = load_profile(profile_path)
     width, height = [int(value) for value in profile["screen_size"]]
+    trace = InteractionTrace(trace_path, (width, height), trace_hz) if trace_path is not None else None
+    next_trace_at = time.monotonic()
     with FocusOverlay(width, height, alpha=alpha, radius_px=radius) as overlay:
         logging.info("headless runtime active; visible_interface=False")
         try:
             while True:
+                now = time.monotonic()
                 ok, frame = capture.read()
                 if not ok:
                     overlay.hide()
+                    if trace is not None and now >= next_trace_at:
+                        trace.write_sample(now, None, None, read_pointer_position())
+                        next_trace_at = now + 1.0 / trace.sample_hz
                     time.sleep(0.05)
                     continue
                 sample = tracker.sample(frame)
                 if sample is None or sample.quality < 0.50:
                     overlay.hide()
+                    if trace is not None and now >= next_trace_at:
+                        trace.write_sample(now, sample, None, read_pointer_position())
+                        next_trace_at = now + 1.0 / trace.sample_hz
                     continue
                 point = mapper.predict(sample.features)
                 overlay.set_focus(*point)
+                if trace is not None and now >= next_trace_at:
+                    trace.write_sample(now, sample, point, read_pointer_position())
+                    next_trace_at = now + 1.0 / trace.sample_hz
                 time.sleep(0.01)
         except KeyboardInterrupt:
             logging.info("headless runtime stopped")
         finally:
             overlay.hide()
+            if trace is not None:
+                trace.close()
 
 
 def parse_args() -> argparse.Namespace:
@@ -127,6 +150,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--camera", type=int, default=0)
     parser.add_argument("--overlay-alpha", type=int, default=30)
     parser.add_argument("--focus-radius", type=int, default=260)
+    parser.add_argument("--trace", type=Path, default=None, help="opt-in timestamp trace without video or screen content")
+    parser.add_argument("--trace-hz", type=float, default=20.0, help="interaction trace rate")
     return parser.parse_args()
 
 
@@ -163,7 +188,7 @@ def main() -> int:
                     args.merge_existing,
                     args.existing_condition,
                 )
-            run_headless(tracker, capture, args.profile, args.overlay_alpha, args.focus_radius)
+            run_headless(tracker, capture, args.profile, args.overlay_alpha, args.focus_radius, args.trace, args.trace_hz)
         finally:
             capture.release()
     except (FileNotFoundError, GpuUnavailable, RuntimeError, ValueError) as exc:
