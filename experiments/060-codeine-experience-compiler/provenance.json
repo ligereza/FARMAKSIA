@@ -1,0 +1,138 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:060-codeine-experience-compiler",
+  "status": "exploratory",
+  "purpose": "Compile a declared intention into a verified declarative task and reversible sensory representation plan.",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher-060",
+      "type": "agent",
+      "role": "declares_the_intent_analogy_and_experience_constraints"
+    },
+    {
+      "id": "farmaxia:python-runner-060",
+      "type": "software_agent",
+      "role": "compiles_the_contract_and_runs_independent_oracle_and_kill_tests"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:codeine-060-fixture",
+      "type": "entity",
+      "path": "fixture.json",
+      "role": "declared_intent_semantic_map_and_synthetic_task",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:codeine-060-compiler",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "role": "deterministic_experience_compiler",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-060-oracle",
+      "type": "entity",
+      "path": "objective_oracle.py",
+      "role": "independent_state_trace_oracle",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-060-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "positive_contract_test",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-060-kill-tests",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "role": "negative_contract_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-060-decision",
+      "type": "entity",
+      "path": "../../research/decisions/066-codeine-experience-compiler.md",
+      "role": "architecture_decision_and_research_synthesis",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:codeine-060-compile",
+      "type": "activity",
+      "label": "compile semantic intent, declarative machine and representation plan",
+      "agent": "farmaxia:python-runner-060",
+      "used": [
+        "farmaxia:codeine-060-fixture",
+        "farmaxia:codeine-060-compiler",
+        "farmaxia:codeine-060-oracle"
+      ],
+      "generated": []
+    },
+    {
+      "id": "farmaxia:codeine-060-adversarial-check",
+      "type": "activity",
+      "label": "mutate analogy, transitions and sensory controls to verify blocking",
+      "agent": "farmaxia:python-runner-060",
+      "used": [
+        "farmaxia:codeine-060-fixture",
+        "farmaxia:codeine-060-compiler",
+        "farmaxia:codeine-060-kill-tests"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:codeine-060-query-compile",
+      "expression": "does a declared intention compile to a state machine and representation plan without executing generated code",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:codeine-060-fixture",
+        "farmaxia:codeine-060-compiler"
+      ]
+    },
+    {
+      "id": "farmaxia:codeine-060-query-oracle",
+      "expression": "does an independent oracle reject a mutated transition or unexplained event",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:codeine-060-oracle",
+        "farmaxia:codeine-060-kill-tests"
+      ]
+    },
+    {
+      "id": "farmaxia:codeine-060-query-sensation",
+      "expression": "does the representation layer remain bounded, reversible and driven only by declared interaction signals",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:codeine-060-fixture",
+        "farmaxia:codeine-060-decision"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The fixture is a synthetic semantic example, not a game reverse-engineering claim.",
+    "A declarative intermediate representation is safer to inspect than direct arbitrary source execution.",
+    "Tempo, motion and attention weight are rendering parameters, not measurements of a person's nervous system.",
+    "Declared interaction signals do not establish emotion, impairment or diagnosis."
+  ],
+  "kill_tests": [
+    "Missing residue on a non-equivalent mapping blocks compilation.",
+    "A mutated transition must disagree with the independent oracle.",
+    "A representation plan without preview, accept or revert is rejected.",
+    "Periodic flashing and implicit friction inference are rejected.",
+    "Unknown events return unavailable or blocked rather than inventing a transition.",
+    "No human data, camera, network or generated-code execution is allowed."
+  ],
+  "unknowns": [
+    "Whether a person learns or builds faster with the contrastive map.",
+    "Whether a declared tempo or reduced-motion policy feels better in sustained work.",
+    "Whether an agent can infer a useful semantic map from real documentation without introducing unsupported relations.",
+    "Whether the declarative machine is sufficient for a real application adapter.",
+    "Which open-source parser or UI catalog should be adopted in a later runtime."
+  ]
+}

@@ -86,6 +86,11 @@ def main() -> None:
         "experiments/052-vizz-binocular-auto-geometry/provenance.json",
         "experiments/053-vizz-gpu-binocular-ray-adapter/provenance.json",
         "experiments/054-vizz-naturalistic-quality-audit/provenance.json",
+        "experiments/056-farmaxia-representation-renderer/provenance.json",
+        "experiments/057-farmaxia-overlay-runtime/provenance.json",
+        "experiments/058-farmaxia-gpu-composition-runtime/provenance.json",
+        "experiments/059-xanax-tutorial-transfer-contract/provenance.json",
+        "experiments/060-codeine-experience-compiler/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -924,6 +929,57 @@ def main() -> None:
         "VIZZ_054_NATURALISTIC_QUALITY_AUDIT_CONTRACT_VALID",
     )
     command("provenance 054", python_script("research/tools/validate_provenance.py", provenance[51]), "PROVENANCE_VALID")
+
+    command(
+        "experiment FARMAKSIA representation renderer 056",
+        python_script("experiments/056-farmaxia-representation-renderer/run_experiment.py"),
+        '"code_execution": false',
+    )
+    command(
+        "contract test FARMAKSIA representation renderer 056",
+        python_script("experiments/056-farmaxia-representation-renderer/run_contract_test.py"),
+        "FARMAXIA_056",
+    )
+    command("provenance 056", python_script("research/tools/validate_provenance.py", provenance[52]), "PROVENANCE_VALID")
+    command(
+        "contract test FARMAKSIA overlay runtime 057",
+        python_script("experiments/057-farmaxia-overlay-runtime/run_contract_test.py"),
+        "FARMAXIA_057_OVERLAY_CONTRACT_VALID",
+    )
+    command("provenance 057", python_script("research/tools/validate_provenance.py", provenance[53]), "PROVENANCE_VALID")
+    command(
+        "contract test FARMAKSIA GPU composition runtime 058",
+        python_script("experiments/058-farmaxia-gpu-composition-runtime/run_contract_test.py"),
+        "FARMAXIA_058_GPU_COMPOSITION_CONTRACT_VALID",
+    )
+    command("provenance 058", python_script("research/tools/validate_provenance.py", provenance[54]), "PROVENANCE_VALID")
+    command(
+        "contract test X-ANA-X tutorial transfer 059",
+        python_script("experiments/059-xanax-tutorial-transfer-contract/run_contract_test.py"),
+        "XANAX_059_TUTORIAL_TRANSFER_CONTRACT_VALID",
+    )
+    command(
+        "kill test X-ANA-X tutorial transfer 059",
+        python_script("experiments/059-xanax-tutorial-transfer-contract/run_kill_test.py"),
+        "XANAX_059_KILL_TESTS_VALID",
+    )
+    command("provenance 059", python_script("research/tools/validate_provenance.py", provenance[55]), "PROVENANCE_VALID")
+    command(
+        "experiment CODE-INE experience compiler 060",
+        python_script("experiments/060-codeine-experience-compiler/run_experiment.py"),
+        '"status": "COMPILED_VERIFIED_WITH_RESIDUE"',
+    )
+    command(
+        "contract test CODE-INE experience compiler 060",
+        python_script("experiments/060-codeine-experience-compiler/run_contract_test.py"),
+        "CODEINE_060_EXPERIENCE_COMPILER_CONTRACT_VALID",
+    )
+    command(
+        "kill test CODE-INE experience compiler 060",
+        python_script("experiments/060-codeine-experience-compiler/run_kill_test.py"),
+        "CODEINE_060_KILL_TESTS_VALID",
+    )
+    command("provenance 060", python_script("research/tools/validate_provenance.py", provenance[56]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

@@ -25,7 +25,7 @@
       "id": "farmaxia:xanax-transfer-protocol-059",
       "type": "entity",
       "path": "README.md",
-      "sha256": "6F911065A373A5EC576220533B33FCE1A45A53E13CD542C21388A3A0382026BC",
+      "sha256": "8D04922FC13BD2AAF9458F3E0940ADF71F6080B1BF2ACB478D5DCAE8B5288A41",
       "role": "tutorial_transfer_contract_and_limits",
       "authority": "human_reviewed_record"
     },
@@ -49,7 +49,7 @@
       "id": "farmaxia:xanax-transfer-kill-test-059",
       "type": "entity",
       "path": "run_kill_test.py",
-      "sha256": "CE02E5A73F4C865C7331AF61933415E97820E33022243185AE2337CFCD2C91D4",
+      "sha256": "0C8F07FD383885F5A1B4F96D6B404AEB985B7CAB5B6A376047281826CF93A3F1",
       "role": "negative_contract_cases",
       "authority": "human_declared_tool"
     },
@@ -57,7 +57,7 @@
       "id": "farmaxia:xanax-transfer-results-059",
       "type": "entity",
       "path": "results.md",
-      "sha256": "BAF261906992D414A46980198CC924474AF95A04C34CA89C6EF4A372108EC37E",
+      "sha256": "313493C06D703CE79C7212053C33FDE6C7DBA062E26B6F84F72CF557EDA22F31",
       "role": "measurement_record",
       "authority": "human_reviewed_record"
     }

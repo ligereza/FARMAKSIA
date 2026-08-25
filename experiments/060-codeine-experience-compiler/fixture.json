@@ -1,0 +1,167 @@
+{
+  "schema": "farmaxia:codeine-experience-compiler-fixture:0.1",
+  "intent": {
+    "id": "build-recovery-loop",
+    "statement": "Quiero que un proceso avance, explique sus fallos y no repita un error en silencio.",
+    "entry_profile": "guided",
+    "familiar_domain": "arcade_finite_state_policy",
+    "target_domain": "reliable_work_loop",
+    "declared_preferences": {
+      "tempo": "deliberate",
+      "density": "compact",
+      "motion": "reduced"
+    },
+    "complexity_budget": {
+      "max_active_concepts": 2,
+      "max_disclosure_layers": 3
+    }
+  },
+  "analogy": {
+    "source_concepts": [
+      {
+        "id": "chase",
+        "label": "seguir un objetivo",
+        "meaning": "la política mantiene una meta activa"
+      },
+      {
+        "id": "frightened",
+        "label": "entrar en riesgo",
+        "meaning": "la política cambia porque el estado ya no es seguro"
+      },
+      {
+        "id": "collision",
+        "label": "ocurre un choque",
+        "meaning": "un evento externo obliga a resolver el estado"
+      },
+      {
+        "id": "score",
+        "label": "subir puntaje",
+        "meaning": "una métrica resume una partida"
+      },
+      {
+        "id": "unknown_arcade_reward",
+        "label": "recompensa no descrita",
+        "meaning": "el fixture no declara su regla"
+      }
+    ],
+    "target_concepts": [
+      {
+        "id": "select_task",
+        "label": "seleccionar trabajo",
+        "meaning": "el proceso mantiene una tarea verificable"
+      },
+      {
+        "id": "blocked",
+        "label": "quedar bloqueado",
+        "meaning": "el proceso detiene la acción y conserva el contexto"
+      },
+      {
+        "id": "failure",
+        "label": "registrar fallo",
+        "meaning": "un resultado observable cambia el estado"
+      },
+      {
+        "id": "reliability",
+        "label": "confiabilidad",
+        "meaning": "una propiedad requiere evidencia, no sólo una cifra"
+      },
+      {
+        "id": "unknown_work_outcome",
+        "label": "resultado no descrito",
+        "meaning": "el fixture no declara su condición"
+      }
+    ],
+    "mappings": [
+      {
+        "source": "chase",
+        "target": "select_task",
+        "relation": "analogous",
+        "preserves": ["active_goal"],
+        "residue": ["target_selection_rules_are_not_the_same"]
+      },
+      {
+        "source": "frightened",
+        "target": "blocked",
+        "relation": "analogous",
+        "preserves": ["state_change_requires_attention"],
+        "residue": ["risk_in_a_game_is_not_a_work_failure"]
+      },
+      {
+        "source": "collision",
+        "target": "failure",
+        "relation": "analogous",
+        "preserves": ["external_event_changes_state"],
+        "residue": ["a_collision_does_not_define_a_recovery_policy"]
+      },
+      {
+        "source": "score",
+        "target": "reliability",
+        "relation": "different",
+        "preserves": [],
+        "residue": ["a_score_is_not_evidence_of_reliability"]
+      },
+      {
+        "source": "unknown_arcade_reward",
+        "target": "unknown_work_outcome",
+        "relation": "unknown",
+        "preserves": [],
+        "residue": ["no_declared_mapping"]
+      }
+    ]
+  },
+  "task": {
+    "kind": "finite_state_machine",
+    "initial_state": "ready",
+    "states": ["ready", "working", "blocked", "retrying", "verified", "halted"],
+    "transitions": [
+      {
+        "id": "start-work",
+        "from": "ready",
+        "event": "start",
+        "to": "working",
+        "observable": "work_started",
+        "postcondition": "active_task_exists"
+      },
+      {
+        "id": "record-failure",
+        "from": "working",
+        "event": "failure",
+        "to": "blocked",
+        "observable": "failure_explained",
+        "postcondition": "failure_is_visible"
+      },
+      {
+        "id": "allow-retry",
+        "from": "blocked",
+        "event": "retry_allowed",
+        "to": "retrying",
+        "observable": "retry_is_scoped",
+        "postcondition": "retry_budget_is_known"
+      },
+      {
+        "id": "verify-retry",
+        "from": "retrying",
+        "event": "success",
+        "to": "verified",
+        "observable": "result_passes_oracle",
+        "postcondition": "success_is_independent"
+      },
+      {
+        "id": "stop-on-budget",
+        "from": "blocked",
+        "event": "retry_exhausted",
+        "to": "halted",
+        "observable": "loop_stops_with_reason",
+        "postcondition": "silent_repetition_is_prevented"
+      }
+    ],
+    "trace": ["start", "failure", "retry_allowed", "success"],
+    "expected_states": ["ready", "working", "blocked", "retrying", "verified"]
+  },
+  "interaction": {
+    "declared_events": [
+      {"event": "inspect", "declared_friction": "none"},
+      {"event": "mismatch", "declared_friction": "stuck"}
+    ]
+  }
+}
