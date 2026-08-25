@@ -1,0 +1,90 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:034-vizz-pretrained-model-probe",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "defines_eye_centric_and_gpu_only_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_cuda_model_probe",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-034-probe",
+      "type": "entity",
+      "path": "run_probe.py",
+      "role": "cuda_only_synthetic_model_probe",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-034-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "static_privacy_and_cuda_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-034-readme",
+      "type": "entity",
+      "path": "README.md",
+      "role": "probe_scope_and_limits",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-034-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "evidence_and_unknowns_record",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-034-static-audit",
+      "type": "activity",
+      "label": "verify CUDA-only and no-camera probe boundary",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-034-probe",
+        "farmaxia:vizz-034-contract",
+        "farmaxia:vizz-034-readme"
+      ],
+      "generated": ["farmaxia:vizz-034-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-034-query-ptgaze",
+      "question": "Which pretrained GPU gaze-vector candidate should be probed first?",
+      "source": "https://github.com/hysts/pytorch_mpiigaze_demo",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-034-probe"]
+    },
+    {
+      "id": "farmaxia:vizz-034-query-iris",
+      "question": "Does an iris frontend provide gaze direction or only iris/landmark geometry?",
+      "source": "https://github.com/google-ai-edge/mediapipe/blob/master/docs/solutions/iris.md",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-034-probe"]
+    },
+    {
+      "id": "farmaxia:vizz-034-query-mobilegaze",
+      "question": "Which lightweight ONNX/CUDA candidate is suitable for a later deployment comparison?",
+      "source": "https://github.com/yakhyo/gaze-estimation",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-034-probe"]
+    }
+  ],
+  "unknowns": [
+    "The existing baseline smoke test does not establish screen accuracy.",
+    "The compatibility of ptgaze/ETH-XGaze and MobileGaze with this Windows environment is not yet measured.",
+    "No human video, raw frames or new calibration were collected.",
+    "Thermal behavior beyond the current GPU telemetry snapshot is unknown."
+  ]
+}

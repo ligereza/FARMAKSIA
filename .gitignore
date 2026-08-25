@@ -6,6 +6,7 @@ venv/
 .vizz-models/
 .vizz-calibration.json
 .vizz-validation*.json
+.vizz-pretrained-probe.json
 *.log
 dist/
 build/
