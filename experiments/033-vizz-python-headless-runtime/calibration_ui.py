@@ -24,7 +24,7 @@ CALIBRATION_POINTS: tuple[tuple[float, float], ...] = (
     (0.92, 0.92),
 )
 SAMPLES_PER_POINT = 16
-POINT_TIMEOUT_SECONDS = 3.0
+CLICK_TARGET_RADIUS_PX = 100
 
 
 class CalibrationAborted(RuntimeError):
@@ -57,7 +57,9 @@ class CalibrationWindow:
         self.dot_id: int | None = None
         self.status_id: int | None = None
         self.started = False
+        self.point_active = False
         self.start_window: int | None = None
+        self.canvas.bind("<Button-1>", self._on_canvas_click)
         self._draw_landing()
 
     def run(self) -> None:
@@ -121,6 +123,7 @@ class CalibrationWindow:
             self._finish()
             return
         self.point_samples = []
+        self.point_active = True
         self.started_at = time.monotonic()
         self._draw_point()
         self.root.after(50, self._tick)
@@ -136,28 +139,48 @@ class CalibrationWindow:
             18,
             18,
             anchor="nw",
-            text=f"Mira el punto {self.point_index + 1}/{len(CALIBRATION_POINTS)} · Esc cancela",
+            text=f"Mira el punto y haz clic sobre él cuando estés listo · {self.point_index + 1}/{len(CALIBRATION_POINTS)} · Esc cancela",
             fill="#d0d0d0",
             font=("Segoe UI", 12),
         )
 
     def _tick(self) -> None:
-        if not self.root.winfo_exists():
+        if not self.root.winfo_exists() or not self.point_active:
             return
         sample = self.sample_provider()
         if sample is not None and sample.quality >= 0.50:
             self.point_samples.append(sample.features)
-        elapsed = time.monotonic() - self.started_at
-        if len(self.point_samples) >= SAMPLES_PER_POINT or elapsed >= POINT_TIMEOUT_SECONDS:
-            if self.point_samples:
-                feature_count = len(self.point_samples)
-                mean_features = tuple(sum(values[index] for values in self.point_samples) / feature_count for index in range(6))
-                target = CALIBRATION_POINTS[self.point_index]
-                self.samples.append({"features": list(mean_features), "target": list(target)})
-            self.point_index += 1
-            self.root.after(220, self._begin_point)
-            return
+        if self.status_id is not None:
+            self.canvas.itemconfig(
+                self.status_id,
+                text=f"Mira el punto y haz clic sobre él cuando estés listo · muestras {len(self.point_samples)}/{SAMPLES_PER_POINT} · Esc cancela",
+            )
         self.root.after(50, self._tick)
+
+    def _on_canvas_click(self, event: tk.Event[tk.Misc]) -> None:
+        if not self.started or not self.point_active:
+            return
+        target_x, target_y = CALIBRATION_POINTS[self.point_index]
+        target_px = target_x * self.width
+        target_py = target_y * self.height
+        distance = ((event.x - target_px) ** 2 + (event.y - target_py) ** 2) ** 0.5
+        if distance > CLICK_TARGET_RADIUS_PX:
+            if self.status_id is not None:
+                self.canvas.itemconfig(self.status_id, text="Haz clic sobre el punto rojo para confirmar esta muestra")
+            return
+        if len(self.point_samples) < SAMPLES_PER_POINT:
+            if self.status_id is not None:
+                self.canvas.itemconfig(
+                    self.status_id,
+                    text=f"Aún faltan muestras válidas ({len(self.point_samples)}/{SAMPLES_PER_POINT}); mantén la mirada y vuelve a hacer clic",
+                )
+            return
+        feature_count = len(self.point_samples)
+        mean_features = tuple(sum(values[index] for values in self.point_samples) / feature_count for index in range(6))
+        self.samples.append({"features": list(mean_features), "target": [target_x, target_y]})
+        self.point_active = False
+        self.point_index += 1
+        self.root.after(220, self._begin_point)
 
     def _finish(self) -> None:
         if len(self.samples) < len(CALIBRATION_POINTS):
