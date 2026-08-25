@@ -75,6 +75,7 @@ cuando no existe un archivo humano.
 - [Decisión de compuerta gaze-contingent VIZZ](research/decisions/038-vizz-gaze-quality-gate.md)
 - [Literatura del runtime WebGazer VIZZ](research/literature/016-vizz-webgazer-runtime.md)
 - [Decisión de adopción experimental WebGazer VIZZ](research/decisions/041-vizz-webgazer-opt-in.md)
+- [Modelo óptico reducido VIZZ: pantalla, luz, foco y retina](experiments/044-vizz-reduced-eye-camera/README.md)
 - [Investigación de calibración y herramientas open source VIZZ](research/literature/017-vizz-calibration-open-source.md)
 - [Investigación de runtime Python GPU VIZZ](research/literature/018-vizz-python-gpu-runtime.md)
 - [Decisión de flujo VIZZ calibración/runtime](research/decisions/045-vizz-flow-split.md)

@@ -1,5 +1,10 @@
 # VIZZ 042 — ojos, pantalla y trazos de luz
 
+> **Estado:** prototipo histórico. Para estudiar la formación física de la
+> imagen usa [VIZZ 044](../044-vizz-reduced-eye-camera/README.md), que separa
+> fuente luminosa, pupila finita, lente equivalente y retina. Este experimento
+> conserva el boceto de pantalla móvil y no es el modelo óptico de referencia.
+
 Este experimento convierte la idea de VIZZ en un esquema óptico manipulable:
 una sola pantalla compartida, tres modelos de ojo y haces de rayos que se
 recalculan cada vez que la pantalla cambia de posición.
