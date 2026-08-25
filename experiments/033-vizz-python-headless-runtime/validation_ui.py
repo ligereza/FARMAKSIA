@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import random
+import logging
 import time
 import tkinter as tk
 from collections.abc import Callable
@@ -66,6 +67,7 @@ class ValidationWindow:
         self.start_window: int | None = None
         self.transition_window: int | None = None
         self.tick_scheduled = False
+        self.capture_finish_job: str | None = None
         self._draw_landing()
 
     def run(self) -> None:
@@ -179,12 +181,16 @@ class ValidationWindow:
         if not self.root.winfo_exists() or self.state == "idle":
             return
         if self.state == "capturing" and self.capture is not None:
-            sample = self.sample_provider()
-            result = self.capture.push(time.monotonic(), sample)
-            if result is None and self.capture.deadline is not None and time.monotonic() >= self.capture.deadline:
-                result = self.capture.finish()
-            if result is not None:
-                self._handle_capture_result(result)
+            try:
+                sample = self.sample_provider()
+                result = self.capture.push(time.monotonic(), sample)
+                if result is None and self.capture.deadline is not None and time.monotonic() >= self.capture.deadline:
+                    result = self.capture.finish()
+                if result is not None:
+                    self._handle_capture_result(result)
+            except Exception:
+                logging.exception("validation sample callback failed")
+                self._handle_capture_failure("Falló la lectura de cámara/modelo; repite este punto.")
         self._schedule_tick()
 
     def _on_canvas_click(self, event: tk.Event[tk.Misc]) -> None:
@@ -201,6 +207,10 @@ class ValidationWindow:
         self.capture = StableCapture(VALIDATION_CONFIG)
         self.capture.arm(time.monotonic())
         self.state = "capturing"
+        self.capture_finish_job = self.root.after(
+            int((VALIDATION_CONFIG.settle_seconds + VALIDATION_CONFIG.window_seconds + 0.35) * 1000),
+            self._finish_capture_by_timer,
+        )
         self.canvas.delete("all")
         self.status_id = None
         x = int(round(target_x * self.width))
@@ -211,22 +221,27 @@ class ValidationWindow:
         self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#f0a000", outline="#ffffff", width=2)
         self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
 
+    def _finish_capture_by_timer(self) -> None:
+        self.capture_finish_job = None
+        if self.state == "capturing" and self.capture is not None:
+            self._handle_capture_result(self.capture.finish())
+
+    def _cancel_capture_timer(self) -> None:
+        if self.capture_finish_job is not None:
+            try:
+                self.root.after_cancel(self.capture_finish_job)
+            except tk.TclError:
+                pass
+            self.capture_finish_job = None
+
     def _handle_capture_result(self, result: CaptureResult) -> None:
+        self._cancel_capture_timer()
         if not result.accepted or result.features is None:
-            self.state = "waiting_for_click"
-            self.capture = None
-            if self.status_id is None:
-                self.status_id = self.canvas.create_text(18, 18, anchor="nw", fill="#d0d0d0", font=("Segoe UI", 12))
             message = {
                 "insufficient_valid_samples": "Muestras insuficientes; repite este punto.",
                 "unstable_feature_window": "Ventana inestable; repite este punto sin mover la cabeza.",
             }.get(result.reason, "Captura rechazada; repite este punto.")
-            target_index, (target_x, target_y) = self._current_target()
-            x = int(round(target_x * self.width))
-            y = int(round(target_y * self.height))
-            self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#d62027", outline="#ffffff", width=2)
-            self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
-            self.canvas.itemconfig(self.status_id, text=message)
+            self._handle_capture_failure(message)
             return
         target_index, (target_x, target_y) = self._current_target()
         condition_key, _condition_label = self.conditions[self.condition_index]
@@ -253,6 +268,19 @@ class ValidationWindow:
         self.capture = None
         self.order_index += 1
         self.root.after(220, self._draw_target)
+
+    def _handle_capture_failure(self, message: str) -> None:
+        self._cancel_capture_timer()
+        self.state = "waiting_for_click"
+        self.capture = None
+        self.canvas.delete("all")
+        self.status_id = self.canvas.create_text(18, 18, anchor="nw", fill="#d0d0d0", font=("Segoe UI", 12))
+        _target_index, (target_x, target_y) = self._current_target()
+        x = int(round(target_x * self.width))
+        y = int(round(target_y * self.height))
+        self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#d62027", outline="#ffffff", width=2)
+        self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
+        self.canvas.itemconfig(self.status_id, text=message)
 
     def _show_condition_transition(self) -> None:
         self.state = "between_conditions"
