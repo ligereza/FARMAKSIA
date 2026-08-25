@@ -1,0 +1,93 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:047-vizz-controlled-playback",
+  "status": "exploratory",
+  "purpose": "Compare static and gaze-contingent visual policies in a synthetic playback before any desktop overlay.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_visual_policy_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-047-policy",
+      "type": "software",
+      "path": "playback_policy.py",
+      "role": "three_zone_visual_policy_descriptor",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-047-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "synthetic_scene_comparison",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-047-html",
+      "type": "document",
+      "path": "playback.html",
+      "role": "local_manual_playback",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-047-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "peripheral_signal_kill_tests",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-047-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "human_reviewed_experiment_protocol",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-047-contract-activity",
+      "type": "activity",
+      "label": "verify protected peripheral policy against static and unprotected controls",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-047-policy",
+        "farmaxia:vizz-047-runner",
+        "farmaxia:vizz-047-contract"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-047-query",
+      "question": "Can VIZZ reduce low-priority peripheral detail while preserving a peripheral alert in a controlled playback?",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8802022/",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-047-policy",
+        "farmaxia:vizz-047-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The screen angular extent is a declared playback fixture, not an individual measurement.",
+    "Peripheral signals are marked by the synthetic scene designer and are not inferred from human attention.",
+    "A policy descriptor is not yet a production renderer."
+  ],
+  "kill_tests": [
+    "Protected adaptive mode must preserve the synthetic peripheral alert.",
+    "The unprotected control must expose the failure mode by degrading that alert.",
+    "Static full mode must not alter detail.",
+    "The playback must not open a camera or mutate the desktop."
+  ],
+  "unknowns": [
+    "Whether humans notice or prefer the protected policy.",
+    "How latency and gaze error alter the safe radii in real use.",
+    "Whether the same policy transfers across reading, coding and monitoring."
+  ]
+}

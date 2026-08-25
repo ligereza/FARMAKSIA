@@ -1,6 +1,7 @@
 {
   "schema": "farmaxia:provenance-manifest:0.1",
   "experiment": "farmaxia:experiment:045-vizz-single-eye-camera",
+  "status": "retired",
   "agents": [
     {
       "id": "farmaxia:python-runner",
@@ -10,13 +11,6 @@
     }
   ],
   "entities": [
-    {
-      "id": "farmaxia:vizz-045-simulator",
-      "type": "entity",
-      "path": "eye_camera_complete.py",
-      "role": "explicit_camera_lens_sensor_ray_scene",
-      "authority": "computed"
-    },
     {
       "id": "farmaxia:vizz-045-contract",
       "type": "entity",
@@ -45,10 +39,7 @@
       "type": "activity",
       "label": "verify explicit camera, focal point and retinal inversion",
       "agent": "farmaxia:python-runner",
-      "used": [
-        "farmaxia:vizz-045-simulator",
-        "farmaxia:vizz-045-contract"
-      ],
+      "used": ["farmaxia:vizz-045-contract"],
       "generated": ["farmaxia:vizz-045-results"]
     }
   ],
@@ -59,7 +50,6 @@
       "source": "https://openstax.org/books/college-physics/pages/25-6-image-formation-by-lenses",
       "authority": "human_reviewed_record",
       "required_entities": [
-        "farmaxia:vizz-045-simulator",
         "farmaxia:vizz-045-contract"
       ]
     }

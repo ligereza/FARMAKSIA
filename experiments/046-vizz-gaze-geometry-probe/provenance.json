@@ -1,0 +1,95 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:046-vizz-gaze-geometry-probe",
+  "status": "exploratory",
+  "purpose": "Resolve binocular gaze geometry into monitor hypotheses and a safe policy before rendering.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_geometry_probe",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-046-geometry",
+      "type": "software",
+      "path": "gaze_geometry.py",
+      "role": "monitor_plane_and_gaze_state_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-046-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "synthetic_geometry_cases",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-046-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "geometry_and_kill_tests",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-046-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "human_reviewed_experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-046-results",
+      "type": "document",
+      "path": "results.md",
+      "role": "synthetic_contract_record",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-046-contract-activity",
+      "type": "activity",
+      "label": "verify ray-plane resolution, uncertainty and static fallback",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-046-geometry",
+        "farmaxia:vizz-046-runner",
+        "farmaxia:vizz-046-contract"
+      ],
+      "generated": ["farmaxia:vizz-046-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-046-query",
+      "question": "Can binocular gaze be resolved against multiple physical monitor planes with explicit UNKNOWN states before any renderer is enabled?",
+      "source": "https://docs.opencv.org/4.10.0/d9/d0c/group__calib3d.html",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-046-geometry",
+        "farmaxia:vizz-046-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The input gaze vector is a synthetic estimator output, not camera ground truth.",
+    "Monitor axes define planar physical rectangles in world metres.",
+    "The eye midpoint is used as the ray origin for this first geometry contract.",
+    "A valid state is allowed to describe a region but not to mutate screen content."
+  ],
+  "kill_tests": [
+    "Head translation with a fixed world target must preserve monitor UV.",
+    "Missing eyes, stale layouts, low confidence and invalid pose must return UNKNOWN.",
+    "Overlapping monitor hypotheses must return ambiguous_monitor.",
+    "Mouse and keyboard context must never become gaze ground truth.",
+    "The geometry probe must not open a camera or mutate display content."
+  ],
+  "unknowns": [
+    "Accuracy and latency of the real webcam/frontend on this machine.",
+    "Whether the monitor plane and eye centers can be estimated robustly in naturalistic motion.",
+    "What adaptive visual policy improves a human task without harming peripheral detection or comfort."
+  ]
+}

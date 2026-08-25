@@ -1,4 +1,8 @@
-# VIZZ 045 — cámara óptica de un solo ojo
+# VIZZ 045 — cámara óptica de un solo ojo (retirado)
+
+Estado: **retirado**. El último `.py` fue eliminado porque la base visual no
+era suficientemente coherente para continuar construyendo sobre ella. La
+versión reducida mantenida para contratos educativos es [VIZZ 044](../044-vizz-reduced-eye-camera/).
 
 Este experimento rehace la base monocular en una escena única. No incorpora
 binocularidad ni intenta esconder la diferencia entre luz, imagen retinal y
@@ -40,15 +44,11 @@ La posición focal sigue `1/f = 1/u + 1/v`, y la magnificación ideal es
 `-v/u`. El signo negativo se comprueba con la marca asimétrica y con el
 centroide retinal, no se interpreta como una operación literal del cerebro.
 
-## Ejecutar
+## Contrato de retiro
 
-```powershell
-.\.venv\Scripts\python.exe experiments/045-vizz-single-eye-camera/eye_camera_complete.py
-```
-
-Se puede mover la pantalla en X/Y/Z, cambiar la pupila, escoger el modelo y
-seleccionar el punto emisor de la pantalla. El foco normal coincide con el
-sensor, pero se marca con una cruz para que no desaparezca visualmente.
+`run_contract_test.py` verifica que el simulador eliminado no reaparezca y que
+la frontera de retiro permanezca documentada. No se ejecuta una GUI desde este
+experimento.
 
 ## Límites
 

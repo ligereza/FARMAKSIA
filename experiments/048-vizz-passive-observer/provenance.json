@@ -1,0 +1,86 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:048-vizz-passive-observer",
+  "status": "exploratory",
+  "purpose": "Prepare privacy-preserving passive observation of gaze state and interaction context without screen mutation.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_passive_trace_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-048-writer",
+      "type": "software",
+      "path": "passive_trace.py",
+      "role": "privacy_preserving_trace_writer_and_auditor",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-048-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "synthetic_passive_trace_fixture",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-048-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "privacy_boundary_contract",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-048-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "human_reviewed_experiment_protocol",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-048-contract-activity",
+      "type": "activity",
+      "label": "verify minimal passive trace and privacy boundary",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-048-writer",
+        "farmaxia:vizz-048-runner",
+        "farmaxia:vizz-048-contract"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-048-query",
+      "question": "Can VIZZ observe gaze quality and interaction context without persisting text, key identity, video or screen content?",
+      "source": "https://learn.microsoft.com/en-us/windows/win32/winmsg/lowlevel-keyboard-hook",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-048-writer",
+        "farmaxia:vizz-048-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The GazeState provider is external to this privacy adapter.",
+    "Keyboard activity is represented only by count and recency.",
+    "Mouse coordinates are contextual and never establish gaze truth."
+  ],
+  "kill_tests": [
+    "The trace must reject or avoid key identity, text, video, window title and screen content.",
+    "UNKNOWN reason must remain auditable.",
+    "Mouse must remain explicitly non-ground-truth.",
+    "The observer must not start camera or mutate display content in this phase."
+  ],
+  "unknowns": [
+    "Whether real-time Windows capture can supply the contract without privacy leakage.",
+    "How much passive data is needed for an A/B task comparison.",
+    "Whether keyboard activity improves task-state classification without contaminating gaze inference."
+  ]
+}

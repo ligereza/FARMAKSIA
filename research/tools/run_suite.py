@@ -77,6 +77,10 @@ def main() -> None:
         "experiments/041-vizz-keyboard-activity-trace/provenance.json",
         "experiments/044-vizz-reduced-eye-camera/provenance.json",
         "experiments/045-vizz-single-eye-camera/provenance.json",
+        "experiments/046-vizz-gaze-geometry-probe/provenance.json",
+        "experiments/047-vizz-controlled-playback/provenance.json",
+        "experiments/048-vizz-passive-observer/provenance.json",
+        "experiments/049-vizz-runtime-geometry-bridge/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -813,9 +817,53 @@ def main() -> None:
     command(
         "contract test VIZZ single eye camera 045",
         python_script("experiments/045-vizz-single-eye-camera/run_contract_test.py"),
-        "VIZZ_045_CAMERA_OPTICAL_CONTRACT_VALID",
+        "VIZZ_045_RETIREMENT_CONTRACT_VALID",
     )
     command("provenance 045", python_script("research/tools/validate_provenance.py", provenance[42]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ gaze geometry 046",
+        python_script("experiments/046-vizz-gaze-geometry-probe/run_experiment.py"),
+        '"screen_content_mutated": false',
+    )
+    command(
+        "contract test VIZZ gaze geometry 046",
+        python_script("experiments/046-vizz-gaze-geometry-probe/run_contract_test.py"),
+        "VIZZ_046_GEOMETRY_CONTRACT_VALID",
+    )
+    command("provenance 046", python_script("research/tools/validate_provenance.py", provenance[43]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ controlled playback 047",
+        python_script("experiments/047-vizz-controlled-playback/run_experiment.py"),
+        '"screen_content_mutated": false',
+    )
+    command(
+        "contract test VIZZ controlled playback 047",
+        python_script("experiments/047-vizz-controlled-playback/run_contract_test.py"),
+        "VIZZ_047_PLAYBACK_CONTRACT_VALID",
+    )
+    command("provenance 047", python_script("research/tools/validate_provenance.py", provenance[44]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ passive observer 048",
+        python_script("experiments/048-vizz-passive-observer/run_experiment.py"),
+        '"screen_content_mutated": false',
+    )
+    command(
+        "contract test VIZZ passive observer 048",
+        python_script("experiments/048-vizz-passive-observer/run_contract_test.py"),
+        "VIZZ_048_PASSIVE_TRACE_CONTRACT_VALID",
+    )
+    command("provenance 048", python_script("research/tools/validate_provenance.py", provenance[45]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ runtime geometry bridge 049",
+        python_script("experiments/049-vizz-runtime-geometry-bridge/run_experiment.py"),
+        '"screen_content_mutated": false',
+    )
+    command(
+        "contract test VIZZ runtime geometry bridge 049",
+        python_script("experiments/049-vizz-runtime-geometry-bridge/run_contract_test.py"),
+        "VIZZ_049_RUNTIME_BRIDGE_CONTRACT_VALID",
+    )
+    command("provenance 049", python_script("research/tools/validate_provenance.py", provenance[46]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

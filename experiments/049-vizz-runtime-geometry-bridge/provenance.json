@@ -1,0 +1,78 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:049-vizz-runtime-geometry-bridge",
+  "status": "exploratory",
+  "purpose": "Keep legacy image-space gaze from becoming physical screen geometry without world eye and monitor data.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_runtime_bridge_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-049-bridge",
+      "type": "software",
+      "path": "runtime_bridge.py",
+      "role": "closed_legacy_to_world_geometry_adapter",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-049-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "synthetic_bridge_cases",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-049-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "legacy_mapping_kill_test",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-049-contract-activity",
+      "type": "activity",
+      "label": "verify missing world geometry fails closed",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-049-bridge",
+        "farmaxia:vizz-049-runner",
+        "farmaxia:vizz-049-contract"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-049-query",
+      "question": "Does the runtime refuse to derive physical screen coordinates from legacy image-space features alone?",
+      "source": "https://docs.opencv.org/4.10.0/d9/d0c/group__calib3d.html",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-049-bridge",
+        "farmaxia:vizz-049-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "A world geometry provider will eventually expose both eye centers and a gaze ray.",
+    "Legacy image-space features do not have physical monitor semantics by themselves.",
+    "The geometry-first contract remains separate from the current production mapper."
+  ],
+  "kill_tests": [
+    "Legacy-only input must return UNKNOWN: missing_world_geometry.",
+    "The bridge must never mark legacy screen mapping as allowed.",
+    "Explicit synthetic world geometry must resolve through the 046 monitor contract."
+  ],
+  "unknowns": [
+    "How to estimate world eye centers and camera extrinsics robustly on the current machine.",
+    "What calibration protocol supplies those quantities without conditioning on a fixed head pose.",
+    "Whether the geometry-first representation improves a human task."
+  ]
+}

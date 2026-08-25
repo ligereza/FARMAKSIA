@@ -1,17 +1,15 @@
-# Resultados VIZZ 045
+# Resultados VIZZ 045 — retiro
 
-Estado: `EXPLORATORY_IMPLEMENTED`.
+Estado: `RETIRED_BY_DESIGN`.
 
-La escena separa explícitamente pantalla, rayos de luz, cámara/ojo reducido,
-apertura, lente, punto focal y sensor/retina. El contrato comprueba la
-inversión de la marca asimétrica, foco normal, miopía/hipermetropía conceptual,
-desenfoque por pupila y dos meridianos astigmáticos.
+El simulador monocular fue eliminado por solicitud del usuario porque sus
+diagramas no constituían una base suficientemente coherente para la siguiente
+fase. Se mantiene la documentación histórica y el contrato de retiro, pero no
+se afirma que el experimento continúe ejecutable.
 
-No se han usado personas, cámara física, vídeo ni datos clínicos.
+La visualización educativa mantenida para rayos, foco y retina es VIZZ 044.
 
 Verificaciones ejecutadas:
 
-- `run_contract_test.py` → `VIZZ_045_CAMERA_OPTICAL_CONTRACT_VALID`.
+- `run_contract_test.py` → `VIZZ_045_RETIREMENT_CONTRACT_VALID`.
 - `validate_provenance.py` → `PROVENANCE_VALID`.
-- prueba GUI con foco normal y astigmatismo → `VIZZ_045_CAMERA_GUI_SMOKE_VALID`.
-- suite completa → `SUITE_VALID`.

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>VIZZ 047 · playback controlado</title>
+  <style>
+    :root { color-scheme: dark; font-family: Segoe UI, sans-serif; }
+    body { margin: 0; background: #07111f; color: #e5e7eb; }
+    header { display:flex; gap:8px; align-items:center; flex-wrap:wrap; padding:12px 16px; background:#111827; border-bottom:1px solid #243248; }
+    button, select { background:#1e293b; color:#e5e7eb; border:1px solid #475569; border-radius:6px; padding:7px 10px; cursor:pointer; }
+    button.active { background:#0e7490; border-color:#67e8f9; }
+    #status { margin-left:auto; color:#93c5fd; font-size:13px; }
+    #stage { position:relative; height:calc(100vh - 66px); min-height:540px; overflow:hidden; background:linear-gradient(135deg,#0f172a,#172554); cursor:crosshair; }
+    .card { position:absolute; box-sizing:border-box; border:1px solid #64748b; border-radius:10px; padding:14px; transition:filter .14s linear, opacity .14s linear, transform .14s linear; background:#1e293b; }
+    .card h2 { margin:0 0 8px; font-size:16px; }
+    .card p { margin:0; line-height:1.45; font-size:14px; }
+    #editor { left:4%; top:22%; width:42%; height:52%; background:#111827; }
+    #terminal { left:57%; top:52%; width:38%; height:32%; background:#020617; }
+    #alert { right:3%; top:5%; width:17%; background:#7f1d1d; border-color:#fca5a5; }
+    #chart { right:3%; top:23%; width:24%; height:22%; background:#164e63; }
+    #toolbar { left:42%; top:4%; width:22%; background:#334155; }
+    #background { left:48%; top:28%; width:11%; height:15%; opacity:.7; background:#312e81; }
+    .focus-ring { position:absolute; width:0; height:0; border:2px solid #67e8f9; border-radius:50%; pointer-events:none; transform:translate(-50%,-50%); box-shadow:0 0 0 9px #67e8f933; }
+    .legend { position:absolute; left:16px; bottom:14px; padding:8px 10px; border-radius:6px; background:#020617cc; color:#cbd5e1; font-size:12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>VIZZ 047 · playback</strong>
+    <button data-mode="static_full">Normal</button>
+    <button data-mode="static_clean">Static clean</button>
+    <button data-mode="adaptive_protected">Adaptive protected</button>
+    <button data-mode="adaptive_unprotected">Adaptive failure control</button>
+    <label>Tarea <select id="task"><option>reading</option><option>coding</option><option>monitoring</option></select></label>
+    <span id="status"></span>
+  </header>
+  <main id="stage" aria-label="escena sintética de playback">
+    <section class="card" id="editor"><h2>Editor</h2><p>El foco central conserva texto y estructura. Esta escena no representa una aplicación real.</p></section>
+    <section class="card" id="terminal"><h2>Terminal</h2><p>build → test → observe<br>salida sintética para comparar zonas.</p></section>
+    <section class="card" id="alert"><h2>ALERTA</h2><p>Debe permanecer detectable aunque esté en periferia.</p></section>
+    <section class="card" id="chart"><h2>Monitor</h2><p>▂▅▃▇▆▂▅</p></section>
+    <section class="card" id="toolbar"><h2>Controles</h2><p>acciones y foco</p></section>
+    <section class="card" id="background"><h2>Fondo</h2></section>
+    <div class="focus-ring" id="focus-ring"></div>
+    <div class="legend">Haz clic para mover el foco simulado. Este playback no usa cámara ni modifica otras ventanas.</div>
+  </main>
+  <script>
+    const stage = document.getElementById('stage');
+    const ring = document.getElementById('focus-ring');
+    const status = document.getElementById('status');
+    let mode = 'static_full';
+    let focus = {u:.25, v:.50};
+    const metadata = {
+      editor:{u:.25,v:.48,kind:'text',signal:false}, terminal:{u:.76,v:.68,kind:'text',signal:false},
+      alert:{u:.915,v:.13,kind:'alert',signal:true}, chart:{u:.85,v:.34,kind:'chart',signal:true},
+      toolbar:{u:.53,v:.08,kind:'control',signal:false}, background:{u:.535,v:.355,kind:'background',signal:false}
+    };
+    function setMode(next) { mode=next; document.querySelectorAll('button[data-mode]').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode)); apply(); }
+    function apply() {
+      Object.entries(metadata).forEach(([id,m])=>{
+        const el=document.getElementById(id); const dx=(m.u-focus.u)*45; const dy=(m.v-focus.v)*26; const e=Math.hypot(dx,dy);
+        let detail=1, zone='static';
+        if(mode==='static_clean') { detail=['text','alert','control'].includes(m.kind)?1:.45; zone='static_clean'; }
+        if(mode==='adaptive_protected' || mode==='adaptive_unprotected') {
+          if(e<=3) { detail=1; zone='foveal'; }
+          else if(e<=8) { detail=.7; zone='parafoveal'; }
+          else { zone='peripheral'; detail=(mode==='adaptive_protected'&&m.signal)? .85 : (['text','control'].includes(m.kind)?.28:.22); }
+        }
+        el.style.opacity=(.62+.38*detail).toFixed(3); el.style.filter=`blur(${((1-detail)*2.2).toFixed(2)}px) saturate(${(.72+.28*detail).toFixed(2)})`;
+        el.dataset.zone=zone;
+      });
+      ring.style.left=`${focus.u*100}%`; ring.style.top=`${focus.v*100}%`; ring.style.width=mode.startsWith('adaptive')?'160px':'0px'; ring.style.height=mode.startsWith('adaptive')?'160px':'0px';
+      status.textContent=`modo: ${mode} · foco: ${(focus.u*100).toFixed(0)}%, ${(focus.v*100).toFixed(0)}%`;
+    }
+    document.querySelectorAll('button[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));
+    stage.addEventListener('click', e=>{ const r=stage.getBoundingClientRect(); focus={u:(e.clientX-r.left)/r.width,v:(e.clientY-r.top)/r.height}; apply(); });
+    setMode(mode);
+  </script>
+</body>
+</html>
