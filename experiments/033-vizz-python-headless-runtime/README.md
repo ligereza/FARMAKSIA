@@ -124,6 +124,12 @@ se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
 - La calidad cae si no se detectan dos ojos, si la discrepancia binocular supera
   45 grados o si el rostro no supera el umbral. En esos casos el overlay se
   oculta: no inventa una coordenada.
+- Esta ruta 033 es todavía un runtime experimental dependiente de cámara. La
+  arquitectura de producto futura debe iniciar en `NO_CAMERA` y activar
+  `HEAD_POSE` o `BINOCULAR_EYES` sólo por consentimiento explícito; transformar
+  frames a vectores en RAM no protege contra malware que controle el driver o
+  el proceso antes de la inferencia. La decisión completa está en
+  `research/decisions/060-vizz-privacy-capability-gate.md`.
 - Desde el incremento 036, cada muestra y cada resumen de ventana conserva,
   además, `eye_centric`, `eye_centric_distance_px`, `eye_centric_roll_rad` y su
   razón de `UNKNOWN`. Esos campos se guardan para comparar la nueva

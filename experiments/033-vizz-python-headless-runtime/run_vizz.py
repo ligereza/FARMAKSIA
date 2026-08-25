@@ -122,6 +122,7 @@ def run_headless(
                     continue
                 point = mapper.predict(sample.features)
                 overlay.set_focus(*point)
+                overlay.pump_messages()
                 if trace is not None and now >= next_trace_at:
                     trace.write_sample(now, sample, point, read_pointer_position(), keyboard.snapshot(now) if keyboard else None)
                     next_trace_at = now + 1.0 / trace.sample_hz

@@ -1,0 +1,88 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:054-vizz-naturalistic-quality-audit",
+  "status": "exploratory",
+  "purpose": "Compare naturalistic VIZZ quality traces offline without turning them into gaze ground truth or a calibration profile.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_quality_audit_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-054-auditor",
+      "type": "software",
+      "path": "quality_audit.py",
+      "role": "offline_trace_summary_and_condition_comparison",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-054-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "synthetic_quality_trace_fixture",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-054-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "privacy_and_blink_identifiability_kill_tests",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-054-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "human_reviewed_experiment_protocol",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-054-contract-activity",
+      "type": "activity",
+      "label": "audit paired naturalistic traces without camera access or causal overclaim",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-054-auditor",
+        "farmaxia:vizz-054-runner",
+        "farmaxia:vizz-054-contract"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-054-query",
+      "question": "Can VIZZ compare two naturalistic quality traces while preserving privacy and explicitly refusing blink, gaze-target and lens-causality claims?",
+      "source": "https://github.com/pupil-labs/real-time-screen-gaze",
+      "authority": "human_reviewed_record",
+      "required_entities": [
+        "farmaxia:vizz-054-auditor",
+        "farmaxia:vizz-054-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The quality trace schema contains summaries rather than raw video or screen content.",
+    "The Windows display boundaries supplied to the auditor come from the 050 layout probe.",
+    "Mouse position is an auxiliary covariate and not gaze truth.",
+    "Naturalistic condition comparisons remain confounded by session, pose, distance and task."
+  ],
+  "kill_tests": [
+    "Raw-video traces are rejected.",
+    "Missing explicit blink fields do not become a blink count.",
+    "Footer/sample-count mismatch is rejected.",
+    "Pointer region is not interpreted as gaze monitor identity.",
+    "No camera, network or screen mutation occurs."
+  ],
+  "unknowns": [
+    "Whether blink events were tolerated without a visible quality loss.",
+    "Which monitor the user actually looked at during a naturalistic movie task.",
+    "Whether any difference between conditions survives a balanced repeated design."
+  ]
+}

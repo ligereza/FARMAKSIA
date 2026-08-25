@@ -1,0 +1,81 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:058-farmaxia-gpu-composition-runtime",
+  "status": "exploratory",
+  "purpose": "Test a retained GPU composition backend for a reversible overlay over existing applications.",
+  "agents": [
+    {
+      "id": "farmaxia:dotnet-gpu-runner",
+      "type": "software_agent",
+      "role": "creates_d3d11_directcomposition_overlay",
+      "version": "net8-vortice-3.8.3"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-058-compositor",
+      "type": "software",
+      "path": "Program.cs",
+      "role": "d3d11-directcomposition-overlay",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-058-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "static-stability-and-privacy-contract",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-058-plan-input",
+      "type": "software",
+      "path": "Program.cs",
+      "role": "local-jsonl-representation-plan-boundary",
+      "authority": "experiment_defined"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-058-contract-activity",
+      "type": "activity",
+      "label": "verify retained GPU composition without camera, network or arbitrary execution",
+      "agent": "farmaxia:dotnet-gpu-runner",
+      "used": [
+        "farmaxia:vizz-058-compositor",
+        "farmaxia:vizz-058-contract",
+        "farmaxia:vizz-058-plan-input"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-058-query",
+      "question": "Can a GPU-composed overlay update only on plan changes without the Python full-frame strobo path?",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:vizz-058-compositor",
+        "farmaxia:vizz-058-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The Windows desktop compositor is available and the hardware D3D11 driver is present.",
+    "The pointer and JSONL plan are probes, not gaze ground truth.",
+    "The underlying application remains the source of truth.",
+    "A display-layout change requires a new runtime instance until WM_DISPLAYCHANGE is implemented."
+  ],
+  "kill_tests": [
+    "A static scene must not present continuously.",
+    "SetWindowPos must not be called from the render loop.",
+    "The backend must not capture the screen or request camera/network access.",
+    "The JSONL boundary must not execute arbitrary code.",
+    "The overlay must close and release resources after duration or stop."
+  ],
+  "unknowns": [
+    "External GPU-engine utilization and temperature under pointer motion.",
+    "Behavior over exclusive-fullscreen applications.",
+    "Whether the visual plan improves a real task without increasing distraction.",
+    "The adapter needed to connect the Python semantic controller in 057."
+  ]
+}

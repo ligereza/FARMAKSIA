@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FARMAKSIA 056 — Representation Renderer</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0c1018;
+      --panel: #131b28;
+      --panel-2: #192436;
+      --ink: #edf4ff;
+      --muted: #9cafc6;
+      --line: #2c3c55;
+      --cyan: #67e8f9;
+      --blue: #8ca7ff;
+      --violet: #c49bff;
+      --amber: #f7c873;
+      --green: #72e0ad;
+      --red: #ff8c9e;
+      --intensity: 68;
+      --motion: 1;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 0%, rgba(103,232,249,.12), transparent 34rem),
+        radial-gradient(circle at 90% 10%, rgba(196,155,255,.10), transparent 32rem),
+        var(--bg);
+      line-height: 1.45;
+    }
+    button, input { font: inherit; }
+    button {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(19,27,40,.72);
+      padding: .52rem .8rem;
+      cursor: pointer;
+      transition: border-color .18s ease, color .18s ease, background .18s ease;
+    }
+    button:hover, button:focus-visible { border-color: var(--cyan); color: var(--ink); outline: none; }
+    button[aria-pressed="true"] { color: var(--bg); background: var(--cyan); border-color: var(--cyan); }
+    .shell { width: min(1480px, calc(100% - 28px)); margin: 0 auto; padding: 24px 0 40px; }
+    .topbar { display: flex; gap: 20px; align-items: end; justify-content: space-between; margin-bottom: 18px; }
+    .eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: .14em; font-size: .72rem; font-weight: 700; }
+    h1 { margin: .15rem 0 .25rem; font-size: clamp(1.65rem, 3vw, 2.65rem); line-height: 1.05; letter-spacing: -.04em; }
+    .lede { max-width: 720px; color: var(--muted); margin: 0; }
+    .badge { border: 1px solid rgba(103,232,249,.34); color: var(--cyan); border-radius: 999px; padding: .35rem .65rem; white-space: nowrap; font-size: .82rem; }
+    .toolbar { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; padding: 12px; border: 1px solid var(--line); background: rgba(19,27,40,.78); border-radius: 18px; margin-bottom: 14px; }
+    .modebar, .micro-controls { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+    .micro-controls { justify-content: end; color: var(--muted); font-size: .8rem; }
+    .micro-controls label { display: inline-flex; align-items: center; gap: 7px; }
+    input[type="range"] { width: 110px; accent-color: var(--cyan); }
+    .statusline { min-height: 1.6rem; color: var(--muted); font-size: .9rem; margin: 0 0 14px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 14px; }
+    .stage, .inspector { border: 1px solid var(--line); border-radius: 22px; background: rgba(19,27,40,.78); overflow: hidden; }
+    .stage-head, .inspector-head { padding: 15px 17px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .stage-head strong, .inspector-head strong { letter-spacing: -.01em; }
+    .stage-head span, .inspector-head span { color: var(--muted); font-size: .78rem; }
+    .stage-body { padding: 18px; min-height: 580px; }
+    .view { display: none; animation: reveal .35s ease both; }
+    .view.active { display: block; }
+    @keyframes reveal { from { opacity: 0; transform: translateY(calc(7px * var(--motion))); } to { opacity: 1; transform: none; } }
+    .view-title { display: flex; justify-content: space-between; align-items: start; gap: 20px; margin-bottom: 16px; }
+    .view-title h2 { margin: 0; font-size: 1.35rem; }
+    .view-title p { margin: .3rem 0 0; color: var(--muted); max-width: 700px; }
+    .chip { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); border-radius: 999px; padding: .25rem .52rem; font-size: .72rem; color: var(--muted); white-space: nowrap; }
+    .chip.cyan { border-color: rgba(103,232,249,.48); color: var(--cyan); }
+    .chip.violet { border-color: rgba(196,155,255,.48); color: var(--violet); }
+    .chip.amber { border-color: rgba(247,200,115,.48); color: var(--amber); }
+    .chip.green { border-color: rgba(114,224,173,.48); color: var(--green); }
+    .panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .card { border: 1px solid var(--line); border-radius: 17px; background: linear-gradient(145deg, rgba(25,36,54,.96), rgba(16,23,35,.96)); padding: 15px; }
+    .card h3 { margin: 0 0 5px; font-size: .94rem; }
+    .card p { margin: 0; color: var(--muted); font-size: .84rem; }
+    .card .meta { color: var(--cyan); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+    .step-list { display: grid; gap: 9px; margin-top: 16px; }
+    .step { display: grid; grid-template-columns: 36px minmax(0,1fr) auto; gap: 12px; align-items: center; padding: 11px; border: 1px solid var(--line); border-radius: 14px; background: rgba(18,27,42,.82); opacity: .62; }
+    .step.active { opacity: 1; border-color: var(--cyan); box-shadow: 0 0 0 1px rgba(103,232,249,.18), 0 12px 32px rgba(0,0,0,.18); }
+    .step.done { opacity: .88; border-color: rgba(114,224,173,.45); }
+    .step-num { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: var(--panel-2); color: var(--cyan); font-weight: 700; }
+    .step strong { display: block; font-size: .9rem; }
+    .step small { color: var(--muted); }
+    .step .state { font-size: .74rem; color: var(--muted); }
+    .map-wrap { border: 1px solid var(--line); border-radius: 18px; padding: 12px; background: radial-gradient(circle at 50% 40%, rgba(103,232,249,.08), transparent 60%), rgba(10,15,24,.68); }
+    svg { display: block; width: 100%; height: auto; }
+    .map-line { stroke: var(--line); stroke-width: 2; stroke-dasharray: 7 6; }
+    .map-line.active { stroke: var(--cyan); stroke-width: 3; stroke-dasharray: none; }
+    .map-node { fill: var(--panel-2); stroke: var(--line); stroke-width: 2; }
+    .map-node.active { fill: rgba(103,232,249,.18); stroke: var(--cyan); }
+    .map-label { fill: var(--ink); font-size: 13px; font-weight: 700; }
+    .map-note { fill: var(--muted); font-size: 11px; }
+    .analogy-grid { display: grid; grid-template-columns: minmax(0,1fr) 70px minmax(0,1fr); align-items: stretch; gap: 10px; }
+    .analogy-side { display: grid; gap: 9px; }
+    .analogy-side h3 { margin: 0 0 2px; font-size: .88rem; color: var(--muted); }
+    .analogy-item { border: 1px solid var(--line); border-radius: 13px; padding: 12px; background: rgba(25,36,54,.82); }
+    .analogy-item strong { display: block; font-size: .9rem; }
+    .analogy-item span { color: var(--muted); font-size: .78rem; }
+    .bridge { display: grid; align-content: center; gap: 14px; justify-items: center; color: var(--violet); }
+    .bridge i { display: block; width: 100%; height: 1px; background: linear-gradient(90deg, transparent, var(--violet), transparent); }
+    .bridge b { font-size: 1.25rem; }
+    .prediction { margin-top: 14px; border: 1px solid rgba(114,224,173,.4); background: rgba(114,224,173,.08); border-radius: 15px; padding: 13px; }
+    .prediction strong { color: var(--green); }
+    .builder { display: grid; grid-template-columns: .8fr 1.25fr .9fr; gap: 10px; }
+    .builder-col { min-width: 0; border: 1px solid var(--line); border-radius: 16px; background: rgba(18,27,42,.82); overflow: hidden; }
+    .builder-col h3 { margin: 0; padding: 11px 13px; border-bottom: 1px solid var(--line); font-size: .82rem; color: var(--muted); }
+    .builder-col .inside { padding: 13px; }
+    .intent { color: var(--amber); font-size: .94rem; line-height: 1.55; }
+    pre { margin: 0; white-space: pre-wrap; color: #cde6ff; font: .78rem/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .code-key { color: var(--violet); }
+    .code-string { color: var(--green); }
+    .preview { border: 1px solid var(--line); border-radius: 12px; padding: 11px; background: rgba(10,15,24,.62); }
+    .preview .bar { height: 8px; border-radius: 999px; background: var(--cyan); width: 74%; margin-bottom: 10px; }
+    .preview .bar.short { width: 46%; background: var(--violet); }
+    .preview .box { height: 42px; border-radius: 9px; border: 1px solid rgba(103,232,249,.4); margin-top: 11px; }
+    .oracle { display: inline-flex; align-items: center; gap: 6px; margin-top: 13px; color: var(--green); font-size: .8rem; }
+    .oracle::before { content: "✓"; width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; background: rgba(114,224,173,.18); }
+    .inspector-body { padding: 15px; }
+    .inspector-note { color: var(--muted); font-size: .82rem; margin: 0 0 15px; }
+    dl { margin: 0; display: grid; gap: 11px; }
+    dt { color: var(--muted); font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; }
+    dd { margin: 2px 0 0; font-size: .84rem; }
+    .token-list { display: flex; flex-wrap: wrap; gap: 5px; }
+    .token { display: inline-flex; align-items: center; gap: 5px; border: 1px solid var(--line); border-radius: 7px; padding: 3px 6px; color: var(--muted); font-size: .72rem; }
+    .token::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--token, var(--cyan)); }
+    .invariant { margin-top: 16px; padding: 12px; border-radius: 14px; border: 1px dashed rgba(103,232,249,.42); color: var(--muted); font-size: .78rem; }
+    .invariant strong { color: var(--cyan); display: block; margin-bottom: 4px; }
+    .footer { margin-top: 14px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: .78rem; }
+    @media (max-width: 980px) { .layout { grid-template-columns: 1fr; } .inspector { order: -1; } .toolbar { grid-template-columns: 1fr; } .micro-controls { justify-content: start; } }
+    @media (max-width: 700px) { .topbar { align-items: start; flex-direction: column; } .panel-grid, .builder, .analogy-grid { grid-template-columns: 1fr; } .bridge { grid-template-columns: 1fr 1fr; display: grid; transform: rotate(90deg); margin: -8px 0; } .stage-body { padding: 12px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell" id="farmaxia-056">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">FARMAKSIA / 056</div>
+        <h1>Representation Renderer</h1>
+        <p class="lede">La misma escena semántica, cinco maneras de percibirla, aprenderla y construirla.</p>
+      </div>
+      <div class="badge">sin cámara · sin red · fuente fija</div>
+    </header>
+
+    <section class="toolbar" aria-label="Controles del renderer">
+      <div class="modebar" role="group" aria-label="Compuesto de representación">
+        <button type="button" data-mode="panel" aria-pressed="true">Panel</button>
+        <button type="button" data-mode="guided" aria-pressed="false">Guía / VIZZ</button>
+        <button type="button" data-mode="map" aria-pressed="false">Mapa</button>
+        <button type="button" data-mode="analogy" aria-pressed="false">Analogía / X-ANA-X</button>
+        <button type="button" data-mode="builder" aria-pressed="false">Constructor / CODE-INE</button>
+      </div>
+      <div class="micro-controls">
+        <label>intensidad <input id="intensity" type="range" min="25" max="100" value="68"></label>
+        <label>paso <input id="step" type="range" min="0" max="3" value="1"></label>
+        <label><input id="motion" type="checkbox" checked> movimiento</label>
+        <button type="button" id="reset">restaurar</button>
+      </div>
+    </section>
+
+    <p class="statusline" id="status" aria-live="polite"></p>
+
+    <div class="layout">
+      <section class="stage" aria-label="Renderer de representación">
+        <div class="stage-head"><strong id="stage-label">Panel base</strong><span>la fuente semántica permanece constante</span></div>
+        <div class="stage-body">
+          <section class="view active" data-view="panel">
+            <div class="view-title"><div><h2>Panel completo</h2><p>Inventario directo: todo está visible y cada elemento tiene el mismo peso inicial.</p></div><span class="chip">baseline</span></div>
+            <div class="panel-grid">
+              <article class="card" data-semantic-id="objective"><div class="meta">objetivo</div><h3>Validar el flujo de mensajes</h3><p>Una cola recibe mensajes y un worker los procesa sin perder orden.</p></article>
+              <article class="card" data-semantic-id="queue"><div class="meta">estructura</div><h3>Cola de mensajes</h3><p>Espera, ordena y entrega cada mensaje al worker disponible.</p></article>
+              <article class="card" data-semantic-id="worker"><div class="meta">acción</div><h3>Worker</h3><p>Consume un mensaje, ejecuta la regla y devuelve un resultado.</p></article>
+              <article class="card" data-semantic-id="failure"><div class="meta">ruptura</div><h3>Mensaje inválido</h3><p>El flujo se detiene para que el error pueda inspeccionarse.</p></article>
+              <article class="card" data-semantic-id="verification"><div class="meta">prueba</div><h3>Oracle de verificación</h3><p>Confirma que todos los mensajes llegaron en el orden esperado.</p></article>
+              <article class="card" data-semantic-id="next"><div class="meta">siguiente</div><h3>Construir la interfaz</h3><p>Convertir la intención en una vista visible y comprobable.</p></article>
+            </div>
+          </section>
+
+          <section class="view" data-view="guided">
+            <div class="view-title"><div><h2>Guía de operador</h2><p>VIZZ dirige el recorrido: un foco activo, un contexto persistente y un siguiente paso.</p></div><span class="chip cyan">VIZZ / orientar</span></div>
+            <div class="card"><div class="meta">ruta visual</div><h3 id="guided-head">Primero fija el objetivo</h3><p id="guided-copy">Antes de tocar la cola, entiende qué debe verificarse al final.</p></div>
+            <div class="step-list" id="guided-steps"></div>
+          </section>
+
+          <section class="view" data-view="map">
+            <div class="view-title"><div><h2>Mapa de relaciones</h2><p>La posición y las líneas explican qué causa, qué consume y qué verifica a qué.</p></div><span class="chip cyan">VIZZ + X-ANA-X</span></div>
+            <div class="map-wrap"><svg viewBox="0 0 820 420" role="img" aria-label="Mapa de relaciones entre objetivo, cola, worker, error y verificación">
+              <line class="map-line" data-relation="objective-queue" x1="410" y1="74" x2="205" y2="184"></line>
+              <line class="map-line" data-relation="queue-worker" x1="205" y1="226" x2="410" y2="314"></line>
+              <line class="map-line" data-relation="worker-failure" x1="470" y1="314" x2="660" y2="226"></line>
+              <line class="map-line" data-relation="worker-verification" x1="440" y1="350" x2="290" y2="386"></line>
+              <line class="map-line" data-relation="verification-next" x1="530" y1="386" x2="660" y2="350"></line>
+              <g data-node="objective"><circle class="map-node" cx="410" cy="54" r="34"></circle><text class="map-label" x="410" y="50" text-anchor="middle">objetivo</text><text class="map-note" x="410" y="66" text-anchor="middle">validar</text></g>
+              <g data-node="queue"><circle class="map-node" cx="205" cy="205" r="42"></circle><text class="map-label" x="205" y="201" text-anchor="middle">cola</text><text class="map-note" x="205" y="218" text-anchor="middle">ordena</text></g>
+              <g data-node="worker"><circle class="map-node" cx="410" cy="334" r="42"></circle><text class="map-label" x="410" y="330" text-anchor="middle">worker</text><text class="map-note" x="410" y="347" text-anchor="middle">procesa</text></g>
+              <g data-node="failure"><circle class="map-node" cx="660" cy="205" r="42"></circle><text class="map-label" x="660" y="201" text-anchor="middle">ruptura</text><text class="map-note" x="660" y="218" text-anchor="middle">rechaza</text></g>
+              <g data-node="verification"><circle class="map-node" cx="410" cy="386" r="28"></circle><text class="map-label" x="410" y="390" text-anchor="middle">oracle</text></g>
+              <g data-node="next"><circle class="map-node" cx="660" cy="350" r="42"></circle><text class="map-label" x="660" y="346" text-anchor="middle">construir</text><text class="map-note" x="660" y="363" text-anchor="middle">siguiente</text></g>
+            </svg></div>
+            <div class="prediction"><strong>Relación declarada:</strong> la cola entrega al worker; el oracle verifica el resultado. El mapa no inventa una relación entre “ruptura” y “éxito”.</div>
+          </section>
+
+          <section class="view" data-view="analogy">
+            <div class="view-title"><div><h2>Analogía verificable</h2><p>X-ANA-X usa una estructura conocida para hacer manipulable una estructura nueva.</p></div><span class="chip violet">X-ANA-X / traducir</span></div>
+            <div class="analogy-grid">
+              <div class="analogy-side"><h3>fuente conocida · fila física</h3><div class="analogy-item" data-semantic-id="source-order"><strong>La primera persona espera primero</strong><span>relación: orden de llegada</span></div><div class="analogy-item" data-semantic-id="source-service"><strong>Un operador atiende una persona</strong><span>relación: consumo y resultado</span></div><div class="analogy-item" data-semantic-id="source-break"><strong>Una persona con datos inválidos vuelve atrás</strong><span>relación: ruptura explícita</span></div></div>
+              <div class="bridge" aria-hidden="true"><i></i><b>↔</b><i></i></div>
+              <div class="analogy-side"><h3>objetivo · cola computacional</h3><div class="analogy-item" data-semantic-id="queue-order"><strong>El primer mensaje entra primero</strong><span>relación conservada: orden</span></div><div class="analogy-item" data-semantic-id="queue-service"><strong>El worker consume el mensaje</strong><span>relación conservada: procesamiento</span></div><div class="analogy-item" data-semantic-id="queue-break"><strong>El oracle rechaza el mensaje inválido</strong><span>relación conservada: ruptura</span></div></div>
+            </div>
+            <div class="prediction"><strong>Predicción:</strong> si llega A antes que B, el oracle debe observar A antes que B. <span id="prediction-state">La relación está lista para probarse.</span></div>
+          </section>
+
+          <section class="view" data-view="builder">
+            <div class="view-title"><div><h2>Constructor de interfaz</h2><p>CODE-INE mantiene juntas intención, estructura, código, preview y prueba.</p></div><span class="chip amber">CODE-INE / construir</span></div>
+            <div class="builder">
+              <div class="builder-col"><h3>01 · intención</h3><div class="inside"><p class="intent">“Quiero una interfaz donde el operador pueda ver el flujo, detectar el mensaje inválido y verificar el orden.”</p><span class="chip amber">objetivo declarado</span></div></div>
+              <div class="builder-col"><h3>02 · código inspeccionable</h3><div class="inside"><pre><span class="code-key">const</span> plan = {
+  <span class="code-key">focus</span>: <span class="code-string">"message-flow"</span>,
+  <span class="code-key">context</span>: <span class="code-string">"preserve"</span>,
+  <span class="code-key">error</span>: <span class="code-string">"visible"</span>,
+  <span class="code-key">oracle</span>: <span class="code-string">"ordered-delivery"</span>
+};</pre><span class="chip amber">no se ejecuta en este experimento</span></div></div>
+              <div class="builder-col"><h3>03 · preview + oracle</h3><div class="inside"><div class="preview"><div class="bar"></div><div class="bar short"></div><div class="box"></div></div><div class="oracle">estructura aceptada por el oracle local</div></div></div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="inspector" aria-label="Inspector del RepresentationPlan">
+        <div class="inspector-head"><strong>RepresentationPlan</strong><span id="plan-id">RP-056-BASE</span></div>
+        <div class="inspector-body">
+          <p class="inspector-note">El renderer cambia la forma; la escena semántica permanece bloqueada.</p>
+          <dl>
+            <div><dt>compuesto</dt><dd id="plan-compound">baseline</dd></div>
+            <div><dt>prioridad</dt><dd id="plan-priority">inventario completo</dd></div>
+            <div><dt>revelación</dt><dd id="plan-disclosure">todo visible</dd></div>
+            <div><dt>ritmo</dt><dd id="plan-tempo">estable</dd></div>
+            <div><dt>contexto periférico</dt><dd id="plan-periphery">mínimo</dd></div>
+            <div><dt>tokens activos</dt><dd><div class="token-list" id="plan-tokens"></div></dd></div>
+          </dl>
+          <div class="invariant"><strong>Invariante de fuente</strong>6 entidades · 5 relaciones · 1 objetivo · 1 predicción. Sólo cambia la representación.</div>
+        </div>
+      </aside>
+    </div>
+
+    <footer class="footer"><span>Experimento local · no contiene datos humanos</span><span>Fuente: escena semántica sintética declarada</span></footer>
+  </main>
+
+  <script>
+    const SCENE = Object.freeze({
+      id: 'message-flow-056',
+      objective: 'validate-message-flow',
+      entities: ['objective', 'queue', 'worker', 'failure', 'verification', 'next'],
+      relations: ['objective-queue', 'queue-worker', 'worker-failure', 'worker-verification', 'verification-next'],
+      steps: [
+        {title: 'Fijar el objetivo', copy: 'Entender qué debe verificarse al final.', state: 'ancla'},
+        {title: 'Seguir el mensaje', copy: 'Ver cómo entra y espera en la cola.', state: 'recorrido'},
+        {title: 'Observar el worker', copy: 'Relacionar consumo, acción y resultado.', state: 'acción'},
+        {title: 'Confirmar el orden', copy: 'Usar el oracle para verificar A antes que B.', state: 'prueba'}
+      ]
+    });
+    const REPRESENTATION_PLAN_SCHEMA = Object.freeze({
+      semantic_priority: 'declared',
+      disclosure_layers: 'declared',
+      spatial_anchors: 'declared',
+      visual_tokens: 'declared',
+      motion_policy: 'declared',
+      tempo_policy: 'declared',
+      peripheral_context: 'declared',
+      user_controls: 'declared',
+      reversible_actions: 'declared'
+    });
+    const PLANS = {
+      panel: {label: 'Panel base', id: 'RP-056-BASE', compound: 'baseline', priority: 'inventario completo', disclosure: 'todo visible', tempo: 'estable', periphery: 'mínimo', tokens: [['estructura','cyan'],['detalle','blue'],['comparación','green']]},
+      guided: {label: 'Guía de operador', id: 'RP-056-VIZZ', compound: 'VIZZ / orientar', priority: 'siguiente acción', disclosure: 'progresiva', tempo: 'pausado y secuencial', periphery: 'objetivo persistente', tokens: [['foco','cyan'],['paso','blue'],['estado','green']]},
+      map: {label: 'Mapa relacional', id: 'RP-056-MAP', compound: 'VIZZ + X-ANA-X', priority: 'relaciones causales', disclosure: 'estructura primero', tempo: 'espacial', periphery: 'nodos conectados', tokens: [['relación','violet'],['causa','amber'],['oracle','green']]},
+      analogy: {label: 'Analogía verificable', id: 'RP-056-XANAX', compound: 'X-ANA-X / traducir', priority: 'transferencia', disclosure: 'fuente ↔ objetivo', tempo: 'comparativo', periphery: 'ruptura declarada', tokens: [['fuente','violet'],['mapeo','cyan'],['predicción','green']]},
+      builder: {label: 'Constructor de interfaz', id: 'RP-056-CODEINE', compound: 'CODE-INE / construir', priority: 'intención → resultado', disclosure: 'capas de construcción', tempo: 'iterativo', periphery: 'oracle persistente', tokens: [['intención','amber'],['código','violet'],['verificación','green']]}
+    };
+    const state = { mode: 'panel', step: 1, intensity: 68, motion: true };
+    const root = document.getElementById('farmaxia-056');
+    const $ = selector => root.querySelector(selector);
+    const $$ = selector => Array.from(root.querySelectorAll(selector));
+    function escapeText(value) { return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch])); }
+    function renderSteps() {
+      $('#guided-steps').innerHTML = SCENE.steps.map((step, index) => `<div class="step ${index === state.step ? 'active' : ''} ${index < state.step ? 'done' : ''}" data-semantic-id="step-${index}"><div class="step-num">${index + 1}</div><div><strong>${escapeText(step.title)}</strong><small>${escapeText(step.copy)}</small></div><span class="state">${escapeText(index === state.step ? 'mirar aquí' : step.state)}</span></div>`).join('');
+      $('#guided-head').textContent = SCENE.steps[state.step].title;
+      $('#guided-copy').textContent = SCENE.steps[state.step].copy;
+    }
+    function renderMap() {
+      $$('[data-node]').forEach(node => node.classList.toggle('active', node.dataset.node === SCENE.steps[state.step].state || (state.step === 0 && node.dataset.node === 'objective') || (state.step === 1 && node.dataset.node === 'queue') || (state.step === 2 && node.dataset.node === 'worker') || (state.step === 3 && ['verification','next'].includes(node.dataset.node))));
+      $$('[data-relation]').forEach(line => line.classList.toggle('active', (state.step === 0 && line.dataset.relation === 'objective-queue') || (state.step === 1 && line.dataset.relation === 'queue-worker') || (state.step === 2 && line.dataset.relation === 'worker-failure') || (state.step === 3 && ['worker-verification','verification-next'].includes(line.dataset.relation))));
+    }
+    function renderPlan() {
+      const plan = PLANS[state.mode];
+      root.style.setProperty('--intensity', state.intensity);
+      root.style.setProperty('--motion', state.motion ? '1' : '0');
+      $('#stage-label').textContent = plan.label;
+      $('#plan-id').textContent = plan.id;
+      $('#plan-compound').textContent = plan.compound;
+      $('#plan-priority').textContent = plan.priority;
+      $('#plan-disclosure').textContent = plan.disclosure;
+      $('#plan-tempo').textContent = plan.tempo;
+      $('#plan-periphery').textContent = plan.periphery;
+      $('#plan-tokens').innerHTML = plan.tokens.map(([label, color]) => `<span class="token" style="--token:var(--${color})">${escapeText(label)}</span>`).join('');
+      $$('.view').forEach(view => view.classList.toggle('active', view.dataset.view === state.mode));
+      $$('[data-mode]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === state.mode)));
+      $('#status').textContent = `${plan.label}: ${plan.priority}. La fuente sigue siendo ${SCENE.entities.length} entidades y ${SCENE.relations.length} relaciones; paso ${state.step + 1} de ${SCENE.steps.length}.`;
+      $('#step').value = state.step;
+      $('#intensity').value = state.intensity;
+      $('#motion').checked = state.motion;
+      renderSteps();
+      renderMap();
+    }
+    $$('[data-mode]').forEach(button => button.addEventListener('click', () => { state.mode = button.dataset.mode; renderPlan(); }));
+    $('#step').addEventListener('input', event => { state.step = Number(event.target.value); renderPlan(); });
+    $('#intensity').addEventListener('input', event => { state.intensity = Number(event.target.value); renderPlan(); });
+    $('#motion').addEventListener('change', event => { state.motion = event.target.checked; renderPlan(); });
+    $('#reset').addEventListener('click', () => { state.mode = 'panel'; state.step = 1; state.intensity = 68; state.motion = true; renderPlan(); });
+    renderPlan();
+  </script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:056-farmaxia-representation-renderer",
+  "status": "exploratory",
+  "purpose": "Render one fixed semantic scene through five declarative representation policies without camera, network, human data, or code execution.",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_representation_plan_and_kill_tests"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "checks_renderer_contract_and_semantic_invariants",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-056-readme",
+      "type": "document",
+      "path": "README.md",
+      "role": "experiment_protocol",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-056-renderer",
+      "type": "software",
+      "path": "renderer.html",
+      "role": "local_multi-representation_renderer",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-056-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "privacy_and_representation_kill_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-056-runner",
+      "type": "software",
+      "path": "run_experiment.py",
+      "role": "semantic_invariant_runner",
+      "authority": "human_declared_tool"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-056-contract-activity",
+      "type": "activity",
+      "label": "verify five representations preserve one declared semantic scene",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-056-readme",
+        "farmaxia:vizz-056-renderer",
+        "farmaxia:vizz-056-contract",
+        "farmaxia:vizz-056-runner"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-056-query",
+      "question": "Can the same semantic scene be rendered as panel, guided path, relation map, analogy, and construction flow without changing its declared entities or relations?",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:vizz-056-renderer",
+        "farmaxia:vizz-056-contract",
+        "farmaxia:vizz-056-runner"
+      ]
+    }
+  ],
+  "unknowns": [
+    "Whether a human learns faster in any representation",
+    "Whether the analogy improves transfer",
+    "Which intensity and tempo are preferred during sustained work"
+  ]
+}

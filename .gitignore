@@ -14,6 +14,10 @@ venv/
 .vizz-dual-audit.json
 .vizz-trace*.jsonl
 .vizz-binocular-quality*.jsonl
+.vizz-quality-audit*.json
 *.log
 dist/
 build/
+bin/
+obj/
+experiments/058-farmaxia-gpu-composition-runtime/inspect/

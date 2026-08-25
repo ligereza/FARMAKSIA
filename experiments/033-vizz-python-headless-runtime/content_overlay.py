@@ -63,19 +63,26 @@ if os.name == "nt":
 class FocusOverlay:
     """A black translucent vignette that leaves a gaze-centered region clear."""
 
-    def __init__(self, width: int, height: int, alpha: int = 30, radius_px: int = 260) -> None:
+    def __init__(self, width: int, height: int, alpha: int = 30, radius_px: int = 260, origin: tuple[int, int] = (0, 0), diagnostic_marker: bool = False) -> None:
         if os.name != "nt":
             raise OverlayUnavailable("the native click-through layer currently targets Windows")
         if width <= 0 or height <= 0:
             raise ValueError("overlay dimensions must be positive")
         self.width = int(width)
         self.height = int(height)
+        self.origin_x = int(origin[0])
+        self.origin_y = int(origin[1])
+        self.diagnostic_marker = bool(diagnostic_marker)
         self.alpha = max(0, min(255, int(alpha)))
         self.radius_px = max(32, int(radius_px))
         self.user32 = ctypes.windll.user32
         self.gdi32 = ctypes.windll.gdi32
         self.user32.DefWindowProcW.argtypes = [wintypes.HWND, wintypes.UINT, wintypes.WPARAM, wintypes.LPARAM]
         self.user32.DefWindowProcW.restype = ctypes.c_ssize_t
+        self.user32.SetWindowPos.argtypes = [wintypes.HWND, wintypes.HWND, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.INT, wintypes.UINT]
+        self.user32.SetWindowPos.restype = wintypes.BOOL
+        self.user32.ShowWindow.argtypes = [wintypes.HWND, ctypes.c_int]
+        self.user32.ShowWindow.restype = wintypes.BOOL
         self.hinstance = ctypes.windll.kernel32.GetModuleHandleW(None)
         self.class_name = f"FARMAXIA_VIZZ_LAYER_{id(self):x}"
         self._wndproc = WNDPROC(self._window_proc)
@@ -87,7 +94,7 @@ class FocusOverlay:
             raise OverlayUnavailable("could not register the transparent layer")
         style = 0x80000000  # WS_POPUP
         extended = 0x00080000 | 0x00000020 | 0x00000080 | 0x08000000  # layered, transparent, tool, no activate
-        self.hwnd = self.user32.CreateWindowExW(extended, self.class_name, "FARMAXIA_CONTENT_LAYER", style, 0, 0, self.width, self.height, None, None, self.hinstance, None)
+        self.hwnd = self.user32.CreateWindowExW(extended, self.class_name, "FARMAXIA_CONTENT_LAYER", style, self.origin_x, self.origin_y, self.width, self.height, None, None, self.hinstance, None)
         if not self.hwnd:
             self.user32.UnregisterClassW(self.class_name, self.hinstance)
             raise OverlayUnavailable("could not create the content layer")
@@ -124,16 +131,33 @@ class FocusOverlay:
         alpha = np.asarray(np.rint(self.alpha * (1.0 - clear)), dtype=np.uint8)
         image = np.zeros((self.height, self.width, 4), dtype=np.uint8)
         image[:, :, 3] = alpha
+        if self.diagnostic_marker:
+            marker_distance = np.sqrt(distance2)
+            marker = np.abs(marker_distance - 18.0) <= 3.0
+            image[marker, 0:3] = 255
+            image[marker, 3] = 230
         ctypes.memmove(self.bits, image.ctypes.data, image.nbytes)
-        destination = POINT(0, 0)
+        destination = POINT(self.origin_x, self.origin_y)
         size = SIZE(self.width, self.height)
         source = POINT(0, 0)
         if not self.user32.UpdateLayeredWindow(self.hwnd, None, ctypes.byref(destination), ctypes.byref(size), self.memdc, ctypes.byref(source), 0, ctypes.byref(self._blend), 2):
             raise OverlayUnavailable("UpdateLayeredWindow failed")
+        # Reassert topmost on every frame. A normal application opened after
+        # the overlay must not cover the layer; the layer still remains
+        # click-through and does not activate itself.
+        flags = 0x0010 | 0x0040 | 0x0080 | 0x0400  # NOACTIVATE | SHOWWINDOW | NOOWNERZORDER | NOSENDCHANGING
+        if not self.user32.SetWindowPos(self.hwnd, wintypes.HWND(-1), self.origin_x, self.origin_y, self.width, self.height, flags):
+            raise OverlayUnavailable("SetWindowPos failed while asserting topmost overlay")
         if not self._visible:
-            flags = 0x0010 | 0x0040 | 0x0080  # SWP_NOACTIVATE | SWP_SHOWWINDOW | SWP_NOOWNERZORDER
-            self.user32.SetWindowPos(self.hwnd, -1, 0, 0, self.width, self.height, flags)
+            self.user32.ShowWindow(self.hwnd, 4)  # SW_SHOWNOACTIVATE; layered windows need an explicit show call.
             self._visible = True
+
+    def pump_messages(self) -> None:
+        """Keep the native window alive without taking focus from the app below."""
+        message = wintypes.MSG()
+        while self.user32.PeekMessageW(ctypes.byref(message), self.hwnd, 0, 0, 1):  # PM_REMOVE
+            self.user32.TranslateMessage(ctypes.byref(message))
+            self.user32.DispatchMessageW(ctypes.byref(message))
 
     def hide(self) -> None:
         if self._visible:

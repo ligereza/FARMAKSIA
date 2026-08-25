@@ -1,0 +1,79 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:057-farmaxia-overlay-runtime",
+  "status": "exploratory",
+  "purpose": "Verify a reversible no-camera overlay over existing applications using a declarative representation plan.",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_overlay_contract_and_smoke_checks",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-057-runtime",
+      "type": "software",
+      "path": "run_overlay.py",
+      "role": "no-camera-transparent-overlay-runtime",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-057-plan",
+      "type": "software",
+      "path": "overlay_runtime.py",
+      "role": "representation-plan-contract-and-pointer-adapter",
+      "authority": "experiment_defined"
+    },
+    {
+      "id": "farmaxia:vizz-057-contract",
+      "type": "software",
+      "path": "run_contract_test.py",
+      "role": "privacy-and-reversibility-contract",
+      "authority": "human_declared_tool"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-057-contract-activity",
+      "type": "activity",
+      "label": "verify a click-through reversible overlay without camera or network",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-057-runtime",
+        "farmaxia:vizz-057-plan",
+        "farmaxia:vizz-057-contract"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-057-query",
+      "question": "Can FARMAXIA place a reversible representation layer over an existing desktop without camera, network, code execution or input interception?",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:vizz-057-runtime",
+        "farmaxia:vizz-057-plan",
+        "farmaxia:vizz-057-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "The pointer is only a temporary probe signal and is not gaze ground truth.",
+    "The native layer is limited to Windows in this prototype.",
+    "The underlying application remains the source of truth."
+  ],
+  "kill_tests": [
+    "The layer must not intercept mouse or keyboard input.",
+    "The layer must be removable with Ctrl+C.",
+    "The runtime must not request camera or network access.",
+    "The representation plan must be reversible and expirable."
+  ],
+  "unknowns": [
+    "Whether a GPU-native backend is required for sustained full-desktop effects.",
+    "Which application semantic adapter should be implemented first.",
+    "Whether focus adaptation improves task performance for a human user."
+  ]
+}
