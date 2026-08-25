@@ -53,7 +53,7 @@ def main() -> None:
     require("providers=[\"CUDAExecutionProvider\"]" in tracker, "tracker does not request CUDA only", failures)
     require("session.disable_cpu_ep_fallback" in tracker, "CPU fallback kill switch is missing", failures)
     require("CPUExecutionProvider" not in tracker, "tracker names a CPU provider", failures)
-    require("pose" in tracker and "eye_roll" in tracker, "tracker does not expose pose diagnostics", failures)
+    require("pose" in tracker and "eye_roll" in tracker and "def height" in tracker, "tracker does not expose complete pose diagnostics", failures)
     require('"raw_video": False' in profile, "profile permits raw video persistence", failures)
     require("style = 0x80000000" in overlay, "overlay is not a borderless popup layer", failures)
     require("extended = 0x00080000" in overlay, "overlay is missing layered click-through flags", failures)
