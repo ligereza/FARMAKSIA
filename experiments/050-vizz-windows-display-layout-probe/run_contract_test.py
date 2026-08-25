@@ -12,8 +12,8 @@ def main() -> None:
     failures: list[str] = []
     if snapshot.screen_content_mutated or snapshot.camera_started or snapshot.network_used:
         failures.append("probe crossed its read-only boundary")
-    if snapshot.physical_geometry_status != "UNKNOWN":
-        failures.append("logical desktop data was incorrectly promoted to physical geometry")
+    if snapshot.physical_geometry_status not in {"UNKNOWN", "PARTIAL_EDID_ONLY"}:
+        failures.append("logical desktop data was incorrectly promoted to full physical geometry")
 
     if os.name == "nt":
         if snapshot.status != "VALID":
@@ -31,6 +31,8 @@ def main() -> None:
             work_left, work_top, work_right, work_bottom = monitor.work_rect
             if work_right <= work_left or work_bottom <= work_top:
                 failures.append(f"invalid work rectangle for {monitor.device_name}")
+            if monitor.as_dict()["physical_plane"] is not None:
+                failures.append(f"physical plane was fabricated for {monitor.device_name}")
         if not snapshot.layout_version:
             failures.append("missing deterministic layout version")
     else:

@@ -11,9 +11,10 @@ snapshot recibe una versión determinista; si cambia la configuración lógica,
 una calibración anterior deberá quedar obsoleta o revalidarse.
 
 El probe no transforma esos rectángulos, el DPI ni el identificador del monitor
-en un plano físico 3D. La salida mantiene `physical_geometry_status=UNKNOWN`
-hasta que exista una medición o calibración explícita de tamaño, orientación y
-pose del monitor respecto de los ojos/cámara.
+en un plano físico 3D. Puede leer dimensiones declaradas por EDID cuando hay
+checksum válido y consenso entre candidatos, pero la salida queda en
+`PARTIAL_EDID_ONLY` hasta tener orientación y pose del monitor respecto de los
+ojos/cámara.
 
 ## Evidencia
 
@@ -28,8 +29,10 @@ laboratorio:
 - una región lógica sin monitor entre ambos rectángulos;
 - orientación válida para el primario y `UNKNOWN` para el secundario.
 
-Esto confirma que el sistema operativo entrega identidad y coordenadas
-lógicas útiles, pero no prueba distancia ojo-pantalla ni permite inferirla.
+Una auditoría adicional del registro encontró bloques EDID con checksum válido
+y dimensiones concordantes: `DISPLAY1=38×21 cm` y `DISPLAY2=70×39 cm`. Esto
+añade una escala de tamaño declarada que puede alimentar la auto-geometría,
+pero no prueba distancia ojo-pantalla ni orientación del plano.
 
 ## Base técnica
 

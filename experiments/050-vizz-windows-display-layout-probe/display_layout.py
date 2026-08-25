@@ -15,6 +15,11 @@ import os
 from dataclasses import asdict, dataclass
 from typing import Any
 
+try:
+    import winreg
+except ImportError:  # pragma: no cover - non-Windows fallback
+    winreg = None
+
 
 MONITORINFOF_PRIMARY = 1
 ENUM_CURRENT_SETTINGS = -1
@@ -153,6 +158,45 @@ def _read_orientation(user32: Any, device_name: str) -> tuple[int | None, str]:
     return value, "EnumDisplaySettingsExW"
 
 
+def _read_edid_dimensions(device_id: str | None) -> tuple[int | None, int | None, str, int]:
+    """Read manufacturer-reported EDID dimensions with a base-block checksum."""
+
+    if os.name != "nt" or winreg is None or not device_id:
+        return None, None, "UNKNOWN_NO_DEVICE_ID", 0
+    parts = device_id.split("\\")
+    if len(parts) < 2 or not parts[1]:
+        return None, None, "UNKNOWN_INVALID_DEVICE_ID", 0
+    vendor = parts[1]
+    root_path = rf"SYSTEM\CurrentControlSet\Enum\DISPLAY\{vendor}"
+    candidates: list[tuple[int, int]] = []
+    try:
+        with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, root_path) as vendor_key:
+            instance_count = winreg.QueryInfoKey(vendor_key)[0]
+            instance_names = [winreg.EnumKey(vendor_key, index) for index in range(instance_count)]
+        for instance_name in instance_names:
+            params_path = f"{root_path}\\{instance_name}\\Device Parameters"
+            try:
+                with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, params_path) as params_key:
+                    raw_edid, _value_type = winreg.QueryValueEx(params_key, "EDID")
+            except (FileNotFoundError, OSError):
+                continue
+            edid = bytes(raw_edid)
+            if len(edid) < 128 or sum(edid[:128]) % 256 != 0:
+                continue
+            width_cm, height_cm = int(edid[21]), int(edid[22])
+            if width_cm > 0 and height_cm > 0:
+                candidates.append((width_cm, height_cm))
+    except (FileNotFoundError, OSError):
+        return None, None, "UNKNOWN_EDID_UNAVAILABLE", 0
+    if not candidates:
+        return None, None, "UNKNOWN_NO_VALID_EDID", 0
+    unique = sorted(set(candidates))
+    if len(unique) > 1:
+        return None, None, "AMBIGUOUS_EDID_DIMENSIONS", len(candidates)
+    status = "CONSENSUS_UNIQUE" if len(candidates) == 1 else "CONSENSUS_MULTIPLE"
+    return unique[0][0], unique[0][1], status, len(candidates)
+
+
 @dataclass(frozen=True)
 class MonitorRecord:
     device_name: str
@@ -166,6 +210,10 @@ class MonitorRecord:
     dpi_source: str
     orientation: int | None
     orientation_source: str
+    edid_width_cm: int | None
+    edid_height_cm: int | None
+    edid_status: str
+    edid_candidate_count: int
 
     def as_dict(self) -> dict[str, Any]:
         payload = asdict(self)
@@ -173,7 +221,11 @@ class MonitorRecord:
         payload["work_rect"] = list(self.work_rect)
         width, height = _rect_size(self.monitor_rect)
         payload["logical_size_px"] = [width, height]
-        payload["physical_size_m"] = None
+        payload["physical_size_m"] = (
+            [self.edid_width_cm / 100.0, self.edid_height_cm / 100.0]
+            if self.edid_width_cm is not None and self.edid_height_cm is not None
+            else None
+        )
         payload["physical_plane"] = None
         return payload
 
@@ -221,8 +273,19 @@ def _unknown(reason: str) -> DisplayLayoutSnapshot:
 def _version(monitors: tuple[MonitorRecord, ...], virtual_rect: tuple[int, int, int, int]) -> str:
     canonical = {
         "virtual_screen_rect": list(virtual_rect),
-        "monitors": [monitor.as_dict() for monitor in monitors],
+        "monitors": [],
     }
+    for monitor in monitors:
+        descriptor = monitor.as_dict()
+        # The logical layout version must not change merely because EDID
+        # metadata becomes available; physical metadata has its own status.
+        descriptor["physical_size_m"] = None
+        descriptor["physical_plane"] = None
+        descriptor.pop("edid_width_cm", None)
+        descriptor.pop("edid_height_cm", None)
+        descriptor.pop("edid_status", None)
+        descriptor.pop("edid_candidate_count", None)
+        canonical["monitors"].append(descriptor)
     encoded = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()[:16]
 
@@ -285,6 +348,7 @@ def probe_windows_layout() -> DisplayLayoutSnapshot:
         device_string, device_id = _device_details(user32, device_name)
         dpi_x, dpi_y, dpi_source = _read_dpi(shcore, monitor_handle)
         orientation, orientation_source = _read_orientation(user32, device_name)
+        edid_width_cm, edid_height_cm, edid_status, edid_candidate_count = _read_edid_dimensions(device_id)
         records.append(
             MonitorRecord(
                 device_name=device_name,
@@ -298,6 +362,10 @@ def probe_windows_layout() -> DisplayLayoutSnapshot:
                 dpi_source=dpi_source,
                 orientation=orientation,
                 orientation_source=orientation_source,
+                edid_width_cm=edid_width_cm,
+                edid_height_cm=edid_height_cm,
+                edid_status=edid_status,
+                edid_candidate_count=edid_candidate_count,
             )
         )
         return 1
@@ -320,6 +388,10 @@ def probe_windows_layout() -> DisplayLayoutSnapshot:
         layout_version=_version(ordered, virtual_rect),
         virtual_screen_rect=virtual_rect,
         monitors=ordered,
-        physical_geometry_status="UNKNOWN",
+        physical_geometry_status=(
+            "PARTIAL_EDID_ONLY"
+            if any(record.edid_status.startswith("CONSENSUS") for record in ordered)
+            else "UNKNOWN"
+        ),
         unknown_reason=None,
     )
