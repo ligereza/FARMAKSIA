@@ -359,6 +359,23 @@ class EyeCameraSimulator:
         screen_x, _ = self._project_xz(pose.z, 0.0, bounds, pose.z)
         lens_x, _ = self._project_xz(0.0, 0.0, bounds, pose.z)
         retina_x, _ = self._project_xz(-optics.retina, 0.0, bounds, pose.z)
+        camera_top = top + 42
+        camera_bottom = top + height - 28
+        self.canvas.create_rectangle(
+            lens_x - 20,
+            camera_top,
+            retina_x + 24,
+            camera_bottom,
+            outline="#64748b",
+            width=2,
+        )
+        self.canvas.create_text(
+            (lens_x + retina_x) / 2,
+            camera_top + 10,
+            text="CÁMARA / OJO REDUCIDO",
+            fill="#cbd5e1",
+            font=("Segoe UI", 7, "bold"),
+        )
         self.canvas.create_oval(lens_x - 16, top + 48, retina_x + 18, top + height - 34, outline="#334155", dash=(5, 3))
         self.canvas.create_arc(lens_x - 15, axis_y - 28, lens_x + 7, axis_y + 28, start=270, extent=180, outline="#cbd5e1", width=2)
         self.canvas.create_line(screen_x, top + 35, screen_x, top + height - 18, fill="#60a5fa", width=2)
@@ -366,9 +383,8 @@ class EyeCameraSimulator:
         self.canvas.create_oval(lens_x - 7, axis_y - 25, lens_x + 7, axis_y + 25, outline="#f8fafc", width=2)
         self.canvas.create_line(retina_x, top + 35, retina_x, top + height - 18, fill="#f87171", width=2)
         self.canvas.create_text(screen_x, top + height - 3, text="pantalla", fill="#93c5fd", anchor="s", font=("Segoe UI", 7))
-        self.canvas.create_text(lens_x, top + height - 3, text="pupila + lente", fill="#e2e8f0", anchor="s", font=("Segoe UI", 7))
-        self.canvas.create_text(retina_x, top + height - 3, text="retina", fill="#fca5a5", anchor="s", font=("Segoe UI", 7))
-        self.canvas.create_text(lens_x + 10, top + 44, text="ojo reducido", fill="#94a3b8", anchor="sw", font=("Segoe UI", 7))
+        self.canvas.create_text(lens_x, top + height - 3, text="apertura + lente", fill="#e2e8f0", anchor="s", font=("Segoe UI", 7))
+        self.canvas.create_text(retina_x, top + height - 3, text="retina / sensor", fill="#fca5a5", anchor="s", font=("Segoe UI", 7))
 
         source_y = axis_y - object_height * min(170.0, (height - 70.0) / 0.28)
         self.canvas.create_oval(screen_x - 5, source_y - 5, screen_x + 5, source_y + 5, fill="#ffffff", outline="#60a5fa")
@@ -384,8 +400,26 @@ class EyeCameraSimulator:
                 self.canvas.create_line(lens_x, aperture_y, retina_x, retina_y, fill=optics.color, width=2, arrow=tk.LAST)
                 if focus_z > optics.retina + 1e-9:
                     self.canvas.create_line(retina_x, retina_y, focus_x, focus_ray_y, fill=optics.color, width=1, dash=(3, 3))
+        self.canvas.create_line(
+            focus_x,
+            camera_top + 18,
+            focus_x,
+            camera_bottom - 10,
+            fill="#f59e0b",
+            width=2,
+            dash=(5, 3),
+        )
         self.canvas.create_oval(focus_x - 5, focus_y - 5, focus_x + 5, focus_y + 5, fill=optics.color, outline="#ffffff")
-        self.canvas.create_text(focus_x, top + 8, text=f"foco {focus_z * 1000:.2f} mm", fill=optics.color, anchor="ne", font=("Consolas", 7))
+        self.canvas.create_line(focus_x - 9, focus_y, focus_x + 9, focus_y, fill="#f59e0b", width=2)
+        self.canvas.create_line(focus_x, focus_y - 9, focus_x, focus_y + 9, fill="#f59e0b", width=2)
+        self.canvas.create_text(
+            focus_x,
+            camera_top + 20,
+            text=f"PUNTO FOCAL · v={focus_z * 1000:.2f} mm",
+            fill="#fbbf24",
+            anchor="n",
+            font=("Consolas", 7, "bold"),
+        )
         self.canvas.create_text(left + width - 8, top + 8, text=focus_state(focus_z, optics.retina), fill=optics.color, anchor="ne", font=("Segoe UI", 8, "bold"))
         return trace
 

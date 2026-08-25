@@ -18,6 +18,9 @@ Corrección visual posterior:
 - las flechas muestran el sentido de propagación en ambos tramos;
 - la marca asimétrica `A` se proyecta de arriba-izquierda en pantalla a
   abajo-derecha en retina, además de la nube de muestras.
+- la carcasa `CÁMARA / OJO REDUCIDO`, el sensor/retina y el `PUNTO FOCAL`
+  aparecen como elementos visuales independientes; el foco normal se marca
+  con una cruz ámbar aunque coincida con la retina.
 
 La primera versión correcta del modelo comprueba computacionalmente:
 

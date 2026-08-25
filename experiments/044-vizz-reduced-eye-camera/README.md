@@ -41,8 +41,9 @@ desenfoque proporcional a la abertura de la pupila.
 La interfaz muestra:
 
 - dos cortes laterales: meridiano horizontal y vertical;
-- la pantalla, la pupila/lente, la retina y el haz de rayos;
-- el foco antes, sobre o detrás de la retina;
+- una carcasa explícita de cámara/ojo reducido, apertura, lente y sensor/retina;
+- rayos con flechas desde la pantalla hasta el sensor;
+- el plano y punto focal marcados en ámbar, antes, sobre o detrás de la retina;
 - una vista frontal de la pantalla;
 - una vista frontal ampliada de la imagen retinal invertida;
 - el efecto de cambiar distancia, desplazamiento y radio pupilar.
