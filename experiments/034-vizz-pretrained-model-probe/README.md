@@ -5,6 +5,11 @@ representación de VIZZ. Usa solamente los modelos ONNX que ya están en
 `.vizz-models`, genera tensores sintéticos y no abre la cámara, no muestra una
 previsualización y no guarda frames.
 
+Incluye el baseline binocular actual y `MobileOne S0` de MobileGaze. Este
+último recibe un recorte de rostro completo y devuelve yaw/pitch por bins; no
+se etiqueta como eye-centric ni se convierte directamente en coordenadas de
+pantalla.
+
 ## Ejecución
 
 Desde `C:\IA\FARMAXIA`:
@@ -38,5 +43,5 @@ personal.
 Un smoke test CUDA no demuestra precisión, estabilidad ante movimiento de
 cabeza ni exactitud en pantalla. No se hace afirmación humana ni clínica. No se
 descargan automáticamente pesos de terceros en este experimento. Los modelos
-ptgaze/ETH-XGaze, MobileGaze, MediaPipe Iris, 6DRepNet y UniGaze quedan en el
+ptgaze/ETH-XGaze, MediaPipe Iris, 6DRepNet y UniGaze quedan en el
 catálogo hasta revisar dependencias, pesos, licencia y compatibilidad Windows.

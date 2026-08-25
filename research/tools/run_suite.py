@@ -68,6 +68,7 @@ def main() -> None:
         "experiments/032-vizz-python-flow-split/provenance.json",
         "experiments/033-vizz-python-headless-runtime/provenance.json",
         "experiments/034-vizz-pretrained-model-probe/provenance.json",
+        "experiments/035-vizz-eye-centric-normalization/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -723,6 +724,17 @@ def main() -> None:
         "CONTRACT_TESTS_VALID",
     )
     command("provenance 034", python_script("research/tools/validate_provenance.py", provenance[33]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ eye-centric normalization 035",
+        python_script("experiments/035-vizz-eye-centric-normalization/run_experiment.py"),
+        "EYE_CENTRIC_VALID",
+    )
+    command(
+        "contract test VIZZ eye-centric normalization 035",
+        python_script("experiments/035-vizz-eye-centric-normalization/run_contract_test.py"),
+        "CONTRACT_TESTS_VALID",
+    )
+    command("provenance 035", python_script("research/tools/validate_provenance.py", provenance[34]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

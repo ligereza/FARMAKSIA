@@ -1,0 +1,89 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:035-vizz-eye-centric-normalization",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "defines_eye_centric_invariance_and_unknown_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_metamorphic_geometry_test",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-035-module",
+      "type": "entity",
+      "path": "eye_centric.py",
+      "role": "interocular_coordinate_normalizer",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:vizz-035-runner",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "role": "synthetic_invariance_and_degenerate_case_test",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-035-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "static_eye_centric_scope_audit",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-035-readme",
+      "type": "entity",
+      "path": "README.md",
+      "role": "invariance_and_limit_record",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-035-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "synthetic_measurement_record",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-035-synthetic-test",
+      "type": "activity",
+      "label": "test eye-centric transformation properties without human data",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-035-module",
+        "farmaxia:vizz-035-runner",
+        "farmaxia:vizz-035-contract"
+      ],
+      "generated": ["farmaxia:vizz-035-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-035-query-normalization",
+      "question": "Which transformations should be removed before personal gaze calibration?",
+      "source": "https://github.com/xucong-zhang/ETH-XGaze",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-035-module"]
+    },
+    {
+      "id": "farmaxia:vizz-035-query-3d-limit",
+      "question": "Which head-pose effects remain outside a 2D eye-pair normalization?",
+      "source": "https://github.com/thohemp/6DRepNet",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-035-readme"]
+    }
+  ],
+  "unknowns": [
+    "The synthetic invariance property may not hold for a real landmark detector.",
+    "3D head yaw/pitch and camera perspective require an independent pose/geometry model.",
+    "No screen accuracy or human-session result is claimed."
+  ]
+}

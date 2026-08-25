@@ -159,7 +159,7 @@ def smoke_inference(session: ort.InferenceSession) -> dict[str, Any]:
         array = np.asarray(output)
         output_shapes.append(list(array.shape))
         finite_values.append(float(np.isfinite(array).mean()) if array.size else 1.0)
-    return {
+    result: dict[str, Any] = {
         "input_shape": list(shape),
         "output_shapes": output_shapes,
         "output_finite_ratio": finite_values,
@@ -167,6 +167,21 @@ def smoke_inference(session: ort.InferenceSession) -> dict[str, Any]:
         "latency_ms": [round(value, 3) for value in durations],
         "human_data": False,
     }
+    if len(outputs) == 2 and all(np.asarray(output).shape == (1, 90) for output in outputs):
+        bins = np.arange(90, dtype=np.float32)
+        angles = []
+        for output in outputs:
+            logits = np.asarray(output, dtype=np.float32)
+            logits = logits - np.max(logits, axis=1, keepdims=True)
+            probabilities = np.exp(logits)
+            probabilities /= probabilities.sum(axis=1, keepdims=True)
+            angles.append(float((probabilities * bins).sum(axis=1)[0] * 4.0 - 180.0))
+        result["decoded_gaze_deg"] = {
+            "yaw": angles[0],
+            "pitch": angles[1],
+            "decoder": "90-bin-softmax-4deg-minus-180",
+        }
+    return result
 
 
 def probe_model(name: str, path: Path) -> dict[str, Any]:
@@ -212,8 +227,8 @@ def candidate_catalog() -> list[dict[str, str]]:
         },
         {
             "name": "MobileGaze",
-            "status": "researched-not-installed",
-            "role": "small ONNX/CUDA deployment candidate",
+            "status": "installed-and-probed",
+            "role": "small full-face ONNX/CUDA deployment baseline",
             "source": "https://github.com/yakhyo/gaze-estimation",
         },
         {
@@ -263,6 +278,7 @@ def main() -> None:
     models = (
         ("retinaface", MODEL_DIR / "retinaface.onnx"),
         ("binocular_gaze", MODEL_DIR / "gaze.onnx"),
+        ("mobileone_s0_full_face_gaze", MODEL_DIR / "mobileone_s0_gaze.onnx"),
     )
     try:
         for name, path in models:

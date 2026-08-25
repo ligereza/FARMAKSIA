@@ -38,8 +38,11 @@ Evaluar los candidatos en este orden:
    cabeza, y permite comparar directamente un vector de mirada antes del
    mapper personal.
 2. `MobileGaze` como baseline de despliegue ONNX/CUDA con backbone pequeño.
-   Se medirá latencia, memoria y estabilidad además del error; no se asumirá
-   que el nombre mobile garantiza menor temperatura en la configuración local.
+   El peso MobileOne S0 ya pasó un smoke test local en CUDA, pero se mantiene
+   como baseline de rostro completo: no reemplaza la normalización de ambos
+   ojos. Se medirá latencia, memoria y estabilidad además del error; no se
+   asumirá que el nombre mobile garantiza menor temperatura en la configuración
+   local.
 3. Un frontend de landmarks/iris y distancia interocular. MediaPipe Iris se
    usará primero como referencia de extracción, no como estimador de gaze,
    porque sus propios documentos aclaran que no determina hacia dónde mira la

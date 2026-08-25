@@ -33,11 +33,20 @@ preentrenados, inferencia ONNX Runtime y exportación ONNX. Es el candidato más
 atractivo para una ruta GPU ligera y comparar coste térmico sin cambiar el
 contrato de inferencia.
 
+El peso `mobileone_s0_gaze.onnx` fue descargado fuera de git y ejecutado en la
+RTX 4070 local. Requiere una entrada de rostro completo `1x3x448x448`, produce
+dos logits de 90 bins (`yaw` y `pitch`) y su perfil sintético mostró 360
+asignaciones en CUDA. Esto confirma compatibilidad de infraestructura, no
+invariancia ante distancia/pose ni precisión de pantalla. Por su entrada de
+rostro completo, queda como baseline de comparación y no como la representación
+eye-centric final.
+
 Antes de usarlo hay que auditar la normalización y orientación de ángulos de
 cada peso. El repositorio declara MIT, pero los pesos y datasets mantienen sus
 propias condiciones de procedencia.
 
-Fuente: [repositorio MobileGaze](https://github.com/yakhyo/gaze-estimation).
+Fuente: [repositorio MobileGaze](https://github.com/yakhyo/gaze-estimation),
+[pesos ONNX publicados](https://github.com/yakhyo/gaze-estimation/releases/tag/weights).
 
 ### UniGaze
 

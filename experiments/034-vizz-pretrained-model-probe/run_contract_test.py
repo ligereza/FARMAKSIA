@@ -23,6 +23,8 @@ def main() -> None:
     require('"camera_opened": False' in probe, "probe does not declare camera boundary", failures)
     require('"raw_frames_persisted": False' in probe, "probe may persist raw frames", failures)
     require("screen_coordinates_claimed" in probe, "probe does not separate gaze from screen geometry", failures)
+    require("mobileone_s0_gaze.onnx" in probe, "MobileGaze asset is not part of the probe", failures)
+    require("decoded_gaze_deg" in probe and "90-bin-softmax" in probe, "MobileGaze decoder is missing", failures)
     require("researched-not-installed" in probe, "candidate catalog is missing explicit install status", failures)
     require("run_probe.py" in readme and "CUDA" in readme and "no abre la cámara" in readme, "probe boundary is undocumented", failures)
     require("--output" in readme and ".vizz-pretrained-probe.json" in readme, "probe output is undocumented", failures)
