@@ -65,6 +65,7 @@ class ValidationWindow:
         self.status_id: int | None = None
         self.start_window: int | None = None
         self.transition_window: int | None = None
+        self.tick_scheduled = False
         self._draw_landing()
 
     def run(self) -> None:
@@ -166,9 +167,15 @@ class ValidationWindow:
             fill="#d0d0d0",
             font=("Segoe UI", 12),
         )
-        self.root.after(50, self._tick)
+        self._schedule_tick()
+
+    def _schedule_tick(self) -> None:
+        if not self.tick_scheduled and self.root.winfo_exists():
+            self.tick_scheduled = True
+            self.root.after(50, self._tick)
 
     def _tick(self) -> None:
+        self.tick_scheduled = False
         if not self.root.winfo_exists() or self.state == "idle":
             return
         if self.state == "capturing" and self.capture is not None:
@@ -178,7 +185,7 @@ class ValidationWindow:
                 result = self.capture.finish()
             if result is not None:
                 self._handle_capture_result(result)
-        self.root.after(50, self._tick)
+        self._schedule_tick()
 
     def _on_canvas_click(self, event: tk.Event[tk.Misc]) -> None:
         if not self.started or self.state != "waiting_for_click":
@@ -198,7 +205,10 @@ class ValidationWindow:
         self.status_id = None
         x = int(round(target_x * self.width))
         y = int(round(target_y * self.height))
-        self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#d62027", outline="#ffffff", width=2)
+        # Amber means the fixed capture window is running. No text is shown,
+        # so the user cannot accidentally look at a status label and contaminate
+        # the target label.
+        self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#f0a000", outline="#ffffff", width=2)
         self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
 
     def _handle_capture_result(self, result: CaptureResult) -> None:
@@ -211,6 +221,11 @@ class ValidationWindow:
                 "insufficient_valid_samples": "Muestras insuficientes; repite este punto.",
                 "unstable_feature_window": "Ventana inestable; repite este punto sin mover la cabeza.",
             }.get(result.reason, "Captura rechazada; repite este punto.")
+            target_index, (target_x, target_y) = self._current_target()
+            x = int(round(target_x * self.width))
+            y = int(round(target_y * self.height))
+            self.canvas.create_oval(x - 18, y - 18, x + 18, y + 18, fill="#d62027", outline="#ffffff", width=2)
+            self.canvas.create_oval(x - 5, y - 5, x + 5, y + 5, fill="#ffffff", outline="")
             self.canvas.itemconfig(self.status_id, text=message)
             return
         target_index, (target_x, target_y) = self._current_target()

@@ -68,6 +68,7 @@ def main() -> None:
     require("MINIMUM_SAMPLES = 24" in profile, "combined profile does not require both calibration sessions", failures)
     require('"farmaxia:vizz-validation:0.1"' in validation and '"raw_video": False' in validation, "validation artifact contract is missing", failures)
     require("ValidationWindow" in validation and "repetitions" in validation_ui and "pose" in validation_ui, "controlled validation flow is incomplete", failures)
+    require('fill="#f0a000"' in validation_ui and "tick_scheduled" in validation_ui, "validation capture state is not visibly bounded", failures)
 
     class SyntheticSample:
         def __init__(self, features: tuple[float, ...], quality: float = 0.90) -> None:
