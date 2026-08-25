@@ -41,7 +41,7 @@ class InteractionTrace:
         self._count = 0
         self._write(
             {
-                "schema": "farmaxia:vizz-interaction-trace:0.1",
+                "schema": "farmaxia:vizz-interaction-trace:0.2",
                 "type": "header",
                 "sample_hz": self.sample_hz,
                 "screen_size": list(screen_size),
@@ -49,6 +49,7 @@ class InteractionTrace:
                 "raw_video": False,
                 "screen_content": False,
                 "mouse_is_ground_truth": False,
+                "pretrained_gaze_model": "github:yakhyo/gaze-estimation:mobileone_s0_gaze.onnx",
             }
         )
 
@@ -78,6 +79,9 @@ class InteractionTrace:
             "eye_centric_distance_px": None,
             "eye_centric_roll_rad": None,
             "pose": None,
+            "pretrained_gaze_deg": None,
+            "pretrained_gaze_valid": False,
+            "pretrained_gaze_unknown_reason": None,
         }
         if sample is not None:
             payload["quality"] = float(sample.quality) if math.isfinite(float(sample.quality)) else None
@@ -87,6 +91,9 @@ class InteractionTrace:
             payload["legacy_features"] = _finite_vector(getattr(sample, "features", None), 6)
             payload["eye_centric"] = _finite_vector(getattr(sample, "eye_centric", None), 6)
             payload["pose"] = _finite_vector(getattr(sample, "pose", None), 6)
+            payload["pretrained_gaze_deg"] = _finite_vector(getattr(sample, "pretrained_gaze_deg", None), 2)
+            payload["pretrained_gaze_valid"] = payload["pretrained_gaze_deg"] is not None
+            payload["pretrained_gaze_unknown_reason"] = getattr(sample, "pretrained_gaze_unknown_reason", None)
             distance = getattr(sample, "eye_centric_distance_px", None)
             if distance is not None and math.isfinite(float(distance)) and float(distance) > 0.0:
                 payload["eye_centric_distance_px"] = float(distance)

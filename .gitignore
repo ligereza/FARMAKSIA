@@ -4,10 +4,13 @@ __pycache__/
 .venv/
 venv/
 .vizz-models/
+.vizz-vendor/
+.vizz-quarantine/
 .vizz-calibration.json
 .vizz-calibration-*.json
 .vizz-validation*.json
 .vizz-pretrained-probe.json
+.vizz-pretrained-probe*.json
 .vizz-dual-audit.json
 .vizz-trace*.jsonl
 *.log

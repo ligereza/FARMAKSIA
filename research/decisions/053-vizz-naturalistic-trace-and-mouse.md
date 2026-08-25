@@ -40,6 +40,9 @@ eye_centric_roll_rad
 pose
 quality
 disagreement_deg
+pretrained_gaze_deg
+pretrained_gaze_valid
+pretrained_gaze_unknown_reason
 ```
 
 El encabezado declara `mouse_is_ground_truth=false`, `raw_video=false` y

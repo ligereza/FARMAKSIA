@@ -11,6 +11,8 @@ import cv2
 import numpy as np
 import onnxruntime as ort
 
+from pretrained_gaze import decode_mobileone_angles, preprocess_mobileone_face
+
 
 IRIS_IDX_481 = np.asarray([248, 252, 224, 228, 232, 236, 240, 244], dtype=np.int64)
 GAZE_SIZE = 160
@@ -55,6 +57,11 @@ class GazeSample:
     eye_centric_distance_px: float | None = None
     eye_centric_roll_rad: float | None = None
     eye_centric_unknown_reason: str | None = None
+    # Independent full-face gaze model from the GitHub yakhyo/gaze-estimation
+    # MobileOne S0 release. It is diagnostic until a profile is calibrated for
+    # this representation; it is never silently converted to screen pixels.
+    pretrained_gaze_deg: tuple[float, float] | None = None
+    pretrained_gaze_unknown_reason: str | None = None
 
 
 def sha256(path: Path) -> str:
@@ -163,10 +170,11 @@ def _eye_centric_geometry(
 class GpuTracker:
     """Minimal model pipeline extracted from the MIT screen-eye-tracking approach."""
 
-    def __init__(self, face_model: Path, gaze_model: Path) -> None:
+    def __init__(self, face_model: Path, gaze_model: Path, pretrained_gaze_model: Path | None = None) -> None:
         self.face_model_sha256 = sha256(face_model)
         self.face = create_cuda_session(face_model)
         self.gaze = create_cuda_session(gaze_model)
+        self.pretrained_gaze = create_cuda_session(pretrained_gaze_model) if pretrained_gaze_model is not None else None
         self.face_input = self.face.get_inputs()[0]
         self.face_output = self.face.get_outputs()[0]
         self.gaze_input = self.gaze.get_inputs()[0]
@@ -179,6 +187,41 @@ class GpuTracker:
             raise GpuUnavailable("unexpected gaze input signature")
         if self.gaze_output.name != "output" or list(self.gaze_output.shape[1:]) != [962, 3]:
             raise GpuUnavailable("unexpected gaze output signature")
+        self.pretrained_input = None
+        self.pretrained_yaw_output = None
+        self.pretrained_pitch_output = None
+        if self.pretrained_gaze is not None:
+            self.pretrained_input = self.pretrained_gaze.get_inputs()[0]
+            outputs = {output.name: output for output in self.pretrained_gaze.get_outputs()}
+            if list(self.pretrained_input.shape) != [1, 3, 448, 448]:
+                raise GpuUnavailable("unexpected MobileOne input signature")
+            if not {"yaw", "pitch"}.issubset(outputs):
+                raise GpuUnavailable("unexpected MobileOne output names")
+            if list(outputs["yaw"].shape) != [1, 90] or list(outputs["pitch"].shape) != [1, 90]:
+                raise GpuUnavailable("unexpected MobileOne output signature")
+            self.pretrained_yaw_output = outputs["yaw"]
+            self.pretrained_pitch_output = outputs["pitch"]
+
+    def _predict_pretrained_gaze(
+        self, frame: np.ndarray, face: Detection
+    ) -> tuple[tuple[float, float] | None, str | None]:
+        if self.pretrained_gaze is None or self.pretrained_input is None:
+            return None, "model_not_configured"
+        height, width = frame.shape[:2]
+        x1 = max(0, min(width - 1, int(math.floor(face.x1))))
+        y1 = max(0, min(height - 1, int(math.floor(face.y1))))
+        x2 = max(x1 + 1, min(width, int(math.ceil(face.x2))))
+        y2 = max(y1 + 1, min(height, int(math.ceil(face.y2))))
+        try:
+            face_crop = frame[y1:y2, x1:x2]
+            tensor = preprocess_mobileone_face(face_crop)
+            outputs = self.pretrained_gaze.run(
+                [self.pretrained_yaw_output.name, self.pretrained_pitch_output.name],
+                {self.pretrained_input.name: tensor},
+            )
+            return decode_mobileone_angles(outputs[0], outputs[1]), None
+        except (ValueError, RuntimeError, cv2.error) as exc:
+            return None, f"inference_unknown:{type(exc).__name__}"
 
     def detect_face(self, frame: np.ndarray) -> tuple[Detection, list[Detection]] | None:
         height, width = frame.shape[:2]
@@ -257,6 +300,7 @@ class GpuTracker:
             eye_center[1] / max(1.0, height),
         )
         eye_centric, eye_centric_distance, eye_centric_roll = _eye_centric_geometry(left_points, right_points)
+        pretrained_gaze_deg, pretrained_unknown_reason = self._predict_pretrained_gaze(frame, face)
         if eye_centric is None:
             return GazeSample(
                 features,
@@ -267,6 +311,8 @@ class GpuTracker:
                 None,
                 None,
                 eye_centric_roll,
+                pretrained_gaze_deg,
+                pretrained_unknown_reason,
             )
         return GazeSample(
             features,
@@ -277,4 +323,6 @@ class GpuTracker:
             eye_centric_distance,
             eye_centric_roll,
             None,
+            pretrained_gaze_deg,
+            pretrained_unknown_reason,
         )

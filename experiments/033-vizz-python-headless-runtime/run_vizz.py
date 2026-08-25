@@ -18,6 +18,7 @@ from profile_model import load_profile, load_samples_for_merge, seal_profile
 REPO_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MODEL_DIR = REPO_ROOT / ".vizz-models"
 DEFAULT_PROFILE = REPO_ROOT / ".vizz-calibration.json"
+DEFAULT_PRETRAINED_GAZE_MODEL = DEFAULT_MODEL_DIR / "mobileone_s0_gaze.onnx"
 LOG_PATH = REPO_ROOT / ".vizz-runtime.log"
 CONDITION_LABELS = {
     "with_glasses": "con lentes",
@@ -147,6 +148,12 @@ def parse_args() -> argparse.Namespace:
         help="condition represented by a legacy profile being merged",
     )
     parser.add_argument("--model-dir", type=Path, default=DEFAULT_MODEL_DIR)
+    parser.add_argument(
+        "--pretrained-gaze-model",
+        type=Path,
+        default=DEFAULT_PRETRAINED_GAZE_MODEL,
+        help="GitHub yakhyo MobileOne S0 ONNX model used as an independent CUDA gaze signal",
+    )
     parser.add_argument("--camera", type=int, default=0)
     parser.add_argument("--overlay-alpha", type=int, default=30)
     parser.add_argument("--focus-radius", type=int, default=260)
@@ -169,7 +176,7 @@ def main() -> int:
             # A headless launch with a missing/invalid profile must fail before
             # it requests camera access.
             load_profile(args.profile)
-        tracker = GpuTracker(face_model, gaze_model)
+        tracker = GpuTracker(face_model, gaze_model, args.pretrained_gaze_model)
         capture = open_camera(args.camera)
         try:
             if args.calibrate:

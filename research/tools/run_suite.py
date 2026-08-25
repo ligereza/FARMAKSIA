@@ -72,6 +72,7 @@ def main() -> None:
         "experiments/036-vizz-eye-centric-capture-contract/provenance.json",
         "experiments/037-vizz-dual-representation-audit/provenance.json",
         "experiments/038-vizz-naturalistic-trace/provenance.json",
+        "experiments/039-vizz-github-pretrained-gaze/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -766,6 +767,17 @@ def main() -> None:
         "CONTRACT_TESTS_VALID",
     )
     command("provenance 038", python_script("research/tools/validate_provenance.py", provenance[37]), "PROVENANCE_VALID")
+    command(
+        "experiment VIZZ GitHub pretrained gaze 039",
+        python_script("experiments/039-vizz-github-pretrained-gaze/run_experiment.py"),
+        "GITHUB_PRETRAINED_GAZE_VALID",
+    )
+    command(
+        "contract test VIZZ GitHub pretrained gaze 039",
+        python_script("experiments/039-vizz-github-pretrained-gaze/run_contract_test.py"),
+        "CONTRACT_TESTS_VALID",
+    )
+    command("provenance 039", python_script("research/tools/validate_provenance.py", provenance[38]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

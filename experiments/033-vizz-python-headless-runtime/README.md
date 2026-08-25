@@ -38,9 +38,11 @@ python -m venv .venv
 .\.venv\Scripts\python.exe experiments/033-vizz-python-headless-runtime/run_vizz.py --calibrate
 ```
 
-El descargador también fija el peso ONNX MobileOne S0 de MobileGaze para el
-probe 034; ese modelo queda fuera del runtime productivo hasta completar la
-comparación eye-centric.
+El descargador también fija el peso ONNX MobileOne S0 de
+[`yakhyo/gaze-estimation`](https://github.com/yakhyo/gaze-estimation) para el
+runtime y el probe 034. Se ejecuta en CUDA como señal independiente de gaze;
+no reemplaza el mapper calibrado binocularmente ni se convierte por sí solo en
+coordenadas de pantalla.
 
 La calibración se almacena en `.vizz-calibration.json` y no contiene vídeo.
 Para iniciar después sin mostrar la calibración:

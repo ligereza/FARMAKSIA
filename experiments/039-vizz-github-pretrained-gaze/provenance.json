@@ -1,0 +1,70 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:039-vizz-github-pretrained-gaze",
+  "agents": [
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_synthetic_pretrained_gaze_contract",
+      "version": "3.13"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:vizz-yakhyo-source",
+      "type": "entity",
+      "path": "../033-vizz-python-headless-runtime/download_models.py",
+      "role": "upstream_gaze_model_and_onnx_release",
+      "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-mobileone-adapter",
+      "type": "entity",
+      "path": "../033-vizz-python-headless-runtime/pretrained_gaze.py",
+      "role": "onnx_preprocess_and_bin_decoder",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-mobileone-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "github_only_cuda_only_boundary",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:vizz-mobileone-results",
+      "type": "entity",
+      "path": "results.md",
+      "role": "synthetic_contract_record",
+      "authority": "computed"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:vizz-mobileone-contract-activity",
+      "type": "activity",
+      "label": "verify GitHub-sourced pretrained gaze bridge",
+      "agent": "farmaxia:python-runner",
+      "used": [
+        "farmaxia:vizz-yakhyo-source",
+        "farmaxia:vizz-mobileone-adapter",
+        "farmaxia:vizz-mobileone-contract"
+      ],
+      "generated": ["farmaxia:vizz-mobileone-results"]
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:vizz-mobileone-query",
+      "question": "Can a GitHub-released MobileOne S0 gaze model be loaded through the existing CUDA-only ONNX boundary without claiming screen coordinates?",
+      "source": "https://github.com/yakhyo/gaze-estimation",
+      "authority": "human_reviewed_record",
+      "required_entities": ["farmaxia:vizz-mobileone-adapter", "farmaxia:vizz-mobileone-contract"]
+    }
+  ],
+  "unknowns": [
+    "The pretrained model has not been calibrated to this monitor profile.",
+    "Its head-centric angle convention must be compared with binocular eye-centric output in a held-out analysis.",
+    "No conclusion about screen accuracy follows from the synthetic decoder test."
+  ]
+}
