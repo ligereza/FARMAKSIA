@@ -42,6 +42,9 @@ class GazeSample:
     features: tuple[float, float, float, float, float, float]
     quality: float
     disagreement_deg: float
+    # Proxies derived from face/eye geometry; they are diagnostics for now and
+    # are not yet fed into the screen mapper.
+    pose: tuple[float, float, float, float, float, float] | None = None
 
 
 def sha256(path: Path) -> str:
@@ -193,6 +196,16 @@ class GpuTracker:
             return None
         height, width = frame.shape[:2]
         quality = max(0.0, min(1.0, face.score * (1.0 - disagreement / 45.0)))
+        face_center_x, face_center_y = face.center
+        eye_roll = math.atan2(float(right_center[1] - left_center[1]), float(right_center[0] - left_center[0])) / math.pi
+        pose = (
+            face_center_x / max(1.0, width),
+            face_center_y / max(1.0, height),
+            face.width / max(1.0, width),
+            face.height / max(1.0, height),
+            eye_roll,
+            eye_distance / max(1.0, width),
+        )
         features = (
             (left_yaw + right_yaw) * 0.5 / 45.0,
             (left_pitch + right_pitch) * 0.5 / 30.0,
@@ -201,4 +214,4 @@ class GpuTracker:
             eye_center[0] / max(1.0, width),
             eye_center[1] / max(1.0, height),
         )
-        return GazeSample(features, quality, disagreement)
+        return GazeSample(features, quality, disagreement, pose)

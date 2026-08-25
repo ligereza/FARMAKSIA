@@ -16,6 +16,7 @@ from typing import Protocol
 class SampleLike(Protocol):
     features: tuple[float, ...]
     quality: float
+    pose: tuple[float, ...] | None
 
 
 @dataclass(frozen=True)
@@ -41,6 +42,8 @@ class CaptureResult:
     quality_mean: float
     max_feature_mad: float
     reason: str
+    pose: tuple[float, ...] | None = None
+    max_pose_mad: float = 0.0
 
 
 def _median(values: list[float]) -> float:
@@ -76,6 +79,7 @@ class StableCapture:
         self.active_at: float | None = None
         self.deadline: float | None = None
         self.samples: list[tuple[float, ...]] = []
+        self.poses: list[tuple[float, ...]] = []
         self.qualities: list[float] = []
         self.finished = False
 
@@ -90,6 +94,7 @@ class StableCapture:
         self.active_at = now + self.config.settle_seconds
         self.deadline = self.active_at + self.config.window_seconds
         self.samples = []
+        self.poses = []
         self.qualities = []
         self.finished = False
 
@@ -111,6 +116,11 @@ class StableCapture:
         if not features or not all(math.isfinite(value) for value in features):
             return None
         self.samples.append(features)
+        pose = getattr(sample, "pose", None)
+        if pose is not None:
+            pose_values = tuple(float(value) for value in pose)
+            if pose_values and all(math.isfinite(value) for value in pose_values):
+                self.poses.append(pose_values)
         self.qualities.append(float(sample.quality))
         return None
 
@@ -137,6 +147,10 @@ class StableCapture:
                 max_feature_mad=max_feature_mad,
                 reason="unstable_feature_window",
             )
+        pose = None
+        max_pose_mad = 0.0
+        if self.poses:
+            pose, max_pose_mad = _robust_center(self.poses)
         return CaptureResult(
             accepted=True,
             features=features,
@@ -144,6 +158,8 @@ class StableCapture:
             quality_mean=_mean(self.qualities),
             max_feature_mad=max_feature_mad,
             reason="accepted",
+            pose=pose,
+            max_pose_mad=max_pose_mad,
         )
 
 

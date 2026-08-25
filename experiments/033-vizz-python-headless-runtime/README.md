@@ -57,6 +57,16 @@ observaciones por punto, asigna explícitamente la condición del perfil legado 
 vuelve a ajustar una sola transformación regularizada. Esto es auditable y
 permite añadir futuras sesiones sin depender de un selector de perfil.
 
+Para ejecutar la validación controlada de pose sin modificar el perfil:
+
+```powershell
+.\.venv\Scripts\python.exe experiments/033-vizz-python-headless-runtime/run_validation.py --profile .\.vizz-calibration.json --output .\.vizz-validation.json
+```
+
+La validación realiza tres repeticiones por punto y condición, registra seis
+proxies geométricos de pose y guarda únicamente vectores/metadatos en
+`.vizz-validation.json`. No inicia el overlay ni sobrescribe la calibración.
+
 Para detener el proceso headless se usa `Ctrl+C` si se inició con `python`, o
 se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
 `.vizz-runtime.log`; no se abre una interfaz de error VIZZ.

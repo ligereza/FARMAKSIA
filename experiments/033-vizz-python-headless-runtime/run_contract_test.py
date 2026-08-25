@@ -32,6 +32,8 @@ def main() -> None:
     tracker = (HERE / "gpu_tracker.py").read_text(encoding="utf-8")
     profile = (HERE / "profile_model.py").read_text(encoding="utf-8")
     overlay = (HERE / "content_overlay.py").read_text(encoding="utf-8")
+    validation = (HERE / "run_validation.py").read_text(encoding="utf-8")
+    validation_ui = (HERE / "validation_ui.py").read_text(encoding="utf-8")
 
     require(policy["calibration_visible"] is True, "calibration is not declared visible", failures)
     require(policy["headless_visible"] is False, "headless phase declares a visible interface", failures)
@@ -51,6 +53,7 @@ def main() -> None:
     require("providers=[\"CUDAExecutionProvider\"]" in tracker, "tracker does not request CUDA only", failures)
     require("session.disable_cpu_ep_fallback" in tracker, "CPU fallback kill switch is missing", failures)
     require("CPUExecutionProvider" not in tracker, "tracker names a CPU provider", failures)
+    require("pose" in tracker and "eye_roll" in tracker, "tracker does not expose pose diagnostics", failures)
     require('"raw_video": False' in profile, "profile permits raw video persistence", failures)
     require("style = 0x80000000" in overlay, "overlay is not a borderless popup layer", failures)
     require("extended = 0x00080000" in overlay, "overlay is missing layered click-through flags", failures)
@@ -63,6 +66,8 @@ def main() -> None:
     require("camera" in (HERE / "README.md").read_text(encoding="utf-8"), "camera boundary is undocumented", failures)
     require("calibration_protocol" in profile and "0.4" in profile and "REQUIRED_CONDITIONS" in profile, "profile schema was not versioned for the combined calibration policy", failures)
     require("MINIMUM_SAMPLES = 24" in profile, "combined profile does not require both calibration sessions", failures)
+    require('"farmaxia:vizz-validation:0.1"' in validation and '"raw_video": False' in validation, "validation artifact contract is missing", failures)
+    require("ValidationWindow" in validation and "repetitions" in validation_ui and "pose" in validation_ui, "controlled validation flow is incomplete", failures)
 
     class SyntheticSample:
         def __init__(self, features: tuple[float, ...], quality: float = 0.90) -> None:
