@@ -32,6 +32,7 @@ class CaptureConfig:
     min_valid_samples: int = 12
     min_quality: float = 0.50
     max_feature_mad: float = 0.08
+    require_pose: bool = False
 
 
 @dataclass(frozen=True)
@@ -115,12 +116,15 @@ class StableCapture:
         features = tuple(float(value) for value in sample.features)
         if not features or not all(math.isfinite(value) for value in features):
             return None
-        self.samples.append(features)
         pose = getattr(sample, "pose", None)
+        pose_values: tuple[float, ...] | None = None
         if pose is not None:
-            pose_values = tuple(float(value) for value in pose)
-            if pose_values and all(math.isfinite(value) for value in pose_values):
-                self.poses.append(pose_values)
+            candidate = tuple(float(value) for value in pose)
+            if candidate and all(math.isfinite(value) for value in candidate):
+                pose_values = candidate
+        self.samples.append(features)
+        if pose_values is not None:
+            self.poses.append(pose_values)
         self.qualities.append(float(sample.quality))
         return None
 
@@ -136,6 +140,15 @@ class StableCapture:
                 quality_mean=_mean(self.qualities),
                 max_feature_mad=math.inf,
                 reason="insufficient_valid_samples",
+            )
+        if self.config.require_pose and len(self.poses) < self.config.min_valid_samples:
+            return CaptureResult(
+                accepted=False,
+                features=None,
+                valid_count=len(self.samples),
+                quality_mean=_mean(self.qualities),
+                max_feature_mad=math.inf,
+                reason="insufficient_pose_samples",
             )
         features, max_feature_mad = _robust_center(self.samples)
         if max_feature_mad > self.config.max_feature_mad:

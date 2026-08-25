@@ -19,6 +19,7 @@ VALIDATION_CONFIG = CaptureConfig(
     min_valid_samples=12,
     min_quality=0.50,
     max_feature_mad=0.08,
+    require_pose=True,
 )
 VALIDATION_ORDER_SEED = 20260824
 CLICK_TARGET_RADIUS_PX = 100
@@ -239,6 +240,7 @@ class ValidationWindow:
         if not result.accepted or result.features is None:
             message = {
                 "insufficient_valid_samples": "Muestras insuficientes; repite este punto.",
+                "insufficient_pose_samples": "No se obtuvo pose; mantén el rostro visible y repite este punto.",
                 "unstable_feature_window": "Ventana inestable; repite este punto sin mover la cabeza.",
             }.get(result.reason, "Captura rechazada; repite este punto.")
             self._handle_capture_failure(message)

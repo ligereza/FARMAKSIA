@@ -18,8 +18,8 @@ necesario repetir esa sesión: se puede capturar sólo la condición faltante y
 fusionar sus observaciones con un refit conjunto. Para cada
 punto, el cursor solo arma la captura: se descarta el periodo de estabilización
 y luego se recoge una ventana fija de muestras válidas. La ventana se acepta
-únicamente si tiene suficientes muestras y baja dispersión robusta; el mouse
-nunca se guarda como verdad de la mirada. El texto de estado desaparece durante
+únicamente si tiene suficientes muestras, pose disponible y baja dispersión
+robusta; el mouse nunca se guarda como verdad de la mirada. El texto de estado desaparece durante
 la captura para no contaminar la etiqueta visual. No hay vista previa de
 cámara. Al sellar el perfil se cierra Tk y el proceso pasa al runtime de fondo.
 El runtime no importa Tkinter,
@@ -90,6 +90,10 @@ se cierra su proceso si se inició con `pythonw`. Los fallos se registran en
   protocolo `static-stable-window-v3-multicondition`. Exige las condiciones
   `with_glasses` y `without_glasses` en un único perfil; no hay que alternar
   perfiles durante el runtime.
+- Las calibraciones nuevas persisten seis proxies de pose por punto y marcan
+  `pose_complete=true` solo cuando los 24 puntos tienen pose válida. Un perfil
+  legado fusionado puede quedar incompleto; el auditor lo detecta y no permite
+  usarlo para afirmar una comparación pose-aware entre sesiones.
 - Esta versión implementa la primera corrección de la arquitectura híbrida:
   puntos estáticos con ventanas temporales estables. La trayectoria móvil y la
   cabeza neuronal personalizada permanecen como fases posteriores; no se

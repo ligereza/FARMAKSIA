@@ -15,6 +15,14 @@ MINIMUM_SAMPLES = 24
 FEATURE_COUNT = 6
 CALIBRATION_PROTOCOL = "static-stable-window-v3-multicondition"
 REQUIRED_CONDITIONS = frozenset({"with_glasses", "without_glasses"})
+POSE_PROXY_NAMES = (
+    "face_center_x_norm",
+    "face_center_y_norm",
+    "face_width_norm",
+    "face_height_norm",
+    "eye_roll_norm",
+    "eye_distance_norm",
+)
 
 
 def design_row(features: Iterable[float]) -> np.ndarray:
@@ -62,6 +70,12 @@ def seal_profile(
         missing = sorted(REQUIRED_CONDITIONS.difference(conditions))
         raise ValueError(f"profile is missing calibration conditions: {missing}")
     x_coefficients, y_coefficients = fit_mapping(materialized)
+    pose_complete = all(
+        isinstance(sample.get("pose"), (list, tuple))
+        and len(sample["pose"]) == len(POSE_PROXY_NAMES)
+        and all(np.isfinite(float(value)) for value in sample["pose"])
+        for sample in materialized
+    )
     payload = {
         "schema": PROFILE_SCHEMA,
         "calibration_protocol": CALIBRATION_PROTOCOL,
@@ -73,6 +87,8 @@ def seal_profile(
         },
         "screen_size": [int(screen_size[0]), int(screen_size[1])],
         "sample_count": len(materialized),
+        "pose_proxy_names": list(POSE_PROXY_NAMES) if pose_complete else [],
+        "pose_complete": pose_complete,
         "model_sha256": model_sha256,
         "samples": materialized,
         "mapping": {"x": x_coefficients, "y": y_coefficients},

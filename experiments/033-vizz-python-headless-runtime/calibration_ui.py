@@ -30,6 +30,7 @@ CAPTURE_CONFIG = CaptureConfig(
     min_valid_samples=12,
     min_quality=0.50,
     max_feature_mad=0.08,
+    require_pose=True,
 )
 SAMPLES_PER_POINT = CAPTURE_CONFIG.min_valid_samples
 CLICK_TARGET_RADIUS_PX = 100
@@ -215,6 +216,7 @@ class CalibrationWindow:
             self.capture = None
             messages = {
                 "insufficient_valid_samples": "No hubo suficientes muestras válidas. Mira el punto y vuelve a hacer clic.",
+                "insufficient_pose_samples": "No se pudo medir la pose. Mantén el rostro visible y vuelve a intentarlo.",
                 "unstable_feature_window": "La mirada se movió durante la captura. Mira el punto y vuelve a hacer clic.",
             }
             self._draw_point(show_status=True)
@@ -225,6 +227,7 @@ class CalibrationWindow:
         self.samples.append(
             {
                 "features": list(result.features),
+                "pose": list(result.pose) if result.pose is not None else None,
                 "target": [target_x, target_y],
                 "phase": "static",
                 "condition": condition_key,
@@ -233,6 +236,7 @@ class CalibrationWindow:
                     "valid_count": result.valid_count,
                     "quality_mean": result.quality_mean,
                     "max_feature_mad": result.max_feature_mad,
+                    "max_pose_mad": result.max_pose_mad,
                     "settle_seconds": CAPTURE_CONFIG.settle_seconds,
                     "window_seconds": CAPTURE_CONFIG.window_seconds,
                 },

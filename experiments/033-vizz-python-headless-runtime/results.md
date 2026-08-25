@@ -51,6 +51,12 @@ entre ojos ni efecto perceptual. La calibración persistió features, pero no lo
 seis proxies de pose; por eso los modelos pose-aware no son identificables
 entre sesiones y el auditor los marca `UNKNOWN_NOT_IDENTIFIABLE`.
 
+La siguiente corrección del contrato exige pose válida durante cada ventana de
+calibración y persiste `pose`, `max_pose_mad`, `pose_proxy_names` y
+`pose_complete`. Esto no altera el perfil existente; prepara la próxima sesión
+para que M1/M2 puedan evaluarse entre sesiones sin reconstruir pose a partir de
+features oculares.
+
 ## Kill tests
 
 - Modelo ausente, CUDA ausente o DLL incompatible: terminar antes de abrir la

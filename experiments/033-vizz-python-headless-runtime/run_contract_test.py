@@ -42,7 +42,8 @@ def main() -> None:
     require("root.attributes(\"-fullscreen\", True)" in calibration, "calibration is not fullscreen", failures)
     require('text="Iniciar calibración"' in calibration and "command=self._start" in calibration, "calibration starts without explicit click", failures)
     require('canvas.bind("<Button-1>", self._on_canvas_click)' in calibration, "calibration points are not click-confirmed", failures)
-    require("StableCapture" in calibration and "CaptureConfig" in calibration, "calibration lacks a temporal capture policy", failures)
+    require("StableCapture" in calibration and "CaptureConfig" in calibration and "require_pose=True" in calibration, "calibration lacks a temporal pose capture policy", failures)
+    require('"pose": list(result.pose)' in calibration and '"max_pose_mad"' in calibration, "calibration does not persist pose diagnostics", failures)
     require("CALIBRATION_CONDITIONS" in calibration and "with_glasses" in calibration and "without_glasses" in calibration, "calibration does not cover both visual conditions", failures)
     require('"condition": condition_key' in calibration and "_show_condition_transition" in calibration, "calibration conditions are not recorded in one flow", failures)
     require('self._draw_point(show_status=False)' in calibration, "status text is not hidden during capture", failures)
@@ -66,9 +67,10 @@ def main() -> None:
     require(runtime.index("tracker = GpuTracker") < runtime.index("capture = open_camera"), "camera opens before CUDA models", failures)
     require("camera" in (HERE / "README.md").read_text(encoding="utf-8"), "camera boundary is undocumented", failures)
     require("calibration_protocol" in profile and "0.4" in profile and "REQUIRED_CONDITIONS" in profile, "profile schema was not versioned for the combined calibration policy", failures)
+    require("pose_complete" in profile and "POSE_PROXY_NAMES" in profile, "profile does not declare pose completeness metadata", failures)
     require("MINIMUM_SAMPLES = 24" in profile, "combined profile does not require both calibration sessions", failures)
     require('"farmaxia:vizz-validation:0.1"' in validation and '"raw_video": False' in validation, "validation artifact contract is missing", failures)
-    require("ValidationWindow" in validation and "repetitions" in validation_ui and "pose" in validation_ui, "controlled validation flow is incomplete", failures)
+    require("ValidationWindow" in validation and "repetitions" in validation_ui and "pose" in validation_ui and "require_pose=True" in validation_ui, "controlled validation flow is incomplete", failures)
     require('fill="#f0a000"' in validation_ui and "tick_scheduled" in validation_ui and "capture_finish_job" in validation_ui, "validation capture state is not visibly bounded", failures)
     require("validation sample callback failed" in validation_ui and "_handle_capture_failure" in validation_ui, "validation callback errors are not surfaced", failures)
     require("leave_one_target_out" in analysis and "pose_available_in_calibration" in analysis and "UNKNOWN_NOT_IDENTIFIABLE" in analysis, "validation analysis does not preserve grouped and identifiable-model boundaries", failures)
@@ -94,6 +96,27 @@ def main() -> None:
     stable.push(0.80, SyntheticSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
     stable_result = stable.push(1.25, None)
     require(stable_result is not None and stable_result.accepted, "stable fixed window was not accepted", failures)
+
+    class PoseSample(SyntheticSample):
+        pose = (0.5, 0.5, 0.2, 0.3, 0.0, 0.08)
+
+    pose_required = StableCapture(
+        CaptureConfig(
+            settle_seconds=0.0,
+            window_seconds=1.00,
+            min_valid_samples=4,
+            max_feature_mad=0.08,
+            require_pose=True,
+        )
+    )
+    pose_required.arm(0.0)
+    pose_required.push(0.10, SyntheticSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
+    pose_required.push(0.20, PoseSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
+    pose_required.push(0.30, PoseSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
+    pose_required.push(0.40, PoseSample((0.1, 0.2, 0.3, 0.4, 0.5, 0.6)))
+    pose_result = pose_required.push(1.10, None)
+    require(pose_result is not None and not pose_result.accepted, "pose-required capture accepted incomplete pose data", failures)
+    require(pose_result is not None and pose_result.reason == "insufficient_pose_samples", "pose-required capture reported the wrong failure", failures)
 
     unstable = StableCapture(
         CaptureConfig(
@@ -142,6 +165,13 @@ def main() -> None:
         combined_profile, _mapper = load_profile(combined_path)
         require(combined_profile["sample_count"] == 24, "combined profile did not seal 24 samples", failures)
         require(combined_profile["calibration_conditions"] == ["with_glasses", "without_glasses"], "combined profile lost condition metadata", failures)
+
+        pose_samples = [dict(sample, pose=[0.5, 0.5, 0.2, 0.3, 0.0, 0.08]) for sample in combined_samples]
+        pose_path = Path(temporary) / "pose-complete.json"
+        seal_profile(pose_path, (1707, 960), pose_samples, "TEST_MODEL_HASH")
+        pose_profile, _pose_mapper = load_profile(pose_path)
+        require(pose_profile["pose_complete"] is True, "pose-complete profile did not record pose completeness", failures)
+        require(len(pose_profile["pose_proxy_names"]) == 6, "pose-complete profile lost proxy names", failures)
 
         legacy_path = Path(temporary) / "legacy.json"
         legacy_samples = [{key: value for key, value in sample.items() if key != "condition"} for sample in combined_samples[:12]]
