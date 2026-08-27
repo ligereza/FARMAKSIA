@@ -109,6 +109,7 @@ def main() -> None:
         "experiments/076-farmaxia-pywinauto-uia-adapter/provenance.json",
         "experiments/077-farmaxia-excel-blender-capability-inventory/provenance.json",
         "experiments/078-farmaxia-native-transition-probe/provenance.json",
+        "experiments/079-farmaxia-consented-input-semantic-bridge/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1286,6 +1287,22 @@ def main() -> None:
         "FARMAXIA_078_NATIVE_TRANSITION_KILL_TESTS_VALID",
     )
     command("provenance 078", python_script("research/tools/validate_provenance.py", provenance[74]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA consented input semantic bridge 079",
+        python_script("experiments/079-farmaxia-consented-input-semantic-bridge/run_experiment.py", "--duration", "1.0", "--sample-hz", "5"),
+        '"status": "CONSENTED_INPUT_OBSERVER_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA consented input semantic bridge 079",
+        python_script("experiments/079-farmaxia-consented-input-semantic-bridge/run_contract_test.py"),
+        "FARMAXIA_079_CONSENTED_INPUT_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA consented input semantic bridge 079",
+        python_script("experiments/079-farmaxia-consented-input-semantic-bridge/run_kill_test.py"),
+        "FARMAXIA_079_CONSENTED_INPUT_KILL_TESTS_VALID",
+    )
+    command("provenance 079", python_script("research/tools/validate_provenance.py", provenance[75]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

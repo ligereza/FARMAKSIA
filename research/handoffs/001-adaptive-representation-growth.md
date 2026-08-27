@@ -298,12 +298,16 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
   observaron `create → select → modify → revert`, incluyendo cálculo de fórmula,
   selección de objeto, modificación espacial y restauración del contexto en el
   [experimento 078](../../experiments/078-farmaxia-native-transition-probe/README.md);
+- ~~observer de input consentido~~ — una ejecución real observó actividad de
+  teclado por conteo, aplicación allowlisted y rol UIA enfocado (`firefox:Group`)
+  sin títulos, texto, teclas ni píxeles en el
+  [experimento 079](../../experiments/079-farmaxia-consented-input-semantic-bridge/README.md);
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
-- conectar input humano autorizado a las transiciones tipadas observadas en el
-  experimento 078, sin confundir evento físico con intención;
+- correlacionar input humano autorizado con un delta nativo de Excel o Blender,
+  sin confundir actividad física con intención;
 
 ### Más adelante
 

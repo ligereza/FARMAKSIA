@@ -1,0 +1,51 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:079-consented-input-semantic-bridge",
+  "status": "exploratory",
+  "purpose": "Connect consented local keyboard, focus and optional pointer observations to the typed transition kernel without capturing content or claiming intent.",
+  "agents": [
+    {"id": "farmaxia:researcher-079", "type": "agent", "role": "defines_input_to_transition_boundary"},
+    {"id": "farmaxia:python-runner-079", "type": "software_agent", "role": "runs_real_local_keyboard_and_uia_context_observer"}
+  ],
+  "entities": [
+    {"id": "farmaxia:input-bridge-079", "type": "entity", "path": "input_bridge.py", "role": "consented_local_input_and_uia_context_observer", "authority": "human_declared_tool"},
+    {"id": "farmaxia:input-probe-079", "type": "entity", "path": "run_experiment.py", "role": "semantic_input_observer_runner", "authority": "human_declared_tool"},
+    {"id": "farmaxia:input-contract-079", "type": "entity", "path": "run_contract_test.py", "role": "positive_privacy_preserving_input_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:input-kill-tests-079", "type": "entity", "path": "run_kill_test.py", "role": "raw_key_title_intent_injection_and_capture_boundary", "authority": "human_declared_tool"},
+    {"id": "farmaxia:input-protocol-079", "type": "entity", "path": "README.md", "role": "consent_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:input-results-079", "type": "entity", "path": "results.md", "role": "observed_input_boundary_and_unknowns", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:transition-kernel-078", "type": "entity", "path": "../078-farmaxia-native-transition-probe/results.md", "role": "typed_native_transition_target", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:input-suite-079", "type": "entity", "path": "../../research/tools/run_suite.py", "role": "reproducible_suite_registration", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:input-run-079", "type": "activity", "label": "observe local keyboard activity and active UIA context without retaining content", "agent": "farmaxia:python-runner-079", "used": ["farmaxia:input-bridge-079", "farmaxia:input-protocol-079"], "generated": ["farmaxia:input-results-079"]},
+    {"id": "farmaxia:input-kill-079", "type": "activity", "label": "attack raw key title intent input injection camera screenshot and network boundaries", "agent": "farmaxia:python-runner-079", "used": ["farmaxia:input-kill-tests-079"], "generated": []},
+    {"id": "farmaxia:input-record-079", "type": "activity", "label": "record the distinction between input observation and native state transition", "agent": "farmaxia:researcher-079", "used": ["farmaxia:input-results-079", "farmaxia:transition-kernel-078", "farmaxia:input-suite-079"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:input-real-query-079", "expression": "can real local input activity and UIA focus context be observed without retaining content", "authority": "experiment_defined", "required_entities": ["farmaxia:input-bridge-079", "farmaxia:input-probe-079"]},
+    {"id": "farmaxia:input-intent-query-079", "expression": "does the observer avoid treating keyboard activity as intent before a native state delta exists", "authority": "experiment_defined", "required_entities": ["farmaxia:input-contract-079", "farmaxia:transition-kernel-078"]},
+    {"id": "farmaxia:input-safety-query-079", "expression": "does the observer reject raw keys titles pixels camera network and injected actions", "authority": "experiment_defined", "required_entities": ["farmaxia:input-contract-079", "farmaxia:input-kill-tests-079"]},
+    {"id": "farmaxia:input-repro-query-079", "expression": "is consented input observation registered in the reproducible suite", "authority": "experiment_defined", "required_entities": ["farmaxia:input-suite-079", "farmaxia:input-probe-079"]}
+  ],
+  "assumptions": [
+    "The existing low-level keyboard observer is opt-in and stores counts only.",
+    "The active UIA control type is context metadata, not user content or intent.",
+    "Pointer coordinates remain optional and local to the explicit experiment.",
+    "Semantic intent must remain false until an independent native state delta is observed.",
+    "The observer is read-only and does not authorize future actions."
+  ],
+  "kill_tests": [
+    "Raw key values are rejected.",
+    "Raw text and window titles are rejected.",
+    "Intent claims without native outcome are rejected.",
+    "Input injection is rejected.",
+    "Camera capture is rejected."
+  ],
+  "unknowns": [
+    "Whether a real human input event can be paired reliably with one native state delta under rapid interaction.",
+    "Whether UIA context is specific enough to route Excel and Blender events without document content.",
+    "Whether pointer and keyboard traces remain useful after privacy minimization.",
+    "Whether VIZZ gaze can add value as context without becoming an unverified intent oracle."
+  ]
+}
