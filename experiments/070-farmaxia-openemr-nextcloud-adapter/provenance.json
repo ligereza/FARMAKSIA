@@ -23,6 +23,7 @@
   ],
   "queries": [
     {"id": "farmaxia:institutional-query-reuse-070", "expression": "does the second surface pair use the same envelope kernel while changing only domain adapter fields", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel", "farmaxia:institutional-validator-070"]},
+    {"id": "farmaxia:institutional-query-replay-070", "expression": "does replay across three delivery permutations preserve the same canonical event order", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel", "farmaxia:institutional-validator-070"]},
     {"id": "farmaxia:institutional-query-provenance-070", "expression": "are synthetic document claims still tied to source entity references and independently verified", "authority": "experiment_defined", "required_entities": ["farmaxia:institutional-fixture-070", "farmaxia:institutional-validator-070"]},
     {"id": "farmaxia:institutional-query-safety-070", "expression": "does a Nextcloud proposal remain dry-run and blocked by missing permission or stale source state", "authority": "experiment_defined", "required_entities": ["farmaxia:institutional-kill-tests-070", "farmaxia:institutional-protocol-070"]}
   ],

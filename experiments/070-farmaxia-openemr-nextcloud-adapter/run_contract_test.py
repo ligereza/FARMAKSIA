@@ -37,6 +37,15 @@ def main() -> None:
         ],
         "original_envelopes_retained": True,
     }
+    assert payload["replay"] == {
+        "permutation_count": 3,
+        "all_canonical_signatures_equal": True,
+        "canonical_order": [
+            "ev-patient-context",
+            "ev-care-plan-published",
+            "ev-document-ready",
+        ],
+    }
     assert payload["adapter"]["source"] == "openemr"
     assert payload["adapter"]["destination"] == "nextcloud"
     assert payload["adapter"]["same_shared_cloudevents_kernel"] is True

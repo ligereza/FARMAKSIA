@@ -35,6 +35,28 @@ def compile_fixture(fixture: dict[str, Any]) -> dict[str, Any]:
     destination = fixture.get("nextcloud_surface", {})
     cloud_result = compile_envelope(fixture)
     blockers = list(cloud_result["blockers"])
+    replay_permutations = [
+        fixture.get("events", []),
+        list(reversed(fixture.get("events", []))),
+        sorted(
+            fixture.get("events", []),
+            key=lambda event: (event.get("farmaxia-observed-at", -1), event.get("id", "")),
+        ),
+    ]
+    replay_signatures = []
+    for permutation in replay_permutations:
+        replay_result = compile_envelope({**fixture, "events": permutation})
+        if replay_result["status"] != "CLOUDEVENTS_ENVELOPE_VERIFIED":
+            blockers.append("replay_permutation_not_verified")
+        replay_signatures.append(
+            json.dumps(
+                replay_result["envelope"]["canonical_order"],
+                separators=(",", ":"),
+            )
+        )
+    replay_order_invariant = len(set(replay_signatures)) == 1
+    if not replay_order_invariant:
+        blockers.append("replay_order_changed_projection")
 
     if adapter.get("source_surface") != source.get("surface"):
         blockers.append("adapter_source_surface_mismatch")
@@ -130,6 +152,11 @@ def compile_fixture(fixture: dict[str, Any]) -> dict[str, Any]:
             "duplicate_event_count": cloud_result["envelope"]["duplicate_event_count"],
             "canonical_order": cloud_result["envelope"]["canonical_order"],
             "original_envelopes_retained": cloud_result["envelope"]["original_envelopes_retained"],
+        },
+        "replay": {
+            "permutation_count": len(replay_permutations),
+            "all_canonical_signatures_equal": replay_order_invariant,
+            "canonical_order": cloud_result["envelope"]["canonical_order"],
         },
         "adapter": {
             "source": source.get("surface"),

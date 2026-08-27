@@ -11,7 +11,8 @@ documental sintética y una carpeta de Nextcloud.
 El fixture contiene sólo registros sintéticos. El adapter reutiliza
 `research/tools/cloudevents_contract.py`, transforma los eventos a claims
 documentales y verifica la fuente OpenEMR sintética antes de proponer una
-acción de organización en Nextcloud.
+acción de organización en Nextcloud. También repite el procesamiento con tres
+órdenes de llegada y exige la misma secuencia canónica.
 
 ```text
 OpenEMR sintético → CloudEvents común → adapter documental → Nextcloud dry-run

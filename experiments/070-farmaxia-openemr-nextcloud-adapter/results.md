@@ -10,6 +10,7 @@
 - 4 entregas OpenEMR sintéticas se redujeron a 3 eventos únicos y 1 duplicado;
 - el orden canónico se reconstruyó como `ev-patient-context`,
   `ev-care-plan-published`, `ev-document-ready`;
+- tres permutaciones de llegada produjeron la misma secuencia canónica;
 - los claims documentales conservaron referencias a las entidades fuente;
 - la propuesta para organizar el documento en Nextcloud permaneció en
   `DRY_RUN_ONLY` y requirió confirmación;
