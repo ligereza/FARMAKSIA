@@ -109,10 +109,12 @@ superficie sintética, un parche de código CODE-INE, fue verificada en el
 [experimento 071](../../experiments/071-farmaxia-codeine-patch-adapter/README.md):
 añadió sólo semántica específica de parche —hash base, precondición y
 previsualización— y conservó el mismo sobre, replay, procedencia y permisos.
-El siguiente objetivo queda restringido a auditar media sólo si timeline,
-codec o sincronización introducen una diferencia semántica real. Todavía no se
-seleccionará un adapter institucional real ni se añadirá infraestructura por
-anticipación.
+La auditoría media sintética fue verificada en el
+[experimento 072](../../experiments/072-farmaxia-media-timeline-adapter/README.md):
+timeline, codec y sincronización sí introdujeron semántica real, pero se
+encapsularon sin cambiar el núcleo. El siguiente objetivo es comparar el
+contrato con representaciones read-only sintéticas de OTIO y `ffprobe`, sin
+construir aún un renderer ni añadir infraestructura por anticipación.
 
 ## Fuentes revisadas
 

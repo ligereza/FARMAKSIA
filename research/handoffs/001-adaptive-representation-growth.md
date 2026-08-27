@@ -275,8 +275,9 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~tercera superficie no institucional ni documental~~ — el adapter de parche
   CODE-INE reutiliza el mismo núcleo y añade sólo hash base, precondición y
   previsualización en [experimento 071](../../experiments/071-farmaxia-codeine-patch-adapter/README.md);
-- auditoría de media sólo si exige una diferencia semántica real, como timeline,
-  codec o sincronización audiovisual;
+- ~~auditoría de media~~ — el [experimento 072](../../experiments/072-farmaxia-media-timeline-adapter/README.md)
+  demostró una diferencia real en reloj de media, rangos, codec y sincronía,
+  conservando el núcleo y sin justificar aún un renderer completo;
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;

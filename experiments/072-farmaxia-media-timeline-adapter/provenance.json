@@ -1,0 +1,55 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:072-media-timeline-adapter",
+  "status": "exploratory",
+  "purpose": "Audit whether media timeline and playback semantics require a new adapter layer while reusing the shared CloudEvents and evidence kernel.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-072", "type": "agent", "role": "defines_media_semantic_boundary_and_safety_scope"},
+    {"id": "farmaxia:python-runner-072", "type": "software_agent", "role": "runs_shared_cloudevents_kernel_and_exact_media_oracle"}
+  ],
+  "entities": [
+    {"id": "farmaxia:media-fixture-072", "type": "entity", "path": "fixture.json", "role": "synthetic_asset_timeline_tracks_marker_codec_and_player", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:media-validator-072", "type": "entity", "path": "run_experiment.py", "role": "media_clock_range_sync_and_permission_oracle", "authority": "human_declared_tool"},
+    {"id": "farmaxia:media-contract-072", "type": "entity", "path": "run_contract_test.py", "role": "positive_media_adapter_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:media-kill-tests-072", "type": "entity", "path": "run_kill_test.py", "role": "timebase_range_codec_sync_permission_and_provenance_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:media-protocol-072", "type": "entity", "path": "README.md", "role": "media_adapter_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:media-results-072", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:shared-cloudevents-kernel-072", "type": "entity", "path": "../../research/tools/cloudevents_contract.py", "role": "shared_envelope_validation_kernel", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:media-process-072", "type": "activity", "label": "adapt synthetic media events through the shared CloudEvents kernel and exact timeline oracle", "agent": "farmaxia:python-runner-072", "used": ["farmaxia:media-fixture-072", "farmaxia:shared-cloudevents-kernel-072", "farmaxia:media-validator-072"], "generated": []},
+    {"id": "farmaxia:media-kill-072", "type": "activity", "label": "attack media timebase range codec sync permission and provenance boundaries", "agent": "farmaxia:python-runner-072", "used": ["farmaxia:media-kill-tests-072"], "generated": []},
+    {"id": "farmaxia:media-record-072", "type": "activity", "label": "record the material media semantics and the limits of the adapter audit", "agent": "farmaxia:human-researcher-072", "used": ["farmaxia:media-fixture-072", "farmaxia:media-protocol-072"], "generated": ["farmaxia:media-results-072"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:media-query-reuse-072", "expression": "does the media surface reuse the shared CloudEvents identity provenance replay and permission kernel", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel-072", "farmaxia:media-validator-072"]},
+    {"id": "farmaxia:media-query-clock-072", "expression": "does the adapter keep event time separate from exact media timeline time", "authority": "experiment_defined", "required_entities": ["farmaxia:media-fixture-072", "farmaxia:media-validator-072"]},
+    {"id": "farmaxia:media-query-integrity-072", "expression": "does the oracle reject invalid source ranges unsupported codecs and audio video drift", "authority": "experiment_defined", "required_entities": ["farmaxia:media-fixture-072", "farmaxia:media-kill-tests-072"]},
+    {"id": "farmaxia:media-query-safety-072", "expression": "is the media action preview-only with no decode network or external write", "authority": "experiment_defined", "required_entities": ["farmaxia:media-protocol-072", "farmaxia:media-validator-072"]}
+  ],
+  "assumptions": [
+    "The media catalog, asset, timeline, decoder and player are synthetic and local.",
+    "The shared CloudEvents kernel owns envelope identity, event time, deduplication and provenance extensions.",
+    "Media frame coordinates are represented by exact value/rate rationals.",
+    "Preview permission is reversible and does not imply playback, export or write permission.",
+    "This audit must not decode media or contact a live service."
+  ],
+  "kill_tests": [
+    "Missing required media event blocks the adapter.",
+    "A source range outside the available asset range blocks the adapter.",
+    "An unsupported codec blocks the adapter.",
+    "Audio/video timeline drift blocks the adapter.",
+    "A zero timebase blocks without raising an exception.",
+    "A marker whose source frame disagrees with the source record blocks.",
+    "Missing preview permission blocks the action.",
+    "Disabling dry-run blocks external execution.",
+    "A stale asset hash blocks the precondition.",
+    "A claim without source references blocks provenance."
+  ],
+  "unknowns": [
+    "Whether a real adapter needs VFR, drop-frame, keyframe and time-warp semantics beyond this fixture.",
+    "Whether production audio/video synchronization needs a hardware clock or clock-drift model.",
+    "Whether a real player exposes codec and rights state as independently verifiable authority.",
+    "Whether transitions and effects require a separate semantic layer or can remain timeline payloads."
+  ]
+}

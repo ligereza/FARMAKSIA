@@ -1,0 +1,249 @@
+{
+  "schema": "farmaxia:media-timeline-adapter:0.1",
+  "source_of_truth": {
+    "surface": "media-catalog",
+    "source_uri": "https://media.example.test/catalog/farmaksia",
+    "current_version": 4,
+    "entity_refs": [
+      "media-catalog:farmaksia:asset:interview-master",
+      "media-catalog:farmaksia:timeline:cut-01",
+      "media-catalog:farmaksia:marker:insight-01",
+      "media-catalog:farmaksia:decoder:h264"
+    ],
+    "records": [
+      {
+        "entity_ref": "media-catalog:farmaksia:asset:interview-master",
+        "kind": "media_asset",
+        "sha256": "sha256:synthetic-interview-master-v4",
+        "codec": "h264",
+        "available_range": {
+          "start": {"value": 0, "rate": 24},
+          "duration": {"value": 240, "rate": 24}
+        },
+        "synthetic": true
+      },
+      {
+        "entity_ref": "media-catalog:farmaksia:timeline:cut-01",
+        "kind": "editorial_timeline",
+        "status": "published",
+        "source_version": 4
+      },
+      {
+        "entity_ref": "media-catalog:farmaksia:marker:insight-01",
+        "kind": "timeline_marker",
+        "source_frame": 60,
+        "label": "insight",
+        "source_version": 4
+      },
+      {
+        "entity_ref": "media-catalog:farmaksia:decoder:h264",
+        "kind": "decoder_capability",
+        "codec": "h264",
+        "status": "available",
+        "source_version": 4
+      }
+    ]
+  },
+  "policy": {
+    "cloud_events_specversion": "1.0",
+    "identity_is_source_plus_id": true,
+    "preserve_original_envelope": true,
+    "preserve_farmaxia_extensions": true,
+    "network_allowed": false,
+    "human_data": false,
+    "external_execution": false
+  },
+  "events": [
+    {
+      "specversion": "1.0",
+      "id": "ev-timeline-published",
+      "source": "https://media.example.test/catalog/farmaksia",
+      "type": "io.farmaksia.media.timeline.published.v1",
+      "subject": "timelines/cut-01",
+      "time": "2026-08-27T13:00:20Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "media-catalog:farmaksia:timeline:cut-01",
+      "farmaxia-source-version": 4,
+      "farmaxia-observed-at": 20,
+      "farmaxia-root-id": "root-timeline-cut-01",
+      "data": {
+        "event_id": "ev-timeline-published",
+        "entity_ref": "media-catalog:farmaksia:timeline:cut-01",
+        "subject": "timelines/cut-01",
+        "event_kind": "timeline_published",
+        "occurred_at": 20,
+        "payload": {"timeline_id": "cut-01", "timebase": {"value": 24, "rate": 1}}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-asset-ingested",
+      "source": "https://media.example.test/catalog/farmaksia",
+      "type": "io.farmaksia.media.asset.ingested.v1",
+      "subject": "assets/interview-master",
+      "time": "2026-08-27T13:00:10Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "media-catalog:farmaksia:asset:interview-master",
+      "farmaxia-source-version": 4,
+      "farmaxia-observed-at": 10,
+      "farmaxia-root-id": "root-asset-interview-master",
+      "data": {
+        "event_id": "ev-asset-ingested",
+        "entity_ref": "media-catalog:farmaksia:asset:interview-master",
+        "subject": "assets/interview-master",
+        "event_kind": "asset_ingested",
+        "occurred_at": 10,
+        "payload": {"codec": "h264", "sha256": "sha256:synthetic-interview-master-v4"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-marker-declared",
+      "source": "https://media.example.test/catalog/farmaksia",
+      "type": "io.farmaksia.media.marker.declared.v1",
+      "subject": "timelines/cut-01/markers/insight-01",
+      "time": "2026-08-27T13:00:30Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "media-catalog:farmaksia:marker:insight-01",
+      "farmaxia-source-version": 4,
+      "farmaxia-observed-at": 30,
+      "farmaxia-root-id": "root-marker-insight-01",
+      "data": {
+        "event_id": "ev-marker-declared",
+        "entity_ref": "media-catalog:farmaksia:marker:insight-01",
+        "subject": "timelines/cut-01/markers/insight-01",
+        "event_kind": "timeline_marker_declared",
+        "occurred_at": 30,
+        "payload": {"timeline_id": "cut-01", "source_frame": 60}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-timeline-published",
+      "source": "https://media.example.test/catalog/farmaksia",
+      "type": "io.farmaksia.media.timeline.published.v1",
+      "subject": "timelines/cut-01",
+      "time": "2026-08-27T13:00:20Z",
+      "datacontenttype": "application/json",
+      "farmaxia-delivery-id": "delivery-timeline-retry",
+      "farmaxia-entity-ref": "media-catalog:farmaksia:timeline:cut-01",
+      "farmaxia-source-version": 4,
+      "farmaxia-observed-at": 31,
+      "farmaxia-root-id": "root-timeline-cut-01",
+      "data": {
+        "event_id": "ev-timeline-published",
+        "entity_ref": "media-catalog:farmaksia:timeline:cut-01",
+        "subject": "timelines/cut-01",
+        "event_kind": "timeline_published",
+        "occurred_at": 20,
+        "payload": {"timeline_id": "cut-01", "timebase": {"value": 24, "rate": 1}}
+      }
+    }
+  ],
+  "expected_canonical_order": ["ev-asset-ingested", "ev-timeline-published", "ev-marker-declared"],
+  "adapter": {
+    "input_envelope": "inline",
+    "source_surface": "media-catalog",
+    "destination_surface": "media-review-player",
+    "required_event_ids": ["ev-asset-ingested", "ev-timeline-published", "ev-marker-declared"],
+    "mapping": {
+      "source_plus_id": "event_id",
+      "farmaxia-entity-ref": "source_ref",
+      "time": "event_clock.occurred_at",
+      "timeline.timebase": "media_clock.rate",
+      "clip.source_range": "asset_frame_range"
+    }
+  },
+  "player": {
+    "player_id": "farmaksia-review-player",
+    "permissions": ["read", "preview"],
+    "dry_run_only": true,
+    "decoder_capabilities": ["h264"]
+  },
+  "timeline": {
+    "timeline_id": "cut-01",
+    "timebase": {"value": 24, "rate": 1},
+    "tracks": [
+      {
+        "track_id": "video-main",
+        "media_kind": "video",
+        "clips": [
+          {
+            "clip_id": "clip-video-01",
+            "asset_ref": "media-catalog:farmaksia:asset:interview-master",
+            "timeline_start": {"value": 0, "rate": 24},
+            "source_range": {
+              "start": {"value": 48, "rate": 24},
+              "duration": {"value": 96, "rate": 24}
+            }
+          }
+        ]
+      },
+      {
+        "track_id": "audio-main",
+        "media_kind": "audio",
+        "clips": [
+          {
+            "clip_id": "clip-audio-01",
+            "asset_ref": "media-catalog:farmaksia:asset:interview-master",
+            "timeline_start": {"value": 0, "rate": 24},
+            "source_range": {
+              "start": {"value": 48, "rate": 24},
+              "duration": {"value": 96, "rate": 24}
+            }
+          }
+        ]
+      }
+    ],
+    "markers": [
+      {
+        "marker_id": "media-catalog:farmaksia:marker:insight-01",
+        "source_frame": 60,
+        "label": "insight"
+      }
+    ]
+  },
+  "representation_claims": [
+    {
+      "claim_id": "claim-media-asset",
+      "text": "El asset sintético usa H.264 y conserva su hash de origen.",
+      "source_refs": ["media-catalog:farmaksia:asset:interview-master"]
+    },
+    {
+      "claim_id": "claim-timeline-marker",
+      "text": "El marcador insight-01 está en el frame 60 del asset fuente.",
+      "source_refs": [
+        "media-catalog:farmaksia:timeline:cut-01",
+        "media-catalog:farmaksia:marker:insight-01"
+      ]
+    }
+  ],
+  "action": {
+    "action_id": "act-preview-media-cut-01",
+    "operation": "preview_media_timeline",
+    "target_player_id": "farmaksia-review-player",
+    "dry_run": true,
+    "requires_confirmation": true,
+    "preconditions": [
+      {
+        "entity_ref": "media-catalog:farmaksia:asset:interview-master",
+        "source_version": 4,
+        "sha256": "sha256:synthetic-interview-master-v4"
+      },
+      {
+        "entity_ref": "media-catalog:farmaksia:timeline:cut-01",
+        "source_version": 4,
+        "status": "published"
+      }
+    ]
+  },
+  "expected": {
+    "envelope_status": "CLOUDEVENTS_ENVELOPE_VERIFIED",
+    "adapter_status": "MEDIA_TIMELINE_ADAPTER_VERIFIED",
+    "canonical_order": ["ev-asset-ingested", "ev-timeline-published", "ev-marker-declared"],
+    "marker_presentation_frame": 12,
+    "marker_presentation_time": "1/2",
+    "audio_video_sync_offset_frames": 0,
+    "action_status": "DRY_RUN_ONLY"
+  }
+}

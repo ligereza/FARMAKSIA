@@ -41,7 +41,7 @@ commits, sandboxing de herramientas y cualquier integración con una API viva.
 
 ## Siguiente objetivo
 
-Auditar una superficie media sólo si introduce una semántica materialmente
-distinta —por ejemplo timeline, codec o sincronización audiovisual—. Si sólo
-repite identidad, procedencia, permisos, replay y dry-run, se documentará como
-no necesaria y no se añadirá otro adapter.
+La auditoría media 072 ya demostró una diferencia material —reloj de frames,
+rango, codec y sincronía—. El siguiente paso es comparar ese contrato con
+representaciones read-only sintéticas de OTIO y `ffprobe`, sin construir aún un
+renderer multimedia.
