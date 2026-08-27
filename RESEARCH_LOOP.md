@@ -264,6 +264,15 @@ ofrecían cuatro representaciones. El sistema pudo explorar sin objetivo
 formal y sólo habilitó el contrato de acción al final. Esto demuestra una
 frontera computacional, no creatividad, comprensión ni aprendizaje humano.
 
+El experimento 062 convirtió esa frontera en un renderer local de
+`RepresentationSpace`. La rama activa ocupa el centro, las alternativas quedan
+recuperables, `compare` exige dos candidatos explícitos y `commit` exige
+confirmación junto a un preview reversible. La fuente semántica —entidades,
+relaciones e incertidumbres— se conserva en las cuatro proyecciones. No hay
+cámara, red, overlay del escritorio ni ejecución externa. Esto demuestra una
+interacción contractual y reversible; no demuestra que una representación sea
+mejor para una persona.
+
 La auditoría 040 recorrió los requisitos de esta fase: prototipos mínimos,
 literatura, adopción, contratos, procedencia, kill tests, límites, decisiones y
 seguridad. `LAB_COMPLETION_VALID` confirma que la fundación reproducible está
@@ -283,7 +292,11 @@ respetan la auditoría 040:
 1. CODEINE: mantener separadas transición base, score declarado, oracle
    ejecutable y estado humano; exigir que las mutaciones relevantes sean
    detectables antes de llamar verificada a una secuencia.
-2. VIZZ: el experimento 032 separó la calibración visible del runtime y el
+2. RepresentationSpace: medir si comparar ramas preservadas ayuda a corregir
+   decisiones en tareas sintéticas sin convertir la primera sugerencia en
+   autoridad. Registrar sólo decisiones y errores observables, no estados
+   mentales.
+3. VIZZ: el experimento 032 separó la calibración visible del runtime y el
    experimento 033 adoptó un pipeline Python CUDA con RetinaFace + gaze ONNX y
    una capa click-through sobre el contenido normal. El siguiente paso humano,
    solo con consentimiento explícito, es medir retención, error frente a

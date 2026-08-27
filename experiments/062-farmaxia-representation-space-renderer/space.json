@@ -1,0 +1,83 @@
+{
+  "schema": "farmaxia:representation-space-renderer:0.1",
+  "source_state": {
+    "id": "scene-3d-exploration",
+    "statement": "Quiero hacer algo interesante con esta escena 3D, pero todavía no sé qué.",
+    "revision": 1,
+    "entities": [
+      {"id": "scene", "label": "escena", "role": "source"},
+      {"id": "objects", "label": "objetos", "role": "content"},
+      {"id": "lighting", "label": "luz", "role": "condition"},
+      {"id": "composition", "label": "composición", "role": "unknown"},
+      {"id": "purpose", "label": "propósito", "role": "unknown"}
+    ],
+    "relations": [
+      {"id": "scene-contains-objects", "from": "scene", "to": "objects", "kind": "contains", "label": "contiene"},
+      {"id": "lighting-affects-composition", "from": "lighting", "to": "composition", "kind": "affects", "label": "afecta"},
+      {"id": "objects-form-composition", "from": "objects", "to": "composition", "kind": "forms", "label": "forma"},
+      {"id": "purpose-unknown", "from": "purpose", "to": "scene", "kind": "unknown_for", "label": "aún desconocido"}
+    ],
+    "unknowns": ["style", "composition", "purpose"],
+    "constraints": ["preserve_source", "show_unknowns", "reversible_preview"]
+  },
+  "plans": [
+    {
+      "id": "plan-map",
+      "kind": "relation_map",
+      "title": "Mapa de relaciones",
+      "description": "Hace visible qué contiene, afecta y forma a qué, sin cerrar el propósito.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "possibility_field", "tempo": "deliberate", "motion": "reduced", "density": "balanced", "flashing": false}
+    },
+    {
+      "id": "plan-sequence",
+      "kind": "guided_sequence",
+      "title": "Ruta guiada",
+      "description": "Ordena una posible exploración por pasos, conservando anclas y retorno.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "next_relation", "tempo": "deliberate", "motion": "reduced", "density": "compact", "flashing": false}
+    },
+    {
+      "id": "plan-analogy",
+      "kind": "contrastive_analogy",
+      "title": "Analogía contrastiva",
+      "description": "Conecta la escena con una estructura familiar y señala dónde deja de aplicar.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "paired_relation", "tempo": "deliberate", "motion": "trace", "density": "balanced", "flashing": false}
+    },
+    {
+      "id": "plan-full",
+      "kind": "full_scene",
+      "title": "Superficie completa",
+      "description": "Mantiene la vista amplia para inspeccionar la escena antes de decidir qué enfatizar.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "whole_surface", "tempo": "normal", "motion": "reduced", "density": "full", "flashing": false}
+    }
+  ],
+  "phase_contracts": {
+    "explore": {"allowed": ["represent", "inspect", "compare", "branch"], "requires": [], "forbidden": ["execute", "apply"]},
+    "compare": {"allowed": ["represent", "inspect", "compare", "select", "branch"], "requires": ["two_candidates"], "forbidden": ["execute", "apply"]},
+    "commit": {"allowed": ["represent", "preview", "confirm", "commit", "revert"], "requires": ["user_confirmation", "reversible_preview"], "forbidden": ["silent_apply", "execute"]}
+  },
+  "trajectory": [
+    {"type": "offer", "phase": "explore", "plan_id": "plan-map"},
+    {"type": "offer", "phase": "explore", "plan_id": "plan-sequence"},
+    {"type": "offer", "phase": "explore", "plan_id": "plan-analogy"},
+    {"type": "offer", "phase": "explore", "plan_id": "plan-full"},
+    {"type": "compare", "phase": "compare", "plan_ids": ["plan-map", "plan-analogy"]},
+    {"type": "select", "phase": "compare", "plan_id": "plan-map"},
+    {"type": "preview", "phase": "commit", "plan_id": "plan-map"},
+    {"type": "confirm", "phase": "commit", "requires": "user_confirmation"},
+    {"type": "commit", "phase": "commit", "plan_id": "plan-map"},
+    {"type": "revert", "phase": "commit", "plan_id": "plan-map"}
+  ],
+  "commit_contract": {
+    "id": "commit-representation-direction",
+    "risk_class": "representational",
+    "requires_user_confirmation": true,
+    "preview_is_reversible": true,
+    "external_execution": false,
+    "source_mutation": false,
+    "revert_operation": "restore_previous_representation_state"
+  }
+}

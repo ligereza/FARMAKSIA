@@ -1,0 +1,48 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:062-representation-space-renderer",
+  "status": "exploratory",
+  "purpose": "Validate a local renderer for branching representations with explicit comparison, guarded commitment and reversible preview.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-062", "type": "agent", "role": "defines_the_representation_space_question"},
+    {"id": "farmaxia:python-runner-062", "type": "software_agent", "role": "validates_the_fixture_and_kill_tests"}
+  ],
+  "entities": [
+    {"id": "farmaxia:representation-space-062", "type": "entity", "path": "space.json", "role": "source_state_plans_phase_contracts_and_commit_contract", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:representation-renderer-062", "type": "entity", "path": "renderer.html", "role": "local_interactive_projection", "authority": "human_declared_tool"},
+    {"id": "farmaxia:representation-validator-062", "type": "entity", "path": "run_experiment.py", "role": "contract_validator", "authority": "human_declared_tool"},
+    {"id": "farmaxia:representation-contract-062", "type": "entity", "path": "run_contract_test.py", "role": "positive_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:representation-kill-tests-062", "type": "entity", "path": "run_kill_test.py", "role": "adversarial_boundary_tests", "authority": "human_declared_tool"},
+    {"id": "farmaxia:representation-decision-068", "type": "entity", "path": "../../research/decisions/068-representation-space-renderer.md", "role": "architecture_decision", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:representation-compile-062", "type": "activity", "label": "validate source preservation and phase contracts", "agent": "farmaxia:python-runner-062", "used": ["farmaxia:representation-space-062", "farmaxia:representation-validator-062"], "generated": []},
+    {"id": "farmaxia:representation-render-062", "type": "activity", "label": "render explore compare and commit states locally", "agent": "farmaxia:human-researcher-062", "used": ["farmaxia:representation-renderer-062"], "generated": []},
+    {"id": "farmaxia:representation-verify-062", "type": "activity", "label": "run positive and kill contracts", "agent": "farmaxia:python-runner-062", "used": ["farmaxia:representation-contract-062", "farmaxia:representation-kill-tests-062"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:representation-query-preservation-062", "expression": "do all branches preserve the same source entities relations and unknowns", "authority": "experiment_defined", "required_entities": ["farmaxia:representation-space-062", "farmaxia:representation-validator-062"]},
+    {"id": "farmaxia:representation-query-commitment-062", "expression": "does the renderer keep exploration and comparison separate from guarded reversible commitment", "authority": "experiment_defined", "required_entities": ["farmaxia:representation-space-062", "farmaxia:representation-contract-062"]}
+  ],
+  "assumptions": [
+    "A representation branch can be useful before task purpose is resolved.",
+    "The source semantic set is small enough to preserve explicitly in a fixture.",
+    "Local browser state is sufficient to demonstrate the interaction contract.",
+    "A visual preview can remain representational without mutating an external application."
+  ],
+  "kill_tests": [
+    "A branch that drops source semantics must block.",
+    "Explore and compare must not acquire execution.",
+    "Commit must require confirmation and a reversible preview.",
+    "Unknown branch references must block.",
+    "Periodic flashing must block.",
+    "The renderer must remain offline and permission-free."
+  ],
+  "unknowns": [
+    "How many alternatives a person can compare before comparison becomes overload.",
+    "Whether keeping alternatives visible improves later correction of a choice.",
+    "Whether the four projection kinds transfer to real tutorials or coding tasks.",
+    "Which explicit user signals should control density, tempo and motion.",
+    "How a future agent can supply plans without becoming an opaque authority."
+  ]
+}

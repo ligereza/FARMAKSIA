@@ -92,6 +92,7 @@ def main() -> None:
         "experiments/059-xanax-tutorial-transfer-contract/provenance.json",
         "experiments/060-codeine-experience-compiler/provenance.json",
         "experiments/061-codeine-progressive-commitment/provenance.json",
+        "experiments/062-farmaxia-representation-space-renderer/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -997,6 +998,22 @@ def main() -> None:
         "CODEINE_061_KILL_TESTS_VALID",
     )
     command("provenance 061", python_script("research/tools/validate_provenance.py", provenance[57]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA RepresentationSpace renderer 062",
+        python_script("experiments/062-farmaxia-representation-space-renderer/run_experiment.py"),
+        '"status": "REPRESENTATION_SPACE_RENDERER_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA RepresentationSpace renderer 062",
+        python_script("experiments/062-farmaxia-representation-space-renderer/run_contract_test.py"),
+        "FARMAXIA_062_REPRESENTATION_SPACE_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA RepresentationSpace renderer 062",
+        python_script("experiments/062-farmaxia-representation-space-renderer/run_kill_test.py"),
+        "FARMAXIA_062_KILL_TESTS_VALID",
+    )
+    command("provenance 062", python_script("research/tools/validate_provenance.py", provenance[58]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
