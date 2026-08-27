@@ -1,0 +1,137 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:061-codeine-progressive-commitment",
+  "status": "exploratory",
+  "purpose": "Test progressive intent formalization, branching representations and risk-proportional commitment gates.",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher-061",
+      "type": "agent",
+      "role": "declares_a_longitudinal_synthetic_intent_fixture"
+    },
+    {
+      "id": "farmaxia:python-runner-061",
+      "type": "software_agent",
+      "role": "applies_local_patches_compiles_policies_and_runs_independent_oracle"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:codeine-061-fixture",
+      "type": "entity",
+      "path": "fixture.json",
+      "role": "intent_revisions_representation_branches_and_action_contract",
+      "authority": "human_declared_fixture"
+    },
+    {
+      "id": "farmaxia:codeine-061-compiler",
+      "type": "entity",
+      "path": "run_experiment.py",
+      "role": "progressive_commitment_compiler",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-061-oracle",
+      "type": "entity",
+      "path": "objective_oracle.py",
+      "role": "independent_progression_and_action_oracle",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-061-contract",
+      "type": "entity",
+      "path": "run_contract_test.py",
+      "role": "positive_progressive_commitment_contract",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-061-kill-tests",
+      "type": "entity",
+      "path": "run_kill_test.py",
+      "role": "negative_commitment_and_branching_tests",
+      "authority": "human_declared_tool"
+    },
+    {
+      "id": "farmaxia:codeine-061-decision",
+      "type": "entity",
+      "path": "../../research/decisions/067-codeine-progressive-commitment.md",
+      "role": "direction_decision_and_architecture_refinement",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:codeine-061-formalization",
+      "type": "activity",
+      "label": "apply intent revisions and compile phase-specific representation policies",
+      "agent": "farmaxia:python-runner-061",
+      "used": [
+        "farmaxia:codeine-061-fixture",
+        "farmaxia:codeine-061-compiler"
+      ],
+      "generated": []
+    },
+    {
+      "id": "farmaxia:codeine-061-verification",
+      "type": "activity",
+      "label": "check commitment order and reversible action contract with independent oracle",
+      "agent": "farmaxia:python-runner-061",
+      "used": [
+        "farmaxia:codeine-061-oracle",
+        "farmaxia:codeine-061-contract",
+        "farmaxia:codeine-061-kill-tests"
+      ],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:codeine-061-query-ambiguity",
+      "expression": "can an emergent intent receive reversible alternative representations without being blocked",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:codeine-061-fixture",
+        "farmaxia:codeine-061-compiler"
+      ]
+    },
+    {
+      "id": "farmaxia:codeine-061-query-commitment",
+      "expression": "does execution remain unavailable until intent maturity, outcome verifiability and action contract are sufficient",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:codeine-061-compiler",
+        "farmaxia:codeine-061-oracle"
+      ]
+    },
+    {
+      "id": "farmaxia:codeine-061-query-branching",
+      "expression": "are unselected representation plans retained as alternatives instead of being labeled wrong",
+      "authority": "experiment_defined",
+      "required_entities": [
+        "farmaxia:codeine-061-fixture",
+        "farmaxia:codeine-061-contract"
+      ]
+    }
+  ],
+  "assumptions": [
+    "Intent revisions are declarative synthetic examples and do not represent a real participant.",
+    "JSON Patch supplies revision and branching mechanics without requiring a runtime dependency.",
+    "A reversible representation may be shown while task binding remains unknown.",
+    "Action contracts govern commitment and execution, not every act of exploration."
+  ],
+  "kill_tests": [
+    "Premature commitment must block the progression.",
+    "A representation space without alternatives must block exploratory validity.",
+    "Invalid JSON Patch paths must not be silently ignored.",
+    "An action without independent verification must block final construction.",
+    "Consequential unauthorised actions must block.",
+    "No human data, camera, network or generated-code execution is allowed."
+  ],
+  "unknowns": [
+    "Whether progressive formalization improves human exploration or learning.",
+    "Whether retaining alternatives prevents premature convergence in real creative work.",
+    "How many branches a person can compare before the representation itself becomes overwhelming.",
+    "Whether a real application can expose enough state for a reversible effect contract.",
+    "Whether RFC 6902 patches remain sufficient for collaborative or long-lived intent histories."
+  ]
+}

@@ -58,6 +58,7 @@ def main() -> None:
         "029-codeine-executable-oracle",
         "030-vizz-webgazer-opt-in",
         "060-codeine-experience-compiler",
+        "061-codeine-progressive-commitment",
     ]
     for experiment in required_experiments:
         directory = ROOT / "experiments" / experiment
@@ -80,6 +81,7 @@ def main() -> None:
         "040-laboratory-completion-audit.md",
         "041-vizz-webgazer-opt-in.md",
         "066-codeine-experience-compiler.md",
+        "067-codeine-progressive-commitment.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

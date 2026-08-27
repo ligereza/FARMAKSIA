@@ -1,0 +1,116 @@
+{
+  "schema": "farmaxia:progressive-commitment-fixture:0.1",
+  "base_intent": {
+    "statement": "Quiero hacer algo interesante con esta escena 3D, pero todavía no sé qué.",
+    "maturity": "emergent",
+    "outcome_verifiability": "open",
+    "action_risk": "representational",
+    "alternatives": [],
+    "constraints": [],
+    "unknowns": ["style", "composition", "purpose"],
+    "declared_preferences": {
+      "tempo": "deliberate",
+      "motion": "reduced",
+      "density": "balanced"
+    },
+    "provenance": "user_declared",
+    "revision": 1
+  },
+  "intent_revisions": [
+    {
+      "id": "intent-revision-2",
+      "patch": [
+        {"op": "replace", "path": "/revision", "value": 2},
+        {"op": "add", "path": "/alternatives/-", "value": "map_of_relations"},
+        {"op": "add", "path": "/alternatives/-", "value": "guided_sequence"},
+        {"op": "add", "path": "/alternatives/-", "value": "contrastive_analogy"},
+        {"op": "add", "path": "/alternatives/-", "value": "full_scene"}
+      ]
+    },
+    {
+      "id": "intent-revision-3",
+      "patch": [
+        {"op": "replace", "path": "/revision", "value": 3},
+        {"op": "replace", "path": "/maturity", "value": "provisional"},
+        {"op": "replace", "path": "/outcome_verifiability", "value": "constrained"},
+        {"op": "replace", "path": "/action_risk", "value": "reversible"},
+        {"op": "replace", "path": "/statement", "value": "Quiero explorar una composición nocturna sin modificar la escena original."},
+        {"op": "add", "path": "/constraints/-", "value": "preserve_source_scene"}
+      ]
+    },
+    {
+      "id": "intent-revision-4",
+      "patch": [
+        {"op": "replace", "path": "/revision", "value": 4},
+        {"op": "replace", "path": "/statement", "value": "Quiero construir un preview reversible de la composición nocturna usando una rama de trabajo."},
+        {"op": "add", "path": "/constraints/-", "value": "preview_before_apply"},
+        {"op": "add", "path": "/constraints/-", "value": "keep_alternative_plans"}
+      ]
+    },
+    {
+      "id": "intent-revision-5",
+      "patch": [
+        {"op": "replace", "path": "/revision", "value": 5},
+        {"op": "replace", "path": "/maturity", "value": "committed"},
+        {"op": "replace", "path": "/outcome_verifiability", "value": "verifiable"},
+        {"op": "replace", "path": "/statement", "value": "Construir y verificar un preview reversible de la composición nocturna."}
+      ]
+    }
+  ],
+  "representation_space": [
+    {
+      "id": "plan-map",
+      "kind": "relation_map",
+      "description": "Muestra objetos, relaciones y alternativas como un campo de posibilidades.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "possibility_field", "tempo": "deliberate", "motion": "reduced", "density": "balanced"}
+    },
+    {
+      "id": "plan-sequence",
+      "kind": "guided_sequence",
+      "description": "Revela una ruta posible por etapas, manteniendo anclas y regreso.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "next_relation", "tempo": "deliberate", "motion": "reduced", "density": "compact"}
+    },
+    {
+      "id": "plan-analogy",
+      "kind": "contrastive_analogy",
+      "description": "Relaciona la escena con una estructura familiar y muestra dónde se rompe.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "paired_relation", "tempo": "deliberate", "motion": "trace", "density": "balanced"}
+    },
+    {
+      "id": "plan-full",
+      "kind": "full_scene",
+      "description": "Conserva la vista completa para inspección y comparación.",
+      "preserves": ["scene_entities", "scene_relations", "unknowns"],
+      "sensory_policy": {"focus": "whole_surface", "tempo": "normal", "motion": "reduced", "density": "full"}
+    }
+  ],
+  "trajectory": [
+    {"type": "offer", "plan_id": "plan-map", "at_revision": 1},
+    {"type": "offer", "plan_id": "plan-sequence", "at_revision": 1},
+    {"type": "offer", "plan_id": "plan-analogy", "at_revision": 1},
+    {"type": "offer", "plan_id": "plan-full", "at_revision": 1},
+    {"type": "inspect", "plan_id": "plan-analogy", "at_revision": 2},
+    {"type": "compare", "plan_ids": ["plan-map", "plan-analogy"], "at_revision": 2},
+    {"type": "select", "plan_id": "plan-map", "at_revision": 3},
+    {"type": "edit", "plan_id": "plan-map", "change": "preserve_source_scene", "at_revision": 4},
+    {"type": "commit_intent", "at_revision": 5},
+    {"type": "preview", "action_id": "preview-night-composition", "at_revision": 5},
+    {"type": "authorize", "action_id": "preview-night-composition", "at_revision": 5},
+    {"type": "dry_run", "action_id": "preview-night-composition", "at_revision": 5},
+    {"type": "verify", "action_id": "preview-night-composition", "at_revision": 5}
+  ],
+  "action_contract": {
+    "id": "preview-night-composition",
+    "operation": "create_reversible_preview",
+    "preconditions": ["intent_committed", "source_scene_available", "preview_branch_available"],
+    "expected_postconditions": ["preview_exists", "source_scene_unchanged", "branch_remains_reversible"],
+    "forbidden_postconditions": ["source_scene_overwritten", "alternative_plans_deleted"],
+    "verification_method": "synthetic_state_oracle",
+    "risk_class": "reversible",
+    "reversibility": "delete_preview_branch",
+    "authorized": true
+  }
+}

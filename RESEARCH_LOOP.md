@@ -5,10 +5,10 @@
 Mantener un laboratorio independiente de investigación científica,
 computacional y artística sobre estados humano-computacionales:
 
-- CODE-INE: transición entre producción estimulada y repetición/sedación
-  durante una sesión de desarrollo.
-- X-ANA-X: reducción provisional de fricción cognitiva mediante analogía,
-  búsqueda y verificación.
+- CODE-INE: compilación progresiva de intención, representación y construcción;
+  permisivo con la ambigüedad al explorar y estricto al comprometer o ejecutar.
+- X-ANA-X: expansión de relaciones, analogías, contrastes y residuos para
+  ayudar a formar una dirección sin imponerla.
 - KETAMINE: `UNASSIGNED / QUARANTINED` hasta que aparezca una experiencia
   humano-computacional genuinamente distinta.
 - VIZZ: adaptación activa de la representación computacional a la percepción
@@ -17,6 +17,21 @@ computacional y artística sobre estados humano-computacionales:
 El objetivo no es conservar los cuatro nombres ni traducir farmacología a
 software. Cada ciclo debe descubrir un mecanismo y puede confirmar, fusionar,
 redefinir o abandonar una metáfora.
+
+## Dirección activa desde 2026-08-27
+
+FARMAKSIA adopta una escalera de compromiso:
+
+```text
+representar → comparar → formar intención → construir preview → ejecutar → verificar
+```
+
+La representación reversible puede trabajar con intención emergente. El
+compromiso y la ejecución requieren progresivamente restricciones,
+autorización, reversibilidad y evidencia. Las alternativas no seleccionadas se
+conservan como ramas; no se etiquetan como incorrectas. Esta regla conecta
+CODE-INE con X-ANA-X y VIZZ sin convertir la experiencia en una tubería que
+siempre converge a una única respuesta.
 
 ## Ciclo de trabajo
 
@@ -237,6 +252,17 @@ en memoria y el apagado intenta detener vídeo, loop y modelo. El test estático
 pasó sin abrir cámara, pedir permisos ni usar red. Esto demuestra integración,
 no precisión, latencia, cobertura, comodidad, eficacia o inferencia de estados
 humanos; esas propiedades siguen desconocidas.
+
+El experimento 060 convirtió CODE-INE en un compilador de experiencia: una
+intención declarada produce un mapa contrastivo, una máquina de estados y un
+plan sensorial reversible. La traza compilada coincide con un oracle
+independiente y conserva analogías, diferencias y desconocidos.
+
+El experimento 061 extendió esa unidad a una sesión longitudinal sintética. La
+intención pasó de `emergent` a `provisional` y luego a `committed`, mientras se
+ofrecían cuatro representaciones. El sistema pudo explorar sin objetivo
+formal y sólo habilitó el contrato de acción al final. Esto demuestra una
+frontera computacional, no creatividad, comprensión ni aprendizaje humano.
 
 La auditoría 040 recorrió los requisitos de esta fase: prototipos mínimos,
 literatura, adopción, contratos, procedencia, kill tests, límites, decisiones y

@@ -91,6 +91,7 @@ def main() -> None:
         "experiments/058-farmaxia-gpu-composition-runtime/provenance.json",
         "experiments/059-xanax-tutorial-transfer-contract/provenance.json",
         "experiments/060-codeine-experience-compiler/provenance.json",
+        "experiments/061-codeine-progressive-commitment/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -980,6 +981,22 @@ def main() -> None:
         "CODEINE_060_KILL_TESTS_VALID",
     )
     command("provenance 060", python_script("research/tools/validate_provenance.py", provenance[56]), "PROVENANCE_VALID")
+    command(
+        "experiment CODE-INE progressive commitment 061",
+        python_script("experiments/061-codeine-progressive-commitment/run_experiment.py"),
+        '"status": "PROGRESSIVE_COMMITMENT_VERIFIED"',
+    )
+    command(
+        "contract test CODE-INE progressive commitment 061",
+        python_script("experiments/061-codeine-progressive-commitment/run_contract_test.py"),
+        "CODEINE_061_PROGRESSIVE_COMMITMENT_CONTRACT_VALID",
+    )
+    command(
+        "kill test CODE-INE progressive commitment 061",
+        python_script("experiments/061-codeine-progressive-commitment/run_kill_test.py"),
+        "CODEINE_061_KILL_TESTS_VALID",
+    )
+    command("provenance 061", python_script("research/tools/validate_provenance.py", provenance[57]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

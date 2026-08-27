@@ -33,6 +33,7 @@ REQUIRED_EXPERIMENTS = [
     "029-codeine-executable-oracle",
     "030-vizz-webgazer-opt-in",
     "060-codeine-experience-compiler",
+    "061-codeine-progressive-commitment",
 ]
 
 DECISIONS = [
@@ -48,6 +49,7 @@ DECISIONS = [
     "039-codeine-executable-oracle.md",
     "041-vizz-webgazer-opt-in.md",
     "066-codeine-experience-compiler.md",
+    "067-codeine-progressive-commitment.md",
 ]
 
 LITERATURE = [
@@ -110,6 +112,7 @@ def main() -> None:
         ROOT / "experiments" / "029-codeine-executable-oracle" / "provenance.json",
         ROOT / "experiments" / "030-vizz-webgazer-opt-in" / "provenance.json",
         ROOT / "experiments" / "060-codeine-experience-compiler" / "provenance.json",
+        ROOT / "experiments" / "061-codeine-progressive-commitment" / "provenance.json",
     ]
     for path in active_unknowns:
         manifest = json.loads(path.read_text(encoding="utf-8"))
