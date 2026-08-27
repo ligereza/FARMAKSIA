@@ -150,8 +150,9 @@ en el [experimento 071](../../experiments/071-farmaxia-codeine-patch-adapter/REA
 La auditoría media 072 demostró una diferencia acotada en reloj de frames,
 rango, codec y sincronía, sin justificar una dependencia externa. El puente
 073 comparó representaciones OTIO-style y ffprobe-style: la primera fue
-compatible y la segunda quedó correctamente en `PARTIAL_UNKNOWN`. El siguiente
-paso es probar un sidecar editorial sintético por hash/versiones. No se inicia
+compatible y la segunda quedó correctamente en `PARTIAL_UNKNOWN`. El 074
+verificó la composición de un sidecar editorial sintético por hash/versiones.
+No se inicia
 todavía una captura humana, un benchmark en VM, una descarga de modelos ni una
 instalación de agentes.
 

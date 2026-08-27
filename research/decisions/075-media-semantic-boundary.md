@@ -42,7 +42,9 @@ en dependencias:
 La comparación 073 mostró que una representación de streams estilo `ffprobe`
 no debe ascender silenciosamente a timeline editorial: puede compartir
 identidad, hash, codec y timebase con OTIO-style, pero necesita un sidecar para
-rangos de clips y marcadores.
+rangos de clips y marcadores. El experimento 074 verificó la composición
+read-only de ese sidecar por `asset_ref`, hash y versión, manteniendo
+`PARTIAL_UNKNOWN` hasta que las tres llaves y los rangos exactos coinciden.
 
 ## Límites
 
@@ -55,4 +57,6 @@ independiente, permisos y una política de exportación explícita.
 
 No se añadirá un renderer media completo. Primero se compondrán fuentes
 read-only por hash/versiones; sólo un campo cuya semántica no pueda preservarse
-con esa composición justificará una extensión.
+con esa composición justificará una extensión. Dos sidecars incompatibles no se
+resolverán por orden de llegada: deben conservarse y producir `CONFLICT` o
+`UNKNOWN`.

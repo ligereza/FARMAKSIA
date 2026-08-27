@@ -280,11 +280,14 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
   conservando el núcleo y sin justificar aún un renderer completo;
 - ~~puente de representaciones media~~ — OTIO-style se normaliza como completo
   y ffprobe-style se abstiene como `PARTIAL_UNKNOWN` en el [experimento 073](../../experiments/073-farmaxia-media-representation-bridge/README.md);
+- ~~composición de sidecar editorial~~ — ffprobe-style se completa sólo cuando
+  coinciden identidad, hash y versión, con rangos exactos y política read-only,
+  en el [experimento 074](../../experiments/074-farmaxia-media-sidecar-composition/README.md);
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
-- composición de sidecar editorial por hash/versiones;
+- conflictos entre sidecars válidos y versiones concurrentes;
 
 ### Más adelante
 

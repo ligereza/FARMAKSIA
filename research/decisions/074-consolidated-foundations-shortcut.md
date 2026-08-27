@@ -116,8 +116,10 @@ encapsularon sin cambiar el núcleo. El siguiente objetivo es comparar el
 contrato con representaciones read-only sintéticas de OTIO y `ffprobe`. Ese
 puente fue verificado en el [experimento 073](../../experiments/073-farmaxia-media-representation-bridge/README.md):
 OTIO-style conserva la edición y ffprobe-style exige un sidecar editorial. El
-siguiente objetivo es probar esa composición por hash/versiones, sin construir
-aún un renderer ni añadir infraestructura por anticipación.
+siguiente objetivo era probar esa composición por hash/versiones, sin construir
+aún un renderer ni añadir infraestructura por anticipación. El experimento 074
+ya verificó el caso compatible en un fixture read-only; el siguiente riesgo es
+un conflicto entre sidecars válidos o una versión concurrente.
 
 ## Fuentes revisadas
 

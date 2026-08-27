@@ -1,0 +1,58 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:074-media-sidecar-composition",
+  "status": "exploratory",
+  "purpose": "Compose synthetic read-only ffprobe-style metadata with an editorial sidecar using identity hash and source version without adding a new media core.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-074", "type": "agent", "role": "defines_join_keys_abstention_and_safety_boundary"},
+    {"id": "farmaxia:python-runner-074", "type": "software_agent", "role": "replays_and_verifies_sidecar_composition_through_shared_kernel"}
+  ],
+  "entities": [
+    {"id": "farmaxia:sidecar-fixture-074", "type": "entity", "path": "fixture.json", "role": "synthetic_ffprobe_style_and_editorial_sidecar_payloads", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:sidecar-validator-074", "type": "entity", "path": "run_experiment.py", "role": "join_key_range_marker_sync_and_read_only_composition_oracle", "authority": "human_declared_tool"},
+    {"id": "farmaxia:sidecar-contract-074", "type": "entity", "path": "run_contract_test.py", "role": "positive_sidecar_composition_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:sidecar-kill-tests-074", "type": "entity", "path": "run_kill_test.py", "role": "stale_identity_range_marker_sync_provenance_and_write_boundary_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:sidecar-protocol-074", "type": "entity", "path": "README.md", "role": "sidecar_join_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:sidecar-results-074", "type": "entity", "path": "results.md", "role": "measurement_and_interpretation_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:shared-cloudevents-kernel-074", "type": "entity", "path": "../../research/tools/cloudevents_contract.py", "role": "shared_envelope_validation_kernel", "authority": "human_declared_tool"},
+    {"id": "farmaxia:media-timeline-contract-072", "type": "entity", "path": "../072-farmaxia-media-timeline-adapter/fixture.json", "role": "base_media_contract_and_event_fixture", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:representation-bridge-073", "type": "entity", "path": "../073-farmaxia-media-representation-bridge/fixture.json", "role": "ffprobe_style_normalization_fixture", "authority": "human_declared_fixture"}
+  ],
+  "activities": [
+    {"id": "farmaxia:sidecar-compose-074", "type": "activity", "label": "join ffprobe-style metadata and editorial sidecar by asset identity hash and source version", "agent": "farmaxia:python-runner-074", "used": ["farmaxia:sidecar-fixture-074", "farmaxia:media-timeline-contract-072", "farmaxia:representation-bridge-073", "farmaxia:shared-cloudevents-kernel-074", "farmaxia:sidecar-validator-074"], "generated": ["farmaxia:sidecar-results-074"]},
+    {"id": "farmaxia:sidecar-kill-074", "type": "activity", "label": "attack stale sidecars conflicting identities ranges markers synchronization provenance and write permissions", "agent": "farmaxia:python-runner-074", "used": ["farmaxia:sidecar-kill-tests-074"], "generated": []},
+    {"id": "farmaxia:sidecar-record-074", "type": "activity", "label": "record the shortcut result and remaining live-media unknowns", "agent": "farmaxia:human-researcher-074", "used": ["farmaxia:sidecar-protocol-074", "farmaxia:sidecar-results-074"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:sidecar-join-query-074", "expression": "can ffprobe-style metadata be completed by a sidecar without losing asset identity hash and version provenance", "authority": "experiment_defined", "required_entities": ["farmaxia:sidecar-fixture-074", "farmaxia:sidecar-validator-074"]},
+    {"id": "farmaxia:sidecar-exact-time-query-074", "expression": "are source ranges marker position and audio video sync preserved with exact rational time", "authority": "experiment_defined", "required_entities": ["farmaxia:sidecar-validator-074", "farmaxia:media-timeline-contract-072"]},
+    {"id": "farmaxia:sidecar-abstention-query-074", "expression": "do stale identity range marker sync provenance and write violations block composition", "authority": "experiment_defined", "required_entities": ["farmaxia:sidecar-kill-tests-074", "farmaxia:sidecar-validator-074"]},
+    {"id": "farmaxia:sidecar-reuse-query-074", "expression": "does the shortcut reuse the shared CloudEvents replay and read-only kernel without installing media infrastructure", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel-074", "farmaxia:sidecar-validator-074"]}
+  ],
+  "assumptions": [
+    "Both ffprobe-style metadata and the editorial sidecar are synthetic payloads modeled after documented concepts, not live tool output.",
+    "The source version and content hash are authoritative only within the declared synthetic source registry.",
+    "A sidecar completes only the missing editorial semantics; it cannot grant rights or playback capability.",
+    "Read-only normalization and dry-run composition do not imply export or execution permission.",
+    "Exact rational values are required for timebase ranges marker mapping and synchronization."
+  ],
+  "kill_tests": [
+    "A stale sidecar hash blocks composition.",
+    "A stale sidecar source version blocks composition.",
+    "A sidecar for another asset blocks composition.",
+    "A source range outside the asset available range blocks composition.",
+    "A marker source frame inconsistent with the source record blocks composition.",
+    "Audio/video timeline drift blocks composition.",
+    "Missing sidecar provenance references block composition.",
+    "A writable sidecar policy blocks the adapter.",
+    "A non-dry-run action blocks the adapter.",
+    "A missing required input event blocks the shared envelope."
+  ],
+  "unknowns": [
+    "Whether a real sidecar needs signatures or an external authority beyond ref hash and version.",
+    "Whether file replacement and concurrent sidecars require a conflict/version vector contract.",
+    "Whether VFR drop-frame keyframes transitions effects and time-warp need a media contract extension.",
+    "Whether rights and player capability can be independently verified in a live system.",
+    "Whether a real ffprobe adapter preserves the same fields and failure modes as this fixture."
+  ]
+}
