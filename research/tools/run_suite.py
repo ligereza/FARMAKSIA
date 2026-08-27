@@ -103,6 +103,7 @@ def main() -> None:
         "experiments/070-farmaxia-openemr-nextcloud-adapter/provenance.json",
         "experiments/071-farmaxia-codeine-patch-adapter/provenance.json",
         "experiments/072-farmaxia-media-timeline-adapter/provenance.json",
+        "experiments/073-farmaxia-media-representation-bridge/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1184,6 +1185,22 @@ def main() -> None:
         "FARMAXIA_072_MEDIA_TIMELINE_ADAPTER_KILL_TESTS_VALID",
     )
     command("provenance 072", python_script("research/tools/validate_provenance.py", provenance[68]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA media representation bridge 073",
+        python_script("experiments/073-farmaxia-media-representation-bridge/run_experiment.py"),
+        '"status": "MEDIA_REPRESENTATION_BRIDGE_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA media representation bridge 073",
+        python_script("experiments/073-farmaxia-media-representation-bridge/run_contract_test.py"),
+        "FARMAXIA_073_MEDIA_REPRESENTATION_BRIDGE_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA media representation bridge 073",
+        python_script("experiments/073-farmaxia-media-representation-bridge/run_kill_test.py"),
+        "FARMAXIA_073_MEDIA_REPRESENTATION_BRIDGE_KILL_TESTS_VALID",
+    )
+    command("provenance 073", python_script("research/tools/validate_provenance.py", provenance[69]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

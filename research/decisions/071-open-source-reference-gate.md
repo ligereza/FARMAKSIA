@@ -148,10 +148,12 @@ El segundo par sintético fue verificado en el
 La tercera superficie sintética, un parche de código CODE-INE, fue verificada
 en el [experimento 071](../../experiments/071-farmaxia-codeine-patch-adapter/README.md).
 La auditoría media 072 demostró una diferencia acotada en reloj de frames,
-rango, codec y sincronía, sin justificar una dependencia externa. El siguiente
-paso es comparar representaciones read-only sintéticas con OTIO y `ffprobe`.
-No se inicia todavía una captura humana, un benchmark en VM, una descarga de
-modelos ni una instalación de agentes.
+rango, codec y sincronía, sin justificar una dependencia externa. El puente
+073 comparó representaciones OTIO-style y ffprobe-style: la primera fue
+compatible y la segunda quedó correctamente en `PARTIAL_UNKNOWN`. El siguiente
+paso es probar un sidecar editorial sintético por hash/versiones. No se inicia
+todavía una captura humana, un benchmark en VM, una descarga de modelos ni una
+instalación de agentes.
 
 El segundo adapter deberá conservar las mismas preguntas que ya respondió el
 fixture y el primer adapter:

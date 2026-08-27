@@ -278,10 +278,13 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~auditoría de media~~ — el [experimento 072](../../experiments/072-farmaxia-media-timeline-adapter/README.md)
   demostró una diferencia real en reloj de media, rangos, codec y sincronía,
   conservando el núcleo y sin justificar aún un renderer completo;
+- ~~puente de representaciones media~~ — OTIO-style se normaliza como completo
+  y ffprobe-style se abstiene como `PARTIAL_UNKNOWN` en el [experimento 073](../../experiments/073-farmaxia-media-representation-bridge/README.md);
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
+- composición de sidecar editorial por hash/versiones;
 
 ### Más adelante
 

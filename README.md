@@ -169,6 +169,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Adapter documental OpenEMR–Nextcloud](experiments/070-farmaxia-openemr-nextcloud-adapter/README.md)
 - [Adapter de parche CODE-INE](experiments/071-farmaxia-codeine-patch-adapter/README.md)
 - [Adapter de timeline media](experiments/072-farmaxia-media-timeline-adapter/README.md)
+- [Puente de representaciones media OTIO-style/ffprobe-style](experiments/073-farmaxia-media-representation-bridge/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)

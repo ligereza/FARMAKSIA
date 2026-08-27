@@ -1,0 +1,123 @@
+{
+  "schema": "farmaxia:media-representation-bridge:0.1",
+  "adapter": {
+    "source_surface": "media-representation",
+    "destination_surface": "farmaxia-media-contract",
+    "required_event_ids": ["ev-asset-ingested", "ev-timeline-published", "ev-marker-declared"],
+    "required_representations": ["otio", "ffprobe"],
+    "read_only": true
+  },
+  "comparison": {
+    "expected_otio_status": "COMPATIBLE",
+    "expected_ffprobe_status": "PARTIAL_UNKNOWN",
+    "expected_full_contract_equivalent": false,
+    "sidecar_required_for_ffprobe": true
+  },
+  "representations": {
+    "otio": {
+      "schema": "Timeline.1",
+      "name": "cut-01",
+      "metadata": {
+        "farmaxia_timeline_ref": "media-catalog:farmaksia:timeline:cut-01"
+      },
+      "tracks": [
+        {
+          "schema": "Track.1",
+          "name": "video-main",
+          "kind": "Video",
+          "children": [
+            {
+              "schema": "Clip.1",
+              "name": "clip-video-01",
+              "media_reference": {
+                "schema": "ExternalReference.1",
+                "target_url": "media://interview-master",
+                "available_range": {
+                  "start_time": {"value": 0, "rate": 24},
+                  "duration": {"value": 240, "rate": 24}
+                },
+                "metadata": {
+                  "farmaxia_asset_ref": "media-catalog:farmaksia:asset:interview-master",
+                  "sha256": "sha256:synthetic-interview-master-v4",
+                  "codec_name": "h264"
+                }
+              },
+              "source_range": {
+                "start_time": {"value": 48, "rate": 24},
+                "duration": {"value": 96, "rate": 24}
+              },
+              "metadata": {"timeline_start": {"value": 0, "rate": 24}}
+            }
+          ]
+        },
+        {
+          "schema": "Track.1",
+          "name": "audio-main",
+          "kind": "Audio",
+          "children": [
+            {
+              "schema": "Clip.1",
+              "name": "clip-audio-01",
+              "media_reference": {
+                "schema": "ExternalReference.1",
+                "target_url": "media://interview-master",
+                "available_range": {
+                  "start_time": {"value": 0, "rate": 24},
+                  "duration": {"value": 240, "rate": 24}
+                },
+                "metadata": {
+                  "farmaxia_asset_ref": "media-catalog:farmaksia:asset:interview-master",
+                  "sha256": "sha256:synthetic-interview-master-v4",
+                  "codec_name": "h264"
+                }
+              },
+              "source_range": {
+                "start_time": {"value": 48, "rate": 24},
+                "duration": {"value": 96, "rate": 24}
+              },
+              "metadata": {"timeline_start": {"value": 0, "rate": 24}}
+            }
+          ]
+        }
+      ],
+      "markers": [
+        {
+          "name": "insight",
+          "metadata": {
+            "farmaxia_marker_ref": "media-catalog:farmaksia:marker:insight-01",
+            "farmaxia_source_frame": 60
+          }
+        }
+      ]
+    },
+    "ffprobe": {
+      "format": {
+        "filename": "media://interview-master",
+        "duration": "10.000000",
+        "tags": {
+          "farmaxia_asset_ref": "media-catalog:farmaksia:asset:interview-master",
+          "sha256": "sha256:synthetic-interview-master-v4"
+        }
+      },
+      "streams": [
+        {
+          "index": 0,
+          "codec_type": "video",
+          "codec_name": "h264",
+          "time_base": "1/24",
+          "start_pts": 0,
+          "duration_ts": 240
+        },
+        {
+          "index": 1,
+          "codec_type": "audio",
+          "codec_name": "aac",
+          "time_base": "1/24",
+          "start_pts": 0,
+          "duration_ts": 240
+        }
+      ],
+      "chapters": []
+    }
+  }
+}

@@ -44,7 +44,7 @@ hardware.
 
 ## Siguiente objetivo
 
-No añadir otra abstracción media todavía. El siguiente avance de mayor valor es
-comparar este contrato con un archivo OTIO o un reporte `ffprobe` sintético,
-manteniendo ambos como fuentes read-only; sólo si aparece una incompatibilidad
-no expresable se justificará una extensión.
+El experimento 073 ya comparó este contrato con representaciones OTIO-style y
+ffprobe-style: la primera es compatible; la segunda necesita un sidecar para
+completar la semántica editorial. El siguiente avance es componer ese sidecar
+por hash/versiones, manteniendo ambas fuentes read-only.

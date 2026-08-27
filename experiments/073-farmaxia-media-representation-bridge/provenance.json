@@ -1,0 +1,56 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:073-media-representation-bridge",
+  "status": "exploratory",
+  "purpose": "Compare synthetic read-only OTIO-style and ffprobe-style media representations without mistaking partial metadata for a complete editorial timeline.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-073", "type": "agent", "role": "defines_representation_boundary_and_abstention_policy"},
+    {"id": "farmaxia:python-runner-073", "type": "software_agent", "role": "normalizes_synthetic_representations_through_shared_kernel"}
+  ],
+  "entities": [
+    {"id": "farmaxia:representation-fixture-073", "type": "entity", "path": "fixture.json", "role": "synthetic_otio_style_and_ffprobe_style_payloads", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:representation-validator-073", "type": "entity", "path": "run_experiment.py", "role": "representation_normalization_and_safe_abstention_oracle", "authority": "human_declared_tool"},
+    {"id": "farmaxia:representation-contract-073", "type": "entity", "path": "run_contract_test.py", "role": "positive_representation_bridge_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:representation-kill-tests-073", "type": "entity", "path": "run_kill_test.py", "role": "identity_range_marker_timebase_completeness_and_read_only_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:representation-protocol-073", "type": "entity", "path": "README.md", "role": "representation_bridge_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:representation-results-073", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:shared-cloudevents-kernel-073", "type": "entity", "path": "../../research/tools/cloudevents_contract.py", "role": "shared_envelope_validation_kernel", "authority": "human_declared_tool"},
+    {"id": "farmaxia:media-timeline-contract-072", "type": "entity", "path": "../072-farmaxia-media-timeline-adapter/fixture.json", "role": "base_media_contract_and_event_fixture", "authority": "human_declared_fixture"}
+  ],
+  "activities": [
+    {"id": "farmaxia:representation-process-073", "type": "activity", "label": "normalize OTIO-style and ffprobe-style payloads through the shared CloudEvents and media contract", "agent": "farmaxia:python-runner-073", "used": ["farmaxia:representation-fixture-073", "farmaxia:media-timeline-contract-072", "farmaxia:shared-cloudevents-kernel-073", "farmaxia:representation-validator-073"], "generated": []},
+    {"id": "farmaxia:representation-kill-073", "type": "activity", "label": "attack source identity ranges markers timebase editorial completeness and write boundaries", "agent": "farmaxia:python-runner-073", "used": ["farmaxia:representation-kill-tests-073"], "generated": []},
+    {"id": "farmaxia:representation-record-073", "type": "activity", "label": "record which representation semantics are portable and which require a sidecar", "agent": "farmaxia:human-researcher-073", "used": ["farmaxia:representation-fixture-073", "farmaxia:representation-protocol-073"], "generated": ["farmaxia:representation-results-073"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:representation-query-otio-073", "expression": "does an OTIO-style payload preserve timeline range marker and audio video sync semantics", "authority": "experiment_defined", "required_entities": ["farmaxia:representation-fixture-073", "farmaxia:representation-validator-073"]},
+    {"id": "farmaxia:representation-query-ffprobe-073", "expression": "which media asset stream codec and timebase facts are available from a ffprobe-style payload", "authority": "experiment_defined", "required_entities": ["farmaxia:representation-fixture-073", "farmaxia:representation-validator-073"]},
+    {"id": "farmaxia:representation-query-abstention-073", "expression": "does missing editorial data produce PARTIAL_UNKNOWN instead of fabricated timeline claims", "authority": "experiment_defined", "required_entities": ["farmaxia:representation-kill-tests-073", "farmaxia:representation-validator-073"]},
+    {"id": "farmaxia:representation-query-reuse-073", "expression": "does the bridge reuse the shared CloudEvents identity provenance replay and read-only kernel", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel-073", "farmaxia:media-timeline-contract-072"]}
+  ],
+  "assumptions": [
+    "Both representations are synthetic payloads modeled after documented fields, not tool output captured from a file.",
+    "The media timeline contract from experiment 072 is the target normalized representation.",
+    "A stream report cannot be treated as an editorial timeline without a separate authorized source.",
+    "Read-only normalization is reversible and does not imply playback or export permission.",
+    "This comparison must not install tools or decode media."
+  ],
+  "kill_tests": [
+    "An OTIO asset hash mismatch blocks normalization.",
+    "An OTIO source range outside available range blocks normalization.",
+    "An OTIO marker without source frame blocks normalization.",
+    "Missing ffprobe streams blocks the representation.",
+    "An invalid ffprobe timebase blocks the representation.",
+    "A ffprobe payload cannot claim editorial completeness without timeline fields.",
+    "Cross-representation asset identity mismatch blocks comparison.",
+    "A writable bridge policy blocks the adapter.",
+    "A missing OTIO representation blocks the comparison.",
+    "A missing required event blocks the shared envelope."
+  ],
+  "unknowns": [
+    "Whether a real OTIO adapter needs transitions, effects, nested stacks or time warps beyond this fixture.",
+    "Whether ffprobe metadata plus a real sidecar can provide stable linkage under file replacement.",
+    "Whether VFR, drop-frame and keyframe semantics need a versioned media contract extension.",
+    "Whether rights and player capability can be independently verified in a live system."
+  ]
+}
