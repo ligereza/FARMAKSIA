@@ -39,7 +39,6 @@ declarativo. No afirma que la UI real de grandMA3 o Titan haya sido observada,
 que UIA exponga esos roles, ni que la traducción ayude a un operador humano.
 La siguiente etapa es reemplazar regiones declarativas por observaciones
 read-only de ventanas seleccionadas con el preview 082.
-
 ## Kill tests
 
 - una región de destino solapada es rechazada;
@@ -48,4 +47,3 @@ read-only de ventanas seleccionadas con el preview 082.
 - la capacidad `execute_blocked` es obligatoria;
 - un destino diferente de Titan es rechazado;
 - la cobertura incompleta de tareas es rechazada.
-

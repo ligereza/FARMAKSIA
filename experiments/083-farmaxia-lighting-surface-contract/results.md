@@ -1,6 +1,6 @@
 # Resultados 083 — contrato de superficie grandMA3 → Titan
 
-**Fecha de ejecución:** 2026-08-27  
+**Fecha de ejecución:** 2026-08-27
 **Estado:** `LIGHTING_SURFACE_CONTRACT_VERIFIED`
 
 ## Evidencia obtenida
@@ -21,8 +21,7 @@ El contrato es suficientemente preciso para alimentar un renderer de preview,
 pero todavía no es un adaptador de producción. La próxima evidencia debe venir
 de UIA/captura de grandMA3 onPC y Titan Simulator en las versiones concretas.
 No se puede aceptar un mapa basado sólo en texto, posición o analogía de
-vocabulario.
-
+  vocabulario.
 ## Desconocidos
 
 - qué roles y rectángulos expone grandMA3 onPC por UIA;
@@ -30,4 +29,3 @@ vocabulario.
 - cómo cambian las superficies al abrir layouts, ventanas o showfiles;
 - si un operador familiarizado con Titan localiza más rápido las tareas;
 - si alguna función avanzada requiere `PARTIAL` o `UNSUPPORTED`.
-
