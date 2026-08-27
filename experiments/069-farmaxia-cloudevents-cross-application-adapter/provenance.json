@@ -1,0 +1,52 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:069-cloudevents-cross-application-adapter",
+  "status": "exploratory",
+  "purpose": "Verify that a standard CloudEvents envelope can feed the existing cross-application bridge without losing identity, provenance or safety controls.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-069", "type": "agent", "role": "defines_adapter_reuse_and_no_duplication_boundary"},
+    {"id": "farmaxia:python-runner-069", "type": "software_agent", "role": "maps_cloudevents_to_existing_bridge_and_replays_verification"}
+  ],
+  "entities": [
+    {"id": "farmaxia:adapter-fixture-069", "type": "entity", "path": "fixture.json", "role": "synthetic_source_destination_and_mapping_configuration", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:adapter-validator-069", "type": "entity", "path": "run_experiment.py", "role": "reusable_cloudevents_to_bridge_adapter", "authority": "human_declared_tool"},
+    {"id": "farmaxia:adapter-contract-069", "type": "entity", "path": "run_contract_test.py", "role": "positive_cross_application_adapter_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:adapter-kill-tests-069", "type": "entity", "path": "run_kill_test.py", "role": "missing_input_identity_provenance_permission_and_safety_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:adapter-protocol-069", "type": "entity", "path": "README.md", "role": "adapter_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:adapter-results-069", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:cloudevents-envelope-068", "type": "entity", "path": "../068-farmaxia-cloudevents-envelope/fixture.json", "role": "standardized_local_input_envelope", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:cross-app-bridge-065", "type": "entity", "path": "../065-farmaxia-cross-application-evidence/run_experiment.py", "role": "reused_existing_bridge_compiler", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:adapter-process-069", "type": "activity", "label": "map the standardized envelope into the existing cross-application contract", "agent": "farmaxia:python-runner-069", "used": ["farmaxia:adapter-fixture-069", "farmaxia:cloudevents-envelope-068", "farmaxia:cross-app-bridge-065", "farmaxia:adapter-validator-069"], "generated": []},
+    {"id": "farmaxia:adapter-kill-069", "type": "activity", "label": "attack adapter input identity provenance permissions and external execution", "agent": "farmaxia:python-runner-069", "used": ["farmaxia:adapter-kill-tests-069"], "generated": []},
+    {"id": "farmaxia:adapter-record-069", "type": "activity", "label": "record equivalence and the no-live-api boundary", "agent": "farmaxia:human-researcher-069", "used": ["farmaxia:adapter-fixture-069", "farmaxia:adapter-protocol-069"], "generated": ["farmaxia:adapter-results-069"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:adapter-query-preservation-069", "expression": "does the adapter preserve the envelope event identity and canonical order", "authority": "experiment_defined", "required_entities": ["farmaxia:cloudevents-envelope-068", "farmaxia:adapter-validator-069"]},
+    {"id": "farmaxia:adapter-query-bridge-069", "expression": "does the mapped payload satisfy the existing GitLab to Mattermost bridge contract", "authority": "experiment_defined", "required_entities": ["farmaxia:cross-app-bridge-065", "farmaxia:adapter-validator-069"]},
+    {"id": "farmaxia:adapter-query-safety-069", "expression": "does the adapter retain dry-run, permission, provenance and independent verification gates", "authority": "experiment_defined", "required_entities": ["farmaxia:adapter-kill-tests-069", "farmaxia:adapter-protocol-069"]}
+  ],
+  "assumptions": [
+    "The 068 local envelope is the only input event stream for this fixture.",
+    "The 065 compiler is reused as an existing contract and is not copied into the adapter.",
+    "The destination remains Mattermost dry-run and no external API is contacted.",
+    "The source snapshot is synthetic and contains no human data.",
+    "Preserving event identity and source references is more important than hiding mapping steps."
+  ],
+  "kill_tests": [
+    "Missing required input event blocks the adapter.",
+    "External destination execution blocks the adapter.",
+    "Missing claim provenance blocks the bridge.",
+    "Stale precondition blocks the proposed action.",
+    "Missing destination permission blocks the bridge.",
+    "Detached required event identity blocks the adapter.",
+    "An undeclared input envelope blocks the adapter."
+  ],
+  "unknowns": [
+    "Whether GitLab and Mattermost production APIs can emit and consume this exact mapping.",
+    "Whether a real adapter needs signatures, schema registry or transactional delivery.",
+    "Which institutional pair should be the first non-synthetic adapter.",
+    "Whether the same mapping can be reused for OpenEMR and Nextcloud without domain-specific fields."
+  ]
+}

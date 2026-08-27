@@ -99,10 +99,13 @@ La adopción queda bloqueada si:
 El fixture local de CloudEvents ya fue implementado en el
 [experimento 068](../../experiments/068-farmaxia-cloudevents-envelope/README.md).
 Conserva el sobre original, deduplica por `source + id` y mantiene el mapeo
-interno de FARMAKSIA. El siguiente trabajo es conectar un primer adapter
-sintético a este sobre y verificar que conserva los resultados de los
-contratos 065–067. Si ese adapter no revela un problema nuevo, no se añade
-otra capa de infraestructura.
+interno de FARMAKSIA. El primer adapter sintético ya fue verificado en el
+[experimento 069](../../experiments/069-farmaxia-cloudevents-cross-application-adapter/README.md):
+reutiliza el compilador 065, conserva los resultados y mantiene `DRY_RUN_ONLY`.
+El siguiente objetivo es probar un segundo par sintético sólo si cambia la
+superficie y no el núcleo. Si el segundo par encaja, recién entonces se
+seleccionará un adapter institucional real; no se añadirá infraestructura por
+anticipación.
 
 ## Fuentes revisadas
 

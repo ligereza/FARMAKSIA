@@ -1,0 +1,107 @@
+{
+  "schema": "farmaxia:cloudevents-cross-application-adapter:0.1",
+  "adapter": {
+    "input_envelope": "experiments/068-farmaxia-cloudevents-envelope/fixture.json",
+    "source_surface": "gitlab",
+    "destination_surface": "mattermost",
+    "required_event_ids": [
+      "ev-mr-open",
+      "ev-pipeline-fail",
+      "ev-mr-comment"
+    ],
+    "mapping": {
+      "source_plus_id": "event_id",
+      "subject": "entity_ref",
+      "time": "occurred_at",
+      "farmaxia-source-version": "source_version",
+      "data.payload": "payload"
+    }
+  },
+  "source_of_truth": {
+    "surface": "gitlab",
+    "project": {
+      "id": "proj-alpha",
+      "path": "alpha/bridge-demo",
+      "version": 42
+    },
+    "entities": [
+      {
+        "type": "merge_request",
+        "id": "mr-7",
+        "iid": 7,
+        "source_version": 42,
+        "state": "opened",
+        "title": "Expose adapter contract",
+        "pipeline_id": "pipe-3",
+        "approved": false
+      },
+      {
+        "type": "pipeline",
+        "id": "pipe-3",
+        "source_version": 42,
+        "status": "failed",
+        "ref": "main"
+      }
+    ]
+  },
+  "mattermost_surface": {
+    "instance_id": "mattermost-lab",
+    "team_id": "team-lab",
+    "channel_id": "chan-review",
+    "actor_id": "mm-reviewer",
+    "permissions": ["post"]
+  },
+  "representation_claims": [
+    {
+      "claim_id": "claim-mr-state",
+      "text": "La merge request 7 sigue abierta.",
+      "source_refs": ["gitlab:proj-alpha:merge_request:mr-7"]
+    },
+    {
+      "claim_id": "claim-pipeline",
+      "text": "El pipeline asociado terminó fallido.",
+      "source_refs": ["gitlab:proj-alpha:pipeline:pipe-3"]
+    },
+    {
+      "claim_id": "claim-review-question",
+      "text": "Existe una pregunta de revisión pendiente de resolver.",
+      "source_refs": ["gitlab:proj-alpha:merge_request:mr-7#event:ev-mr-comment"]
+    }
+  ],
+  "action": {
+    "action_id": "act-notify-review",
+    "operation": "post_contextual_notification",
+    "target_channel_id": "chan-review",
+    "dry_run": true,
+    "requires_confirmation": true,
+    "preconditions": [
+      {
+        "project_id": "proj-alpha",
+        "entity_type": "merge_request",
+        "entity_id": "mr-7",
+        "source_version": 42,
+        "state": "opened"
+      }
+    ]
+  },
+  "policy": {
+    "mode": "local_read_only_dry_run",
+    "network_allowed": false,
+    "human_data": false,
+    "require_project_qualified_identity": true,
+    "require_source_provenance": true,
+    "require_independent_verifier": true,
+    "require_explicit_confirmation": true,
+    "unknown_on_conflict": true
+  },
+  "expected": {
+    "envelope_status": "CLOUDEVENTS_ENVELOPE_VERIFIED",
+    "bridge_status": "CROSS_APPLICATION_EVIDENCE_VERIFIED",
+    "canonical_order": [
+      "ev-mr-open",
+      "ev-pipeline-fail",
+      "ev-mr-comment"
+    ],
+    "action_status": "DRY_RUN_ONLY"
+  }
+}

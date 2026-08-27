@@ -266,6 +266,11 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~fixture CloudEvents local~~ — el sobre estándar conserva identidad,
   procedencia y el evento interno sin red ni dependencia en
   [experimento 068](../../experiments/068-farmaxia-cloudevents-envelope/README.md);
+- ~~primer adapter sobre el estándar~~ — CloudEvents alimenta el puente
+  GitLab–Mattermost sin copiar su compilador, con procedencia y `DRY_RUN_ONLY`
+  verificados en [experimento 069](../../experiments/069-farmaxia-cloudevents-cross-application-adapter/README.md).
+- segundo par sintético de superficies documentales/institucionales,
+  reutilizando el mismo contrato;
 - adapter OpenEMR/Nextcloud con datos sintéticos, reutilizando el mismo contrato
   sin importar datos clínicos;
 - autorización por rol;
