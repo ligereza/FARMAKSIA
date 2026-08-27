@@ -102,9 +102,12 @@ Conserva el sobre original, deduplica por `source + id` y mantiene el mapeo
 interno de FARMAKSIA. El primer adapter sintético ya fue verificado en el
 [experimento 069](../../experiments/069-farmaxia-cloudevents-cross-application-adapter/README.md):
 reutiliza el compilador 065, conserva los resultados y mantiene `DRY_RUN_ONLY`.
-El siguiente objetivo es probar un segundo par sintético sólo si cambia la
-superficie y no el núcleo. Si el segundo par encaja, recién entonces se
-seleccionará un adapter institucional real; no se añadirá infraestructura por
+El segundo par sintético ya fue verificado en el
+[experimento 070](../../experiments/070-farmaxia-openemr-nextcloud-adapter/README.md):
+cambió la superficie y las entidades sin cambiar el núcleo. El siguiente
+objetivo será auditar una superficie no institucional y no documental —código
+o media— sólo si aparece una diferencia semántica real. Todavía no se
+seleccionará un adapter institucional real ni se añadirá infraestructura por
 anticipación.
 
 ## Fuentes revisadas

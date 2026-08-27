@@ -1,0 +1,52 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:070-openemr-nextcloud-adapter",
+  "status": "exploratory",
+  "purpose": "Demonstrate that the shared CloudEvents, evidence, provenance, permission and verification kernel works for a second institutional document surface pair.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-070", "type": "agent", "role": "defines_second_surface_reuse_and_synthetic_data_boundary"},
+    {"id": "farmaxia:python-runner-070", "type": "software_agent", "role": "runs_shared_envelope_kernel_and_document_adapter_verification"}
+  ],
+  "entities": [
+    {"id": "farmaxia:institutional-fixture-070", "type": "entity", "path": "fixture.json", "role": "synthetic_openemr_records_cloudevents_and_nextcloud_destination", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:institutional-validator-070", "type": "entity", "path": "run_experiment.py", "role": "document_adapter_using_shared_cloudevents_kernel", "authority": "human_declared_tool"},
+    {"id": "farmaxia:institutional-contract-070", "type": "entity", "path": "run_contract_test.py", "role": "positive_second_surface_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:institutional-kill-tests-070", "type": "entity", "path": "run_kill_test.py", "role": "missing_event_identity_provenance_permission_precondition_and_safety_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:institutional-protocol-070", "type": "entity", "path": "README.md", "role": "second_surface_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:institutional-results-070", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:shared-cloudevents-kernel", "type": "entity", "path": "../../research/tools/cloudevents_contract.py", "role": "shared_standard_envelope_validation_kernel", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:institutional-process-070", "type": "activity", "label": "validate the second surface pair through the shared CloudEvents kernel", "agent": "farmaxia:python-runner-070", "used": ["farmaxia:institutional-fixture-070", "farmaxia:shared-cloudevents-kernel", "farmaxia:institutional-validator-070"], "generated": []},
+    {"id": "farmaxia:institutional-kill-070", "type": "activity", "label": "attack source identity provenance destination permission preconditions and safety", "agent": "farmaxia:python-runner-070", "used": ["farmaxia:institutional-kill-tests-070"], "generated": []},
+    {"id": "farmaxia:institutional-record-070", "type": "activity", "label": "record second-surface reuse and remaining API unknowns", "agent": "farmaxia:human-researcher-070", "used": ["farmaxia:institutional-fixture-070", "farmaxia:institutional-protocol-070"], "generated": ["farmaxia:institutional-results-070"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:institutional-query-reuse-070", "expression": "does the second surface pair use the same envelope kernel while changing only domain adapter fields", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel", "farmaxia:institutional-validator-070"]},
+    {"id": "farmaxia:institutional-query-provenance-070", "expression": "are synthetic document claims still tied to source entity references and independently verified", "authority": "experiment_defined", "required_entities": ["farmaxia:institutional-fixture-070", "farmaxia:institutional-validator-070"]},
+    {"id": "farmaxia:institutional-query-safety-070", "expression": "does a Nextcloud proposal remain dry-run and blocked by missing permission or stale source state", "authority": "experiment_defined", "required_entities": ["farmaxia:institutional-kill-tests-070", "farmaxia:institutional-protocol-070"]}
+  ],
+  "assumptions": [
+    "All OpenEMR records are synthetic and contain no clinical human data.",
+    "The shared CloudEvents kernel is the only envelope validator for this surface pair.",
+    "Nextcloud is represented as a dry-run destination with explicit write permission.",
+    "Independent verification reads the synthetic source snapshot rather than trusting representation claims.",
+    "A second surface pair is evidence of structural reuse, not production interoperability."
+  ],
+  "kill_tests": [
+    "Missing required input event blocks the adapter.",
+    "Mismatched source surface blocks the adapter.",
+    "Missing claim provenance blocks the adapter.",
+    "External document write blocks the adapter.",
+    "Missing destination write permission blocks the adapter.",
+    "Stale source precondition blocks the action.",
+    "Changed source snapshot is refuted by independent verification.",
+    "Enabling human data policy blocks the fixture."
+  ],
+  "unknowns": [
+    "Whether OpenEMR and Nextcloud production APIs expose this exact event and folder model.",
+    "Which authentication, signing and schema registry mechanisms a live institution requires.",
+    "Whether clinical workflows need extra domain authority beyond the shared evidence kernel.",
+    "Whether a third, non-document surface pair will require new core abstractions."
+  ]
+}

@@ -34,6 +34,7 @@
       "farmaxia-root-id": "root-pipeline-status",
       "data": {
         "event_id": "ev-pipeline-fail",
+        "subject": "projects/proj-alpha/pipelines/pipe-3",
         "project_id": "proj-alpha",
         "entity_type": "pipeline",
         "entity_id": "pipe-3",
@@ -56,6 +57,7 @@
       "farmaxia-root-id": "root-mr-state",
       "data": {
         "event_id": "ev-mr-open",
+        "subject": "projects/proj-alpha/merge_requests/mr-7",
         "project_id": "proj-alpha",
         "entity_type": "merge_request",
         "entity_id": "mr-7",
@@ -78,6 +80,7 @@
       "farmaxia-root-id": "root-mr-review",
       "data": {
         "event_id": "ev-mr-comment",
+        "subject": "projects/proj-alpha/merge_requests/mr-7",
         "project_id": "proj-alpha",
         "entity_type": "merge_request",
         "entity_id": "mr-7",
@@ -101,6 +104,7 @@
       "farmaxia-root-id": "root-mr-state",
       "data": {
         "event_id": "ev-mr-open",
+        "subject": "projects/proj-alpha/merge_requests/mr-7",
         "project_id": "proj-alpha",
         "entity_type": "merge_request",
         "entity_id": "mr-7",

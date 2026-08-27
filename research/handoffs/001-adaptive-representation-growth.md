@@ -269,10 +269,11 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~primer adapter sobre el estándar~~ — CloudEvents alimenta el puente
   GitLab–Mattermost sin copiar su compilador, con procedencia y `DRY_RUN_ONLY`
   verificados en [experimento 069](../../experiments/069-farmaxia-cloudevents-cross-application-adapter/README.md).
-- segundo par sintético de superficies documentales/institucionales,
-  reutilizando el mismo contrato;
-- adapter OpenEMR/Nextcloud con datos sintéticos, reutilizando el mismo contrato
-  sin importar datos clínicos;
+- ~~segundo par de superficies~~ — OpenEMR y Nextcloud sintéticos reutilizan el
+  mismo núcleo de CloudEvents, evidencia, procedencia, permisos y verificación
+  en [experimento 070](../../experiments/070-farmaxia-openemr-nextcloud-adapter/README.md).
+- auditoría de una superficie no institucional y no documental, sólo si exige
+  una diferencia semántica real;
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;

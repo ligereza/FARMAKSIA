@@ -1,0 +1,181 @@
+{
+  "schema": "farmaxia:openemr-nextcloud-adapter:0.1",
+  "source_of_truth": {
+    "surface": "openemr",
+    "source_uri": "https://openemr.example.test/tenants/synthetic-clinic",
+    "current_version": 12,
+    "entity_refs": [
+      "openemr:synthetic-clinic:patient:patient-demo-001",
+      "openemr:synthetic-clinic:care_plan:plan-demo-001",
+      "openemr:synthetic-clinic:document:doc-demo-001"
+    ],
+    "records": [
+      {
+        "entity_ref": "openemr:synthetic-clinic:patient:patient-demo-001",
+        "kind": "patient",
+        "synthetic": true,
+        "care_plan_ref": "openemr:synthetic-clinic:care_plan:plan-demo-001"
+      },
+      {
+        "entity_ref": "openemr:synthetic-clinic:care_plan:plan-demo-001",
+        "kind": "care_plan",
+        "status": "published",
+        "title": "Guía sintética de preparación",
+        "source_version": 12
+      },
+      {
+        "entity_ref": "openemr:synthetic-clinic:document:doc-demo-001",
+        "kind": "document",
+        "status": "ready",
+        "mime": "text/plain",
+        "source_version": 12
+      }
+    ]
+  },
+  "policy": {
+    "cloud_events_specversion": "1.0",
+    "identity_is_source_plus_id": true,
+    "preserve_original_envelope": true,
+    "preserve_farmaxia_extensions": true,
+    "network_allowed": false,
+    "human_data": false,
+    "external_execution": false
+  },
+  "events": [
+    {
+      "specversion": "1.0",
+      "id": "ev-care-plan-published",
+      "source": "https://openemr.example.test/tenants/synthetic-clinic",
+      "type": "io.farmaksia.openemr.care_plan.published.v1",
+      "subject": "patients/patient-demo-001/care-plans/plan-demo-001",
+      "time": "2026-08-27T11:00:20Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "openemr:synthetic-clinic:care_plan:plan-demo-001",
+      "farmaxia-source-version": 12,
+      "farmaxia-observed-at": 20,
+      "farmaxia-root-id": "root-care-plan",
+      "data": {
+        "event_id": "ev-care-plan-published",
+        "entity_ref": "openemr:synthetic-clinic:care_plan:plan-demo-001",
+        "subject": "patients/patient-demo-001/care-plans/plan-demo-001",
+        "event_kind": "care_plan_published",
+        "occurred_at": 20,
+        "payload": {"status": "published", "title": "Guía sintética de preparación"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-patient-context",
+      "source": "https://openemr.example.test/tenants/synthetic-clinic",
+      "type": "io.farmaksia.openemr.patient.context.v1",
+      "subject": "patients/patient-demo-001",
+      "time": "2026-08-27T11:00:10Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "openemr:synthetic-clinic:patient:patient-demo-001",
+      "farmaxia-source-version": 12,
+      "farmaxia-observed-at": 10,
+      "farmaxia-root-id": "root-patient-context",
+      "data": {
+        "event_id": "ev-patient-context",
+        "entity_ref": "openemr:synthetic-clinic:patient:patient-demo-001",
+        "subject": "patients/patient-demo-001",
+        "event_kind": "patient_context_ready",
+        "occurred_at": 10,
+        "payload": {"synthetic": true, "care_plan_ref": "openemr:synthetic-clinic:care_plan:plan-demo-001"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-document-ready",
+      "source": "https://openemr.example.test/tenants/synthetic-clinic",
+      "type": "io.farmaksia.openemr.document.ready.v1",
+      "subject": "patients/patient-demo-001/documents/doc-demo-001",
+      "time": "2026-08-27T11:00:30Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "openemr:synthetic-clinic:document:doc-demo-001",
+      "farmaxia-source-version": 12,
+      "farmaxia-observed-at": 30,
+      "farmaxia-root-id": "root-support-document",
+      "data": {
+        "event_id": "ev-document-ready",
+        "entity_ref": "openemr:synthetic-clinic:document:doc-demo-001",
+        "subject": "patients/patient-demo-001/documents/doc-demo-001",
+        "event_kind": "document_ready",
+        "occurred_at": 30,
+        "payload": {"status": "ready", "mime": "text/plain"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-care-plan-published",
+      "source": "https://openemr.example.test/tenants/synthetic-clinic",
+      "type": "io.farmaksia.openemr.care_plan.published.v1",
+      "subject": "patients/patient-demo-001/care-plans/plan-demo-001",
+      "time": "2026-08-27T11:00:20Z",
+      "datacontenttype": "application/json",
+      "farmaxia-delivery-id": "delivery-care-plan-retry",
+      "farmaxia-entity-ref": "openemr:synthetic-clinic:care_plan:plan-demo-001",
+      "farmaxia-source-version": 12,
+      "farmaxia-observed-at": 31,
+      "farmaxia-root-id": "root-care-plan",
+      "data": {
+        "event_id": "ev-care-plan-published",
+        "entity_ref": "openemr:synthetic-clinic:care_plan:plan-demo-001",
+        "subject": "patients/patient-demo-001/care-plans/plan-demo-001",
+        "event_kind": "care_plan_published",
+        "occurred_at": 20,
+        "payload": {"status": "published", "title": "Guía sintética de preparación"}
+      }
+    }
+  ],
+  "adapter": {
+    "input_envelope": "inline",
+    "source_surface": "openemr",
+    "destination_surface": "nextcloud",
+    "required_event_ids": ["ev-patient-context", "ev-care-plan-published", "ev-document-ready"],
+    "mapping": {
+      "source_plus_id": "event_id",
+      "farmaxia-entity-ref": "source_ref",
+      "time": "occurred_at",
+      "data.payload": "representation_facts"
+    }
+  },
+  "nextcloud_surface": {
+    "instance_id": "nextcloud-lab",
+    "folder_id": "folder-education",
+    "permissions": ["read", "write"],
+    "dry_run_only": true
+  },
+  "representation_claims": [
+    {
+      "claim_id": "claim-care-plan",
+      "text": "La guía sintética está publicada.",
+      "source_refs": ["openemr:synthetic-clinic:care_plan:plan-demo-001"]
+    },
+    {
+      "claim_id": "claim-document",
+      "text": "El documento de apoyo está listo para organizarse.",
+      "source_refs": ["openemr:synthetic-clinic:document:doc-demo-001"]
+    }
+  ],
+  "action": {
+    "action_id": "act-index-synthetic-care-plan",
+    "operation": "create_document_index_entry",
+    "target_folder_id": "folder-education",
+    "dry_run": true,
+    "requires_confirmation": true,
+    "preconditions": [
+      {
+        "entity_ref": "openemr:synthetic-clinic:care_plan:plan-demo-001",
+        "source_version": 12,
+        "status": "published"
+      }
+    ]
+  },
+  "expected": {
+    "envelope_status": "CLOUDEVENTS_ENVELOPE_VERIFIED",
+    "adapter_status": "DOCUMENTAL_CLOUDEVENTS_ADAPTER_VERIFIED",
+    "canonical_order": ["ev-patient-context", "ev-care-plan-published", "ev-document-ready"],
+    "action_status": "DRY_RUN_ONLY"
+  }
+}
