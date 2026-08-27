@@ -299,6 +299,16 @@ La auditoría 032 consolida el estado: VIZZ y CODE-INE son los frentes activos,
 X-ANA-X está archivado, KETAMINE está en cuarentena y el corpus sigue vacío por
 diseño. Los desconocidos humanos permanecen explícitos.
 
+La auditoría de referencias 023 revisó la lista externa completa y separó
+dependencias, adaptadores, benchmarks, modelos, estándares, papers y
+herramientas de evaluación. El resultado no autoriza una instalación masiva.
+JSON Patch, WAI y el vocabulario DTCG sirven como capas de contrato/estilo;
+Pydantic y Hypothesis son candidatos para la siguiente frontera local;
+Tree-sitter, UIA/CDP, Playwright y pywinauto quedan condicionados a adapters
+concretos. OpenAdapt Flow, OpenAdapt Evals, OSWorld, WAA, OpenCUA, OmniParser y
+UFO son referencias de investigación, no runtime FARMAKSIA. Los pesos y datos
+externos de Hugging Face no se incorporan.
+
 ## Reapertura futura
 
 Los siguientes frentes solo se reabrirán si reducen un desconocido declarado y
@@ -313,7 +323,11 @@ respetan la auditoría 040:
    decisiones en tareas sintéticas sin convertir la primera sugerencia en
    autoridad. Registrar sólo decisiones y errores observables, no estados
    mentales.
-4. VIZZ: el experimento 032 separó la calibración visible del runtime y el
+4. FARMAKSIA: implementar el experimento 065 de contrato de evidencia de
+   representación. Registrar fuente, versión, subset, orden, exposición,
+   input explícito, privacidad, procedencia y outcome `verified/refuted/unknown`
+   sin inferir comprensión humana.
+5. VIZZ: el experimento 032 separó la calibración visible del runtime y el
    experimento 033 adoptó un pipeline Python CUDA con RetinaFace + gaze ONNX y
    una capa click-through sobre el contenido normal. El siguiente paso humano,
    solo con consentimiento explícito, es medir retención, error frente a
@@ -326,7 +340,9 @@ control directo más fuerte y cambie una decisión observable.
 Las herramientas candidatas y la investigación científica están registradas en
 `research/literature/006–016`. WebGazer queda adoptado solo en el sandbox 030;
 Pupil Core sigue diferido. No se incorporará KETAMINE al prototipo hasta
-que aparezca una experiencia que lo justifique.
+que aparezca una experiencia que lo justifique. La auditoría de referencias y
+la compuerta de adopción están en `research/literature/023-open-source-reference-audit.md`
+y `research/decisions/071-open-source-reference-gate.md`.
 
 ## Regla de honestidad del loop
 

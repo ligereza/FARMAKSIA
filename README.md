@@ -161,6 +161,8 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Decisión de renderer RepresentationSpace](research/decisions/068-representation-space-renderer.md)
 - [Decisión de preservación semántica relativa a consultas](research/decisions/069-semantic-invariant-contract.md)
 - [Decisión de selección marginal de ramas](research/decisions/070-branch-subset-selection.md)
+- [Auditoría profunda de referencias open source y científicas](research/literature/023-open-source-reference-audit.md)
+- [Compuerta de adopción de referencias externas](research/decisions/071-open-source-reference-gate.md)
 - [Futuro de FARMAKSIA como compilador de representación](research/decisions/061-farmaxia-generative-interface-roadmap.md)
 - [Literatura de observabilidad VIZZ](research/literature/010-vizz-observability-boundary.md)
 - [Literatura de condiciones de display VIZZ](research/literature/011-vizz-display-conditions.md)
