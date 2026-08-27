@@ -312,6 +312,10 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
   [experimento 081](../../experiments/081-farmaxia-window-proxy-sandbox/README.md).
   Esto valida el renderer proxy como base, pero no input entre procesos ni
   reconocimiento semántico universal.
+- preview pasivo de ventana externa — el experimento 082 ya compila el selector
+  seguro y separa `BuildOnly` de la ejecución interactiva. La selección real y
+  la observación de frames quedan pendientes de una ejecución manual con
+  consentimiento.
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;

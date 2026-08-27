@@ -1,0 +1,50 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:082-selected-window-preview",
+  "status": "compiled_contract_verified",
+  "purpose": "Build a consented passive preview for one user-selected window without enumerating windows or intercepting input.",
+  "agents": [
+    {"id": "farmaxia:researcher-082", "type": "agent", "role": "defines_explicit_selection_and_passive_preview_boundary"},
+    {"id": "farmaxia:native-runner-082", "type": "software_agent", "role": "compiles_selected_window_preview_without_running_user_selection"}
+  ],
+  "entities": [
+    {"id": "farmaxia:preview-native-082", "type": "entity", "path": "native/main.cpp", "role": "system_picker_and_passive_window_capture_preview", "authority": "human_declared_tool"},
+    {"id": "farmaxia:preview-build-082", "type": "entity", "path": "native/082-selected-window-preview.vcxproj", "role": "windows_sdk_cppwinrt_build_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:preview-contract-082", "type": "entity", "path": "run_contract_test.py", "role": "picker_privacy_and_no_input_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:preview-build-script-082", "type": "entity", "path": "run_native_build.ps1", "role": "separate_build_only_and_interactive_execution", "authority": "human_declared_tool"},
+    {"id": "farmaxia:preview-protocol-082", "type": "entity", "path": "README.md", "role": "manual_consent_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:preview-results-082", "type": "entity", "path": "results.md", "role": "compiled_evidence_and_unexecuted_runtime_boundary", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:proxy-decision-083", "type": "entity", "path": "../../research/decisions/083-window-proxy-renderer.md", "role": "visual_proxy_architecture_parent", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:preview-suite-082", "type": "entity", "path": "../../research/tools/run_suite.py", "role": "reproducible_static_contract_registration", "authority": "human_declared_tool"},
+    {"id": "farmaxia:official-picker-reference-082", "type": "entity", "role": "Microsoft GraphicsCapturePicker official documentation and Windows UI Composition Win32 sample", "authority": "human_declared"}
+  ],
+  "activities": [
+    {"id": "farmaxia:build-preview-082", "type": "activity", "label": "compile the passive selected-window preview with the official Windows CppWinRT package", "agent": "farmaxia:native-runner-082", "used": ["farmaxia:preview-native-082", "farmaxia:preview-build-082", "farmaxia:official-picker-reference-082"], "generated": []},
+    {"id": "farmaxia:check-preview-082", "type": "activity", "label": "verify picker consent, no enumeration, no raw persistence and no input interception", "agent": "farmaxia:researcher-082", "used": ["farmaxia:preview-contract-082", "farmaxia:preview-protocol-082"], "generated": ["farmaxia:preview-results-082"]},
+    {"id": "farmaxia:record-preview-082", "type": "activity", "label": "record that interactive external-window evidence remains pending", "agent": "farmaxia:researcher-082", "used": ["farmaxia:preview-results-082", "farmaxia:proxy-decision-083", "farmaxia:preview-suite-082"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:picker-query-082", "expression": "does the preview require explicit system selection before a capture session starts", "authority": "experiment_defined", "required_entities": ["farmaxia:preview-native-082", "farmaxia:preview-contract-082"]},
+    {"id": "farmaxia:privacy-query-082", "expression": "does the preview avoid external enumeration, raw persistence and input interception", "authority": "experiment_defined", "required_entities": ["farmaxia:preview-contract-082", "farmaxia:preview-results-082"]},
+    {"id": "farmaxia:runtime-query-082", "expression": "has a real user-selected application produced and sustained a preview frame", "authority": "experiment_defined", "required_entities": ["farmaxia:preview-results-082"]}
+  ],
+  "assumptions": [
+    "The picker is called on the owner UI thread as required by the Windows API.",
+    "The preview is a separate window and does not replace or cover the source.",
+    "The CPU readback is diagnostic only and is not the production renderer.",
+    "No interactive external-window run is claimed in this record."
+  ],
+  "kill_tests": [
+    "Canceling the picker does not start capture.",
+    "The preview source is never selected by title or foreground-window guessing.",
+    "No input is injected or intercepted for the selected source.",
+    "No raw frame is written to disk.",
+    "The unexecuted runtime is not labeled as verified."
+  ],
+  "unknowns": [
+    "Whether the selected application delivers frames on this machine after consent.",
+    "What frame cadence and latency are observed for a real external window.",
+    "How source closure and resize should version the preview.",
+    "Whether a selected window can later support a safe semantic region map."
+  ]
+}
