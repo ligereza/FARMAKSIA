@@ -283,11 +283,14 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~composición de sidecar editorial~~ — ffprobe-style se completa sólo cuando
   coinciden identidad, hash y versión, con rangos exactos y política read-only,
   en el [experimento 074](../../experiments/074-farmaxia-media-sidecar-composition/README.md);
+- ~~conflicto entre sidecars~~ — dos sidecars individualmente válidos pero con
+  claims distintos producen `CONFLICT`, preservan ambos historiales y no
+  seleccionan silenciosamente en el [experimento 075](../../experiments/075-farmaxia-media-sidecar-conflict-audit/README.md);
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
-- conflictos entre sidecars válidos y versiones concurrentes;
+- autoridad y resolución explícita de conflictos entre sidecars;
 
 ### Más adelante
 

@@ -105,6 +105,7 @@ def main() -> None:
         "experiments/072-farmaxia-media-timeline-adapter/provenance.json",
         "experiments/073-farmaxia-media-representation-bridge/provenance.json",
         "experiments/074-farmaxia-media-sidecar-composition/provenance.json",
+        "experiments/075-farmaxia-media-sidecar-conflict-audit/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1218,6 +1219,22 @@ def main() -> None:
         "FARMAXIA_074_MEDIA_SIDECAR_COMPOSITION_KILL_TESTS_VALID",
     )
     command("provenance 074", python_script("research/tools/validate_provenance.py", provenance[70]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA media sidecar conflict audit 075",
+        python_script("experiments/075-farmaxia-media-sidecar-conflict-audit/run_experiment.py"),
+        '"status": "CONFLICT"',
+    )
+    command(
+        "contract test FARMAKSIA media sidecar conflict audit 075",
+        python_script("experiments/075-farmaxia-media-sidecar-conflict-audit/run_contract_test.py"),
+        "FARMAXIA_075_MEDIA_SIDECAR_CONFLICT_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA media sidecar conflict audit 075",
+        python_script("experiments/075-farmaxia-media-sidecar-conflict-audit/run_kill_test.py"),
+        "FARMAXIA_075_MEDIA_SIDECAR_CONFLICT_KILL_TESTS_VALID",
+    )
+    command("provenance 075", python_script("research/tools/validate_provenance.py", provenance[71]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

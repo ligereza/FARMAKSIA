@@ -1,0 +1,57 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:075-media-sidecar-conflict-audit",
+  "status": "exploratory",
+  "purpose": "Verify that two individually valid editorial sidecars with incompatible claims produce CONFLICT while preserving both histories and selecting neither.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-075", "type": "agent", "role": "defines_conflict_preservation_and_no_silent_selection_policy"},
+    {"id": "farmaxia:python-runner-075", "type": "software_agent", "role": "reuses_sidecar_validator_and_audits_concurrent_claims"}
+  ],
+  "entities": [
+    {"id": "farmaxia:conflict-fixture-075", "type": "entity", "path": "fixture.json", "role": "two_synthetic_same_scope_incompatible_sidecars", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:conflict-validator-075", "type": "entity", "path": "run_experiment.py", "role": "candidate_validation_scope_grouping_and_conflict_oracle", "authority": "human_declared_tool"},
+    {"id": "farmaxia:conflict-contract-075", "type": "entity", "path": "run_contract_test.py", "role": "positive_conflict_preservation_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:conflict-kill-tests-075", "type": "entity", "path": "run_kill_test.py", "role": "identity_version_permission_and_silent_selection_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:conflict-protocol-075", "type": "entity", "path": "README.md", "role": "conflict_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:conflict-results-075", "type": "entity", "path": "results.md", "role": "measurement_and_interpretation_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:sidecar-composition-074", "type": "entity", "path": "../074-farmaxia-media-sidecar-composition/run_experiment.py", "role": "reused_verified_sidecar_composition_kernel", "authority": "human_declared_tool"},
+    {"id": "farmaxia:shared-cloudevents-kernel-075", "type": "entity", "path": "../../research/tools/cloudevents_contract.py", "role": "shared_envelope_validation_kernel", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:conflict-compose-075", "type": "activity", "label": "validate two sidecars independently and compare claims within the same asset timeline and version scope", "agent": "farmaxia:python-runner-075", "used": ["farmaxia:conflict-fixture-075", "farmaxia:sidecar-composition-074", "farmaxia:shared-cloudevents-kernel-075", "farmaxia:conflict-validator-075"], "generated": ["farmaxia:conflict-results-075"]},
+    {"id": "farmaxia:conflict-kill-075", "type": "activity", "label": "attack candidate count identity hash version permissions events and silent selection", "agent": "farmaxia:python-runner-075", "used": ["farmaxia:conflict-kill-tests-075"], "generated": []},
+    {"id": "farmaxia:conflict-record-075", "type": "activity", "label": "record preserved histories and remaining authority resolution unknowns", "agent": "farmaxia:human-researcher-075", "used": ["farmaxia:conflict-protocol-075", "farmaxia:conflict-results-075"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:conflict-validity-query-075", "expression": "can two individually valid sidecars with the same asset hash version and timeline be distinguished as incompatible claims", "authority": "experiment_defined", "required_entities": ["farmaxia:conflict-fixture-075", "farmaxia:conflict-validator-075"]},
+    {"id": "farmaxia:conflict-history-query-075", "expression": "does the result preserve every candidate and refuse silent last-write-wins selection", "authority": "experiment_defined", "required_entities": ["farmaxia:conflict-contract-075", "farmaxia:conflict-validator-075"]},
+    {"id": "farmaxia:conflict-abstention-query-075", "expression": "do incomplete or unsafe candidates produce BLOCKED rather than a conflict or compatible composition", "authority": "experiment_defined", "required_entities": ["farmaxia:conflict-kill-tests-075", "farmaxia:conflict-validator-075"]},
+    {"id": "farmaxia:conflict-reuse-query-075", "expression": "does conflict auditing reuse the 074 sidecar validator and shared event replay without a new core", "authority": "experiment_defined", "required_entities": ["farmaxia:sidecar-composition-074", "farmaxia:shared-cloudevents-kernel-075"]}
+  ],
+  "assumptions": [
+    "Both sidecars are synthetic and individually consistent with the declared source registry.",
+    "The common asset hash version and timeline identify the scope in which claims are compared.",
+    "Different marker references or source frames are semantically incompatible claims for this audit.",
+    "A conflict has no valid automatic winner without an authority and resolution policy.",
+    "Preserving both histories is safer than overwriting one candidate."
+  ],
+  "kill_tests": [
+    "Missing candidate blocks the conflict audit.",
+    "Duplicate sidecar identity blocks the conflict audit.",
+    "Cross-asset identity blocks the conflict audit.",
+    "Stale hash blocks the conflict audit.",
+    "Stale version blocks the conflict audit.",
+    "Writable sidecar blocks the conflict audit.",
+    "Non-dry-run action blocks the conflict audit.",
+    "Preferred sidecar selection blocks the conflict audit.",
+    "Missing required event blocks the conflict audit.",
+    "Identical claims cannot be labeled as a conflict."
+  ],
+  "unknowns": [
+    "Which institutional authority can resolve a conflict between valid sidecars.",
+    "Whether signatures, publication time or vector versions are required for real sidecars.",
+    "How file replacement and concurrent editors should be represented.",
+    "Whether semantic equivalence needs a richer claim normalization than this marker-focused fixture.",
+    "Whether a real editorial system can expose the required provenance without privileged access."
+  ]
+}

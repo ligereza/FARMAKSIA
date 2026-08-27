@@ -44,8 +44,9 @@ lógica controlada, no interoperabilidad con archivos reales.
 Quedan abiertos firmas de sidecar, autoridad editorial, reemplazos de archivos,
 sidecars concurrentes, VFR, drop-frame, keyframes, efectos, derechos y player.
 No se deben resolver seleccionando el sidecar más reciente sin comparar
-provenance: el siguiente experimento debe devolver `CONFLICT` o `UNKNOWN` ante
-dos versiones incompatibles.
+provenance: el [experimento 075](../../experiments/075-farmaxia-media-sidecar-conflict-audit/README.md)
+verificó que debe devolver `CONFLICT` o `UNKNOWN` ante dos versiones
+incompatibles.
 
 ## Regla de adopción
 

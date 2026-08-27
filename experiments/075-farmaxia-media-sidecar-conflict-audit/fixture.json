@@ -1,0 +1,95 @@
+{
+  "schema": "farmaxia:media-sidecar-conflict-audit:0.1",
+  "additional_records": [
+    {
+      "entity_ref": "media-catalog:farmaksia:marker:insight-02",
+      "type": "marker",
+      "source_frame": 72,
+      "source_version": 4,
+      "status": "published"
+    }
+  ],
+  "sidecars": [
+    {
+      "sidecar_id": "editorial-sidecar-cut-01-v4-a",
+      "source_uri": "https://media.example.test/editorial/cut-01/a",
+      "source_version": 4,
+      "sidecar_sha256": "sha256:synthetic-sidecar-cut-01-v4-a",
+      "authority": "synthetic-editorial-sidecar-a",
+      "asset_ref": "media-catalog:farmaksia:asset:interview-master",
+      "asset_sha256": "sha256:synthetic-interview-master-v4",
+      "timeline_ref": "media-catalog:farmaksia:timeline:cut-01",
+      "timeline_id": "cut-01",
+      "timebase": {"value": 24, "rate": 1},
+      "video": {
+        "timeline_start": {"value": 0, "rate": 24},
+        "source_start": {"value": 48, "rate": 24},
+        "duration": {"value": 96, "rate": 24}
+      },
+      "audio": {
+        "timeline_start": {"value": 0, "rate": 24},
+        "source_start": {"value": 48, "rate": 24},
+        "duration": {"value": 96, "rate": 24}
+      },
+      "marker": {
+        "marker_ref": "media-catalog:farmaksia:marker:insight-01",
+        "source_frame": 60
+      },
+      "source_refs": [
+        "media-catalog:farmaksia:asset:interview-master",
+        "media-catalog:farmaksia:timeline:cut-01",
+        "media-catalog:farmaksia:marker:insight-01"
+      ],
+      "read_only": true
+    },
+    {
+      "sidecar_id": "editorial-sidecar-cut-01-v4-b",
+      "source_uri": "https://media.example.test/editorial/cut-01/b",
+      "source_version": 4,
+      "sidecar_sha256": "sha256:synthetic-sidecar-cut-01-v4-b",
+      "authority": "synthetic-editorial-sidecar-b",
+      "asset_ref": "media-catalog:farmaksia:asset:interview-master",
+      "asset_sha256": "sha256:synthetic-interview-master-v4",
+      "timeline_ref": "media-catalog:farmaksia:timeline:cut-01",
+      "timeline_id": "cut-01",
+      "timebase": {"value": 24, "rate": 1},
+      "video": {
+        "timeline_start": {"value": 0, "rate": 24},
+        "source_start": {"value": 48, "rate": 24},
+        "duration": {"value": 96, "rate": 24}
+      },
+      "audio": {
+        "timeline_start": {"value": 0, "rate": 24},
+        "source_start": {"value": 48, "rate": 24},
+        "duration": {"value": 96, "rate": 24}
+      },
+      "marker": {
+        "marker_ref": "media-catalog:farmaksia:marker:insight-02",
+        "source_frame": 72
+      },
+      "source_refs": [
+        "media-catalog:farmaksia:asset:interview-master",
+        "media-catalog:farmaksia:timeline:cut-01",
+        "media-catalog:farmaksia:marker:insight-02"
+      ],
+      "read_only": true
+    }
+  ],
+  "conflict_contract": {
+    "expected_status": "CONFLICT",
+    "expected_candidate_count": 2,
+    "expected_preserved_sidecar_ids": [
+      "editorial-sidecar-cut-01-v4-a",
+      "editorial-sidecar-cut-01-v4-b"
+    ],
+    "expected_scope": {
+      "asset_ref": "media-catalog:farmaksia:asset:interview-master",
+      "asset_sha256": "sha256:synthetic-interview-master-v4",
+      "source_version": 4,
+      "timeline_ref": "media-catalog:farmaksia:timeline:cut-01",
+      "timeline_id": "cut-01"
+    },
+    "expected_differing_claims": ["marker.marker_ref", "marker.source_frame"],
+    "expected_selection": null
+  }
+}

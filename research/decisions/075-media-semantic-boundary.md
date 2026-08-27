@@ -14,8 +14,9 @@ segundo sistema de eventos. La nueva semántica mínima es:
 4. composición de tracks y sincronía audio/video;
 5. capacidad de codec y permiso de preview como precondiciones verificables.
 
-El contrato se probó en [experimento 072](../../experiments/072-farmaxia-media-timeline-adapter/README.md)
-y su portabilidad se comparó en el [experimento 073](../../experiments/073-farmaxia-media-representation-bridge/README.md).
+El contrato se probó en [experimento 072](../../experiments/072-farmaxia-media-timeline-adapter/README.md),
+su portabilidad se comparó en el [experimento 073](../../experiments/073-farmaxia-media-representation-bridge/README.md),
+y la composición read-only por sidecar se verificó en el [experimento 074](../../experiments/074-farmaxia-media-sidecar-composition/README.md).
 La operación sólo previsualiza y requiere confirmación. No se instala ningún
 framework ni se decodifica media.
 
@@ -58,5 +59,5 @@ independiente, permisos y una política de exportación explícita.
 No se añadirá un renderer media completo. Primero se compondrán fuentes
 read-only por hash/versiones; sólo un campo cuya semántica no pueda preservarse
 con esa composición justificará una extensión. Dos sidecars incompatibles no se
-resolverán por orden de llegada: deben conservarse y producir `CONFLICT` o
-`UNKNOWN`.
+resolverán por orden de llegada: el [experimento 075](../../experiments/075-farmaxia-media-sidecar-conflict-audit/README.md)
+verificó que deben conservarse y producir `CONFLICT` o `UNKNOWN`.
