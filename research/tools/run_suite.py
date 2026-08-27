@@ -111,6 +111,7 @@ def main() -> None:
         "experiments/078-farmaxia-native-transition-probe/provenance.json",
         "experiments/079-farmaxia-consented-input-semantic-bridge/provenance.json",
         "experiments/080-farmaxia-input-native-delta-correlation/provenance.json",
+        "experiments/081-farmaxia-window-proxy-sandbox/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1320,6 +1321,17 @@ def main() -> None:
         "FARMAXIA_080_INPUT_NATIVE_DELTA_KILL_TESTS_VALID",
     )
     command("provenance 080", python_script("research/tools/validate_provenance.py", provenance[76]), "PROVENANCE_VALID")
+    command(
+        "contract test FARMAKSIA window proxy sandbox 081",
+        python_script("experiments/081-farmaxia-window-proxy-sandbox/run_contract_test.py"),
+        "FARMAXIA_081_WINDOW_PROXY_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA window proxy sandbox 081",
+        python_script("experiments/081-farmaxia-window-proxy-sandbox/run_kill_test.py"),
+        "FARMAXIA_081_WINDOW_PROXY_KILL_TESTS_VALID",
+    )
+    command("provenance 081", python_script("research/tools/validate_provenance.py", provenance[77]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

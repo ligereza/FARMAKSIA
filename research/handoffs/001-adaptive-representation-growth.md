@@ -306,6 +306,12 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
   scratch no guardado y, al no existir input humano, todos quedaron como
   `unassociated_native_delta`; el modo live queda preparado para asociaciones
   candidatas en el [experimento 080](../../experiments/080-farmaxia-input-native-delta-correlation/README.md);
+- ~~prueba de ventana proxy~~ — una ventana propia fue capturada con
+  `Windows.Graphics.Capture`, cuatro regiones fueron reordenadas y un clic
+  reubicado volvió a la fuente mediante la transformación inversa en el
+  [experimento 081](../../experiments/081-farmaxia-window-proxy-sandbox/README.md).
+  Esto valida el renderer proxy como base, pero no input entre procesos ni
+  reconocimiento semántico universal.
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
@@ -314,6 +320,9 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
   sin confundir actividad física con intención;
 - medir el retardo entre input, UIA y delta nativo en una sesión humana
   explícitamente autorizada;
+- construir una vista proxy en modo preview para una ventana seleccionada,
+  usando UIA/OCR sólo como propuestas de regiones y sin interceptar input por
+  defecto;
 
 ### Más adelante
 

@@ -1,0 +1,53 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:081-window-proxy-sandbox",
+  "status": "exploratory_verified",
+  "purpose": "Validate real window capture, bounded visual region permutation and inverse interaction mapping without modifying source application code.",
+  "agents": [
+    {"id": "farmaxia:researcher-081", "type": "agent", "role": "defines_falsifiable_visual_proxy_boundary"},
+    {"id": "farmaxia:native-runner-081", "type": "software_agent", "role": "runs_isolated_windows_graphics_capture_sandbox"}
+  ],
+  "entities": [
+    {"id": "farmaxia:proxy-math-081", "type": "entity", "path": "proxy_math.py", "role": "bijective_region_transform_and_inverse_mapping", "authority": "human_declared_tool"},
+    {"id": "farmaxia:native-sandbox-081", "type": "entity", "path": "native/main.cpp", "role": "isolated_real_window_capture_transform_and_internal_input_route", "authority": "human_declared_tool"},
+    {"id": "farmaxia:native-build-081", "type": "entity", "path": "native/081-window-proxy-sandbox.vcxproj", "role": "windows_sdk_cppwinrt_build_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:contract-081", "type": "entity", "path": "run_contract_test.py", "role": "spatial_round_trip_and_native_boundary_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:kill-tests-081", "type": "entity", "path": "run_kill_test.py", "role": "non_bijective_transform_and_boundary_tests", "authority": "human_declared_tool"},
+    {"id": "farmaxia:protocol-081", "type": "entity", "path": "README.md", "role": "adoption_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:results-081", "type": "entity", "path": "results.md", "role": "observed_native_evidence_and_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:decision-083", "type": "entity", "path": "../../research/decisions/083-window-proxy-renderer.md", "role": "renderer_proxy_architecture_decision", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:official-capture-reference-081", "type": "entity", "role": "Microsoft Windows.Graphics.Capture and Windows.UI.Composition Win32 sample, MIT-licensed reference", "authority": "human_declared"},
+    {"id": "farmaxia:proxy-suite-081", "type": "entity", "path": "../../research/tools/run_suite.py", "role": "reproducible_contract_registration", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:compile-capture-081", "type": "activity", "label": "compile the isolated native capture sandbox with the official Microsoft CppWinRT package", "agent": "farmaxia:native-runner-081", "used": ["farmaxia:native-sandbox-081", "farmaxia:native-build-081", "farmaxia:official-capture-reference-081"], "generated": []},
+    {"id": "farmaxia:run-capture-081", "type": "activity", "label": "capture a self-created source window, permute regions, route an internal proxy click and verify the changed frame", "agent": "farmaxia:native-runner-081", "used": ["farmaxia:native-sandbox-081", "farmaxia:proxy-math-081"], "generated": ["farmaxia:results-081"]},
+    {"id": "farmaxia:attack-proxy-081", "type": "activity", "label": "reject non-bijective maps, out-of-surface points and unsafe external-window capabilities", "agent": "farmaxia:researcher-081", "used": ["farmaxia:kill-tests-081", "farmaxia:contract-081"], "generated": []},
+    {"id": "farmaxia:record-proxy-081", "type": "activity", "label": "record the proxy renderer decision and its limits", "agent": "farmaxia:researcher-081", "used": ["farmaxia:protocol-081", "farmaxia:results-081", "farmaxia:decision-083", "farmaxia:proxy-suite-081"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:real-capture-query-081", "expression": "can an explicitly self-created window produce a changed captured frame without screen-wide capture", "authority": "experiment_defined", "required_entities": ["farmaxia:native-sandbox-081", "farmaxia:results-081"]},
+    {"id": "farmaxia:reorder-query-081", "expression": "can four visual regions be rearranged while preserving pixel identity at declared destinations", "authority": "experiment_defined", "required_entities": ["farmaxia:proxy-math-081", "farmaxia:native-sandbox-081", "farmaxia:contract-081"]},
+    {"id": "farmaxia:inverse-input-query-081", "expression": "does an interaction on a rearranged region map back to its source region when the map is bijective", "authority": "experiment_defined", "required_entities": ["farmaxia:proxy-math-081", "farmaxia:native-sandbox-081"]},
+    {"id": "farmaxia:boundary-query-081", "expression": "does the renderer reject ambiguous maps and external input capabilities", "authority": "experiment_defined", "required_entities": ["farmaxia:kill-tests-081", "farmaxia:protocol-081"]}
+  ],
+  "assumptions": [
+    "The native sandbox owns both the source and proxy HWNDs.",
+    "A quadrant permutation is a sufficient minimal test of a reversible spatial transform.",
+    "The source window remains visible long enough for Windows.Graphics.Capture to deliver frames.",
+    "The official Microsoft sample and CppWinRT package are implementation references, not semantic authorities."
+  ],
+  "kill_tests": [
+    "Non-bijective region maps are rejected.",
+    "The proxy does not target external windows or inject system input.",
+    "A static source does not cause a continuous presentation loop.",
+    "A source update that does not reach the proxy is a timeout/failure.",
+    "An out-of-surface coordinate is rejected."
+  ],
+  "unknowns": [
+    "Whether the same capture path behaves acceptably for arbitrary user-selected applications.",
+    "Whether cross-process input routing can be made safe for UIA-supported controls.",
+    "How much latency and GPU cost a GPU-native region compositor adds at sustained updates.",
+    "Whether UIA or OCR can identify semantic regions without false reordering."
+  ]
+}
