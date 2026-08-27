@@ -289,11 +289,17 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~adopción de herramienta real Windows~~ — `pywinauto 0.6.9` con backend UIA
   enumeró ventanas y controles del desktop real en modo read-only en el
   [experimento 076](../../experiments/076-farmaxia-pywinauto-uia-adapter/README.md);
+- ~~inventario de aplicaciones reales~~ — Excel `16.0` respondió por COM local y
+  Blender `5.1.1` por su API Python en modo background; el
+  [experimento 077](../../experiments/077-farmaxia-excel-blender-capability-inventory/README.md)
+  confirma que UIA debe combinarse con estado nativo y no sustituye el modelo
+  interno de cada aplicación;
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
-- SurfaceDescriptor real a partir de UIA para una aplicación Windows concreta;
+- descriptor de transiciones tipadas a partir de UIA más estado nativo para
+  Excel y Blender;
 
 ### Más adelante
 

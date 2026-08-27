@@ -1,0 +1,50 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:077-excel-blender-capability-inventory",
+  "status": "exploratory",
+  "purpose": "Inspect the real state surfaces of installed Excel and Blender before building a semantic cross-application bridge.",
+  "agents": [
+    {"id": "farmaxia:researcher-077", "type": "agent", "role": "selects_native_state_surfaces_from_real_apps"},
+    {"id": "farmaxia:python-runner-077", "type": "software_agent", "role": "runs_read_only_excel_com_and_blender_python_inventory"}
+  ],
+  "entities": [
+    {"id": "farmaxia:inventory-probe-077", "type": "entity", "path": "run_experiment.py", "role": "real_excel_and_blender_read_only_capability_probe", "authority": "human_declared_tool"},
+    {"id": "farmaxia:inventory-contract-077", "type": "entity", "path": "run_contract_test.py", "role": "positive_real_app_capability_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:inventory-kill-tests-077", "type": "entity", "path": "run_kill_test.py", "role": "mutation_input_capture_and_unsafe_capability_boundary", "authority": "human_declared_tool"},
+    {"id": "farmaxia:inventory-protocol-077", "type": "entity", "path": "README.md", "role": "reproduction_and_scope_boundary", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:inventory-results-077", "type": "entity", "path": "results.md", "role": "interpretation_and_unknowns", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:inventory-pywinauto-076", "type": "entity", "path": "../076-farmaxia-pywinauto-uia-adapter/tool_manifest.json", "role": "surface_adapter_dependency", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:inventory-suite-077", "type": "entity", "path": "../../research/tools/run_suite.py", "role": "reproducible_suite_registration", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:inventory-run-077", "type": "activity", "label": "observe real Excel COM and Blender Python capability surfaces without mutation", "agent": "farmaxia:python-runner-077", "used": ["farmaxia:inventory-probe-077"], "generated": ["farmaxia:inventory-results-077"]},
+    {"id": "farmaxia:inventory-kill-077", "type": "activity", "label": "attack mutation input capture camera network and write boundaries", "agent": "farmaxia:python-runner-077", "used": ["farmaxia:inventory-kill-tests-077"], "generated": []},
+    {"id": "farmaxia:inventory-record-077", "type": "activity", "label": "record native state adapter decision and semantic bridge unknowns", "agent": "farmaxia:researcher-077", "used": ["farmaxia:inventory-protocol-077", "farmaxia:inventory-results-077", "farmaxia:inventory-pywinauto-076", "farmaxia:inventory-suite-077"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:inventory-real-app-query-077", "expression": "do installed Excel and Blender expose observable native state surfaces without user-data mutation", "authority": "experiment_defined", "required_entities": ["farmaxia:inventory-probe-077"]},
+    {"id": "farmaxia:inventory-layer-query-077", "expression": "is UIA alone sufficient or must the bridge combine UIA with native application APIs", "authority": "experiment_defined", "required_entities": ["farmaxia:inventory-probe-077", "farmaxia:inventory-pywinauto-076"]},
+    {"id": "farmaxia:inventory-safety-query-077", "expression": "does the inventory remain read-only and local", "authority": "experiment_defined", "required_entities": ["farmaxia:inventory-contract-077", "farmaxia:inventory-kill-tests-077"]},
+    {"id": "farmaxia:inventory-repro-query-077", "expression": "is the real-app inventory reproducible through the FARMAKSIA suite", "authority": "experiment_defined", "required_entities": ["farmaxia:inventory-suite-077", "farmaxia:inventory-probe-077"]}
+  ],
+  "assumptions": [
+    "Excel is installed and exposes a local COM automation server on the test machine.",
+    "Blender is installed under the standard Blender Foundation directory or is supplied through --blender.",
+    "Launching Excel hidden and Blender in background factory-startup mode does not open or modify user files.",
+    "Native APIs are observation surfaces; they do not by themselves authorize future actions.",
+    "The shared bridge should preserve typed state transitions rather than force a one-to-one control mapping."
+  ],
+  "kill_tests": [
+    "Excel cell or workbook mutation is blocked.",
+    "Mouse or keyboard injection is blocked.",
+    "Network, screenshot and camera capabilities are blocked.",
+    "Source write capability is blocked.",
+    "A surface layer other than the adopted UIA boundary is rejected by the adversarial fixture."
+  ],
+  "unknowns": [
+    "Whether UIA can expose enough Blender viewport semantics for a useful surface descriptor.",
+    "Whether the Excel and Blender native state graphs contain task invariants that transfer for a concrete task.",
+    "Whether future actions can be independently verified through a second state source.",
+    "Whether Excel version and subscription features are stable enough to be treated as capabilities rather than assumptions."
+  ]
+}

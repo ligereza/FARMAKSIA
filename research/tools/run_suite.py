@@ -107,6 +107,7 @@ def main() -> None:
         "experiments/074-farmaxia-media-sidecar-composition/provenance.json",
         "experiments/075-farmaxia-media-sidecar-conflict-audit/provenance.json",
         "experiments/076-farmaxia-pywinauto-uia-adapter/provenance.json",
+        "experiments/077-farmaxia-excel-blender-capability-inventory/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1252,6 +1253,22 @@ def main() -> None:
         "FARMAXIA_076_PYWINAUTO_UIA_KILL_TESTS_VALID",
     )
     command("provenance 076", python_script("research/tools/validate_provenance.py", provenance[72]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA Excel Blender capability inventory 077",
+        python_script("experiments/077-farmaxia-excel-blender-capability-inventory/run_experiment.py"),
+        '"status": "EXCEL_BLENDER_CAPABILITY_INVENTORY_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA Excel Blender capability inventory 077",
+        python_script("experiments/077-farmaxia-excel-blender-capability-inventory/run_contract_test.py"),
+        "FARMAXIA_077_EXCEL_BLENDER_CAPABILITY_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA Excel Blender capability inventory 077",
+        python_script("experiments/077-farmaxia-excel-blender-capability-inventory/run_kill_test.py"),
+        "FARMAXIA_077_EXCEL_BLENDER_CAPABILITY_KILL_TESTS_VALID",
+    )
+    command("provenance 077", python_script("research/tools/validate_provenance.py", provenance[73]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
