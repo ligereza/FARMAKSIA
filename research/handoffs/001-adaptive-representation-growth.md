@@ -302,12 +302,18 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
   teclado por conteo, aplicación allowlisted y rol UIA enfocado (`firefox:Group`)
   sin títulos, texto, teclas ni píxeles en el
   [experimento 079](../../experiments/079-farmaxia-consented-input-semantic-bridge/README.md);
+- ~~correlación input/delta nativo~~ — Excel real produjo tres deltas en un
+  scratch no guardado y, al no existir input humano, todos quedaron como
+  `unassociated_native_delta`; el modo live queda preparado para asociaciones
+  candidatas en el [experimento 080](../../experiments/080-farmaxia-input-native-delta-correlation/README.md);
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
 - correlacionar input humano autorizado con un delta nativo de Excel o Blender,
   sin confundir actividad física con intención;
+- medir el retardo entre input, UIA y delta nativo en una sesión humana
+  explícitamente autorizada;
 
 ### Más adelante
 

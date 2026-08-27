@@ -110,6 +110,7 @@ def main() -> None:
         "experiments/077-farmaxia-excel-blender-capability-inventory/provenance.json",
         "experiments/078-farmaxia-native-transition-probe/provenance.json",
         "experiments/079-farmaxia-consented-input-semantic-bridge/provenance.json",
+        "experiments/080-farmaxia-input-native-delta-correlation/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1303,6 +1304,22 @@ def main() -> None:
         "FARMAXIA_079_CONSENTED_INPUT_KILL_TESTS_VALID",
     )
     command("provenance 079", python_script("research/tools/validate_provenance.py", provenance[75]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA input native delta correlation 080",
+        python_script("experiments/080-farmaxia-input-native-delta-correlation/run_experiment.py", "--mode", "scratch"),
+        '"status": "INPUT_NATIVE_DELTA_CORRELATION_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA input native delta correlation 080",
+        python_script("experiments/080-farmaxia-input-native-delta-correlation/run_contract_test.py"),
+        "FARMAXIA_080_INPUT_NATIVE_DELTA_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA input native delta correlation 080",
+        python_script("experiments/080-farmaxia-input-native-delta-correlation/run_kill_test.py"),
+        "FARMAXIA_080_INPUT_NATIVE_DELTA_KILL_TESTS_VALID",
+    )
+    command("provenance 080", python_script("research/tools/validate_provenance.py", provenance[76]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

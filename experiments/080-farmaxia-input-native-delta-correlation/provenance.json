@@ -1,0 +1,52 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:080-input-native-delta-correlation",
+  "status": "exploratory",
+  "purpose": "Correlate consented input observations with real Excel native state deltas while preserving ambiguity and content privacy.",
+  "agents": [
+    {"id": "farmaxia:researcher-080", "type": "agent", "role": "defines_temporal_candidate_association_without_intent_claim"},
+    {"id": "farmaxia:python-runner-080", "type": "software_agent", "role": "runs_real_excel_scratch_and_optional_live_read_only_correlation"}
+  ],
+  "entities": [
+    {"id": "farmaxia:correlator-080", "type": "entity", "path": "correlator.py", "role": "content_minimized_state_delta_and_candidate_association_kernel", "authority": "human_declared_tool"},
+    {"id": "farmaxia:correlation-probe-080", "type": "entity", "path": "run_experiment.py", "role": "real_excel_scratch_and_live_observer", "authority": "human_declared_tool"},
+    {"id": "farmaxia:correlation-contract-080", "type": "entity", "path": "run_contract_test.py", "role": "positive_real_delta_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:correlation-kill-tests-080", "type": "entity", "path": "run_kill_test.py", "role": "false_intent_cross_app_ambiguity_and_window_boundary_tests", "authority": "human_declared_tool"},
+    {"id": "farmaxia:correlation-protocol-080", "type": "entity", "path": "README.md", "role": "live_mode_consent_privacy_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:correlation-results-080", "type": "entity", "path": "results.md", "role": "observed_excel_delta_and_unknowns", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:input-bridge-079", "type": "entity", "path": "../079-farmaxia-consented-input-semantic-bridge/input_bridge.py", "role": "consented_input_and_allowlisted_context_source", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:transition-kernel-078", "type": "entity", "path": "../078-farmaxia-native-transition-probe/results.md", "role": "native_transition_reference", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:correlation-suite-080", "type": "entity", "path": "../../research/tools/run_suite.py", "role": "reproducible_suite_registration", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:correlation-run-080", "type": "activity", "label": "observe real Excel scratch state deltas and keep them unassociated when no human input exists", "agent": "farmaxia:python-runner-080", "used": ["farmaxia:correlator-080", "farmaxia:transition-kernel-078"], "generated": ["farmaxia:correlation-results-080"]},
+    {"id": "farmaxia:correlation-kill-080", "type": "activity", "label": "attack false intent cross-application matching ambiguity and temporal window boundaries", "agent": "farmaxia:python-runner-080", "used": ["farmaxia:correlation-kill-tests-080"], "generated": []},
+    {"id": "farmaxia:correlation-record-080", "type": "activity", "label": "record live observer boundary and next human-session requirement", "agent": "farmaxia:researcher-080", "used": ["farmaxia:correlation-protocol-080", "farmaxia:correlation-results-080", "farmaxia:input-bridge-079", "farmaxia:correlation-suite-080"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:correlation-real-query-080", "expression": "can real Excel state changes be classified as typed deltas without persisting content", "authority": "experiment_defined", "required_entities": ["farmaxia:correlation-probe-080", "farmaxia:correlator-080"]},
+    {"id": "farmaxia:correlation-input-query-080", "expression": "does the system keep native deltas unassociated when no input observation exists", "authority": "experiment_defined", "required_entities": ["farmaxia:correlation-contract-080", "farmaxia:correlation-results-080"]},
+    {"id": "farmaxia:correlation-safety-query-080", "expression": "does candidate association avoid intent claims and cross-application matches", "authority": "experiment_defined", "required_entities": ["farmaxia:correlation-kill-tests-080", "farmaxia:input-bridge-079"]},
+    {"id": "farmaxia:correlation-repro-query-080", "expression": "is the real Excel delta correlation registered in the FARMAKSIA suite", "authority": "experiment_defined", "required_entities": ["farmaxia:correlation-suite-080", "farmaxia:correlation-probe-080"]}
+  ],
+  "assumptions": [
+    "Excel DispatchEx scratch sessions contain no user workbook and are closed without saving.",
+    "Content-derived signatures remain in memory only and are not emitted.",
+    "Temporal proximity creates a candidate association but not a causal or intent claim.",
+    "The live mode is explicitly opt-in and attaches only to an already open Excel instance.",
+    "The active application class is allowlisted and window titles are never retained."
+  ],
+  "kill_tests": [
+    "A candidate association cannot claim intent.",
+    "An input from Blender cannot match an Excel delta.",
+    "Multiple inputs in the temporal window produce ambiguity.",
+    "An input outside the temporal window remains unassociated.",
+    "Raw content and unsafe capture capabilities are not persisted or enabled."
+  ],
+  "unknowns": [
+    "Whether live Excel associations remain useful during rapid real human interaction.",
+    "Whether snapshots distinguish navigation and editing without reading private content.",
+    "How to expose an equivalent live native snapshot inside Blender.",
+    "Whether UIA and native state timestamps have stable enough latency for a causal experiment."
+  ]
+}
