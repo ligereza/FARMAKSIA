@@ -79,6 +79,19 @@ pequeño, real, reproducible y capaz de mostrar qué gana y qué pierde.
 
 Fecha de corte: 2026-08-24.
 
+## Frente activo desde 2026-08-27: grandMA3 → Avolites Titan
+
+Se abre un caso concreto para probar la hipótesis de capa adaptativa: hacer
+legible grandMA3 para una persona familiarizada con Titan mediante una
+representación visual-semántica reversible. La unidad de traducción será la
+tarea del operador —selección, atributo, preset/palette, cue/cue list y
+playback/executor—, no el botón ni la palabra. La primera etapa es read-only,
+offline, con fixtures sintéticos y sin DMX, red, input inyectado ni showfiles
+modificados. La descarga oficial de grandMA3 onPC queda fuera del repositorio;
+Titan ya está instalado localmente y se observará mediante selección explícita
+de ventana. La investigación y los límites están en la decisión 084 y la
+literatura 024.
+
 Los ciclos 001–012 quedan como archivo técnico de representación,
 procedencia, composición y diseño experimental. Sus resultados no deciden por
 sí solos la supervivencia de las experiencias.
@@ -337,6 +350,12 @@ respetan la auditoría 040:
    solo con consentimiento explícito, es medir retención, error frente a
    referencia, latencia extremo a extremo, apagado, lentes y asimetría entre
    ojos. La automatización no inicia esa sesión ni aporta datos humanos.
+7. Adaptador de superficies de iluminación: completar el contrato
+   `LightingSurfaceContract`, observar grandMA3 onPC y Titan Simulator en
+   ventanas elegidas explícitamente, y probar si el mapa de tareas conserva
+   estado, procedencia y transformación inversa. No declarar equivalencias
+   entre grandMA2/3 ni entre cue, sequence, playback, executor, preset o
+   palette sin evidencia de la versión concreta.
 
 X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.

@@ -195,6 +195,8 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Puente de input consentido y contexto UIA](research/decisions/081-consented-input-semantic-bridge.md)
 - [Correlación temporal de input y estado nativo](experiments/080-farmaxia-input-native-delta-correlation/results.md)
 - [Decisión del renderer proxy visual](research/decisions/083-window-proxy-renderer.md)
+- [Investigación de interfaz grandMA3/Titan](research/literature/024-grandma-titan-interface-research.md)
+- [Decisión del adaptador visual grandMA3 → Titan](research/decisions/084-grandma-titan-visual-adapter.md)
 - [Auditoría profunda de referencias open source y científicas](research/literature/023-open-source-reference-audit.md)
 - [Compuerta de adopción de referencias externas](research/decisions/071-open-source-reference-gate.md)
 - [Decisión de replay temporal de evidencia](research/decisions/072-temporal-evidence-replay.md)
