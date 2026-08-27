@@ -1,0 +1,50 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:078-native-transition-probe",
+  "status": "exploratory",
+  "purpose": "Demonstrate typed native state transitions in isolated real Excel and Blender sessions before attaching human input or cross-application actions.",
+  "agents": [
+    {"id": "farmaxia:researcher-078", "type": "agent", "role": "defines_common_transition_kernel"},
+    {"id": "farmaxia:python-runner-078", "type": "software_agent", "role": "runs_isolated_excel_com_and_blender_python_state_transitions"}
+  ],
+  "entities": [
+    {"id": "farmaxia:transition-probe-078", "type": "entity", "path": "run_experiment.py", "role": "real_isolated_native_transition_probe", "authority": "human_declared_tool"},
+    {"id": "farmaxia:transition-contract-078", "type": "entity", "path": "run_contract_test.py", "role": "positive_native_transition_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:transition-kill-tests-078", "type": "entity", "path": "run_kill_test.py", "role": "user_file_input_network_and_nonreversible_boundary", "authority": "human_declared_tool"},
+    {"id": "farmaxia:transition-protocol-078", "type": "entity", "path": "README.md", "role": "scope_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:transition-results-078", "type": "entity", "path": "results.md", "role": "observed_transition_evidence_and_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:native-surfaces-077", "type": "entity", "path": "../077-farmaxia-excel-blender-capability-inventory/run_experiment.py", "role": "native_state_surface_inventory", "authority": "human_declared_tool"},
+    {"id": "farmaxia:transition-suite-078", "type": "entity", "path": "../../research/tools/run_suite.py", "role": "reproducible_suite_registration", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:transition-run-078", "type": "activity", "label": "create observe mutate and revert isolated native Excel and Blender states", "agent": "farmaxia:python-runner-078", "used": ["farmaxia:transition-probe-078", "farmaxia:native-surfaces-077"], "generated": ["farmaxia:transition-results-078"]},
+    {"id": "farmaxia:transition-kill-078", "type": "activity", "label": "attack user file physical input network and nonreversible transition boundaries", "agent": "farmaxia:python-runner-078", "used": ["farmaxia:transition-kill-tests-078"], "generated": []},
+    {"id": "farmaxia:transition-record-078", "type": "activity", "label": "record typed transition kernel and remaining human input unknowns", "agent": "farmaxia:researcher-078", "used": ["farmaxia:transition-protocol-078", "farmaxia:transition-results-078", "farmaxia:transition-suite-078"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:transition-real-query-078", "expression": "can real Excel and Blender expose create select modify and revert transitions in isolated unsaved sessions", "authority": "experiment_defined", "required_entities": ["farmaxia:transition-probe-078"]},
+    {"id": "farmaxia:transition-kernel-query-078", "expression": "does a typed transition kernel preserve more meaning than a button or coordinate mapping", "authority": "experiment_defined", "required_entities": ["farmaxia:transition-results-078"]},
+    {"id": "farmaxia:transition-safety-query-078", "expression": "does the probe avoid user files physical input camera screenshot network and source writes", "authority": "experiment_defined", "required_entities": ["farmaxia:transition-contract-078", "farmaxia:transition-kill-tests-078"]},
+    {"id": "farmaxia:transition-repro-query-078", "expression": "is the transition probe registered and reproducible in the FARMAKSIA suite", "authority": "experiment_defined", "required_entities": ["farmaxia:transition-suite-078", "farmaxia:transition-probe-078"]}
+  ],
+  "assumptions": [
+    "The isolated Excel DispatchEx process starts with no user workbook attached.",
+    "Blender factory-startup background mode has no user scene that needs preservation.",
+    "In-memory scratch mutation is allowed when no user file is opened or saved.",
+    "A common kernel can describe compatible transitions without claiming application equivalence.",
+    "Human input will be attached only after the native state deltas are observable."
+  ],
+  "kill_tests": [
+    "Writing a user file is blocked.",
+    "Physical keyboard or mouse injection is blocked.",
+    "Network, screenshot and camera capabilities are blocked.",
+    "Replacing a typed transition with a click-button mapping is blocked.",
+    "Replacing revert with a dirty non-reversible state is blocked."
+  ],
+  "unknowns": [
+    "Whether UIA can identify the same semantic target that the native API identifies.",
+    "Whether a human input trace can be decoded into the common kernel without capturing private content.",
+    "Whether a task transition in Excel has a useful analogue in Blender beyond the four primitives.",
+    "Whether an independent verifier can observe future real user actions without using the same adapter."
+  ]
+}

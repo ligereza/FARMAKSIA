@@ -294,12 +294,16 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
   [experimento 077](../../experiments/077-farmaxia-excel-blender-capability-inventory/README.md)
   confirma que UIA debe combinarse con estado nativo y no sustituye el modelo
   interno de cada aplicación;
+- ~~kernel de transición nativa~~ — en sesiones efímeras reales, Excel y Blender
+  observaron `create → select → modify → revert`, incluyendo cálculo de fórmula,
+  selección de objeto, modificación espacial y restauración del contexto en el
+  [experimento 078](../../experiments/078-farmaxia-native-transition-probe/README.md);
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
-- descriptor de transiciones tipadas a partir de UIA más estado nativo para
-  Excel y Blender;
+- conectar input humano autorizado a las transiciones tipadas observadas en el
+  experimento 078, sin confundir evento físico con intención;
 
 ### Más adelante
 
