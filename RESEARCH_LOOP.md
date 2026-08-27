@@ -273,6 +273,14 @@ cámara, red, overlay del escritorio ni ejecución externa. Esto demuestra una
 interacción contractual y reversible; no demuestra que una representación sea
 mejor para una persona.
 
+El experimento 063 reemplazó esa declaración por una comprobación de
+equivalencia observacional. Seis consultas críticas se ejecutaron contra la
+fuente y contra las cuatro vistas; todas coincidieron, con procedencia completa,
+sin relaciones inventadas y sin convertir `UNKNOWN` en `FACT`. La preservación
+es relativa a las consultas versionadas: una vista puede resumir u ordenar fuera
+de `Q`, pero una consulta crítica perdida bloquea el contrato. Esto demuestra
+preservación sintética auditable, no comprensión humana.
+
 La auditoría 040 recorrió los requisitos de esta fase: prototipos mínimos,
 literatura, adopción, contratos, procedencia, kill tests, límites, decisiones y
 seguridad. `LAB_COMPLETION_VALID` confirma que la fundación reproducible está
@@ -292,11 +300,13 @@ respetan la auditoría 040:
 1. CODEINE: mantener separadas transición base, score declarado, oracle
    ejecutable y estado humano; exigir que las mutaciones relevantes sean
    detectables antes de llamar verificada a una secuencia.
-2. RepresentationSpace: medir si comparar ramas preservadas ayuda a corregir
+2. RepresentationSpace: seleccionar ramas por cobertura semántica y costo
+   visual, manteniendo las consultas críticas del experimento 063.
+3. RepresentationSpace: medir si comparar ramas preservadas ayuda a corregir
    decisiones en tareas sintéticas sin convertir la primera sugerencia en
    autoridad. Registrar sólo decisiones y errores observables, no estados
    mentales.
-3. VIZZ: el experimento 032 separó la calibración visible del runtime y el
+4. VIZZ: el experimento 032 separó la calibración visible del runtime y el
    experimento 033 adoptó un pipeline Python CUDA con RetinaFace + gaze ONNX y
    una capa click-through sobre el contenido normal. El siguiente paso humano,
    solo con consentimiento explícito, es medir retención, error frente a

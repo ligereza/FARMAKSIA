@@ -1,0 +1,46 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:063-semantic-invariant-contract",
+  "status": "exploratory",
+  "purpose": "Turn query-relative semantic preservation into an executable contract for RepresentationSpace views.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-063", "type": "agent", "role": "defines_critical_semantic_queries"},
+    {"id": "farmaxia:python-runner-063", "type": "software_agent", "role": "compares_source_and_view_answers_and_runs_kill_tests"}
+  ],
+  "entities": [
+    {"id": "farmaxia:semantic-fixture-063", "type": "entity", "path": "fixture.json", "role": "source_queries_and_view_semantics", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:semantic-validator-063", "type": "entity", "path": "run_experiment.py", "role": "query_preservation_and_provenance_validator", "authority": "human_declared_tool"},
+    {"id": "farmaxia:semantic-contract-063", "type": "entity", "path": "run_contract_test.py", "role": "positive_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:semantic-kill-tests-063", "type": "entity", "path": "run_kill_test.py", "role": "adversarial_invariant_tests", "authority": "human_declared_tool"},
+    {"id": "farmaxia:semantic-decision-069", "type": "entity", "path": "../../research/decisions/069-semantic-invariant-contract.md", "role": "architecture_decision", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:semantic-query-compile-063", "type": "activity", "label": "evaluate critical queries against source and views", "agent": "farmaxia:python-runner-063", "used": ["farmaxia:semantic-fixture-063", "farmaxia:semantic-validator-063"], "generated": []},
+    {"id": "farmaxia:semantic-boundary-063", "type": "activity", "label": "attack relation preservation UNKNOWN and provenance invariants", "agent": "farmaxia:python-runner-063", "used": ["farmaxia:semantic-kill-tests-063"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:semantic-query-preservation-063", "expression": "do all RepresentationSpace views answer the same critical queries as the source", "authority": "experiment_defined", "required_entities": ["farmaxia:semantic-fixture-063", "farmaxia:semantic-validator-063"]},
+    {"id": "farmaxia:semantic-query-no-invention-063", "expression": "do views avoid inventing relations and escalating UNKNOWN without evidence", "authority": "experiment_defined", "required_entities": ["farmaxia:semantic-fixture-063", "farmaxia:semantic-kill-tests-063"]}
+  ],
+  "assumptions": [
+    "Critical queries can be declared for a task family.",
+    "Stable references remain available across representational transforms.",
+    "Claims can carry source references without requiring a database.",
+    "The fixture is non-editable, so round-trip loss is not applicable."
+  ],
+  "kill_tests": [
+    "A view losing a critical relation must block.",
+    "An invented relation must block.",
+    "UNKNOWN becoming FACT without evidence must block.",
+    "Missing relation provenance must block.",
+    "Changing a relation kind or active entity must block.",
+    "No human data, camera, network or external execution is allowed."
+  ],
+  "unknowns": [
+    "Whether query contracts cover the questions people actually need in a real task.",
+    "How to discover missing critical queries without observing private mental states.",
+    "Whether provenance increases trust or visual load in a human evaluation.",
+    "How editable views should implement lawful round-trips.",
+    "How query coverage interacts with branch subset selection and display cost."
+  ]
+}

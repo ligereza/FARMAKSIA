@@ -1,0 +1,98 @@
+{
+  "schema": "farmaxia:semantic-invariant-contract:0.1",
+  "source": {
+    "id": "scene-3d-exploration",
+    "active_entity": "entity:scene",
+    "entities": [
+      {"stable_ref": "entity:scene", "label": "escena", "state": "fact"},
+      {"stable_ref": "entity:objects", "label": "objetos", "state": "fact"},
+      {"stable_ref": "entity:lighting", "label": "luz", "state": "fact"},
+      {"stable_ref": "entity:composition", "label": "composición", "state": "fact"},
+      {"stable_ref": "entity:purpose", "label": "propósito", "state": "fact"}
+    ],
+    "relations": [
+      {"stable_ref": "relation:scene-contains-objects", "from": "entity:scene", "to": "entity:objects", "kind": "contains"},
+      {"stable_ref": "relation:lighting-affects-composition", "from": "entity:lighting", "to": "entity:composition", "kind": "affects"},
+      {"stable_ref": "relation:objects-form-composition", "from": "entity:objects", "to": "entity:composition", "kind": "forms"},
+      {"stable_ref": "relation:purpose-unknown", "from": "entity:purpose", "to": "entity:scene", "kind": "unknown_for"}
+    ],
+    "unknowns": [
+      {"stable_ref": "unknown:style", "state": "unknown"},
+      {"stable_ref": "unknown:composition", "state": "unknown"},
+      {"stable_ref": "unknown:purpose", "state": "unknown"}
+    ],
+    "alternatives": ["plan-map", "plan-sequence", "plan-analogy", "plan-full"]
+  },
+  "queries": [
+    {"id": "q-active-entity", "kind": "active_entity"},
+    {"id": "q-entity-set", "kind": "entity_set"},
+    {"id": "q-objects-composition", "kind": "relation_between", "from": "entity:objects", "to": "entity:composition"},
+    {"id": "q-unknown-set", "kind": "unknown_set"},
+    {"id": "q-alternative-set", "kind": "alternative_set"},
+    {"id": "q-relation-provenance", "kind": "provenance", "target": "relation:objects-form-composition"}
+  ],
+  "views": [
+    {
+      "id": "plan-map",
+      "projection": "relation_map",
+      "entity_refs": ["entity:scene", "entity:objects", "entity:lighting", "entity:composition", "entity:purpose"],
+      "active_entity": "entity:scene",
+      "relation_records": [
+        {"stable_ref": "relation:scene-contains-objects", "from": "entity:scene", "to": "entity:objects", "kind": "contains", "source_ref": "relation:scene-contains-objects"},
+        {"stable_ref": "relation:lighting-affects-composition", "from": "entity:lighting", "to": "entity:composition", "kind": "affects", "source_ref": "relation:lighting-affects-composition"},
+        {"stable_ref": "relation:objects-form-composition", "from": "entity:objects", "to": "entity:composition", "kind": "forms", "source_ref": "relation:objects-form-composition"},
+        {"stable_ref": "relation:purpose-unknown", "from": "entity:purpose", "to": "entity:scene", "kind": "unknown_for", "source_ref": "relation:purpose-unknown"}
+      ],
+      "unknowns": ["unknown:style", "unknown:composition", "unknown:purpose"],
+      "alternatives": ["plan-map", "plan-sequence", "plan-analogy", "plan-full"],
+      "claims": [{"subject": "unknown:purpose", "state": "unknown", "source_ref": "unknown:purpose"}]
+    },
+    {
+      "id": "plan-sequence",
+      "projection": "guided_sequence",
+      "entity_refs": ["entity:lighting", "entity:scene", "entity:objects", "entity:composition", "entity:purpose"],
+      "active_entity": "entity:scene",
+      "relation_records": [
+        {"stable_ref": "relation:scene-contains-objects", "from": "entity:scene", "to": "entity:objects", "kind": "contains", "source_ref": "relation:scene-contains-objects"},
+        {"stable_ref": "relation:lighting-affects-composition", "from": "entity:lighting", "to": "entity:composition", "kind": "affects", "source_ref": "relation:lighting-affects-composition"},
+        {"stable_ref": "relation:objects-form-composition", "from": "entity:objects", "to": "entity:composition", "kind": "forms", "source_ref": "relation:objects-form-composition"},
+        {"stable_ref": "relation:purpose-unknown", "from": "entity:purpose", "to": "entity:scene", "kind": "unknown_for", "source_ref": "relation:purpose-unknown"}
+      ],
+      "unknowns": ["unknown:style", "unknown:composition", "unknown:purpose"],
+      "alternatives": ["plan-map", "plan-sequence", "plan-analogy", "plan-full"],
+      "claims": [{"subject": "unknown:purpose", "state": "unknown", "source_ref": "unknown:purpose"}]
+    },
+    {
+      "id": "plan-analogy",
+      "projection": "contrastive_analogy",
+      "entity_refs": ["entity:scene", "entity:objects", "entity:lighting", "entity:purpose", "entity:composition"],
+      "active_entity": "entity:scene",
+      "relation_records": [
+        {"stable_ref": "relation:scene-contains-objects", "from": "entity:scene", "to": "entity:objects", "kind": "contains", "source_ref": "relation:scene-contains-objects"},
+        {"stable_ref": "relation:lighting-affects-composition", "from": "entity:lighting", "to": "entity:composition", "kind": "affects", "source_ref": "relation:lighting-affects-composition"},
+        {"stable_ref": "relation:objects-form-composition", "from": "entity:objects", "to": "entity:composition", "kind": "forms", "source_ref": "relation:objects-form-composition"},
+        {"stable_ref": "relation:purpose-unknown", "from": "entity:purpose", "to": "entity:scene", "kind": "unknown_for", "source_ref": "relation:purpose-unknown"}
+      ],
+      "unknowns": ["unknown:style", "unknown:composition", "unknown:purpose"],
+      "alternatives": ["plan-map", "plan-sequence", "plan-analogy", "plan-full"],
+      "claims": [{"subject": "unknown:purpose", "state": "unknown", "source_ref": "unknown:purpose"}]
+    },
+    {
+      "id": "plan-full",
+      "projection": "full_scene",
+      "entity_refs": ["entity:scene", "entity:objects", "entity:lighting", "entity:composition", "entity:purpose"],
+      "active_entity": "entity:scene",
+      "relation_records": [
+        {"stable_ref": "relation:scene-contains-objects", "from": "entity:scene", "to": "entity:objects", "kind": "contains", "source_ref": "relation:scene-contains-objects"},
+        {"stable_ref": "relation:lighting-affects-composition", "from": "entity:lighting", "to": "entity:composition", "kind": "affects", "source_ref": "relation:lighting-affects-composition"},
+        {"stable_ref": "relation:objects-form-composition", "from": "entity:objects", "to": "entity:composition", "kind": "forms", "source_ref": "relation:objects-form-composition"},
+        {"stable_ref": "relation:purpose-unknown", "from": "entity:purpose", "to": "entity:scene", "kind": "unknown_for", "source_ref": "relation:purpose-unknown"}
+      ],
+      "unknowns": ["unknown:style", "unknown:composition", "unknown:purpose"],
+      "alternatives": ["plan-map", "plan-sequence", "plan-analogy", "plan-full"],
+      "claims": [{"subject": "unknown:purpose", "state": "unknown", "source_ref": "unknown:purpose"}]
+    }
+  ],
+  "editable": false,
+  "human_data": false
+}

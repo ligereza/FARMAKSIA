@@ -93,6 +93,7 @@ def main() -> None:
         "experiments/060-codeine-experience-compiler/provenance.json",
         "experiments/061-codeine-progressive-commitment/provenance.json",
         "experiments/062-farmaxia-representation-space-renderer/provenance.json",
+        "experiments/063-farmaxia-semantic-invariant-contract/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1014,6 +1015,22 @@ def main() -> None:
         "FARMAXIA_062_KILL_TESTS_VALID",
     )
     command("provenance 062", python_script("research/tools/validate_provenance.py", provenance[58]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA semantic invariant contract 063",
+        python_script("experiments/063-farmaxia-semantic-invariant-contract/run_experiment.py"),
+        '"status": "SEMANTIC_INVARIANT_CONTRACT_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA semantic invariant contract 063",
+        python_script("experiments/063-farmaxia-semantic-invariant-contract/run_contract_test.py"),
+        "FARMAXIA_063_SEMANTIC_INVARIANT_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA semantic invariant contract 063",
+        python_script("experiments/063-farmaxia-semantic-invariant-contract/run_kill_test.py"),
+        "FARMAXIA_063_KILL_TESTS_VALID",
+    )
+    command("provenance 063", python_script("research/tools/validate_provenance.py", provenance[59]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
