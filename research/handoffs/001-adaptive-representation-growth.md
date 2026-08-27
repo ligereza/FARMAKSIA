@@ -242,16 +242,19 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 
 ### Ahora
 
-- fixture GitLab/Mattermost totalmente sintético;
-- eventos, procedencia e idempotencia;
-- representación read-only;
-- dry-run de acciones;
-- verificador de estado;
-- fallos de identidad, permisos y versión.
+- ~~fixture GitLab/Mattermost totalmente sintético~~ — implementado en
+  [experimento 065](../../experiments/065-farmaxia-cross-application-evidence/README.md);
+- ~~eventos, procedencia e idempotencia~~ — duplicados, orden temporal e
+  identidad calificada verificados;
+- ~~representación read-only~~ — claims con referencias a GitLab;
+- ~~dry-run de acciones~~ — propuesta con precondiciones y confirmación;
+- ~~verificador de estado~~ — consulta independiente al almacén fuente;
+- ~~fallos de identidad, permisos y versión~~ — kill tests reproducibles.
 
 ### Después
 
-- adapter OpenEMR/Nextcloud con datos sintéticos;
+- adapter OpenEMR/Nextcloud con datos sintéticos, reutilizando el mismo contrato
+  sin importar datos clínicos;
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;

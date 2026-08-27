@@ -161,6 +161,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Renderer de espacio de representaciones FARMAKSIA](experiments/062-farmaxia-representation-space-renderer/README.md)
 - [Contrato de invariantes semánticos FARMAKSIA](experiments/063-farmaxia-semantic-invariant-contract/README.md)
 - [Selección de subset de ramas FARMAKSIA](experiments/064-farmaxia-branch-subset-selection/README.md)
+- [Evidencia entre aplicaciones GitLab–Mattermost](experiments/065-farmaxia-cross-application-evidence/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)

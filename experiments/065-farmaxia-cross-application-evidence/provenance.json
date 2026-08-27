@@ -1,0 +1,52 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:065-cross-application-evidence",
+  "status": "exploratory",
+  "purpose": "Test a synthetic semantic bridge between GitLab and Mattermost with idempotent ingestion, provenance and independent verification.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-065", "type": "agent", "role": "selects_real_open_source_surface_pair_and_safety_boundary"},
+    {"id": "farmaxia:python-runner-065", "type": "software_agent", "role": "normalizes_events_compiles_representation_and_runs_kill_tests"}
+  ],
+  "entities": [
+    {"id": "farmaxia:cross-fixture-065", "type": "entity", "path": "fixture.json", "role": "synthetic_gitlab_mattermost_state_and_events", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:cross-validator-065", "type": "entity", "path": "run_experiment.py", "role": "semantic_normalizer_and_independent_verifier", "authority": "human_declared_tool"},
+    {"id": "farmaxia:cross-contract-065", "type": "entity", "path": "run_contract_test.py", "role": "positive_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:cross-kill-tests-065", "type": "entity", "path": "run_kill_test.py", "role": "identity_provenance_safety_and_verification_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:cross-protocol-065", "type": "entity", "path": "README.md", "role": "experiment_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:cross-results-065", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:cross-normalize-065", "type": "activity", "label": "deduplicate and order synthetic GitLab events", "agent": "farmaxia:python-runner-065", "used": ["farmaxia:cross-fixture-065", "farmaxia:cross-validator-065"], "generated": []},
+    {"id": "farmaxia:cross-compile-065", "type": "activity", "label": "compile a provenance-bearing Mattermost representation and dry-run action", "agent": "farmaxia:python-runner-065", "used": ["farmaxia:cross-fixture-065", "farmaxia:cross-validator-065"], "generated": ["farmaxia:cross-results-065"]},
+    {"id": "farmaxia:cross-kill-065", "type": "activity", "label": "attack identity, provenance, permissions, freshness and claimed success", "agent": "farmaxia:python-runner-065", "used": ["farmaxia:cross-kill-tests-065"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:cross-query-idempotency-065", "expression": "are duplicate and out-of-order deliveries normalized without changing entity identity", "authority": "experiment_defined", "required_entities": ["farmaxia:cross-fixture-065", "farmaxia:cross-validator-065"]},
+    {"id": "farmaxia:cross-query-provenance-065", "expression": "does every representation claim retain a qualified source reference", "authority": "experiment_defined", "required_entities": ["farmaxia:cross-fixture-065", "farmaxia:cross-validator-065"]},
+    {"id": "farmaxia:cross-query-verification-065", "expression": "is an external effect verified against the source of truth rather than the target representation", "authority": "experiment_defined", "required_entities": ["farmaxia:cross-validator-065", "farmaxia:cross-kill-tests-065"]}
+  ],
+  "assumptions": [
+    "GitLab remains authoritative for the synthetic merge request and pipeline state.",
+    "An event ID is stable for idempotent delivery within the fixture.",
+    "A project-qualified entity reference is sufficient for this first bridge prototype.",
+    "The Mattermost action is low-risk but still requires explicit confirmation before any future write.",
+    "No network call or human data is necessary to test the contract boundary."
+  ],
+  "kill_tests": [
+    "Missing project identity blocks normalization.",
+    "A non-dry-run action blocks execution.",
+    "Missing source references block representation claims.",
+    "Stale preconditions block action proposals.",
+    "Conflicting duplicate deliveries block ingestion.",
+    "Missing Mattermost permission blocks the target action.",
+    "Claimed success without source observation blocks verification.",
+    "Unqualified claims block provenance."
+  ],
+  "unknowns": [
+    "Whether the contract remains sufficient for real OAuth, webhook signatures and token rotation.",
+    "How an institution declares mappings when the two applications expose different roles and permissions.",
+    "Whether a contextual map improves task completion compared with native GitLab and Mattermost views.",
+    "How to verify partial failure when a target message is delivered but the source changes concurrently.",
+    "Whether the same kernel transfers to OpenEMR and Nextcloud without domain-specific clinical assumptions."
+  ]
+}

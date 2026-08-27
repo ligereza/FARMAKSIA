@@ -1,0 +1,127 @@
+{
+  "schema": "farmaxia:cross-application-evidence:0.1",
+  "source_of_truth": {
+    "surface": "gitlab",
+    "instance_id": "gitlab-lab",
+    "project": {
+      "id": "proj-alpha",
+      "path": "alpha/bridge-demo",
+      "version": 42
+    },
+    "entities": [
+      {
+        "type": "merge_request",
+        "id": "mr-7",
+        "iid": 7,
+        "source_version": 42,
+        "state": "opened",
+        "title": "Expose adapter contract",
+        "pipeline_id": "pipe-3",
+        "approved": false
+      },
+      {
+        "type": "pipeline",
+        "id": "pipe-3",
+        "source_version": 42,
+        "status": "failed",
+        "ref": "main"
+      }
+    ]
+  },
+  "events": [
+    {
+      "event_id": "ev-pipeline-fail",
+      "delivery_id": "delivery-1",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_type": "pipeline",
+      "entity_id": "pipe-3",
+      "source_version": 41,
+      "occurred_at": 20,
+      "payload": {"status": "failed", "ref": "main"}
+    },
+    {
+      "event_id": "ev-mr-open",
+      "delivery_id": "delivery-2",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_type": "merge_request",
+      "entity_id": "mr-7",
+      "source_version": 42,
+      "occurred_at": 10,
+      "payload": {"iid": 7, "state": "opened", "pipeline_id": "pipe-3"}
+    },
+    {
+      "event_id": "ev-mr-comment",
+      "delivery_id": "delivery-3",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_type": "merge_request",
+      "entity_id": "mr-7",
+      "source_version": 42,
+      "occurred_at": 30,
+      "payload": {"kind": "review_question", "body": "Ready for review?"}
+    },
+    {
+      "event_id": "ev-mr-open",
+      "delivery_id": "delivery-4-retry",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_type": "merge_request",
+      "entity_id": "mr-7",
+      "source_version": 42,
+      "occurred_at": 10,
+      "payload": {"iid": 7, "state": "opened", "pipeline_id": "pipe-3"}
+    }
+  ],
+  "mattermost_surface": {
+    "instance_id": "mattermost-lab",
+    "team_id": "team-lab",
+    "channel_id": "chan-review",
+    "actor_id": "mm-reviewer",
+    "permissions": ["post"]
+  },
+  "representation_claims": [
+    {
+      "claim_id": "claim-mr-state",
+      "text": "La merge request 7 sigue abierta.",
+      "source_refs": ["gitlab:proj-alpha:merge_request:mr-7"]
+    },
+    {
+      "claim_id": "claim-pipeline",
+      "text": "El pipeline asociado terminó fallido.",
+      "source_refs": ["gitlab:proj-alpha:pipeline:pipe-3"]
+    },
+    {
+      "claim_id": "claim-review-question",
+      "text": "Existe una pregunta de revisión pendiente de resolver.",
+      "source_refs": ["gitlab:proj-alpha:merge_request:mr-7#event:ev-mr-comment"]
+    }
+  ],
+  "action": {
+    "action_id": "act-notify-review",
+    "operation": "post_contextual_notification",
+    "target_channel_id": "chan-review",
+    "dry_run": true,
+    "requires_confirmation": true,
+    "preconditions": [
+      {
+        "project_id": "proj-alpha",
+        "entity_type": "merge_request",
+        "entity_id": "mr-7",
+        "source_version": 42,
+        "state": "opened"
+      }
+    ]
+  },
+  "policy": {
+    "mode": "local_read_only_dry_run",
+    "network_allowed": false,
+    "human_data": false,
+    "require_project_qualified_identity": true,
+    "require_source_provenance": true,
+    "require_independent_verifier": true,
+    "require_explicit_confirmation": true,
+    "unknown_on_conflict": true
+  }
+}
