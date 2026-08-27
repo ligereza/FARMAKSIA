@@ -327,7 +327,11 @@ respetan la auditoría 040:
    representación. Registrar fuente, versión, subset, orden, exposición,
    input explícito, privacidad, procedencia y outcome `verified/refuted/unknown`
    sin inferir comprensión humana.
-5. VIZZ: el experimento 032 separó la calibración visible del runtime y el
+5. FARMAKSIA: poner ese contrato a prueba entre dos superficies reales con
+   fixtures sintéticos: GitLab + Mattermost como primer par y OpenEMR +
+   Nextcloud como transferencia institucional. Empezar read-only/dry-run,
+   exigir identidad, permisos, idempotencia y verificador independiente.
+6. VIZZ: el experimento 032 separó la calibración visible del runtime y el
    experimento 033 adoptó un pipeline Python CUDA con RetinaFace + gaze ONNX y
    una capa click-through sobre el contenido normal. El siguiente paso humano,
    solo con consentimiento explícito, es medir retención, error frente a

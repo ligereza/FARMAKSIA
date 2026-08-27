@@ -15,6 +15,14 @@ un sistema que decide no sólo qué información mostrar, sino con qué ritmo,
 intensidad, estructura, color, movimiento, escala y relación espacial debe
 aparecer para que pueda percibirse, comprenderse y utilizarse.
 
+La dirección de crecimiento es agnóstica a dominios: el núcleo no intentará
+convertirse en una aplicación universal, sino en una capa que conecta dos o
+más superficies mediante un estado semántico, una representación reversible y
+un verificador independiente. El primer producto puede adaptarse a una
+institución con aplicaciones distintas sin reemplazarlas: observa una fuente,
+conserva su procedencia, propone cómo recorrerla en otra superficie y sólo
+declara éxito cuando el resultado real puede comprobarse.
+
 En este sentido, FARMAXIA investiga el diseño de **drogas computacionales**:
 composiciones de interfaz capaces de cambiar una experiencia de interacción
 sin afirmar que reproduzcan sensaciones farmacológicas ni diagnosticar el
@@ -163,6 +171,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Decisión de selección marginal de ramas](research/decisions/070-branch-subset-selection.md)
 - [Auditoría profunda de referencias open source y científicas](research/literature/023-open-source-reference-audit.md)
 - [Compuerta de adopción de referencias externas](research/decisions/071-open-source-reference-gate.md)
+- [Handoff: crecimiento entre aplicaciones y desafío institucional](research/handoffs/001-adaptive-representation-growth.md)
 - [Futuro de FARMAKSIA como compilador de representación](research/decisions/061-farmaxia-generative-interface-roadmap.md)
 - [Literatura de observabilidad VIZZ](research/literature/010-vizz-observability-boundary.md)
 - [Literatura de condiciones de display VIZZ](research/literature/011-vizz-display-conditions.md)
