@@ -1,0 +1,191 @@
+{
+  "schema": "farmaxia:codeine-patch-adapter:0.1",
+  "source_of_truth": {
+    "surface": "code-host",
+    "source_uri": "https://code.example.test/repos/farmaksia/core",
+    "current_version": 17,
+    "entity_refs": [
+      "code-host:farmaksia-core:file:renderer.py",
+      "code-host:farmaksia-core:change:change-17",
+      "code-host:farmaksia-core:check:contract-suite"
+    ],
+    "records": [
+      {
+        "entity_ref": "code-host:farmaksia-core:file:renderer.py",
+        "kind": "source_file",
+        "path": "renderer.py",
+        "sha256": "sha256:baseline-renderer-v16",
+        "language": "python"
+      },
+      {
+        "entity_ref": "code-host:farmaksia-core:change:change-17",
+        "kind": "change_request",
+        "status": "review",
+        "patch_id": "patch-renderer-v17",
+        "source_version": 17
+      },
+      {
+        "entity_ref": "code-host:farmaksia-core:check:contract-suite",
+        "kind": "verification_check",
+        "status": "passed",
+        "suite": "farmaxia-contract-suite",
+        "source_version": 17
+      }
+    ]
+  },
+  "policy": {
+    "cloud_events_specversion": "1.0",
+    "identity_is_source_plus_id": true,
+    "preserve_original_envelope": true,
+    "preserve_farmaxia_extensions": true,
+    "network_allowed": false,
+    "human_data": false,
+    "external_execution": false
+  },
+  "events": [
+    {
+      "specversion": "1.0",
+      "id": "ev-check-passed",
+      "source": "https://code.example.test/repos/farmaksia/core",
+      "type": "io.farmaksia.code.check.passed.v1",
+      "subject": "changes/change-17/checks/contract-suite",
+      "time": "2026-08-27T12:00:20Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "code-host:farmaksia-core:check:contract-suite",
+      "farmaxia-source-version": 17,
+      "farmaxia-observed-at": 20,
+      "farmaxia-root-id": "root-contract-check",
+      "data": {
+        "event_id": "ev-check-passed",
+        "entity_ref": "code-host:farmaksia-core:check:contract-suite",
+        "subject": "changes/change-17/checks/contract-suite",
+        "event_kind": "verification_passed",
+        "occurred_at": 20,
+        "payload": {"status": "passed", "suite": "farmaxia-contract-suite", "test_count": 18}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-change-opened",
+      "source": "https://code.example.test/repos/farmaksia/core",
+      "type": "io.farmaksia.code.change.review.v1",
+      "subject": "changes/change-17",
+      "time": "2026-08-27T12:00:10Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "code-host:farmaksia-core:change:change-17",
+      "farmaxia-source-version": 17,
+      "farmaxia-observed-at": 10,
+      "farmaxia-root-id": "root-change-17",
+      "data": {
+        "event_id": "ev-change-opened",
+        "entity_ref": "code-host:farmaksia-core:change:change-17",
+        "subject": "changes/change-17",
+        "event_kind": "change_ready_for_review",
+        "occurred_at": 10,
+        "payload": {"status": "review", "patch_id": "patch-renderer-v17"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-file-patch",
+      "source": "https://code.example.test/repos/farmaksia/core",
+      "type": "io.farmaksia.code.file.patch.v1",
+      "subject": "changes/change-17/files/renderer.py",
+      "time": "2026-08-27T12:00:30Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "code-host:farmaksia-core:file:renderer.py",
+      "farmaxia-source-version": 17,
+      "farmaxia-observed-at": 30,
+      "farmaxia-root-id": "root-patch-renderer",
+      "data": {
+        "event_id": "ev-file-patch",
+        "entity_ref": "code-host:farmaksia-core:file:renderer.py",
+        "subject": "changes/change-17/files/renderer.py",
+        "event_kind": "patch_available",
+        "occurred_at": 30,
+        "payload": {"path": "renderer.py", "patch_id": "patch-renderer-v17", "base_sha256": "sha256:baseline-renderer-v16"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-check-passed",
+      "source": "https://code.example.test/repos/farmaksia/core",
+      "type": "io.farmaksia.code.check.passed.v1",
+      "subject": "changes/change-17/checks/contract-suite",
+      "time": "2026-08-27T12:00:20Z",
+      "datacontenttype": "application/json",
+      "farmaxia-delivery-id": "delivery-check-retry",
+      "farmaxia-entity-ref": "code-host:farmaksia-core:check:contract-suite",
+      "farmaxia-source-version": 17,
+      "farmaxia-observed-at": 31,
+      "farmaxia-root-id": "root-contract-check",
+      "data": {
+        "event_id": "ev-check-passed",
+        "entity_ref": "code-host:farmaksia-core:check:contract-suite",
+        "subject": "changes/change-17/checks/contract-suite",
+        "event_kind": "verification_passed",
+        "occurred_at": 20,
+        "payload": {"status": "passed", "suite": "farmaxia-contract-suite", "test_count": 18}
+      }
+    }
+  ],
+  "adapter": {
+    "input_envelope": "inline",
+    "source_surface": "code-host",
+    "destination_surface": "editor-workspace",
+    "required_event_ids": ["ev-change-opened", "ev-file-patch", "ev-check-passed"],
+    "mapping": {
+      "source_plus_id": "event_id",
+      "farmaxia-entity-ref": "source_ref",
+      "time": "occurred_at",
+      "data.payload.base_sha256": "patch.base_sha256"
+    }
+  },
+  "workspace": {
+    "instance_id": "editor-lab",
+    "workspace_id": "farmaksia-workspace",
+    "permissions": ["read", "preview", "write"],
+    "dry_run_only": true
+  },
+  "representation_claims": [
+    {
+      "claim_id": "claim-change-review",
+      "text": "El cambio 17 está listo para revisión.",
+      "source_refs": ["code-host:farmaksia-core:change:change-17"]
+    },
+    {
+      "claim_id": "claim-check-passed",
+      "text": "La suite de contratos sintética pasó.",
+      "source_refs": ["code-host:farmaksia-core:check:contract-suite"]
+    }
+  ],
+  "patch": {
+    "patch_id": "patch-renderer-v17",
+    "target_ref": "code-host:farmaksia-core:file:renderer.py",
+    "base_sha256": "sha256:baseline-renderer-v16",
+    "candidate_sha256": "sha256:candidate-renderer-v17",
+    "operation": "preview_patch",
+    "semantic_intent": "make_rendering_contract_explicit",
+    "code_execution": false
+  },
+  "action": {
+    "action_id": "act-preview-renderer-patch",
+    "operation": "preview_code_patch",
+    "target_workspace_id": "farmaksia-workspace",
+    "dry_run": true,
+    "requires_confirmation": true,
+    "preconditions": [
+      {
+        "entity_ref": "code-host:farmaksia-core:change:change-17",
+        "source_version": 17,
+        "status": "review"
+      }
+    ]
+  },
+  "expected": {
+    "envelope_status": "CLOUDEVENTS_ENVELOPE_VERIFIED",
+    "adapter_status": "CODEINE_CLOUDEVENTS_ADAPTER_VERIFIED",
+    "canonical_order": ["ev-change-opened", "ev-check-passed", "ev-file-patch"],
+    "action_status": "DRY_RUN_ONLY"
+  }
+}

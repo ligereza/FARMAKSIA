@@ -272,8 +272,11 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~segundo par de superficies~~ — OpenEMR y Nextcloud sintéticos reutilizan el
   mismo núcleo de CloudEvents, evidencia, procedencia, permisos y verificación
   en [experimento 070](../../experiments/070-farmaxia-openemr-nextcloud-adapter/README.md).
-- auditoría de una superficie no institucional y no documental, sólo si exige
-  una diferencia semántica real;
+- ~~tercera superficie no institucional ni documental~~ — el adapter de parche
+  CODE-INE reutiliza el mismo núcleo y añade sólo hash base, precondición y
+  previsualización en [experimento 071](../../experiments/071-farmaxia-codeine-patch-adapter/README.md);
+- auditoría de media sólo si exige una diferencia semántica real, como timeline,
+  codec o sincronización audiovisual;
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;

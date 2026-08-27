@@ -1,0 +1,54 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:071-codeine-patch-adapter",
+  "status": "exploratory",
+  "purpose": "Audit whether the shared envelope and evidence kernel can support a non-document code patch surface without executing code or adding a new core abstraction.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-071", "type": "agent", "role": "defines_code_surface_and_execution_boundary"},
+    {"id": "farmaxia:python-runner-071", "type": "software_agent", "role": "runs_shared_cloudevents_kernel_and_code_patch_oracle"}
+  ],
+  "entities": [
+    {"id": "farmaxia:code-fixture-071", "type": "entity", "path": "fixture.json", "role": "synthetic_code_events_patch_and_editor_destination", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:code-validator-071", "type": "entity", "path": "run_experiment.py", "role": "code_surface_adapter_and_patch_oracle", "authority": "human_declared_tool"},
+    {"id": "farmaxia:code-contract-071", "type": "entity", "path": "run_contract_test.py", "role": "positive_code_surface_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:code-kill-tests-071", "type": "entity", "path": "run_kill_test.py", "role": "missing_input_provenance_permission_precondition_base_and_execution_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:code-protocol-071", "type": "entity", "path": "README.md", "role": "code_adapter_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:code-results-071", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:shared-cloudevents-kernel-071", "type": "entity", "path": "../../research/tools/cloudevents_contract.py", "role": "shared_envelope_validation_kernel", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:code-process-071", "type": "activity", "label": "adapt synthetic code events through the shared CloudEvents kernel", "agent": "farmaxia:python-runner-071", "used": ["farmaxia:code-fixture-071", "farmaxia:shared-cloudevents-kernel-071", "farmaxia:code-validator-071"], "generated": []},
+    {"id": "farmaxia:code-kill-071", "type": "activity", "label": "attack code identity provenance permission patch base and execution boundaries", "agent": "farmaxia:python-runner-071", "used": ["farmaxia:code-kill-tests-071"], "generated": []},
+    {"id": "farmaxia:code-record-071", "type": "activity", "label": "record whether the third surface requires a new core abstraction", "agent": "farmaxia:human-researcher-071", "used": ["farmaxia:code-fixture-071", "farmaxia:code-protocol-071"], "generated": ["farmaxia:code-results-071"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:code-query-reuse-071", "expression": "does the code surface use the shared CloudEvents kernel while adding only patch-specific semantics", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel-071", "farmaxia:code-validator-071"]},
+    {"id": "farmaxia:code-query-replay-071", "expression": "does replay across three delivery permutations preserve the same canonical code event order", "authority": "experiment_defined", "required_entities": ["farmaxia:shared-cloudevents-kernel-071", "farmaxia:code-validator-071"]},
+    {"id": "farmaxia:code-query-oracle-071", "expression": "does the patch oracle verify source state base hash preview permission and no code execution", "authority": "experiment_defined", "required_entities": ["farmaxia:code-fixture-071", "farmaxia:code-validator-071"]},
+    {"id": "farmaxia:code-query-safety-071", "expression": "are external writes and unknown source or workspace conditions blocked", "authority": "experiment_defined", "required_entities": ["farmaxia:code-kill-tests-071", "farmaxia:code-protocol-071"]}
+  ],
+  "assumptions": [
+    "The code host and editor workspace are synthetic and local.",
+    "The shared CloudEvents kernel handles envelope identity, time and provenance fields.",
+    "Patch-specific semantics require a base hash and an independent source check.",
+    "Preview is allowed only as a reversible dry-run requiring confirmation.",
+    "This audit must not execute or write code."
+  ],
+  "kill_tests": [
+    "Missing required code event blocks the adapter.",
+    "Mismatched source surface blocks the adapter.",
+    "Missing claim provenance blocks the adapter.",
+    "Enabling code execution blocks the adapter.",
+    "Enabling workspace write blocks the adapter.",
+    "Missing preview permission blocks the oracle.",
+    "Stale source precondition blocks the action.",
+    "A failed source check cannot be presented as passed.",
+    "An unknown patch base hash blocks the preview."
+  ],
+  "unknowns": [
+    "Whether a real CODE-INE adapter needs syntax-tree anchors beyond the synthetic patch contract.",
+    "Whether a production workspace needs a separate sandbox or signing policy.",
+    "Whether media surfaces require timeline or codec-specific semantics that do not fit this kernel.",
+    "Whether an actual repository API can provide the same independent postconditions."
+  ]
+}

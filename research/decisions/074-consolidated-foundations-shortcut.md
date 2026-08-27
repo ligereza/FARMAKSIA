@@ -104,9 +104,13 @@ interno de FARMAKSIA. El primer adapter sintético ya fue verificado en el
 reutiliza el compilador 065, conserva los resultados y mantiene `DRY_RUN_ONLY`.
 El segundo par sintético ya fue verificado en el
 [experimento 070](../../experiments/070-farmaxia-openemr-nextcloud-adapter/README.md):
-cambió la superficie y las entidades sin cambiar el núcleo. El siguiente
-objetivo será auditar una superficie no institucional y no documental —código
-o media— sólo si aparece una diferencia semántica real. Todavía no se
+cambió la superficie y las entidades sin cambiar el núcleo. La tercera
+superficie sintética, un parche de código CODE-INE, fue verificada en el
+[experimento 071](../../experiments/071-farmaxia-codeine-patch-adapter/README.md):
+añadió sólo semántica específica de parche —hash base, precondición y
+previsualización— y conservó el mismo sobre, replay, procedencia y permisos.
+El siguiente objetivo queda restringido a auditar media sólo si timeline,
+codec o sincronización introducen una diferencia semántica real. Todavía no se
 seleccionará un adapter institucional real ni se añadirá infraestructura por
 anticipación.
 

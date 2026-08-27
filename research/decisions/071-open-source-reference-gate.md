@@ -145,9 +145,11 @@ verificado en el [experimento 068](../../experiments/068-farmaxia-cloudevents-en
 El adapter sintético ya fue verificado en el [experimento 069](../../experiments/069-farmaxia-cloudevents-cross-application-adapter/README.md).
 El segundo par sintético fue verificado en el
 [experimento 070](../../experiments/070-farmaxia-openemr-nextcloud-adapter/README.md).
-El siguiente paso es auditar una superficie de código o media sin instalar
-agentes externos. No se inicia todavía una captura humana, un benchmark en
-VM, una descarga de modelos ni una instalación de agentes.
+La tercera superficie sintética, un parche de código CODE-INE, fue verificada
+en el [experimento 071](../../experiments/071-farmaxia-codeine-patch-adapter/README.md).
+El siguiente paso sólo puede ser una auditoría media si aparece una diferencia
+semántica real. No se inicia todavía una captura humana, un benchmark en VM,
+una descarga de modelos ni una instalación de agentes.
 
 El segundo adapter deberá conservar las mismas preguntas que ya respondió el
 fixture y el primer adapter:

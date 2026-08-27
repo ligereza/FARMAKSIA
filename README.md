@@ -167,6 +167,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Sobre CloudEvents sin infraestructura](experiments/068-farmaxia-cloudevents-envelope/README.md)
 - [Adapter CloudEvents entre aplicaciones](experiments/069-farmaxia-cloudevents-cross-application-adapter/README.md)
 - [Adapter documental OpenEMR–Nextcloud](experiments/070-farmaxia-openemr-nextcloud-adapter/README.md)
+- [Adapter de parche CODE-INE](experiments/071-farmaxia-codeine-patch-adapter/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)

@@ -101,6 +101,7 @@ def main() -> None:
         "experiments/068-farmaxia-cloudevents-envelope/provenance.json",
         "experiments/069-farmaxia-cloudevents-cross-application-adapter/provenance.json",
         "experiments/070-farmaxia-openemr-nextcloud-adapter/provenance.json",
+        "experiments/071-farmaxia-codeine-patch-adapter/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1150,6 +1151,22 @@ def main() -> None:
         "FARMAXIA_070_DOCUMENTAL_ADAPTER_KILL_TESTS_VALID",
     )
     command("provenance 070", python_script("research/tools/validate_provenance.py", provenance[66]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA CODE-INE patch adapter 071",
+        python_script("experiments/071-farmaxia-codeine-patch-adapter/run_experiment.py"),
+        '"status": "CODEINE_CLOUDEVENTS_ADAPTER_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA CODE-INE patch adapter 071",
+        python_script("experiments/071-farmaxia-codeine-patch-adapter/run_contract_test.py"),
+        "FARMAXIA_071_CODEINE_ADAPTER_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA CODE-INE patch adapter 071",
+        python_script("experiments/071-farmaxia-codeine-patch-adapter/run_kill_test.py"),
+        "FARMAXIA_071_CODEINE_ADAPTER_KILL_TESTS_VALID",
+    )
+    command("provenance 071", python_script("research/tools/validate_provenance.py", provenance[67]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
