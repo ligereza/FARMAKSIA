@@ -286,11 +286,14 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~conflicto entre sidecars~~ — dos sidecars individualmente válidos pero con
   claims distintos producen `CONFLICT`, preservan ambos historiales y no
   seleccionan silenciosamente en el [experimento 075](../../experiments/075-farmaxia-media-sidecar-conflict-audit/README.md);
+- ~~adopción de herramienta real Windows~~ — `pywinauto 0.6.9` con backend UIA
+  enumeró ventanas y controles del desktop real en modo read-only en el
+  [experimento 076](../../experiments/076-farmaxia-pywinauto-uia-adapter/README.md);
 - autorización por rol;
 - redacción y retención mínima;
 - pruebas de conflicto y fallos parciales;
 - evaluación comparativa de resumen, mapa y guía.
-- autoridad y resolución explícita de conflictos entre sidecars;
+- SurfaceDescriptor real a partir de UIA para una aplicación Windows concreta;
 
 ### Más adelante
 

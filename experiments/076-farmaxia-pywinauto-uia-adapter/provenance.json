@@ -1,0 +1,56 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:076-pywinauto-uia-adapter",
+  "status": "exploratory",
+  "purpose": "Adopt and exercise a high-reputation external Windows UI Automation library against the real desktop while preserving a read-only and privacy boundary.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-076", "type": "agent", "role": "selects_external_tool_and_read_only_adoption_boundary"},
+    {"id": "farmaxia:python-runner-076", "type": "software_agent", "role": "runs_real_pywinauto_uia_observation_and_local_contracts"}
+  ],
+  "entities": [
+    {"id": "farmaxia:pywinauto-manifest-076", "type": "entity", "path": "tool_manifest.json", "role": "pinned_external_source_ref_license_and_capability_boundary", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:pywinauto-requirements-076", "type": "entity", "path": "requirements.txt", "role": "pinned_runtime_dependencies", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:pywinauto-probe-076", "type": "entity", "path": "run_experiment.py", "role": "real_desktop_uia_read_only_probe", "authority": "human_declared_tool"},
+    {"id": "farmaxia:pywinauto-contract-076", "type": "entity", "path": "run_contract_test.py", "role": "positive_external_tool_adoption_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:pywinauto-kill-tests-076", "type": "entity", "path": "run_kill_test.py", "role": "raw_text_input_capture_write_and_backend_boundary_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:pywinauto-protocol-076", "type": "entity", "path": "README.md", "role": "external_tool_adoption_protocol_and_reproduction", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:pywinauto-results-076", "type": "entity", "path": "results.md", "role": "real_desktop_observation_and_limit_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:pywinauto-source-076", "type": "entity", "path": "../../research/literature/023-open-source-reference-audit.md", "role": "prior_high_reputation_tool_audit", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:pywinauto-suite-076", "type": "entity", "path": "../../research/tools/run_suite.py", "role": "reproducible_suite_registration", "authority": "human_declared_tool"}
+  ],
+  "activities": [
+    {"id": "farmaxia:pywinauto-download-076", "type": "activity", "label": "download official pywinauto repository and pin stable tag 0.6.9", "agent": "farmaxia:human-researcher-076", "used": ["farmaxia:pywinauto-manifest-076", "farmaxia:pywinauto-source-076"], "generated": []},
+    {"id": "farmaxia:pywinauto-probe-run-076", "type": "activity", "label": "enumerate real Windows UIA windows and optional control metadata without emitting titles or injecting input", "agent": "farmaxia:python-runner-076", "used": ["farmaxia:pywinauto-requirements-076", "farmaxia:pywinauto-probe-076"], "generated": ["farmaxia:pywinauto-results-076"]},
+    {"id": "farmaxia:pywinauto-kill-076", "type": "activity", "label": "attack raw title emission input injection screen capture network write and backend policy", "agent": "farmaxia:python-runner-076", "used": ["farmaxia:pywinauto-kill-tests-076"], "generated": []},
+    {"id": "farmaxia:pywinauto-record-076", "type": "activity", "label": "record external tool adoption decision and remaining surface semantics unknowns", "agent": "farmaxia:human-researcher-076", "used": ["farmaxia:pywinauto-protocol-076", "farmaxia:pywinauto-results-076", "farmaxia:pywinauto-suite-076"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:pywinauto-real-query-076", "expression": "can a pinned external UIA library obtain real desktop structure without screenshot camera or input injection", "authority": "experiment_defined", "required_entities": ["farmaxia:pywinauto-manifest-076", "farmaxia:pywinauto-probe-076"]},
+    {"id": "farmaxia:pywinauto-privacy-query-076", "expression": "does the adapter keep raw window titles and user input out of the emitted observation", "authority": "experiment_defined", "required_entities": ["farmaxia:pywinauto-contract-076", "farmaxia:pywinauto-kill-tests-076"]},
+    {"id": "farmaxia:pywinauto-value-query-076", "expression": "does real UIA structure add information beyond FARMAKSIA synthetic fixtures", "authority": "experiment_defined", "required_entities": ["farmaxia:pywinauto-results-076", "farmaxia:pywinauto-probe-076"]},
+    {"id": "farmaxia:pywinauto-repro-query-076", "expression": "is the adoption reproducible from pinned source tag dependencies and suite registration", "authority": "experiment_defined", "required_entities": ["farmaxia:pywinauto-manifest-076", "farmaxia:pywinauto-requirements-076", "farmaxia:pywinauto-suite-076"]}
+  ],
+  "assumptions": [
+    "The official pywinauto repository and tag 0.6.9 are the selected high-reputation external source.",
+    "Microsoft UI Automation is the target Windows accessibility/control surface, not a guarantee of complete app semantics.",
+    "The local desktop window list is observation data and can change between runs.",
+    "Read-only enumeration is allowed without user-specific application authorization, while actions require a separate capability.",
+    "External dependencies must remain pinned and auditable before entering the product runtime."
+  ],
+  "kill_tests": [
+    "Raw window titles emitted by the adapter are blocked.",
+    "Injected click or keyboard action is blocked.",
+    "A writable policy is blocked.",
+    "Screen capture capability is blocked.",
+    "Network capability is blocked.",
+    "A non-UIA backend is blocked.",
+    "An invalid window count is blocked."
+  ],
+  "unknowns": [
+    "Whether the target application exposes enough UIA roles states bounds and patterns for a useful representation.",
+    "Whether UIA observation is faster and more stable than screenshot or coordinate approaches on the target application.",
+    "Whether a real action can be independently verified without relying on the adapter's own observation.",
+    "Whether pywinauto 0.6.9 remains compatible with future Python and Windows versions.",
+    "Whether a web target should use Playwright instead of the Windows adapter."
+  ]
+}

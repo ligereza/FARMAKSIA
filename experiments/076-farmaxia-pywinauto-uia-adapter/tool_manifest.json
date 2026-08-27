@@ -1,0 +1,10 @@
+{
+  "tool": "pywinauto",
+  "source": "https://github.com/pywinauto/pywinauto.git",
+  "ref": "0.6.9",
+  "commit": "f6219c000d6d1bd676aec0486517afbac3ba9043",
+  "license": "BSD-3-Clause",
+  "backend": "uia",
+  "purpose": "read-only Windows UI Automation adapter for visible controls and window structure",
+  "not_authorized": ["silent_click", "silent_typing", "screen_capture", "camera_capture", "network_upload"]
+}

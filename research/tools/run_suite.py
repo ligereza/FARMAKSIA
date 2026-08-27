@@ -106,6 +106,7 @@ def main() -> None:
         "experiments/073-farmaxia-media-representation-bridge/provenance.json",
         "experiments/074-farmaxia-media-sidecar-composition/provenance.json",
         "experiments/075-farmaxia-media-sidecar-conflict-audit/provenance.json",
+        "experiments/076-farmaxia-pywinauto-uia-adapter/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1235,6 +1236,22 @@ def main() -> None:
         "FARMAXIA_075_MEDIA_SIDECAR_CONFLICT_KILL_TESTS_VALID",
     )
     command("provenance 075", python_script("research/tools/validate_provenance.py", provenance[71]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA pywinauto UIA adapter 076",
+        python_script("experiments/076-farmaxia-pywinauto-uia-adapter/run_experiment.py", "--inspect-controls"),
+        '"status": "PYWINAUTO_UIA_PROBE_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA pywinauto UIA adapter 076",
+        python_script("experiments/076-farmaxia-pywinauto-uia-adapter/run_contract_test.py"),
+        "FARMAXIA_076_PYWINAUTO_UIA_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA pywinauto UIA adapter 076",
+        python_script("experiments/076-farmaxia-pywinauto-uia-adapter/run_kill_test.py"),
+        "FARMAXIA_076_PYWINAUTO_UIA_KILL_TESTS_VALID",
+    )
+    command("provenance 076", python_script("research/tools/validate_provenance.py", provenance[72]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
