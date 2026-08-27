@@ -1,0 +1,80 @@
+{
+  "schema": "farmaxia:lighting-surface-contract:0.1",
+  "source_surface": {
+    "app": "grandMA3",
+    "version": "2.4.2.2",
+    "observation_status": "not_observed"
+  },
+  "target_vocabulary": "Avolites Titan",
+  "mode": "declarative_fixture",
+  "capabilities": ["read_only", "preview", "execute_blocked"],
+  "regions": [
+    {
+      "region_id": "grandma-fixture-selection",
+      "canonical_task": "fixture_selection",
+      "source_object_kind": "fixture_group_layout",
+      "source_role": "fixture_or_group_selection",
+      "target_term": "Fixtures / Groups",
+      "target_object_kind": "fixture_group_workspace",
+      "status": "compatible",
+      "confidence": 0.95,
+      "source_rect": [0.02, 0.04, 0.27, 0.22],
+      "destination_rect": [0.02, 0.04, 0.25, 0.22]
+    },
+    {
+      "region_id": "grandma-programmer",
+      "canonical_task": "attribute_control",
+      "source_object_kind": "programmer",
+      "source_role": "programmer_attribute_state",
+      "target_term": "Programmer",
+      "target_object_kind": "programmer",
+      "status": "compatible",
+      "confidence": 0.9,
+      "source_rect": [0.32, 0.04, 0.28, 0.22],
+      "destination_rect": [0.30, 0.04, 0.30, 0.22]
+    },
+    {
+      "region_id": "grandma-preset-pool",
+      "canonical_task": "reusable_value",
+      "source_object_kind": "preset_pool",
+      "source_role": "preset_reusable_attribute_value",
+      "target_term": "Palette",
+      "target_object_kind": "palette_workspace",
+      "status": "partial",
+      "confidence": 0.78,
+      "source_rect": [0.63, 0.04, 0.34, 0.22],
+      "destination_rect": [0.64, 0.04, 0.34, 0.22]
+    },
+    {
+      "region_id": "grandma-sequence-sheet",
+      "canonical_task": "cue_sequence",
+      "source_object_kind": "sequence_sheet",
+      "source_role": "cue_sequence_timing_state",
+      "target_term": "Cue List / Cue",
+      "target_object_kind": "cue_list_workspace",
+      "status": "partial",
+      "confidence": 0.8,
+      "source_rect": [0.02, 0.32, 0.46, 0.62],
+      "destination_rect": [0.02, 0.32, 0.50, 0.62]
+    },
+    {
+      "region_id": "grandma-executor-bar",
+      "canonical_task": "playback_control",
+      "source_object_kind": "executor",
+      "source_role": "executor_sequence_handle",
+      "target_term": "Playback",
+      "target_object_kind": "playback_handle",
+      "status": "partial",
+      "confidence": 0.82,
+      "source_rect": [0.52, 0.32, 0.46, 0.62],
+      "destination_rect": [0.54, 0.32, 0.44, 0.62]
+    }
+  ],
+  "expectations": {
+    "observed_surfaces": false,
+    "external_execution": false,
+    "network_used": false,
+    "input_injected": false,
+    "source_write_attempted": false
+  }
+}

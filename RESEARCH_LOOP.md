@@ -322,6 +322,13 @@ concretos. OpenAdapt Flow, OpenAdapt Evals, OSWorld, WAA, OpenCUA, OmniParser y
 UFO son referencias de investigación, no runtime FARMAKSIA. Los pesos y datos
 externos de Hugging Face no se incorporan.
 
+El experimento 083 convirtió la hipótesis grandMA3 → Titan en un contrato
+ejecutable de cinco tareas. Las transformaciones normalizadas son reversibles y
+las correspondencias fuertes/débiles quedan separadas; ningún resultado afirma
+haber observado todavía las UIs reales. El siguiente salto es reemplazar el
+fixture declarativo por observaciones read-only de grandMA3 onPC y Titan
+Simulator, manteniendo la ejecución bloqueada.
+
 ## Reapertura futura
 
 Los siguientes frentes solo se reabrirán si reducen un desconocido declarado y

@@ -179,6 +179,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Correlación input/delta nativo](experiments/080-farmaxia-input-native-delta-correlation/README.md)
 - [Sandbox nativo de ventana proxy reversible](experiments/081-farmaxia-window-proxy-sandbox/README.md)
 - [Preview pasivo de ventana seleccionada](experiments/082-farmaxia-selected-window-preview/README.md)
+- [Contrato de superficie grandMA3 → Titan](experiments/083-farmaxia-lighting-surface-contract/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)

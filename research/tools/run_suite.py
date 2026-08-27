@@ -113,6 +113,7 @@ def main() -> None:
         "experiments/080-farmaxia-input-native-delta-correlation/provenance.json",
         "experiments/081-farmaxia-window-proxy-sandbox/provenance.json",
         "experiments/082-farmaxia-selected-window-preview/provenance.json",
+        "experiments/083-farmaxia-lighting-surface-contract/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1339,6 +1340,22 @@ def main() -> None:
         "FARMAXIA_082_SELECTED_WINDOW_PREVIEW_CONTRACT_VALID",
     )
     command("provenance 082", python_script("research/tools/validate_provenance.py", provenance[78]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA lighting surface contract 083",
+        python_script("experiments/083-farmaxia-lighting-surface-contract/run_experiment.py"),
+        '"status": "LIGHTING_SURFACE_CONTRACT_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA lighting surface contract 083",
+        python_script("experiments/083-farmaxia-lighting-surface-contract/run_contract_test.py"),
+        "FARMAXIA_083_LIGHTING_SURFACE_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA lighting surface contract 083",
+        python_script("experiments/083-farmaxia-lighting-surface-contract/run_kill_test.py"),
+        "FARMAXIA_083_LIGHTING_SURFACE_KILL_TESTS_VALID",
+    )
+    command("provenance 083", python_script("research/tools/validate_provenance.py", provenance[79]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

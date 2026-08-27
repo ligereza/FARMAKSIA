@@ -1,0 +1,52 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:083-lighting-surface-contract",
+  "status": "contract_verified_declarative_only",
+  "purpose": "Define and verify a reversible read-only mapping from grandMA3 task regions to Avolites Titan vocabulary without claiming live UI equivalence.",
+  "agents": [
+    {"id": "farmaxia:researcher-083", "type": "agent", "role": "defines_task_level_surface_mapping_and_kill_tests"},
+    {"id": "farmaxia:contract-runner-083", "type": "software_agent", "role": "verifies_normalized_forward_inverse_mapping"}
+  ],
+  "entities": [
+    {"id": "farmaxia:lighting-contract-083", "type": "entity", "path": "lighting_surface_contract.py", "role": "canonical_tasks_regions_and_reversible_transform", "authority": "human_declared_tool"},
+    {"id": "farmaxia:lighting-fixture-083", "type": "entity", "path": "fixture.json", "role": "declarative_grandma3_to_titan_mapping_fixture", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:lighting-experiment-083", "type": "entity", "path": "run_experiment.py", "role": "contract_compiler_and_safety_summary", "authority": "human_declared_tool"},
+    {"id": "farmaxia:lighting-positive-test-083", "type": "entity", "path": "run_contract_test.py", "role": "positive_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:lighting-kill-test-083", "type": "entity", "path": "run_kill_test.py", "role": "false_equivalence_and_capability_kill_tests", "authority": "human_declared_tool"},
+    {"id": "farmaxia:lighting-protocol-083", "type": "entity", "path": "README.md", "role": "scope_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:lighting-results-083", "type": "entity", "path": "results.md", "role": "evidence_and_unknowns", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:lighting-parent-084", "type": "entity", "path": "../../research/decisions/084-grandma-titan-visual-adapter.md", "role": "visual_adapter_parent_decision", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:official-grandma-download-083", "type": "entity", "role": "MA Lighting official grandMA3 onPC 2.4.2.2 download verified outside repository", "authority": "human_declared"},
+    {"id": "farmaxia:official-titan-manual-083", "type": "entity", "role": "Avolites Titan official manual and current support documentation", "authority": "human_declared"}
+  ],
+  "activities": [
+    {"id": "farmaxia:compile-lighting-contract-083", "type": "activity", "label": "validate five canonical lighting tasks and forward/inverse normalized regions", "agent": "farmaxia:contract-runner-083", "used": ["farmaxia:lighting-contract-083", "farmaxia:lighting-fixture-083"], "generated": ["farmaxia:lighting-results-083"]},
+    {"id": "farmaxia:kill-lighting-contract-083", "type": "activity", "label": "reject overlap, false equivalence, unsafe capability and incomplete task coverage", "agent": "farmaxia:researcher-083", "used": ["farmaxia:lighting-contract-083", "farmaxia:lighting-kill-test-083"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:task-coverage-query-083", "expression": "does the declarative adapter cover exactly five canonical lighting tasks", "authority": "experiment_defined", "required_entities": ["farmaxia:lighting-contract-083", "farmaxia:lighting-fixture-083"]},
+    {"id": "farmaxia:inverse-query-083", "expression": "does every preview point return to its source region within tolerance", "authority": "experiment_defined", "required_entities": ["farmaxia:lighting-contract-083", "farmaxia:lighting-results-083"]},
+    {"id": "farmaxia:honesty-query-083", "expression": "does the contract avoid claiming live UI observation or external execution", "authority": "experiment_defined", "required_entities": ["farmaxia:lighting-fixture-083", "farmaxia:lighting-results-083"]}
+  ],
+  "assumptions": [
+    "Normalized rectangular regions are a declarative fixture, not observations of grandMA3 or Titan.",
+    "Task-level correspondence is weaker than object-level equivalence.",
+    "The renderer must keep execution blocked until a future explicit capability gate passes.",
+    "The official grandMA3 download is stored outside the repository and is not a runtime dependency."
+  ],
+  "kill_tests": [
+    "Overlapping destination regions are rejected.",
+    "A compatible or partial mapping must have a target term.",
+    "Unknown or unsupported mappings cannot carry positive confidence.",
+    "The contract must include read_only and execute_blocked capabilities.",
+    "A target vocabulary other than Avolites Titan is rejected.",
+    "Missing one of the five canonical tasks is rejected.",
+    "The fixture cannot claim observed surfaces, network use, input injection or source writes."
+  ],
+  "unknowns": [
+    "Whether grandMA3 onPC exposes stable UIA roles and rectangles for these regions.",
+    "Whether Titan Simulator exposes comparable UIA roles and rectangles.",
+    "Whether the declarative map remains stable across layouts and showfiles.",
+    "Whether a human operator benefits from the transformed representation."
+  ]
+}
