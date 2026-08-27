@@ -176,6 +176,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Compuerta de adopción de referencias externas](research/decisions/071-open-source-reference-gate.md)
 - [Decisión de replay temporal de evidencia](research/decisions/072-temporal-evidence-replay.md)
 - [Decisión de watermarks y eventos tardíos](research/decisions/073-watermark-late-events.md)
+- [Atajo de adopción de infraestructura consolidada](research/decisions/074-consolidated-foundations-shortcut.md)
 - [Handoff: crecimiento entre aplicaciones y desafío institucional](research/handoffs/001-adaptive-representation-growth.md)
 - [Futuro de FARMAKSIA como compilador de representación](research/decisions/061-farmaxia-generative-interface-roadmap.md)
 - [Literatura de observabilidad VIZZ](research/literature/010-vizz-observability-boundary.md)

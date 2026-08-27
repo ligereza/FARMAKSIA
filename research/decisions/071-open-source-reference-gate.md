@@ -137,13 +137,15 @@ La facility-location de 064 permanece como baseline. MMR queda como control de
 redundancia. El próximo avance debe medir exposición y resultado del plan, no
 reemplazar el selector por una librería más grande.
 
-## Próximo trabajo autorizado
+## Siguiente trabajo autorizado
 
-Preparar el experimento 065 de contrato de evidencia de representación con
-fixtures sintéticos. No se inicia todavía una captura humana, un benchmark en
+El contrato de adopción consolidada queda descrito en la
+[decisión 074](074-consolidated-foundations-shortcut.md). El siguiente trabajo
+es un fixture local de CloudEvents, sin red ni dependencia, equivalente a los
+contratos 065–067. No se inicia todavía una captura humana, un benchmark en
 VM, una descarga de modelos ni una instalación de agentes externos.
 
-El experimento debe comprobar que una representación puede responder:
+El fixture debe comprobar que una representación puede responder:
 
 ```text
 qué se mostró

@@ -256,9 +256,14 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~watermarks y eventos tardíos~~ — los eventos fuera de ventana se conservan,
   reabren la proyección y se comparan con replay batch en
   [experimento 067](../../experiments/067-farmaxia-watermark-late-event-replay/README.md).
+- ~~atajo de infraestructura~~ — se compararon CloudEvents, OpenLineage,
+  Flink, Kafka Streams, EventSourcingDB, OPA, OpenFGA y Automerge. El núcleo
+  local se conserva pequeño y la adopción queda condicionada a un adapter real
+  en [decisión 074](../decisions/074-consolidated-foundations-shortcut.md).
 
 ### Después
 
+- fixture CloudEvents local, sin red, equivalente al contrato GitLab–Mattermost;
 - adapter OpenEMR/Nextcloud con datos sintéticos, reutilizando el mismo contrato
   sin importar datos clínicos;
 - autorización por rol;
