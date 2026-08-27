@@ -1,0 +1,53 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:067-watermark-late-event-replay",
+  "status": "exploratory",
+  "purpose": "Test append-and-replay handling for late events, monotone watermarks and causal parent arrival.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-067", "type": "agent", "role": "defines_late_event_watermark_and_causal_boundaries"},
+    {"id": "farmaxia:python-runner-067", "type": "software_agent", "role": "processes_finite_stream_and_compares_online_snapshots_with_batch_replay"}
+  ],
+  "entities": [
+    {"id": "farmaxia:watermark-fixture-067", "type": "entity", "path": "fixture.json", "role": "synthetic_watermarks_late_events_and_causal_chain", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:watermark-validator-067", "type": "entity", "path": "run_experiment.py", "role": "stream_processor_and_order_invariant_replay", "authority": "human_declared_tool"},
+    {"id": "farmaxia:watermark-contract-067", "type": "entity", "path": "run_contract_test.py", "role": "positive_watermark_replay_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:watermark-kill-tests-067", "type": "entity", "path": "run_kill_test.py", "role": "late_event_watermark_causal_and_duplicate_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:watermark-protocol-067", "type": "entity", "path": "README.md", "role": "experiment_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:watermark-results-067", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:watermark-decision-073", "type": "entity", "path": "../../research/decisions/073-watermark-late-events.md", "role": "architecture_decision", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:watermark-process-067", "type": "activity", "label": "process a finite stream with monotone watermarks and late events", "agent": "farmaxia:python-runner-067", "used": ["farmaxia:watermark-fixture-067", "farmaxia:watermark-validator-067"], "generated": []},
+    {"id": "farmaxia:watermark-replay-067", "type": "activity", "label": "compare online snapshots and batch replay across permutations", "agent": "farmaxia:python-runner-067", "used": ["farmaxia:watermark-fixture-067", "farmaxia:watermark-validator-067"], "generated": ["farmaxia:watermark-results-067"]},
+    {"id": "farmaxia:watermark-kill-067", "type": "activity", "label": "attack late-event retention, monotone watermarks and causal authority", "agent": "farmaxia:python-runner-067", "used": ["farmaxia:watermark-kill-tests-067"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:watermark-query-retention-067", "expression": "are late events retained and replayed instead of silently dropped", "authority": "experiment_defined", "required_entities": ["farmaxia:watermark-fixture-067", "farmaxia:watermark-validator-067"]},
+    {"id": "farmaxia:watermark-query-order-067", "expression": "does final batch replay converge across event permutations", "authority": "experiment_defined", "required_entities": ["farmaxia:watermark-fixture-067", "farmaxia:watermark-validator-067"]},
+    {"id": "farmaxia:watermark-query-causality-067", "expression": "does missing causal authority remain UNKNOWN while late parents can resolve pending claims", "authority": "experiment_defined", "required_entities": ["farmaxia:watermark-validator-067", "farmaxia:watermark-kill-tests-067"]}
+  ],
+  "assumptions": [
+    "A watermark is an operational lower bound on expected future event time, not an eternal proof of completeness.",
+    "A late event may revise a previously settled projection and must remain in the append-only ledger.",
+    "Source version and explicit parent IDs provide the minimum causal contract for this finite fixture.",
+    "A source correction may supersede a previous event without deleting its history.",
+    "This experiment is local and synthetic, so no network or human data is needed."
+  ],
+  "kill_tests": [
+    "Dropping a late correction blocks the expected projection.",
+    "A drop-late policy blocks the contract.",
+    "A decreasing watermark blocks processing.",
+    "A conflicting duplicate delivery blocks ingestion.",
+    "A correction without supersession history blocks.",
+    "Missing causal authority cannot become a supported fact.",
+    "A causal child detached from its parent blocks.",
+    "A future source version blocks."
+  ],
+  "unknowns": [
+    "How watermarks should be coordinated across partitions and independent sources.",
+    "Whether source versions or vector clocks are necessary for each production adapter.",
+    "How to make late-event replay atomic with an external action.",
+    "How to sign, authenticate and rotate event deliveries.",
+    "How much provisional state can be shown to a human without causing wrong action."
+  ]
+}

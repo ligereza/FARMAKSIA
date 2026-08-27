@@ -253,6 +253,9 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~replay temporal batch~~ — el orden de llegada ya no cambia la proyección;
   correcciones, conflictos y `UNKNOWN` quedan diferenciados en
   [experimento 066](../../experiments/066-farmaxia-temporal-evidence-replay/README.md).
+- ~~watermarks y eventos tardíos~~ — los eventos fuera de ventana se conservan,
+  reabren la proyección y se comparan con replay batch en
+  [experimento 067](../../experiments/067-farmaxia-watermark-late-event-replay/README.md).
 
 ### Después
 
