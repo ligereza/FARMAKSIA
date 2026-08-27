@@ -61,6 +61,7 @@ def main() -> None:
         "061-codeine-progressive-commitment",
         "062-farmaxia-representation-space-renderer",
         "063-farmaxia-semantic-invariant-contract",
+        "064-farmaxia-branch-subset-selection",
     ]
     for experiment in required_experiments:
         directory = ROOT / "experiments" / experiment
@@ -86,6 +87,7 @@ def main() -> None:
         "067-codeine-progressive-commitment.md",
         "068-representation-space-renderer.md",
         "069-semantic-invariant-contract.md",
+        "070-branch-subset-selection.md",
     ]
     for decision in decisions:
         check((ROOT / "research" / "decisions" / decision).is_file(), f"missing current decision {decision}", failures)

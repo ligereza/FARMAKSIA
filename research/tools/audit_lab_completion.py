@@ -36,6 +36,7 @@ REQUIRED_EXPERIMENTS = [
     "061-codeine-progressive-commitment",
     "062-farmaxia-representation-space-renderer",
     "063-farmaxia-semantic-invariant-contract",
+    "064-farmaxia-branch-subset-selection",
 ]
 
 DECISIONS = [
@@ -54,6 +55,7 @@ DECISIONS = [
     "067-codeine-progressive-commitment.md",
     "068-representation-space-renderer.md",
     "069-semantic-invariant-contract.md",
+    "070-branch-subset-selection.md",
 ]
 
 LITERATURE = [
@@ -119,6 +121,7 @@ def main() -> None:
         ROOT / "experiments" / "061-codeine-progressive-commitment" / "provenance.json",
         ROOT / "experiments" / "062-farmaxia-representation-space-renderer" / "provenance.json",
         ROOT / "experiments" / "063-farmaxia-semantic-invariant-contract" / "provenance.json",
+        ROOT / "experiments" / "064-farmaxia-branch-subset-selection" / "provenance.json",
     ]
     for path in active_unknowns:
         manifest = json.loads(path.read_text(encoding="utf-8"))

@@ -1,0 +1,47 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:064-branch-subset-selection",
+  "status": "exploratory",
+  "purpose": "Select a small recoverable subset of representation branches using semantic coverage and explicit display cost.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-064", "type": "agent", "role": "defines_branch_selection_policy_and_costs"},
+    {"id": "farmaxia:python-runner-064", "type": "software_agent", "role": "runs_greedy_selection_and_adversarial_tests"}
+  ],
+  "entities": [
+    {"id": "farmaxia:branch-fixture-064", "type": "entity", "path": "fixture.json", "role": "semantic_needs_candidates_and_selection_policy", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:branch-selector-064", "type": "entity", "path": "run_experiment.py", "role": "facility_location_greedy_selector_and_mmr_diagnostic", "authority": "human_declared_tool"},
+    {"id": "farmaxia:branch-contract-064", "type": "entity", "path": "run_contract_test.py", "role": "positive_selection_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:branch-kill-tests-064", "type": "entity", "path": "run_kill_test.py", "role": "budget_and_authority_boundary_tests", "authority": "human_declared_tool"},
+    {"id": "farmaxia:branch-source-contract-063", "type": "entity", "path": "../063-farmaxia-semantic-invariant-contract/fixture.json", "role": "critical_query_contract_dependency", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:branch-decision-070", "type": "entity", "path": "../../research/decisions/070-branch-subset-selection.md", "role": "architecture_decision", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:branch-select-064", "type": "activity", "label": "choose branches by marginal semantic coverage under display budget", "agent": "farmaxia:python-runner-064", "used": ["farmaxia:branch-fixture-064", "farmaxia:branch-source-contract-063", "farmaxia:branch-selector-064"], "generated": []},
+    {"id": "farmaxia:branch-audit-064", "type": "activity", "label": "test source contract budget and MMR authority boundaries", "agent": "farmaxia:python-runner-064", "used": ["farmaxia:branch-contract-064", "farmaxia:branch-kill-tests-064"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:branch-query-budget-064", "expression": "does the selected subset maximize declared marginal semantic coverage without exceeding display budget", "authority": "experiment_defined", "required_entities": ["farmaxia:branch-fixture-064", "farmaxia:branch-selector-064"]},
+    {"id": "farmaxia:branch-query-recovery-064", "expression": "do unselected branches remain recoverable and does MMR remain diagnostic only", "authority": "experiment_defined", "required_entities": ["farmaxia:branch-selector-064", "farmaxia:branch-kill-tests-064"]}
+  ],
+  "assumptions": [
+    "Semantic needs can be declared before human evaluation.",
+    "Display cost is an explicit engineering budget, not a physiological measure.",
+    "The full/source anchor is valuable as a recoverable reference.",
+    "The query contract from 063 is required for every candidate."
+  ],
+  "kill_tests": [
+    "The source query contract cannot be bypassed.",
+    "An anchor that exceeds budget must block.",
+    "MMR cannot become final selection authority.",
+    "Unknown semantic needs must block.",
+    "Unselected branches cannot be deleted silently.",
+    "No human data, camera, network or external execution is allowed."
+  ],
+  "unknowns": [
+    "Whether semantic weights predict task-adjusted usefulness.",
+    "Whether marginal coverage correlates with human comparison effort.",
+    "Whether keeping more recoverable branches increases correction quality.",
+    "Whether display cost can be estimated across screens and sensory policies.",
+    "How to personalize budgets without learning a position-biased click ranking."
+  ]
+}

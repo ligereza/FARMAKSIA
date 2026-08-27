@@ -85,7 +85,7 @@ parámetros de representación; no son afirmaciones sobre neurotransmisores.
 
 | Hipótesis | Estado |
 |---|---|
-| CODE-INE | descriptor provisional con oracle ejecutable 029, compilador de experiencia 060, compromiso progresivo 061 y espacio de representaciones 062/063; interoperable con VIZZ; operador independiente eliminado |
+| CODE-INE | descriptor provisional con oracle ejecutable 029, compilador de experiencia 060, compromiso progresivo 061 y espacio de representaciones 062/063/064; interoperable con VIZZ; operador independiente eliminado |
 | X-ANA-X | archivado como hipótesis independiente; protocolo de analogía conservado |
 | KETAMINE | en cuarentena; sin prototipo activo ni teoría forzada |
 | VIZZ | flujo 032/033 y geometría 052/053: runtime CUDA experimental con compuerta privacy-first; no toda función requiere cámara; precisión y eficacia desconocidas |
@@ -152,6 +152,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Compromiso progresivo CODE-INE](experiments/061-codeine-progressive-commitment/README.md)
 - [Renderer de espacio de representaciones FARMAKSIA](experiments/062-farmaxia-representation-space-renderer/README.md)
 - [Contrato de invariantes semánticos FARMAKSIA](experiments/063-farmaxia-semantic-invariant-contract/README.md)
+- [Selección de subset de ramas FARMAKSIA](experiments/064-farmaxia-branch-subset-selection/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)
@@ -159,6 +160,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Decisión CODE-INE de compromiso progresivo](research/decisions/067-codeine-progressive-commitment.md)
 - [Decisión de renderer RepresentationSpace](research/decisions/068-representation-space-renderer.md)
 - [Decisión de preservación semántica relativa a consultas](research/decisions/069-semantic-invariant-contract.md)
+- [Decisión de selección marginal de ramas](research/decisions/070-branch-subset-selection.md)
 - [Futuro de FARMAKSIA como compilador de representación](research/decisions/061-farmaxia-generative-interface-roadmap.md)
 - [Literatura de observabilidad VIZZ](research/literature/010-vizz-observability-boundary.md)
 - [Literatura de condiciones de display VIZZ](research/literature/011-vizz-display-conditions.md)

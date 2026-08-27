@@ -281,6 +281,13 @@ es relativa a las consultas versionadas: una vista puede resumir u ordenar fuera
 de `Q`, pero una consulta crítica perdida bloquea el contrato. Esto demuestra
 preservación sintética auditable, no comprensión humana.
 
+El experimento 064 dejó de tratar cuatro ramas como un número fijo. Un selector
+greedy de cobertura semántica, penalización de costo y presupuesto explícito
+conservó `full` como ancla, añadió ramas por ganancia marginal y dejó las demás
+recuperables. MMR quedó como diagnóstico de redundancia, no como ranking de
+preferencia. Esto demuestra una política de selección auditable; no estima carga
+cognitiva ni decide qué representación debería preferir una persona.
+
 La auditoría 040 recorrió los requisitos de esta fase: prototipos mínimos,
 literatura, adopción, contratos, procedencia, kill tests, límites, decisiones y
 seguridad. `LAB_COMPLETION_VALID` confirma que la fundación reproducible está
@@ -300,8 +307,8 @@ respetan la auditoría 040:
 1. CODEINE: mantener separadas transición base, score declarado, oracle
    ejecutable y estado humano; exigir que las mutaciones relevantes sean
    detectables antes de llamar verificada a una secuencia.
-2. RepresentationSpace: seleccionar ramas por cobertura semántica y costo
-   visual, manteniendo las consultas críticas del experimento 063.
+2. RepresentationSpace: medir si la selección por cobertura marginal conserva
+   utilidad observable bajo un presupuesto de comparación.
 3. RepresentationSpace: medir si comparar ramas preservadas ayuda a corregir
    decisiones en tareas sintéticas sin convertir la primera sugerencia en
    autoridad. Registrar sólo decisiones y errores observables, no estados
