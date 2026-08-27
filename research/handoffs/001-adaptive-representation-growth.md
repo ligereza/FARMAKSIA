@@ -250,6 +250,9 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 - ~~dry-run de acciones~~ — propuesta con precondiciones y confirmación;
 - ~~verificador de estado~~ — consulta independiente al almacén fuente;
 - ~~fallos de identidad, permisos y versión~~ — kill tests reproducibles.
+- ~~replay temporal batch~~ — el orden de llegada ya no cambia la proyección;
+  correcciones, conflictos y `UNKNOWN` quedan diferenciados en
+  [experimento 066](../../experiments/066-farmaxia-temporal-evidence-replay/README.md).
 
 ### Después
 

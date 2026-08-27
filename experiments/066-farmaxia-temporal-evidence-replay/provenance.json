@@ -1,0 +1,52 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:066-temporal-evidence-replay",
+  "status": "exploratory",
+  "purpose": "Test deterministic temporal replay with duplicate deliveries, corrections, retractions, conflicts and UNKNOWN boundaries.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-066", "type": "agent", "role": "defines_temporal_and_evidence_invariants"},
+    {"id": "farmaxia:python-runner-066", "type": "software_agent", "role": "replays_ledger_and_runs_adversarial_permutations"}
+  ],
+  "entities": [
+    {"id": "farmaxia:temporal-fixture-066", "type": "entity", "path": "fixture.json", "role": "synthetic_temporal_evidence_ledger", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:temporal-validator-066", "type": "entity", "path": "run_experiment.py", "role": "deduplicating_replay_and_projection_validator", "authority": "human_declared_tool"},
+    {"id": "farmaxia:temporal-contract-066", "type": "entity", "path": "run_contract_test.py", "role": "positive_replay_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:temporal-kill-tests-066", "type": "entity", "path": "run_kill_test.py", "role": "temporal_conflict_retraction_and_unknown_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:temporal-protocol-066", "type": "entity", "path": "README.md", "role": "experiment_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:temporal-results-066", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:temporal-decision-072", "type": "entity", "path": "../../research/decisions/072-temporal-evidence-replay.md", "role": "architecture_decision", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:temporal-ingest-066", "type": "activity", "label": "deduplicate and preserve an append-only evidence ledger", "agent": "farmaxia:python-runner-066", "used": ["farmaxia:temporal-fixture-066", "farmaxia:temporal-validator-066"], "generated": []},
+    {"id": "farmaxia:temporal-replay-066", "type": "activity", "label": "replay multiple arrival permutations into a deterministic projection", "agent": "farmaxia:python-runner-066", "used": ["farmaxia:temporal-fixture-066", "farmaxia:temporal-validator-066"], "generated": ["farmaxia:temporal-results-066"]},
+    {"id": "farmaxia:temporal-kill-066", "type": "activity", "label": "attack temporal authority, conflict, duplicate and retraction invariants", "agent": "farmaxia:python-runner-066", "used": ["farmaxia:temporal-kill-tests-066"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:temporal-query-order-066", "expression": "does replay produce the same projection under reordered arrival", "authority": "experiment_defined", "required_entities": ["farmaxia:temporal-fixture-066", "farmaxia:temporal-validator-066"]},
+    {"id": "farmaxia:temporal-query-retraction-066", "expression": "does correction retract a fact without deleting its evidence history", "authority": "experiment_defined", "required_entities": ["farmaxia:temporal-fixture-066", "farmaxia:temporal-validator-066"]},
+    {"id": "farmaxia:temporal-query-boundaries-066", "expression": "do conflicts remain conflicts and insufficient temporal authority remain UNKNOWN", "authority": "experiment_defined", "required_entities": ["farmaxia:temporal-validator-066", "farmaxia:temporal-kill-tests-066"]}
+  ],
+  "assumptions": [
+    "The source version is authoritative for ordering state assertions within this synthetic source.",
+    "valid_time and observed_at are distinct clocks and are not interchangeable.",
+    "A retraction names the event it corrects and does not erase that event from the ledger.",
+    "Two distinct values at the same source version cannot be silently resolved.",
+    "This first slice replays a finite batch and does not claim live stream guarantees."
+  ],
+  "kill_tests": [
+    "A set event without source version or valid time blocks instead of becoming a fact.",
+    "A retraction naming an unknown event blocks.",
+    "A conflicting duplicate delivery blocks.",
+    "A same-version conflict cannot collapse to one value.",
+    "Removing a retraction fails the history invariant.",
+    "An UNKNOWN observation cannot be promoted to SUPPORTED without temporal authority.",
+    "An event version ahead of the source version blocks."
+  ],
+  "unknowns": [
+    "How watermarks and late events should work in a live connector.",
+    "How to handle partitioned streams and concurrent source versions.",
+    "Whether a source version is sufficient or a causal clock is required for each application.",
+    "How to make the projection atomic with an external action under TOCTOU.",
+    "How this batch contract maps to OpenEMR and Nextcloud temporal models."
+  ]
+}

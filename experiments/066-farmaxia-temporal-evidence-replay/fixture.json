@@ -1,0 +1,158 @@
+{
+  "schema": "farmaxia:temporal-evidence-replay:0.1",
+  "source_of_truth": {
+    "surface": "gitlab",
+    "project_id": "proj-alpha",
+    "current_version": 6,
+    "entities": [
+      "gitlab:proj-alpha:merge_request:mr-7",
+      "gitlab:proj-alpha:pipeline:pipe-3",
+      "gitlab:proj-alpha:deployment:deploy-9",
+      "gitlab:proj-alpha:merge_request:mr-7:approval"
+    ]
+  },
+  "policy": {
+    "order_invariant_replay": true,
+    "retractions_keep_history": true,
+    "unknown_on_missing_temporal_authority": true,
+    "conflicts_are_not_success": true,
+    "network_allowed": false,
+    "human_data": false
+  },
+  "events": [
+    {
+      "event_id": "ev-mr-merged",
+      "root_id": "root-mr-state",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:merge_request:mr-7",
+      "field": "state",
+      "kind": "set",
+      "source_version": 3,
+      "valid_time": 140,
+      "observed_at": 30,
+      "payload": {"value": "merged"},
+      "parents": ["ev-mr-open"]
+    },
+    {
+      "event_id": "ev-pipeline-retract",
+      "root_id": "root-pipeline-status",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:pipeline:pipe-3",
+      "field": "status",
+      "kind": "retract",
+      "source_version": 4,
+      "valid_time": 120,
+      "observed_at": 40,
+      "revokes": ["ev-pipeline-failed"],
+      "payload": {"reason": "source correction"},
+      "parents": ["ev-pipeline-failed"]
+    },
+    {
+      "event_id": "ev-pipeline-failed",
+      "root_id": "root-pipeline-status",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:pipeline:pipe-3",
+      "field": "status",
+      "kind": "set",
+      "source_version": 2,
+      "valid_time": 120,
+      "observed_at": 20,
+      "payload": {"value": "failed"},
+      "parents": []
+    },
+    {
+      "event_id": "ev-deploy-red",
+      "root_id": "root-deploy-status-red",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:deployment:deploy-9",
+      "field": "status",
+      "kind": "set",
+      "source_version": 6,
+      "valid_time": 200,
+      "observed_at": 60,
+      "payload": {"value": "failed"},
+      "parents": []
+    },
+    {
+      "event_id": "ev-mr-open",
+      "root_id": "root-mr-state",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:merge_request:mr-7",
+      "field": "state",
+      "kind": "set",
+      "source_version": 1,
+      "valid_time": 100,
+      "observed_at": 10,
+      "payload": {"value": "opened"},
+      "parents": []
+    },
+    {
+      "event_id": "ev-pipeline-failed",
+      "root_id": "root-pipeline-status",
+      "delivery_id": "retry-1",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:pipeline:pipe-3",
+      "field": "status",
+      "kind": "set",
+      "source_version": 2,
+      "valid_time": 120,
+      "observed_at": 20,
+      "payload": {"value": "failed"},
+      "parents": []
+    },
+    {
+      "event_id": "ev-pipeline-success",
+      "root_id": "root-pipeline-status",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:pipeline:pipe-3",
+      "field": "status",
+      "kind": "set",
+      "source_version": 5,
+      "valid_time": 120,
+      "observed_at": 41,
+      "payload": {"value": "success"},
+      "parents": ["ev-pipeline-retract"]
+    },
+    {
+      "event_id": "ev-deploy-green",
+      "root_id": "root-deploy-status-green",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:deployment:deploy-9",
+      "field": "status",
+      "kind": "set",
+      "source_version": 6,
+      "valid_time": 200,
+      "observed_at": 61,
+      "payload": {"value": "success"},
+      "parents": []
+    },
+    {
+      "event_id": "ev-approval-observed",
+      "root_id": "root-approval-unknown",
+      "source": "gitlab",
+      "project_id": "proj-alpha",
+      "entity_ref": "gitlab:proj-alpha:merge_request:mr-7:approval",
+      "field": "approved",
+      "kind": "observation",
+      "source_version": null,
+      "valid_time": null,
+      "observed_at": 70,
+      "payload": {"value": false},
+      "parents": []
+    }
+  ],
+  "expected_projection": [
+    {"entity_ref": "gitlab:proj-alpha:merge_request:mr-7", "field": "state", "status": "SUPPORTED", "value": "merged"},
+    {"entity_ref": "gitlab:proj-alpha:pipeline:pipe-3", "field": "status", "status": "SUPPORTED", "value": "success"},
+    {"entity_ref": "gitlab:proj-alpha:deployment:deploy-9", "field": "status", "status": "CONFLICT", "value": null},
+    {"entity_ref": "gitlab:proj-alpha:merge_request:mr-7:approval", "field": "approved", "status": "UNKNOWN", "value": null}
+  ]
+}

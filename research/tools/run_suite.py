@@ -96,6 +96,7 @@ def main() -> None:
         "experiments/063-farmaxia-semantic-invariant-contract/provenance.json",
         "experiments/064-farmaxia-branch-subset-selection/provenance.json",
         "experiments/065-farmaxia-cross-application-evidence/provenance.json",
+        "experiments/066-farmaxia-temporal-evidence-replay/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1065,6 +1066,22 @@ def main() -> None:
         "FARMAXIA_065_KILL_TESTS_VALID",
     )
     command("provenance 065", python_script("research/tools/validate_provenance.py", provenance[61]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA temporal evidence replay 066",
+        python_script("experiments/066-farmaxia-temporal-evidence-replay/run_experiment.py"),
+        '"status": "TEMPORAL_REPLAY_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA temporal evidence replay 066",
+        python_script("experiments/066-farmaxia-temporal-evidence-replay/run_contract_test.py"),
+        "FARMAXIA_066_TEMPORAL_REPLAY_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA temporal evidence replay 066",
+        python_script("experiments/066-farmaxia-temporal-evidence-replay/run_kill_test.py"),
+        "FARMAXIA_066_TEMPORAL_REPLAY_KILL_TESTS_VALID",
+    )
+    command("provenance 066", python_script("research/tools/validate_provenance.py", provenance[62]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")
