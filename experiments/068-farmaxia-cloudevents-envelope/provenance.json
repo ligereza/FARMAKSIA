@@ -1,0 +1,51 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:068-cloudevents-envelope",
+  "status": "exploratory",
+  "purpose": "Validate a CloudEvents 1.0 envelope while preserving the FARMAKSIA event identity, provenance and safety contract.",
+  "agents": [
+    {"id": "farmaxia:human-researcher-068", "type": "agent", "role": "defines_consolidated_envelope_adoption_boundary"},
+    {"id": "farmaxia:python-runner-068", "type": "software_agent", "role": "validates_envelopes_deduplicates_and_maps_to_internal_contract"}
+  ],
+  "entities": [
+    {"id": "farmaxia:cloudevents-fixture-068", "type": "entity", "path": "fixture.json", "role": "synthetic_cloudevents_envelopes_and_duplicate_delivery", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:cloudevents-validator-068", "type": "entity", "path": "run_experiment.py", "role": "envelope_validator_and_farmaxia_mapping", "authority": "human_declared_tool"},
+    {"id": "farmaxia:cloudevents-contract-068", "type": "entity", "path": "run_contract_test.py", "role": "positive_envelope_contract_test", "authority": "human_declared_tool"},
+    {"id": "farmaxia:cloudevents-kill-tests-068", "type": "entity", "path": "run_kill_test.py", "role": "identity_provenance_subject_and_safety_attacks", "authority": "human_declared_tool"},
+    {"id": "farmaxia:cloudevents-protocol-068", "type": "entity", "path": "README.md", "role": "experiment_protocol_and_scope_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:cloudevents-decision-074", "type": "entity", "path": "../../research/decisions/074-consolidated-foundations-shortcut.md", "role": "consolidated_foundations_adoption_decision", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:cloudevents-results-068", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:cloudevents-process-068", "type": "activity", "label": "validate CloudEvents envelopes and map their data to FARMAKSIA", "agent": "farmaxia:python-runner-068", "used": ["farmaxia:cloudevents-fixture-068", "farmaxia:cloudevents-validator-068"], "generated": []},
+    {"id": "farmaxia:cloudevents-kill-068", "type": "activity", "label": "attack envelope identity provenance subject and safety boundaries", "agent": "farmaxia:python-runner-068", "used": ["farmaxia:cloudevents-kill-tests-068"], "generated": []},
+    {"id": "farmaxia:cloudevents-record-068", "type": "activity", "label": "record the local compatibility result and adoption limits", "agent": "farmaxia:human-researcher-068", "used": ["farmaxia:cloudevents-fixture-068", "farmaxia:cloudevents-protocol-068", "farmaxia:cloudevents-decision-074"], "generated": ["farmaxia:cloudevents-results-068"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:cloudevents-query-identity-068", "expression": "does source plus id deduplicate a repeated delivery without changing the event", "authority": "experiment_defined", "required_entities": ["farmaxia:cloudevents-fixture-068", "farmaxia:cloudevents-validator-068"]},
+    {"id": "farmaxia:cloudevents-query-mapping-068", "expression": "does the standardized envelope preserve FARMAKSIA entity and provenance fields", "authority": "experiment_defined", "required_entities": ["farmaxia:cloudevents-fixture-068", "farmaxia:cloudevents-validator-068"]},
+    {"id": "farmaxia:cloudevents-query-safety-068", "expression": "are network execution human data and unscoped extensions blocked by the local contract", "authority": "experiment_defined", "required_entities": ["farmaxia:cloudevents-kill-tests-068", "farmaxia:cloudevents-protocol-068"]}
+  ],
+  "assumptions": [
+    "CloudEvents 1.0 supplies a transport envelope, not domain truth.",
+    "source plus id identifies one logical event and a retry may reuse it.",
+    "FARMAKSIA-specific extensions are namespaced and remain auditable.",
+    "A local fixture is sufficient to test contract compatibility before adding a broker or network.",
+    "No human data or external side effect is allowed in this experiment."
+  ],
+  "kill_tests": [
+    "Missing CloudEvents required attributes blocks processing.",
+    "A non-absolute source blocks source identity.",
+    "A data event id different from the envelope id blocks mapping.",
+    "Missing source version or subject provenance blocks mapping.",
+    "A conflicting duplicate source plus id blocks ingestion.",
+    "An unscoped extension blocks the envelope.",
+    "Enabling network policy blocks the fixture."
+  ],
+  "unknowns": [
+    "Which transport will carry events in a real institutional adapter.",
+    "Whether a production adapter needs signed CloudEvents or a schema registry.",
+    "How external delivery retries and source corrections will be atomically coordinated.",
+    "Whether CloudEvents extensions are sufficient for all future claim-level provenance."
+  ]
+}

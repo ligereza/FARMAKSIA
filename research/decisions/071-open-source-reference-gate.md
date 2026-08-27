@@ -140,10 +140,11 @@ reemplazar el selector por una librería más grande.
 ## Siguiente trabajo autorizado
 
 El contrato de adopción consolidada queda descrito en la
-[decisión 074](074-consolidated-foundations-shortcut.md). El siguiente trabajo
-es un fixture local de CloudEvents, sin red ni dependencia, equivalente a los
-contratos 065–067. No se inicia todavía una captura humana, un benchmark en
-VM, una descarga de modelos ni una instalación de agentes externos.
+[decisión 074](074-consolidated-foundations-shortcut.md) y su fixture local fue
+verificado en el [experimento 068](../../experiments/068-farmaxia-cloudevents-envelope/README.md).
+El siguiente trabajo es un adapter sintético que lo consuma. No se inicia
+todavía una captura humana, un benchmark en VM, una descarga de modelos ni una
+instalación de agentes externos.
 
 El fixture debe comprobar que una representación puede responder:
 

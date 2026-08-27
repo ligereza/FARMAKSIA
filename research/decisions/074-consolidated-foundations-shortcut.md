@@ -96,11 +96,13 @@ La adopción queda bloqueada si:
 
 ## Siguiente paso
 
-Construir un fixture de contrato CloudEvents **sin red y sin dependencia** y
-hacer que un adapter sintético GitLab–Mattermost lo consuma. El resultado debe
-ser equivalente al 065–067 y debe fallar cuando se pierdan identidad,
-procedencia, versión, permiso o postcondición. Si ese fixture no revela un
-problema nuevo, no se añade otra capa de infraestructura.
+El fixture local de CloudEvents ya fue implementado en el
+[experimento 068](../../experiments/068-farmaxia-cloudevents-envelope/README.md).
+Conserva el sobre original, deduplica por `source + id` y mantiene el mapeo
+interno de FARMAKSIA. El siguiente trabajo es conectar un primer adapter
+sintético a este sobre y verificar que conserva los resultados de los
+contratos 065–067. Si ese adapter no revela un problema nuevo, no se añade
+otra capa de infraestructura.
 
 ## Fuentes revisadas
 

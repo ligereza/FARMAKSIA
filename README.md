@@ -164,6 +164,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Evidencia entre aplicaciones GitLab–Mattermost](experiments/065-farmaxia-cross-application-evidence/README.md)
 - [Replay temporal de evidencia FARMAKSIA](experiments/066-farmaxia-temporal-evidence-replay/README.md)
 - [Watermarks y eventos tardíos FARMAKSIA](experiments/067-farmaxia-watermark-late-event-replay/README.md)
+- [Sobre CloudEvents sin infraestructura](experiments/068-farmaxia-cloudevents-envelope/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)

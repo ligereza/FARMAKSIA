@@ -263,7 +263,9 @@ ser propietario de ninguna de las aplicaciones ni reemplazarlas.
 
 ### Después
 
-- fixture CloudEvents local, sin red, equivalente al contrato GitLab–Mattermost;
+- ~~fixture CloudEvents local~~ — el sobre estándar conserva identidad,
+  procedencia y el evento interno sin red ni dependencia en
+  [experimento 068](../../experiments/068-farmaxia-cloudevents-envelope/README.md);
 - adapter OpenEMR/Nextcloud con datos sintéticos, reutilizando el mismo contrato
   sin importar datos clínicos;
 - autorización por rol;

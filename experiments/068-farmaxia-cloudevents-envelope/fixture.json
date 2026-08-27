@@ -1,0 +1,118 @@
+{
+  "schema": "farmaxia:cloudevents-envelope:0.1",
+  "source_of_truth": {
+    "surface": "gitlab",
+    "project_id": "proj-alpha",
+    "source_uri": "https://gitlab.example.test/projects/proj-alpha",
+    "current_version": 42,
+    "entities": [
+      "gitlab:proj-alpha:merge_request:mr-7",
+      "gitlab:proj-alpha:pipeline:pipe-3"
+    ]
+  },
+  "policy": {
+    "cloud_events_specversion": "1.0",
+    "identity_is_source_plus_id": true,
+    "preserve_original_envelope": true,
+    "preserve_farmaxia_extensions": true,
+    "network_allowed": false,
+    "human_data": false,
+    "external_execution": false
+  },
+  "events": [
+    {
+      "specversion": "1.0",
+      "id": "ev-pipeline-fail",
+      "source": "https://gitlab.example.test/projects/proj-alpha",
+      "type": "io.farmaksia.gitlab.pipeline.status.v1",
+      "subject": "projects/proj-alpha/pipelines/pipe-3",
+      "time": "2026-08-27T10:00:20Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "gitlab:proj-alpha:pipeline:pipe-3",
+      "farmaxia-source-version": 42,
+      "farmaxia-observed-at": 20,
+      "farmaxia-root-id": "root-pipeline-status",
+      "data": {
+        "event_id": "ev-pipeline-fail",
+        "project_id": "proj-alpha",
+        "entity_type": "pipeline",
+        "entity_id": "pipe-3",
+        "event_kind": "status_changed",
+        "occurred_at": 20,
+        "payload": {"status": "failed", "ref": "main"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-mr-open",
+      "source": "https://gitlab.example.test/projects/proj-alpha",
+      "type": "io.farmaksia.gitlab.merge_request.state.v1",
+      "subject": "projects/proj-alpha/merge_requests/mr-7",
+      "time": "2026-08-27T10:00:10Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "gitlab:proj-alpha:merge_request:mr-7",
+      "farmaxia-source-version": 42,
+      "farmaxia-observed-at": 10,
+      "farmaxia-root-id": "root-mr-state",
+      "data": {
+        "event_id": "ev-mr-open",
+        "project_id": "proj-alpha",
+        "entity_type": "merge_request",
+        "entity_id": "mr-7",
+        "event_kind": "state_changed",
+        "occurred_at": 10,
+        "payload": {"iid": 7, "state": "opened", "pipeline_id": "pipe-3"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-mr-comment",
+      "source": "https://gitlab.example.test/projects/proj-alpha",
+      "type": "io.farmaksia.gitlab.merge_request.comment.v1",
+      "subject": "projects/proj-alpha/merge_requests/mr-7",
+      "time": "2026-08-27T10:00:30Z",
+      "datacontenttype": "application/json",
+      "farmaxia-entity-ref": "gitlab:proj-alpha:merge_request:mr-7",
+      "farmaxia-source-version": 42,
+      "farmaxia-observed-at": 30,
+      "farmaxia-root-id": "root-mr-review",
+      "data": {
+        "event_id": "ev-mr-comment",
+        "project_id": "proj-alpha",
+        "entity_type": "merge_request",
+        "entity_id": "mr-7",
+        "event_kind": "review_question",
+        "occurred_at": 30,
+        "payload": {"kind": "review_question", "body": "Ready for review?"}
+      }
+    },
+    {
+      "specversion": "1.0",
+      "id": "ev-mr-open",
+      "source": "https://gitlab.example.test/projects/proj-alpha",
+      "type": "io.farmaksia.gitlab.merge_request.state.v1",
+      "subject": "projects/proj-alpha/merge_requests/mr-7",
+      "time": "2026-08-27T10:00:10Z",
+      "datacontenttype": "application/json",
+      "farmaxia-delivery-id": "delivery-4-retry",
+      "farmaxia-entity-ref": "gitlab:proj-alpha:merge_request:mr-7",
+      "farmaxia-source-version": 42,
+      "farmaxia-observed-at": 31,
+      "farmaxia-root-id": "root-mr-state",
+      "data": {
+        "event_id": "ev-mr-open",
+        "project_id": "proj-alpha",
+        "entity_type": "merge_request",
+        "entity_id": "mr-7",
+        "event_kind": "state_changed",
+        "occurred_at": 10,
+        "payload": {"iid": 7, "state": "opened", "pipeline_id": "pipe-3"}
+      }
+    }
+  ],
+  "expected_canonical_order": [
+    "ev-mr-open",
+    "ev-pipeline-fail",
+    "ev-mr-comment"
+  ]
+}
