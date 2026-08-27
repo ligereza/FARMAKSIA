@@ -1,6 +1,6 @@
 # Decisión 084 — Adaptador visual grandMA3 → Titan
 
-Fecha: 2026-08-27  
+Fecha: 2026-08-27
 Estado: **adoptar como frente experimental**
 
 ## Decisión
@@ -108,4 +108,3 @@ capa oculte diferencias importantes.
 La decisión se revisará después de observar ambas UIs reales. Si el usuario
 trabaja con grandMA2, se abrirá una variante versionada en vez de reutilizar
 silenciosamente este contrato.
-

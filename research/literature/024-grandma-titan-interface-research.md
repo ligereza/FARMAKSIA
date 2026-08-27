@@ -142,4 +142,3 @@ Se mata o se reduce el alcance si ocurre cualquiera de estos casos:
 - No sabemos qué subconjunto de controles expone cada aplicación por UIA.
 - No sabemos si el beneficio buscado es entrenamiento, operación asistida o
   una piel visual permanente; el primer slice sirve a los tres sin ejecutar.
-
