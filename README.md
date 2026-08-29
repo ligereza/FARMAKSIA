@@ -199,6 +199,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Investigación de interfaz grandMA3/Titan](research/literature/024-grandma-titan-interface-research.md)
 - [Decisión del adaptador visual grandMA3 → Titan](research/decisions/084-grandma-titan-visual-adapter.md)
 - [Auditoría profunda de referencias open source y científicas](research/literature/023-open-source-reference-audit.md)
+- [Mercado disponible y capas progresivas de FARMAKSIA](research/decisions/087-farmaxia-market-entry-progressive-layers.md)
 - [Compuerta de adopción de referencias externas](research/decisions/071-open-source-reference-gate.md)
 - [Decisión de replay temporal de evidencia](research/decisions/072-temporal-evidence-replay.md)
 - [Decisión de watermarks y eventos tardíos](research/decisions/073-watermark-late-events.md)
