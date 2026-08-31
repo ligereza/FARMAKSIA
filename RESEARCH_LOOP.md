@@ -258,13 +258,12 @@ mutaciones de falla, recuperación y acción cambiaron el resultado del oracle;
 el módulo no lee el score. La evidencia sigue limitada a una especificación de
 tarea sintética y no a una experiencia humana.
 
-El experimento 030 convirtió la compuerta sintética de VIZZ en un adaptador
-real de sandbox: WebGazer 3.5.3 se sirve localmente, el inicio requiere
-consentimiento explícito, la calibración usa nueve objetivos, el marcador vive
-en memoria y el apagado intenta detener vídeo, loop y modelo. El test estático
-pasó sin abrir cámara, pedir permisos ni usar red. Esto demuestra integración,
-no precisión, latencia, cobertura, comodidad, eficacia o inferencia de estados
-humanos; esas propiedades siguen desconocidas.
+El experimento 030 fue un adaptador histórico de sandbox: evaluó WebGazer 3.5.3
+servido localmente, consentimiento explícito, nueve objetivos, marcador en
+memoria y apagado de vídeo, loop y modelo. El test estático pasó sin abrir
+cámara, pedir permisos ni usar red. El sandbox fue retirado del árbol activo;
+su evidencia demuestra integración y controles estáticos, no precisión,
+latencia, cobertura, comodidad, eficacia o inferencia de estados humanos.
 
 El experimento 060 convirtió CODE-INE en un compilador de experiencia: una
 intención declarada produce un mapa contrastivo, una máquina de estados y un
@@ -368,8 +367,8 @@ X-ANA-X queda archivado salvo que una futura predicción relacional sobreviva un
 control directo más fuerte y cambie una decisión observable.
 
 Las herramientas candidatas y la investigación científica están registradas en
-`research/literature/006–016`. WebGazer queda adoptado solo en el sandbox 030;
-Pupil Core sigue diferido. No se incorporará KETAMINE al prototipo hasta
+`research/literature/006–016`. WebGazer queda retirado y conservado solo como
+antecedente; Pupil Core sigue diferido. No se incorporará KETAMINE al prototipo hasta
 que aparezca una experiencia que lo justifique. La auditoría de referencias y
 la compuerta de adopción están en `research/literature/023-open-source-reference-audit.md`
 y `research/decisions/071-open-source-reference-gate.md`.

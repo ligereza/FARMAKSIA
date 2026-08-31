@@ -1,10 +1,10 @@
-# Decisión 041 — VIZZ incorpora un adaptador WebGazer local y opt-in
+# Decisión 041 — VIZZ retira el adaptador WebGazer local y opt-in
 
 Fecha: 2026-08-24
 
-## Evidencia nueva
+## Registro histórico
 
-El experimento 030 implementa una página ejecutable que carga WebGazer.js
+El experimento 030 implementó una página ejecutable que cargaba WebGazer.js
 3.5.3 desde `vendor/` y sus assets MediaPipe Face Mesh desde
 `mediapipe/face_mesh/`, solicita cámara solo después de una acción de
 consentimiento, ofrece nueve objetivos de calibración y dibuja un marcador con
@@ -21,34 +21,34 @@ permite `unsafe-eval` y `wasm-unsafe-eval` únicamente para el runtime local de
 MediaPipe/Emscripten, que usa `Function()` y WebAssembly durante su arranque.
 Los orígenes externos continúan bloqueados.
 
-## Decisión
+## Decisión de retiro
 
-VIZZ **adopta experimentalmente** WebGazer 3.5.3 solo en el sandbox local del
-experimento 030. No se adopta como runtime de producto ni como instrumento
-clínico. La dependencia queda sujeta a GPL-3.0-or-later y a la advertencia de
-que la maintenance oficial terminó; cualquier distribución con otra licencia
-requiere revisión legal independiente.
+VIZZ **retira** WebGazer 3.5.3 del estado activo. El experimento 030 y sus
+bundles ya no se distribuyen ni se integran en la suite. La investigación se
+conserva para explicar qué se probó y por qué no se convirtió en runtime de
+producto. La dependencia estaba sujeta a GPL-3.0-or-later y a la advertencia
+de que la maintenance oficial terminó; cualquier recuperación futura requiere
+una nueva decisión técnica y revisión legal independiente.
 
-La adaptación permitida por ahora es un marcador visual después de nueve
-puntos de calibración y diez predicciones válidas. No cambia contenido según
-una supuesta atención, no infiere estados humanos o farmacológicos y no
-aplica recetas de lentes, modo nocturno o pupila mediante CSS.
+No queda una adaptación WebGazer activa. El núcleo VIZZ vigente debe mantener
+separadas la geometría calibrada, los detectores y cualquier modelo futuro;
+no se infieren estados humanos o farmacológicos ni se aplican recetas de
+lentes, modo nocturno o pupila mediante CSS.
 
 ## Kill tests y límites
 
-- Sin checkbox de consentimiento, el botón de inicio permanece deshabilitado y
-  el adaptador no llama `begin()`.
-- Sin nueve objetivos, el estado de adaptación permanece bloqueado.
-- Al detener se limpian listener, vídeo, loop y modelo local; la limpieza es
-  best-effort porque la página puede cerrarse abruptamente.
+- Los controles de consentimiento, nueve objetivos y apagado fueron límites
+  del sandbox histórico; ya no existen como runtime activo.
+- La evidencia estática de aquel sandbox no equivale a una validación de
+  permisos, hardware o navegador.
 - Cualquier precisión, latencia, cobertura, efecto en confort, sueño o
   comprensión queda desconocida hasta un protocolo humano separado.
 - No se ejecutan pruebas bajo intoxicación ni se usa una medición ocular como
   proxy de neurotransmisores, ansiedad o CODE-INE.
 
-## Próxima compuerta
+## Estado actual
 
-Solo si el operador lo solicita y aprueba una sesión explícita se puede medir
-error contra una referencia, latencia extremo a extremo y retención. Esa
-sesión debe usar datos mínimos, no contenido personal, una vía de abortar y un
-registro separado del corpus vacío por diseño.
+No hay una próxima sesión WebGazer prevista. Si alguna vez se reabre la línea,
+debe tratarse como una nueva evaluación, con dependencia y licencia revisadas,
+datos mínimos, una vía de abortar y un registro separado del corpus vacío por
+diseño.

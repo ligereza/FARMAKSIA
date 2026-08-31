@@ -63,7 +63,6 @@ def main() -> None:
         "experiments/027-codeine-objective-oracle/provenance.json",
         "experiments/028-vizz-gaze-quality-gate/provenance.json",
         "experiments/029-codeine-executable-oracle/provenance.json",
-        "experiments/030-vizz-webgazer-opt-in/provenance.json",
         "experiments/031-vizz-gpu-only-deep-tracker/provenance.json",
         "experiments/032-vizz-python-flow-split/provenance.json",
         "experiments/033-vizz-python-headless-runtime/provenance.json",
@@ -740,35 +739,29 @@ def main() -> None:
     command("provenance 029", python_script("research/tools/validate_provenance.py", provenance[28]), "PROVENANCE_VALID")
 
     command(
-        "contract test VIZZ WebGazer 030",
-        python_script("experiments/030-vizz-webgazer-opt-in/run_contract_test.py"),
-        "CONTRACT_TESTS_VALID",
-    )
-    command("provenance 030", python_script("research/tools/validate_provenance.py", provenance[29]), "PROVENANCE_VALID")
-    command(
         "contract test VIZZ GPU-only 031",
         python_script("experiments/031-vizz-gpu-only-deep-tracker/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 031", python_script("research/tools/validate_provenance.py", provenance[30]), "PROVENANCE_VALID")
+    command("provenance 031", python_script("research/tools/validate_provenance.py", provenance[29]), "PROVENANCE_VALID")
     command(
         "contract test VIZZ Python flow split 032",
         python_script("experiments/032-vizz-python-flow-split/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 032", python_script("research/tools/validate_provenance.py", provenance[31]), "PROVENANCE_VALID")
+    command("provenance 032", python_script("research/tools/validate_provenance.py", provenance[30]), "PROVENANCE_VALID")
     command(
         "contract test VIZZ Python headless runtime 033",
         python_script("experiments/033-vizz-python-headless-runtime/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 033", python_script("research/tools/validate_provenance.py", provenance[32]), "PROVENANCE_VALID")
+    command("provenance 033", python_script("research/tools/validate_provenance.py", provenance[31]), "PROVENANCE_VALID")
     command(
         "contract test VIZZ pretrained model probe 034",
         python_script("experiments/034-vizz-pretrained-model-probe/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 034", python_script("research/tools/validate_provenance.py", provenance[33]), "PROVENANCE_VALID")
+    command("provenance 034", python_script("research/tools/validate_provenance.py", provenance[32]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ eye-centric normalization 035",
         python_script("experiments/035-vizz-eye-centric-normalization/run_experiment.py"),
@@ -779,7 +772,7 @@ def main() -> None:
         python_script("experiments/035-vizz-eye-centric-normalization/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 035", python_script("research/tools/validate_provenance.py", provenance[34]), "PROVENANCE_VALID")
+    command("provenance 035", python_script("research/tools/validate_provenance.py", provenance[33]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ eye-centric capture contract 036",
         python_script("experiments/036-vizz-eye-centric-capture-contract/run_experiment.py"),
@@ -790,13 +783,13 @@ def main() -> None:
         python_script("experiments/036-vizz-eye-centric-capture-contract/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 036", python_script("research/tools/validate_provenance.py", provenance[35]), "PROVENANCE_VALID")
+    command("provenance 036", python_script("research/tools/validate_provenance.py", provenance[34]), "PROVENANCE_VALID")
     command(
         "contract test VIZZ dual representation audit 037",
         python_script("experiments/037-vizz-dual-representation-audit/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 037", python_script("research/tools/validate_provenance.py", provenance[36]), "PROVENANCE_VALID")
+    command("provenance 037", python_script("research/tools/validate_provenance.py", provenance[35]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ naturalistic trace 038",
         python_script("experiments/038-vizz-naturalistic-trace/run_experiment.py"),
@@ -807,7 +800,7 @@ def main() -> None:
         python_script("experiments/038-vizz-naturalistic-trace/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 038", python_script("research/tools/validate_provenance.py", provenance[37]), "PROVENANCE_VALID")
+    command("provenance 038", python_script("research/tools/validate_provenance.py", provenance[36]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ GitHub pretrained gaze 039",
         python_script("experiments/039-vizz-github-pretrained-gaze/run_experiment.py"),
@@ -818,7 +811,7 @@ def main() -> None:
         python_script("experiments/039-vizz-github-pretrained-gaze/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 039", python_script("research/tools/validate_provenance.py", provenance[38]), "PROVENANCE_VALID")
+    command("provenance 039", python_script("research/tools/validate_provenance.py", provenance[37]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ naturalistic trace audit 040",
         python_script("experiments/040-vizz-naturalistic-trace-audit/run_experiment.py"),
@@ -829,7 +822,7 @@ def main() -> None:
         python_script("experiments/040-vizz-naturalistic-trace-audit/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 040", python_script("research/tools/validate_provenance.py", provenance[39]), "PROVENANCE_VALID")
+    command("provenance 040", python_script("research/tools/validate_provenance.py", provenance[38]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ keyboard activity trace 041",
         python_script("experiments/041-vizz-keyboard-activity-trace/run_experiment.py"),
@@ -840,19 +833,19 @@ def main() -> None:
         python_script("experiments/041-vizz-keyboard-activity-trace/run_contract_test.py"),
         "CONTRACT_TESTS_VALID",
     )
-    command("provenance 041", python_script("research/tools/validate_provenance.py", provenance[40]), "PROVENANCE_VALID")
+    command("provenance 041", python_script("research/tools/validate_provenance.py", provenance[39]), "PROVENANCE_VALID")
     command(
         "contract test VIZZ reduced eye camera 044",
         python_script("experiments/044-vizz-reduced-eye-camera/run_contract_test.py"),
         "VIZZ_044_OPTICAL_CONTRACT_VALID",
     )
-    command("provenance 044", python_script("research/tools/validate_provenance.py", provenance[41]), "PROVENANCE_VALID")
+    command("provenance 044", python_script("research/tools/validate_provenance.py", provenance[40]), "PROVENANCE_VALID")
     command(
         "contract test VIZZ single eye camera 045",
         python_script("experiments/045-vizz-single-eye-camera/run_contract_test.py"),
         "VIZZ_045_RETIREMENT_CONTRACT_VALID",
     )
-    command("provenance 045", python_script("research/tools/validate_provenance.py", provenance[42]), "PROVENANCE_VALID")
+    command("provenance 045", python_script("research/tools/validate_provenance.py", provenance[41]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ gaze geometry 046",
         python_script("experiments/046-vizz-gaze-geometry-probe/run_experiment.py"),
@@ -863,7 +856,7 @@ def main() -> None:
         python_script("experiments/046-vizz-gaze-geometry-probe/run_contract_test.py"),
         "VIZZ_046_GEOMETRY_CONTRACT_VALID",
     )
-    command("provenance 046", python_script("research/tools/validate_provenance.py", provenance[43]), "PROVENANCE_VALID")
+    command("provenance 046", python_script("research/tools/validate_provenance.py", provenance[42]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ controlled playback 047",
         python_script("experiments/047-vizz-controlled-playback/run_experiment.py"),
@@ -874,7 +867,7 @@ def main() -> None:
         python_script("experiments/047-vizz-controlled-playback/run_contract_test.py"),
         "VIZZ_047_PLAYBACK_CONTRACT_VALID",
     )
-    command("provenance 047", python_script("research/tools/validate_provenance.py", provenance[44]), "PROVENANCE_VALID")
+    command("provenance 047", python_script("research/tools/validate_provenance.py", provenance[43]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ passive observer 048",
         python_script("experiments/048-vizz-passive-observer/run_experiment.py"),
@@ -885,7 +878,7 @@ def main() -> None:
         python_script("experiments/048-vizz-passive-observer/run_contract_test.py"),
         "VIZZ_048_PASSIVE_TRACE_CONTRACT_VALID",
     )
-    command("provenance 048", python_script("research/tools/validate_provenance.py", provenance[45]), "PROVENANCE_VALID")
+    command("provenance 048", python_script("research/tools/validate_provenance.py", provenance[44]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ runtime geometry bridge 049",
         python_script("experiments/049-vizz-runtime-geometry-bridge/run_experiment.py"),
@@ -896,7 +889,7 @@ def main() -> None:
         python_script("experiments/049-vizz-runtime-geometry-bridge/run_contract_test.py"),
         "VIZZ_049_RUNTIME_BRIDGE_CONTRACT_VALID",
     )
-    command("provenance 049", python_script("research/tools/validate_provenance.py", provenance[46]), "PROVENANCE_VALID")
+    command("provenance 049", python_script("research/tools/validate_provenance.py", provenance[45]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ Windows display layout 050",
         python_script("experiments/050-vizz-windows-display-layout-probe/run_experiment.py"),
@@ -907,7 +900,7 @@ def main() -> None:
         python_script("experiments/050-vizz-windows-display-layout-probe/run_contract_test.py"),
         "VIZZ_050_WINDOWS_DISPLAY_LAYOUT_PROBE_VALID",
     )
-    command("provenance 050", python_script("research/tools/validate_provenance.py", provenance[47]), "PROVENANCE_VALID")
+    command("provenance 050", python_script("research/tools/validate_provenance.py", provenance[46]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ physical monitor calibration 051",
         python_script("experiments/051-vizz-physical-monitor-calibration/run_experiment.py"),
@@ -918,7 +911,7 @@ def main() -> None:
         python_script("experiments/051-vizz-physical-monitor-calibration/run_contract_test.py"),
         "VIZZ_051_PHYSICAL_CALIBRATION_CONTRACT_VALID",
     )
-    command("provenance 051", python_script("research/tools/validate_provenance.py", provenance[48]), "PROVENANCE_VALID")
+    command("provenance 051", python_script("research/tools/validate_provenance.py", provenance[47]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ binocular auto geometry 052",
         python_script("experiments/052-vizz-binocular-auto-geometry/run_experiment.py"),
@@ -929,7 +922,7 @@ def main() -> None:
         python_script("experiments/052-vizz-binocular-auto-geometry/run_contract_test.py"),
         "VIZZ_052_BINOCULAR_AUTO_GEOMETRY_CONTRACT_VALID",
     )
-    command("provenance 052", python_script("research/tools/validate_provenance.py", provenance[49]), "PROVENANCE_VALID")
+    command("provenance 052", python_script("research/tools/validate_provenance.py", provenance[48]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ GPU binocular ray adapter 053",
         python_script("experiments/053-vizz-gpu-binocular-ray-adapter/run_experiment.py"),
@@ -940,7 +933,7 @@ def main() -> None:
         python_script("experiments/053-vizz-gpu-binocular-ray-adapter/run_contract_test.py"),
         "VIZZ_053_GPU_BINOCULAR_RAY_ADAPTER_CONTRACT_VALID",
     )
-    command("provenance 053", python_script("research/tools/validate_provenance.py", provenance[50]), "PROVENANCE_VALID")
+    command("provenance 053", python_script("research/tools/validate_provenance.py", provenance[49]), "PROVENANCE_VALID")
     command(
         "experiment VIZZ naturalistic quality audit 054",
         python_script("experiments/054-vizz-naturalistic-quality-audit/run_experiment.py"),
@@ -951,7 +944,7 @@ def main() -> None:
         python_script("experiments/054-vizz-naturalistic-quality-audit/run_contract_test.py"),
         "VIZZ_054_NATURALISTIC_QUALITY_AUDIT_CONTRACT_VALID",
     )
-    command("provenance 054", python_script("research/tools/validate_provenance.py", provenance[51]), "PROVENANCE_VALID")
+    command("provenance 054", python_script("research/tools/validate_provenance.py", provenance[50]), "PROVENANCE_VALID")
 
     command(
         "experiment FARMAKSIA representation renderer 056",
@@ -963,19 +956,19 @@ def main() -> None:
         python_script("experiments/056-farmaxia-representation-renderer/run_contract_test.py"),
         "FARMAXIA_056",
     )
-    command("provenance 056", python_script("research/tools/validate_provenance.py", provenance[52]), "PROVENANCE_VALID")
+    command("provenance 056", python_script("research/tools/validate_provenance.py", provenance[51]), "PROVENANCE_VALID")
     command(
         "contract test FARMAKSIA overlay runtime 057",
         python_script("experiments/057-farmaxia-overlay-runtime/run_contract_test.py"),
         "FARMAXIA_057_OVERLAY_CONTRACT_VALID",
     )
-    command("provenance 057", python_script("research/tools/validate_provenance.py", provenance[53]), "PROVENANCE_VALID")
+    command("provenance 057", python_script("research/tools/validate_provenance.py", provenance[52]), "PROVENANCE_VALID")
     command(
         "contract test FARMAKSIA GPU composition runtime 058",
         python_script("experiments/058-farmaxia-gpu-composition-runtime/run_contract_test.py"),
         "FARMAXIA_058_GPU_COMPOSITION_CONTRACT_VALID",
     )
-    command("provenance 058", python_script("research/tools/validate_provenance.py", provenance[54]), "PROVENANCE_VALID")
+    command("provenance 058", python_script("research/tools/validate_provenance.py", provenance[53]), "PROVENANCE_VALID")
     command(
         "contract test X-ANA-X tutorial transfer 059",
         python_script("experiments/059-xanax-tutorial-transfer-contract/run_contract_test.py"),
@@ -986,7 +979,7 @@ def main() -> None:
         python_script("experiments/059-xanax-tutorial-transfer-contract/run_kill_test.py"),
         "XANAX_059_KILL_TESTS_VALID",
     )
-    command("provenance 059", python_script("research/tools/validate_provenance.py", provenance[55]), "PROVENANCE_VALID")
+    command("provenance 059", python_script("research/tools/validate_provenance.py", provenance[54]), "PROVENANCE_VALID")
     command(
         "experiment CODE-INE experience compiler 060",
         python_script("experiments/060-codeine-experience-compiler/run_experiment.py"),
@@ -1002,7 +995,7 @@ def main() -> None:
         python_script("experiments/060-codeine-experience-compiler/run_kill_test.py"),
         "CODEINE_060_KILL_TESTS_VALID",
     )
-    command("provenance 060", python_script("research/tools/validate_provenance.py", provenance[56]), "PROVENANCE_VALID")
+    command("provenance 060", python_script("research/tools/validate_provenance.py", provenance[55]), "PROVENANCE_VALID")
     command(
         "experiment CODE-INE progressive commitment 061",
         python_script("experiments/061-codeine-progressive-commitment/run_experiment.py"),
@@ -1018,7 +1011,7 @@ def main() -> None:
         python_script("experiments/061-codeine-progressive-commitment/run_kill_test.py"),
         "CODEINE_061_KILL_TESTS_VALID",
     )
-    command("provenance 061", python_script("research/tools/validate_provenance.py", provenance[57]), "PROVENANCE_VALID")
+    command("provenance 061", python_script("research/tools/validate_provenance.py", provenance[56]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA RepresentationSpace renderer 062",
         python_script("experiments/062-farmaxia-representation-space-renderer/run_experiment.py"),
@@ -1034,7 +1027,7 @@ def main() -> None:
         python_script("experiments/062-farmaxia-representation-space-renderer/run_kill_test.py"),
         "FARMAXIA_062_KILL_TESTS_VALID",
     )
-    command("provenance 062", python_script("research/tools/validate_provenance.py", provenance[58]), "PROVENANCE_VALID")
+    command("provenance 062", python_script("research/tools/validate_provenance.py", provenance[57]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA semantic invariant contract 063",
         python_script("experiments/063-farmaxia-semantic-invariant-contract/run_experiment.py"),
@@ -1050,7 +1043,7 @@ def main() -> None:
         python_script("experiments/063-farmaxia-semantic-invariant-contract/run_kill_test.py"),
         "FARMAXIA_063_KILL_TESTS_VALID",
     )
-    command("provenance 063", python_script("research/tools/validate_provenance.py", provenance[59]), "PROVENANCE_VALID")
+    command("provenance 063", python_script("research/tools/validate_provenance.py", provenance[58]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA branch subset selection 064",
         python_script("experiments/064-farmaxia-branch-subset-selection/run_experiment.py"),
@@ -1066,7 +1059,7 @@ def main() -> None:
         python_script("experiments/064-farmaxia-branch-subset-selection/run_kill_test.py"),
         "FARMAXIA_064_KILL_TESTS_VALID",
     )
-    command("provenance 064", python_script("research/tools/validate_provenance.py", provenance[60]), "PROVENANCE_VALID")
+    command("provenance 064", python_script("research/tools/validate_provenance.py", provenance[59]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA cross-application evidence 065",
         python_script("experiments/065-farmaxia-cross-application-evidence/run_experiment.py"),
@@ -1082,7 +1075,7 @@ def main() -> None:
         python_script("experiments/065-farmaxia-cross-application-evidence/run_kill_test.py"),
         "FARMAXIA_065_KILL_TESTS_VALID",
     )
-    command("provenance 065", python_script("research/tools/validate_provenance.py", provenance[61]), "PROVENANCE_VALID")
+    command("provenance 065", python_script("research/tools/validate_provenance.py", provenance[60]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA temporal evidence replay 066",
         python_script("experiments/066-farmaxia-temporal-evidence-replay/run_experiment.py"),
@@ -1098,7 +1091,7 @@ def main() -> None:
         python_script("experiments/066-farmaxia-temporal-evidence-replay/run_kill_test.py"),
         "FARMAXIA_066_TEMPORAL_REPLAY_KILL_TESTS_VALID",
     )
-    command("provenance 066", python_script("research/tools/validate_provenance.py", provenance[62]), "PROVENANCE_VALID")
+    command("provenance 066", python_script("research/tools/validate_provenance.py", provenance[61]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA watermark late-event replay 067",
         python_script("experiments/067-farmaxia-watermark-late-event-replay/run_experiment.py"),
@@ -1114,7 +1107,7 @@ def main() -> None:
         python_script("experiments/067-farmaxia-watermark-late-event-replay/run_kill_test.py"),
         "FARMAXIA_067_WATERMARK_LATE_REPLAY_KILL_TESTS_VALID",
     )
-    command("provenance 067", python_script("research/tools/validate_provenance.py", provenance[63]), "PROVENANCE_VALID")
+    command("provenance 067", python_script("research/tools/validate_provenance.py", provenance[62]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA CloudEvents envelope 068",
         python_script("experiments/068-farmaxia-cloudevents-envelope/run_experiment.py"),
@@ -1130,7 +1123,7 @@ def main() -> None:
         python_script("experiments/068-farmaxia-cloudevents-envelope/run_kill_test.py"),
         "FARMAXIA_068_CLOUDEVENTS_ENVELOPE_KILL_TESTS_VALID",
     )
-    command("provenance 068", python_script("research/tools/validate_provenance.py", provenance[64]), "PROVENANCE_VALID")
+    command("provenance 068", python_script("research/tools/validate_provenance.py", provenance[63]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA CloudEvents cross-application adapter 069",
         python_script("experiments/069-farmaxia-cloudevents-cross-application-adapter/run_experiment.py"),
@@ -1146,7 +1139,7 @@ def main() -> None:
         python_script("experiments/069-farmaxia-cloudevents-cross-application-adapter/run_kill_test.py"),
         "FARMAXIA_069_CLOUDEVENTS_ADAPTER_KILL_TESTS_VALID",
     )
-    command("provenance 069", python_script("research/tools/validate_provenance.py", provenance[65]), "PROVENANCE_VALID")
+    command("provenance 069", python_script("research/tools/validate_provenance.py", provenance[64]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA OpenEMR-Nextcloud adapter 070",
         python_script("experiments/070-farmaxia-openemr-nextcloud-adapter/run_experiment.py"),
@@ -1162,7 +1155,7 @@ def main() -> None:
         python_script("experiments/070-farmaxia-openemr-nextcloud-adapter/run_kill_test.py"),
         "FARMAXIA_070_DOCUMENTAL_ADAPTER_KILL_TESTS_VALID",
     )
-    command("provenance 070", python_script("research/tools/validate_provenance.py", provenance[66]), "PROVENANCE_VALID")
+    command("provenance 070", python_script("research/tools/validate_provenance.py", provenance[65]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA CODE-INE patch adapter 071",
         python_script("experiments/071-farmaxia-codeine-patch-adapter/run_experiment.py"),
@@ -1178,7 +1171,7 @@ def main() -> None:
         python_script("experiments/071-farmaxia-codeine-patch-adapter/run_kill_test.py"),
         "FARMAXIA_071_CODEINE_ADAPTER_KILL_TESTS_VALID",
     )
-    command("provenance 071", python_script("research/tools/validate_provenance.py", provenance[67]), "PROVENANCE_VALID")
+    command("provenance 071", python_script("research/tools/validate_provenance.py", provenance[66]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA media timeline adapter 072",
         python_script("experiments/072-farmaxia-media-timeline-adapter/run_experiment.py"),
@@ -1194,7 +1187,7 @@ def main() -> None:
         python_script("experiments/072-farmaxia-media-timeline-adapter/run_kill_test.py"),
         "FARMAXIA_072_MEDIA_TIMELINE_ADAPTER_KILL_TESTS_VALID",
     )
-    command("provenance 072", python_script("research/tools/validate_provenance.py", provenance[68]), "PROVENANCE_VALID")
+    command("provenance 072", python_script("research/tools/validate_provenance.py", provenance[67]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA media representation bridge 073",
         python_script("experiments/073-farmaxia-media-representation-bridge/run_experiment.py"),
@@ -1210,7 +1203,7 @@ def main() -> None:
         python_script("experiments/073-farmaxia-media-representation-bridge/run_kill_test.py"),
         "FARMAXIA_073_MEDIA_REPRESENTATION_BRIDGE_KILL_TESTS_VALID",
     )
-    command("provenance 073", python_script("research/tools/validate_provenance.py", provenance[69]), "PROVENANCE_VALID")
+    command("provenance 073", python_script("research/tools/validate_provenance.py", provenance[68]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA media sidecar composition 074",
         python_script("experiments/074-farmaxia-media-sidecar-composition/run_experiment.py"),
@@ -1226,7 +1219,7 @@ def main() -> None:
         python_script("experiments/074-farmaxia-media-sidecar-composition/run_kill_test.py"),
         "FARMAXIA_074_MEDIA_SIDECAR_COMPOSITION_KILL_TESTS_VALID",
     )
-    command("provenance 074", python_script("research/tools/validate_provenance.py", provenance[70]), "PROVENANCE_VALID")
+    command("provenance 074", python_script("research/tools/validate_provenance.py", provenance[69]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA media sidecar conflict audit 075",
         python_script("experiments/075-farmaxia-media-sidecar-conflict-audit/run_experiment.py"),
@@ -1242,7 +1235,7 @@ def main() -> None:
         python_script("experiments/075-farmaxia-media-sidecar-conflict-audit/run_kill_test.py"),
         "FARMAXIA_075_MEDIA_SIDECAR_CONFLICT_KILL_TESTS_VALID",
     )
-    command("provenance 075", python_script("research/tools/validate_provenance.py", provenance[71]), "PROVENANCE_VALID")
+    command("provenance 075", python_script("research/tools/validate_provenance.py", provenance[70]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA pywinauto UIA adapter 076",
         python_script("experiments/076-farmaxia-pywinauto-uia-adapter/run_experiment.py", "--inspect-controls"),
@@ -1258,7 +1251,7 @@ def main() -> None:
         python_script("experiments/076-farmaxia-pywinauto-uia-adapter/run_kill_test.py"),
         "FARMAXIA_076_PYWINAUTO_UIA_KILL_TESTS_VALID",
     )
-    command("provenance 076", python_script("research/tools/validate_provenance.py", provenance[72]), "PROVENANCE_VALID")
+    command("provenance 076", python_script("research/tools/validate_provenance.py", provenance[71]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA Excel Blender capability inventory 077",
         python_script("experiments/077-farmaxia-excel-blender-capability-inventory/run_experiment.py"),
@@ -1274,7 +1267,7 @@ def main() -> None:
         python_script("experiments/077-farmaxia-excel-blender-capability-inventory/run_kill_test.py"),
         "FARMAXIA_077_EXCEL_BLENDER_CAPABILITY_KILL_TESTS_VALID",
     )
-    command("provenance 077", python_script("research/tools/validate_provenance.py", provenance[73]), "PROVENANCE_VALID")
+    command("provenance 077", python_script("research/tools/validate_provenance.py", provenance[72]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA native Excel Blender transitions 078",
         python_script("experiments/078-farmaxia-native-transition-probe/run_experiment.py"),
@@ -1290,7 +1283,7 @@ def main() -> None:
         python_script("experiments/078-farmaxia-native-transition-probe/run_kill_test.py"),
         "FARMAXIA_078_NATIVE_TRANSITION_KILL_TESTS_VALID",
     )
-    command("provenance 078", python_script("research/tools/validate_provenance.py", provenance[74]), "PROVENANCE_VALID")
+    command("provenance 078", python_script("research/tools/validate_provenance.py", provenance[73]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA consented input semantic bridge 079",
         python_script("experiments/079-farmaxia-consented-input-semantic-bridge/run_experiment.py", "--duration", "1.0", "--sample-hz", "5"),
@@ -1306,7 +1299,7 @@ def main() -> None:
         python_script("experiments/079-farmaxia-consented-input-semantic-bridge/run_kill_test.py"),
         "FARMAXIA_079_CONSENTED_INPUT_KILL_TESTS_VALID",
     )
-    command("provenance 079", python_script("research/tools/validate_provenance.py", provenance[75]), "PROVENANCE_VALID")
+    command("provenance 079", python_script("research/tools/validate_provenance.py", provenance[74]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA input native delta correlation 080",
         python_script("experiments/080-farmaxia-input-native-delta-correlation/run_experiment.py", "--mode", "scratch"),
@@ -1322,7 +1315,7 @@ def main() -> None:
         python_script("experiments/080-farmaxia-input-native-delta-correlation/run_kill_test.py"),
         "FARMAXIA_080_INPUT_NATIVE_DELTA_KILL_TESTS_VALID",
     )
-    command("provenance 080", python_script("research/tools/validate_provenance.py", provenance[76]), "PROVENANCE_VALID")
+    command("provenance 080", python_script("research/tools/validate_provenance.py", provenance[75]), "PROVENANCE_VALID")
     command(
         "contract test FARMAKSIA window proxy sandbox 081",
         python_script("experiments/081-farmaxia-window-proxy-sandbox/run_contract_test.py"),
@@ -1333,13 +1326,13 @@ def main() -> None:
         python_script("experiments/081-farmaxia-window-proxy-sandbox/run_kill_test.py"),
         "FARMAXIA_081_WINDOW_PROXY_KILL_TESTS_VALID",
     )
-    command("provenance 081", python_script("research/tools/validate_provenance.py", provenance[77]), "PROVENANCE_VALID")
+    command("provenance 081", python_script("research/tools/validate_provenance.py", provenance[76]), "PROVENANCE_VALID")
     command(
         "contract test FARMAKSIA selected window preview 082",
         python_script("experiments/082-farmaxia-selected-window-preview/run_contract_test.py"),
         "FARMAXIA_082_SELECTED_WINDOW_PREVIEW_CONTRACT_VALID",
     )
-    command("provenance 082", python_script("research/tools/validate_provenance.py", provenance[78]), "PROVENANCE_VALID")
+    command("provenance 082", python_script("research/tools/validate_provenance.py", provenance[77]), "PROVENANCE_VALID")
     command(
         "experiment FARMAKSIA lighting surface contract 083",
         python_script("experiments/083-farmaxia-lighting-surface-contract/run_experiment.py"),
@@ -1355,7 +1348,7 @@ def main() -> None:
         python_script("experiments/083-farmaxia-lighting-surface-contract/run_kill_test.py"),
         "FARMAXIA_083_LIGHTING_SURFACE_KILL_TESTS_VALID",
     )
-    command("provenance 083", python_script("research/tools/validate_provenance.py", provenance[79]), "PROVENANCE_VALID")
+    command("provenance 083", python_script("research/tools/validate_provenance.py", provenance[78]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

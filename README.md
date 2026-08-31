@@ -7,6 +7,9 @@ experimentos, kill tests, procedencia y decisiones de adopción.
 Los nombres CODE-INE, X-ANA-X, KETAMINE y VIZZ son hipótesis de trabajo, no
 compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 
+La política de separación entre este archivo público y los productos privados
+está documentada en [LICENSE_POLICY.md](LICENSE_POLICY.md).
+
 ## Marco conceptual: una capa generativa de representación
 
 FARMAXIA no está construyendo solamente una UI, un hub ni un mouse ocular.
@@ -144,7 +147,6 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Oráculo de objetivo CODE-INE](experiments/027-codeine-objective-oracle/results.md)
 - [Oracle ejecutable y mutación CODE-INE](experiments/029-codeine-executable-oracle/results.md)
 - [Compuerta de calidad gaze-contingent VIZZ](experiments/028-vizz-gaze-quality-gate/results.md)
-- [Adaptador WebGazer local opt-in VIZZ](experiments/030-vizz-webgazer-opt-in/results.md)
 - [Contrato de flujo VIZZ visible/headless](experiments/032-vizz-python-flow-split/README.md)
 - [Runtime Python CUDA y modificador de contenido VIZZ](experiments/033-vizz-python-headless-runtime/README.md)
 - [Auditor offline de calidad naturalista VIZZ](experiments/054-vizz-naturalistic-quality-audit/README.md)
@@ -215,8 +217,8 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Auditoría de completitud de la fundación](research/decisions/040-laboratory-completion-audit.md)
 - [Literatura de calidad de mirada y herramientas VIZZ](research/literature/014-vizz-gaze-quality-tools.md)
 - [Decisión de compuerta gaze-contingent VIZZ](research/decisions/038-vizz-gaze-quality-gate.md)
-- [Literatura del runtime WebGazer VIZZ](research/literature/016-vizz-webgazer-runtime.md)
-- [Decisión de adopción experimental WebGazer VIZZ](research/decisions/041-vizz-webgazer-opt-in.md)
+- [Registro histórico del runtime WebGazer VIZZ — retirado](research/literature/016-vizz-webgazer-runtime.md)
+- [Decisión histórica WebGazer VIZZ — retirada del estado activo](research/decisions/041-vizz-webgazer-opt-in.md)
 - [Modelo óptico reducido VIZZ: pantalla, luz, foco y retina](experiments/044-vizz-reduced-eye-camera/README.md)
 - [Cámara óptica VIZZ 045: objeto, foco y sensor](experiments/045-vizz-single-eye-camera/README.md)
 - [Investigación de calibración y herramientas open source VIZZ](research/literature/017-vizz-calibration-open-source.md)
