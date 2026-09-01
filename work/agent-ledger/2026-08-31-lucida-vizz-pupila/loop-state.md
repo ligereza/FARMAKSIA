@@ -21,6 +21,24 @@ completed:
     evidence: Carpetas, imports, documentación y nombres de paquete observables en los repositorios.
   - item: Se implementó el slice 090 derivado de ZIGO con adaptadores separados VIZZ/PUPILA.
     evidence: Cinco pruebas offline pasan; demo produce dos estados VIZZ y una propuesta PUPILA; procedencia 090 valida.
+  - item: VJ quedó separado en una rama con identidad propia.
+    evidence: C:\IA\VJ en codex/vj-interface-layer, commits 44a1e18 y 6e63ae4, 11 tests, árbol limpio y main intacto.
+  - item: XIO quedó separado en una rama con identidad propia después de que el agente no produjera un cambio verificable.
+    evidence: C:\IA\XIO en codex/xio-interface-layer, commit cada5d1, package LIMEN renombrado a XIO_LAYER, 10 unittest pasan; los cambios pendientes fuera del paquete permanecen sin stage.
+  - item: XIO agregó transporte offline y una regla técnica de idioma ASCII.
+    evidence: C:\IA\XIO en codex/xio-transport, commits bbc7534 y 151670d; 19 unittest pasan y XIO_LAYER/tests/test_ascii_contract.py verifica los archivos técnicos.
+  - item: VJ consolidó una superficie LUCIDA y agregó una barrera ASCII verificable.
+    evidence: C:\IA\VJ en rama LUCIDA, commit e4f835b; lucida/CONTRIBUTING.md, lucida/ascii_guard.py y tests/lucida/test_ascii_guard.py presentes; 14 tests focalizados pasan.
+  - item: XIO entregó sesiones multi-peer y el contrato canónico de eventos de aplicaciones.
+    evidence: C:\IA\XIO en codex/xio-transport, commits b8f8ba0 y 7a9dad3; handshake, fan-out, deduplicación, OSC/Art-Net, replay JSONL y provenance; 33 unittest pasan y la rama está publicada en origin.
+  - item: MOSAIK entregó la frontera OSC inyectable y el replay auditable de LUCIDA.
+    evidence: C:\IA\VJ en LUCIDA, commits e43422d, 7daa9fb y 206b844; 34 pytest pasan y la rama está publicada en origin/LUCIDA.
+  - item: Se creó y publicó el repositorio LUCIDA con sus tres ramas funcionales.
+    evidence: C:\IA\LUCIDA: ADOBE=da90459, RESOLUME=0864be1, MULTI=fb75553; las tres ramas existen en origin y main permanece en eb3e922.
+  - item: Se aceptó la migración Adobe aislada derivada del toolkit de SVG.
+    evidence: C:\IA\LUCIDA\adobe; 538 archivos en ADOBE, ocho carpetas CHEMSEX, 361 incluidos con hashes verificados, sin node_modules/caches/credenciales; verify, smoke, companion check y 11 tests pasan.
+  - item: Se corrigió una dependencia omitida al integrar MOSAIK en RESOLUME.
+    evidence: La primera prueba en LUCIDA falló por falta de adapters.vj; se añadió únicamente ese contrato/adapter, y la suite posterior pasó 23 tests con control ASCII limpio.
 
 current_state:
   files_or_resources:
@@ -28,15 +46,16 @@ current_state:
     - C:\IA\XIO
     - C:\IA\VJ
     - C:\IA\svg\agent-toolkit\generic-interface-layer
-  tests_and_checks: 090 pasa py_compile, cinco contratos offline y procedencia. La suite completa se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
+    - C:\IA\LUCIDA\ADOBE, RESOLUME y MULTI
+  tests_and_checks: 090 pasa py_compile, seis contratos offline y procedencia. XIO pasa 33 unittest; MOSAIK/VJ pasa 34 pytest; LUCIDA/RESOLUME pasa 23 pytest; LUCIDA/MULTI pasa 33 unittest; LUCIDA/ADOBE pasa verify, smoke, companion check y 11 tests. La suite completa de FARMAKSIA se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
   assumptions: LUCIDA es el proyecto base conceptual; XIO y VJ deben conservar nombres propios de su eje en sus ramas derivadas; ZIGO es el origen histórico, no el nombre de los productos finales.
   open_questions:
     - Nombre definitivo de las ramas derivadas de XIO y VJ.
     - Qué partes mínimas de generic-interface-layer se incorporan a FARMAXIA sin acoplarlo a SVG.
-  blockers: Suite global bloqueada en provenance 018; no tocar ese archivo porque contiene cambios previos del usuario. XIO tiene cambios de usuario que no deben sobrescribirse.
+  blockers: Suite global bloqueada en provenance 018; no tocar ese archivo porque contiene cambios previos del usuario. XIO conserva cambios de usuario sin stage. La publicación pesada de ADOBE puede tardar por sus 513 MiB de iconos visuales, pero la rama ya quedó confirmada en origin/ADOBE.
   research_refs: Extracción ZIGO en SVG y contratos actuales de XIO/VJ.
-  delegation_refs: XIO y VJ con límites de no-merge y no-main.
+  delegation_refs: XIO y VJ recibieron tareas ejecutables con commits, suites y límites de no-main; tras detectar turnos inactivos se reactivaron con entregables concretos. SVG finalizó la extracción y la verificación de ADOBE se hizo en el repositorio destino.
   last_critique: La orden anterior de renombrar VJ de forma aislada era técnicamente incompleta: el nombre LIMEN existe en dos repositorios y no debía cambiarse sin contrato común. La acción de menor riesgo es separar primero los ejes y renombrar sólo identidades propias en ramas nuevas.
-  estimated_remaining_effort: Medio; primer hito verificable en una ronda de coordinación y una auditoría de integración.
-  next_action: Esperar la respuesta de XIO/VJ y auditar sus ramas nuevas; luego decidir si el siguiente hito de FARMAKSIA es un transporte loopback observador para 090.
+  estimated_remaining_effort: Medio; separación, publicación e integración mínima ya verificadas. Resta demostrar interoperabilidad entre XIO/MULTI y MOSAIK/RESOLUME mediante un fixture común.
+  next_action: Dirigir la siguiente ronda a un contrato de compatibilidad cross-branch: XIO debe publicar un bridge de ApplicationEvent hacia LUCIDA/MULTI y MOSAIK debe consumir un fixture equivalente en RESOLUME, sin sockets ni Resolume real. Después integrar sólo ese contrato y activar el primer slice verificable de VIZZ/PUPILA sobre eventos reales/replayables.
   next_checkpoint_trigger: Después de que ambos agentes respondan o tras la primera revisión de 5 minutos.
