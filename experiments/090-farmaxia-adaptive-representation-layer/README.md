@@ -58,6 +58,11 @@ acotada que consumiría una superficie transparente, y el replay la expone como
 `finalPupilaView`. No es todavía un transporte de red ni un ejecutor de
 acciones.
 
+El replay también entrega `interactionMetrics`: conteos por estado y tipo de
+señal, más la última política VIZZ observable por participante. Incluye sólo
+metadata acotada de `pointer`, `keyboard`, `focus` y otras señales aceptadas;
+nunca conserva texto, coordenadas crudas ni payloads.
+
 `pupila_view.py` proyecta el estado compartido a una superficie compacta para
 la futura capa transparente. Ordena participantes y propuestas, limita lo que
 se muestra y excluye activity scores, hashes internos, payloads y acciones.
@@ -113,7 +118,7 @@ XIO para probar la frontera real; no abre red.
 
 ## Siguiente hito
 
-Conectar el diff de PUPILA al replay de señales de interacción `pointer`,
-`keyboard` y `focus`, primero en modo observador. La ventana transparente y el
+Conectar `interactionMetrics` y el diff de PUPILA a un fixture compartido con
+LUCIDA/MULTI, primero en modo observador. La ventana transparente y el
 transporte real quedan fuera hasta demostrar autenticación, no bloqueo,
 cancelación y reversibilidad.

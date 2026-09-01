@@ -109,3 +109,13 @@ current_state:
   estimated_remaining_effort: Medio-bajo para el primer vertical offline; alto para transporte real, overlays y outcomes de aprendizaje. El siguiente avance debe demostrar una ruta de señales de interacción observable y reversible, no más contratos abstractos.
   next_action: Dejar a XIO y MOSAIK dirigiendo sus objetivos amplios y auditarlos por commits y suites, no por duración ni mensajes. Integrar en la siguiente revisión el route_plan de XIO y el diff de MOSAIK en las superficies LUCIDA correspondientes, sin copiar assets. En FARMAXIA, extender el replay con pointer/keyboard/focus y medir la política VIZZ/PUPILA por sesiones; dejar el transporte real fuera hasta fijar autenticación.
   next_checkpoint_trigger: Próxima revisión después de dos commits verificables de agentes o de la siguiente integración de 090.
+
+latest_iteration_2026_09_01:
+  selected_action: continue_with_functional_slice
+  delegation:
+    - XIO continues from dc374bf with a replayable local event source and one LUCIDA/MULTI integration fixture; acceptance is full suite, commit and push.
+    - MOSAIK continues from 94bcc81 with a host-neutral overlay consumer smoke path for JSON, diff and revision cursor; acceptance is full suite, commit and push.
+  own_change: Experiment 090 replay now emits bounded interactionMetrics for accepted, blocked and duplicate signals plus latest metadata-only VIZZ policy per participant.
+  evidence: 090 contract passes 19 tests, demo passes, and XIO cross-branch check passes.
+  prediction: The next useful proof is a replay boundary crossing between XIO and LUCIDA, not another standalone schema. Qualitative confidence medium-high.
+  next_action: Wait for agent completion or attention, then verify commits and suites once; integrate only the cross-repository fixture that passes.

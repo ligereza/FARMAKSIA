@@ -297,6 +297,58 @@ def test_canonical_replay_is_deterministic_and_keeps_final_multi_state() -> None
     assert "payload" not in json.dumps(results, ensure_ascii=True)
 
 
+def test_canonical_replay_reports_bounded_interaction_metrics() -> None:
+    replay = CanonicalEventReplay()
+    result = replay.run(
+        [
+            canonical_event(
+                "canonical-event-metrics-001",
+                event_type="focus.changed",
+                channel="focus",
+                payload={"focused": True},
+            ),
+            canonical_event(
+                "canonical-event-metrics-002",
+                event_type="pointer.moved",
+                channel="pointer",
+                payload={"x": 120, "y": 80, "secret": "never-persist"},
+            ),
+            canonical_event(
+                "canonical-event-metrics-003",
+                event_type="keyboard.input",
+                channel="keyboard",
+                payload={"count": 2, "shortcut": "CTRL+K", "text": "secret"},
+            ),
+            canonical_event(
+                "canonical-event-metrics-003",
+                event_type="keyboard.input",
+                channel="keyboard",
+                payload={"count": 2, "shortcut": "CTRL+K", "text": "secret"},
+            ),
+        ],
+        context(),
+        consent=True,
+    )
+    metrics = result["interactionMetrics"]
+    assert metrics["statusCounts"] == {"accepted": 3, "duplicate": 1}
+    assert metrics["kindStatusCounts"]["focus"] == {"accepted": 1}
+    assert metrics["kindStatusCounts"]["pointer"] == {"accepted": 1}
+    assert metrics["kindStatusCounts"]["keyboard"] == {"accepted": 1, "duplicate": 1}
+    assert metrics["participants"] == [
+        {
+            "participantRef": "user-a",
+            "policy": "support",
+            "focusState": True,
+            "activityScore": 0.23125,
+            "sampleCount": 3,
+            "signalCoverage": ["focus", "keyboard", "pointer"],
+        }
+    ]
+    serialized = json.dumps(metrics, ensure_ascii=True)
+    assert "secret" not in serialized
+    assert "never-persist" not in serialized
+
+
 def test_pupila_view_is_bounded_and_redacts_internal_state() -> None:
     raw_state = {
         "schemaVersion": 1,

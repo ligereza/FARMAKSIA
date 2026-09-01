@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from datetime import datetime, timezone
 import re
 from typing import Any, Mapping
@@ -267,10 +268,54 @@ class CanonicalEventReplay:
             "blockedCount": counts["blocked"],
             "duplicateCount": counts["duplicate"],
             "results": results,
+            "interactionMetrics": _interaction_metrics(results),
             "finalVizzState": final["vizzState"] if final else None,
             "finalPupilaState": final["pupilaState"] if final else None,
             "finalPupilaView": final["pupilaView"] if final else None,
         }
+
+
+def _interaction_metrics(results: list[dict[str, Any]]) -> dict[str, Any]:
+    """Summarize replayed interaction metadata without retaining raw content."""
+
+    status_counts = Counter()
+    kind_status_counts: dict[str, Counter[str]] = {}
+    latest_by_participant: dict[str, dict[str, Any]] = {}
+    for result in results:
+        status = result.get("status")
+        if not isinstance(status, str):
+            continue
+        status_counts[status] += 1
+
+        signal = result.get("signal")
+        kind = signal.get("kind") if isinstance(signal, Mapping) else None
+        if not isinstance(kind, str) or not kind:
+            lineage = result.get("lineage")
+            kind = lineage.get("channel") if isinstance(lineage, Mapping) else None
+        kind = kind if isinstance(kind, str) and kind else "unknown"
+        kind_status_counts.setdefault(kind, Counter())[status] += 1
+
+        state = result.get("vizzState")
+        if isinstance(state, Mapping):
+            participant = state.get("participantRef")
+            if isinstance(participant, str) and participant:
+                latest_by_participant[participant] = {
+                    "participantRef": participant,
+                    "policy": state.get("policy"),
+                    "focusState": state.get("focusState") is True,
+                    "activityScore": state.get("activityScore"),
+                    "sampleCount": state.get("sampleCount"),
+                    "signalCoverage": list(state.get("signalCoverage", [])),
+                }
+
+    return {
+        "statusCounts": dict(sorted(status_counts.items())),
+        "kindStatusCounts": {
+            kind: dict(sorted(counts.items()))
+            for kind, counts in sorted(kind_status_counts.items())
+        },
+        "participants": [latest_by_participant[key] for key in sorted(latest_by_participant)],
+    }
 
 
 __all__ = ["CanonicalEventBridge", "CanonicalEventError", "CanonicalEventReplay"]
