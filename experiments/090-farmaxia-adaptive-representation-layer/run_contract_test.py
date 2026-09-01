@@ -13,7 +13,13 @@ sys.path.insert(0, str(HERE))
 from contracts import append_audit_event, normalize_signal, verify_audit_chain  # noqa: E402
 from canonical_event_bridge import CanonicalEventBridge, CanonicalEventError, CanonicalEventReplay  # noqa: E402
 from pupila_adapter import PupilaAdapter  # noqa: E402
-from pupila_view import MAX_PARTICIPANTS, MAX_PROPOSALS, project_pupila_view  # noqa: E402
+from pupila_view import (  # noqa: E402
+    MAX_DIFF_CHANGES,
+    MAX_PARTICIPANTS,
+    MAX_PROPOSALS,
+    diff_pupila_view,
+    project_pupila_view,
+)
 from vizz_adapter import VizzAdapter  # noqa: E402
 
 
@@ -411,6 +417,91 @@ def test_pupila_view_limits_and_empty_state_are_explicit() -> None:
         raise AssertionError("negative view limit was accepted")
 
 
+def test_pupila_view_diff_is_deterministic_bounded_and_redacted() -> None:
+    previous = project_pupila_view(
+        {
+            "sessionId": "session-diff",
+            "roomId": "room-diff",
+            "surfaceId": "surface-diff",
+            "participants": [
+                {"participantRef": "user-a", "policy": "quiet", "focusState": True},
+            ],
+            "proposals": [],
+        }
+    )
+    current = project_pupila_view(
+        {
+            "sessionId": "session-diff",
+            "roomId": "room-diff",
+            "surfaceId": "surface-diff",
+            "participants": [
+                {"participantRef": "user-a", "policy": "quiet", "focusState": True},
+                {"participantRef": "user-b", "policy": "support", "focusState": False},
+            ],
+            "proposals": [
+                {
+                    "proposalId": "proposal-diff",
+                    "kind": "co-presence",
+                    "reason": "A shared surface is available.",
+                    "state": "proposed",
+                    "requiresExplicitAcceptance": True,
+                    "reversible": True,
+                    "action": "must-not-leak",
+                }
+            ],
+        }
+    )
+
+    first = diff_pupila_view(previous, current)
+    second = diff_pupila_view(previous, current)
+    serialized = json.dumps(first, sort_keys=True)
+
+    assert first == second
+    assert [item["field"] for item in first] == [
+        "participantCount",
+        "shownParticipantCount",
+        "proposalCount",
+        "shownProposalCount",
+        "participants",
+        "proposals",
+        "nextAttention",
+    ]
+    assert len(first) <= MAX_DIFF_CHANGES
+    assert "must-not-leak" not in serialized
+    assert '"action":' not in serialized
+    assert diff_pupila_view(previous, previous) == []
+
+
+def test_pupila_view_diff_rejects_unsafe_or_invalid_views() -> None:
+    view = project_pupila_view(
+        {
+            "sessionId": "session-invalid",
+            "roomId": "room-invalid",
+            "surfaceId": "surface-invalid",
+            "participants": [],
+            "proposals": [],
+        }
+    )
+
+    unsafe = dict(view)
+    unsafe["rawPayload"] = {"secret": "must-not-enter"}
+    try:
+        diff_pupila_view(view, unsafe)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("unsafe PUPILA view was accepted")
+
+    invalid_safety = dict(view)
+    invalid_safety["safety"] = {**view["safety"], "actionsIncluded": True}
+    try:
+        diff_pupila_view(view, invalid_safety)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("unsafe PUPILA safety was accepted")
+
+
 if __name__ == "__main__":
     tests = [
         test_consent_blocks_signal_and_drops_content,
@@ -430,6 +521,8 @@ if __name__ == "__main__":
         test_pupila_view_is_bounded_and_redacts_internal_state,
         test_pupila_view_is_deterministic_after_participant_reordering,
         test_pupila_view_limits_and_empty_state_are_explicit,
+        test_pupila_view_diff_is_deterministic_bounded_and_redacted,
+        test_pupila_view_diff_rejects_unsafe_or_invalid_views,
     ]
     for test in tests:
         test()

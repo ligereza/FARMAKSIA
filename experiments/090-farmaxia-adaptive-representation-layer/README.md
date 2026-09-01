@@ -62,6 +62,9 @@ acciones.
 la futura capa transparente. Ordena participantes y propuestas, limita lo que
 se muestra y excluye activity scores, hashes internos, payloads y acciones.
 El estado vacio produce una atencion `waiting`, no una accion automatica.
+`diff_pupila_view` compara dos proyecciones ya redactadas y devuelve sólo los
+cambios seguros, con orden y limite deterministas; no acepta estados internos
+ni añade un canal de acciones.
 
 ## Qué se adopta de ZIGO
 
@@ -105,11 +108,12 @@ XIO para probar la frontera real; no abre red.
 - un evento canónico duplicado no aumenta muestras;
 - un evento canónico sin consentimiento no se registra;
 - una sesion distinta no hereda participantes de otra sesion;
+- el diff de PUPILA no acepta payloads ni altera la frontera read-only;
 - la capa no bloquea ni captura el input de la aplicación.
 
 ## Siguiente hito
 
-Conectar `pupila_view.py` con el replay de señales de interacción `pointer`,
+Conectar el diff de PUPILA al replay de señales de interacción `pointer`,
 `keyboard` y `focus`, primero en modo observador. La ventana transparente y el
 transporte real quedan fuera hasta demostrar autenticación, no bloqueo,
 cancelación y reversibilidad.
