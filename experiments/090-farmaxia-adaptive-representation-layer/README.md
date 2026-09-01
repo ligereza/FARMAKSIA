@@ -53,8 +53,15 @@ sesiones con el mismo `room_id` no se mezclan.
 
 `CanonicalEventReplay` permite reproducir una secuencia de eventos en memoria
 y devuelve conteos de aceptados, bloqueados y duplicados junto con el estado
-final VIZZ/PUPILA. No es todavía un transporte de red ni un ejecutor de
+final VIZZ/PUPILA. Cada resultado también incluye `pupilaView`, la proyección
+acotada que consumiría una superficie transparente, y el replay la expone como
+`finalPupilaView`. No es todavía un transporte de red ni un ejecutor de
 acciones.
+
+`pupila_view.py` proyecta el estado compartido a una superficie compacta para
+la futura capa transparente. Ordena participantes y propuestas, limita lo que
+se muestra y excluye activity scores, hashes internos, payloads y acciones.
+El estado vacio produce una atencion `waiting`, no una accion automatica.
 
 ## Qué se adopta de ZIGO
 
@@ -102,7 +109,7 @@ XIO para probar la frontera real; no abre red.
 
 ## Siguiente hito
 
-Añadir un replay de señales de interacción `pointer`, `keyboard` y `focus`
-alimentado por el evento canónico, primero en modo observador. La ventana
-transparente y el transporte real quedan fuera hasta demostrar autenticación,
-no bloqueo, cancelación y reversibilidad.
+Conectar `pupila_view.py` con el replay de señales de interacción `pointer`,
+`keyboard` y `focus`, primero en modo observador. La ventana transparente y el
+transporte real quedan fuera hasta demostrar autenticación, no bloqueo,
+cancelación y reversibilidad.

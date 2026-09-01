@@ -8,6 +8,7 @@ from typing import Any, Mapping
 
 from contracts import normalize_context, normalize_signal
 from pupila_adapter import PupilaAdapter
+from pupila_view import project_pupila_view
 from vizz_adapter import VizzAdapter
 
 
@@ -196,6 +197,7 @@ class CanonicalEventBridge:
                 "eventId": event["event_id"],
                 "vizzState": vizz_state,
                 "pupilaState": pupila_state,
+                "pupilaView": project_pupila_view(pupila_state),
                 "lineage": _lineage(event),
             }
 
@@ -223,6 +225,7 @@ class CanonicalEventBridge:
             "signal": signal,
             "vizzState": vizz_state,
             "pupilaState": pupila_state,
+            "pupilaView": project_pupila_view(pupila_state),
             "lineage": _lineage(event),
         }
 
@@ -266,6 +269,7 @@ class CanonicalEventReplay:
             "results": results,
             "finalVizzState": final["vizzState"] if final else None,
             "finalPupilaState": final["pupilaState"] if final else None,
+            "finalPupilaView": final["pupilaView"] if final else None,
         }
 
 

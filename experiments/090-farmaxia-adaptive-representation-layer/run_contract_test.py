@@ -13,6 +13,7 @@ sys.path.insert(0, str(HERE))
 from contracts import append_audit_event, normalize_signal, verify_audit_chain  # noqa: E402
 from canonical_event_bridge import CanonicalEventBridge, CanonicalEventError, CanonicalEventReplay  # noqa: E402
 from pupila_adapter import PupilaAdapter  # noqa: E402
+from pupila_view import MAX_PARTICIPANTS, MAX_PROPOSALS, project_pupila_view  # noqa: E402
 from vizz_adapter import VizzAdapter  # noqa: E402
 
 
@@ -164,7 +165,10 @@ def test_canonical_connectivity_event_is_metadata_only() -> None:
     assert result["signal"]["kind"] == "presence"
     assert result["vizzState"]["signalCoverage"] == ["presence"]
     assert result["vizzState"]["activityScore"] == 0.0
+    assert result["pupilaView"]["contractType"] == "PupilaOverlayView"
+    assert result["pupilaView"]["nextAttention"]["kind"] == "waiting"
     assert "secret" not in json.dumps(result, ensure_ascii=True)
+    assert '"payload":' not in json.dumps(result, ensure_ascii=True)
     assert result["lineage"]["sourceEventId"] == "canonical-event-001"
 
 
@@ -198,6 +202,8 @@ def test_unconsented_canonical_event_is_blocked_before_registration() -> None:
     assert result["signal"]["value"] == {}
     assert result["vizzState"]["sampleCount"] == 0
     assert result["pupilaState"]["participantCount"] == 0
+    assert result["pupilaView"]["participantCount"] == 0
+    assert result["pupilaView"]["nextAttention"]["kind"] == "waiting"
     assert "blocked" in result["signal"]["status"]
     assert "secret" not in json.dumps(result, ensure_ascii=True)
 
@@ -211,6 +217,7 @@ def test_duplicate_external_event_is_idempotent() -> None:
     assert second["status"] == "duplicate"
     assert first["vizzState"]["sampleCount"] == 1
     assert second["vizzState"]["sampleCount"] == 1
+    assert first["pupilaView"] == second["pupilaView"]
 
 
 def test_two_canonical_peers_produce_a_pupila_proposal() -> None:
@@ -279,7 +286,129 @@ def test_canonical_replay_is_deterministic_and_keeps_final_multi_state() -> None
     assert results["blockedCount"] == 0
     assert results["finalPupilaState"]["participantCount"] == 2
     assert results["finalPupilaState"]["proposals"]
+    assert results["finalPupilaView"]["contractType"] == "PupilaOverlayView"
+    assert results["finalPupilaView"]["nextAttention"]["kind"] == "proposal"
     assert "payload" not in json.dumps(results, ensure_ascii=True)
+
+
+def test_pupila_view_is_bounded_and_redacts_internal_state() -> None:
+    raw_state = {
+        "schemaVersion": 1,
+        "sessionId": "session-view",
+        "roomId": "room-view",
+        "surfaceId": "surface-view",
+        "participantCount": 2,
+        "participants": [
+            {
+                "participantRef": "user-b",
+                "policy": "support",
+                "focusState": True,
+                "activityScore": 0.7,
+                "stateHash": "sha256:private-state",
+            },
+            {
+                "participantRef": "user-a",
+                "policy": "guide",
+                "focusState": False,
+                "activityScore": 0.1,
+                "stateHash": "sha256:other-state",
+            },
+        ],
+        "proposals": [
+            {
+                "proposalId": "proposal-view",
+                "kind": "peer-bridge",
+                "reason": "One participant can provide a shared next step.",
+                "state": "proposed",
+                "requiresExplicitAcceptance": True,
+                "reversible": True,
+                "action": "must-not-leak",
+            }
+        ],
+    }
+
+    view = project_pupila_view(raw_state)
+    serialized = json.dumps(view, sort_keys=True)
+
+    assert view["contractType"] == "PupilaOverlayView"
+    assert view["participants"][0]["participantRef"] == "user-a"
+    assert view["nextAttention"]["proposalId"] == "proposal-view"
+    assert view["safety"]["proposalOnly"] is True
+    assert "activityScore" not in serialized
+    assert "stateHash" not in serialized
+    assert "must-not-leak" not in serialized
+    assert '"action":' not in serialized
+
+
+def test_pupila_view_is_deterministic_after_participant_reordering() -> None:
+    base = {
+        "sessionId": "session-deterministic",
+        "roomId": "room-deterministic",
+        "surfaceId": "surface-deterministic",
+        "participants": [
+            {"participantRef": "user-b", "policy": "quiet", "focusState": True},
+            {"participantRef": "user-a", "policy": "support", "focusState": False},
+        ],
+        "proposals": [
+            {
+                "proposalId": "proposal-2",
+                "kind": "co-presence",
+                "reason": "Shared surface.",
+                "state": "proposed",
+                "requiresExplicitAcceptance": True,
+                "reversible": True,
+            },
+            {
+                "proposalId": "proposal-1",
+                "kind": "peer-bridge",
+                "reason": "Shared next step.",
+                "state": "proposed",
+                "requiresExplicitAcceptance": True,
+                "reversible": True,
+            },
+        ],
+    }
+    reordered = {**base, "participants": list(reversed(base["participants"]))}
+
+    assert project_pupila_view(base) == project_pupila_view(reordered)
+
+
+def test_pupila_view_limits_and_empty_state_are_explicit() -> None:
+    state = {
+        "sessionId": "session-limits",
+        "roomId": "room-limits",
+        "surfaceId": "surface-limits",
+        "participants": [
+            {"participantRef": f"user-{index:02d}", "policy": "quiet", "focusState": False}
+            for index in range(MAX_PARTICIPANTS + 2)
+        ],
+        "proposals": [
+            {
+                "proposalId": f"proposal-{index:02d}",
+                "kind": "co-presence",
+                "reason": "Shared surface.",
+                "state": "proposed",
+                "requiresExplicitAcceptance": True,
+                "reversible": True,
+            }
+            for index in range(MAX_PROPOSALS + 2)
+        ],
+    }
+    view = project_pupila_view(state)
+    empty = project_pupila_view({"sessionId": "s", "roomId": "r", "surfaceId": "f"})
+
+    assert view["participantCount"] == MAX_PARTICIPANTS + 2
+    assert view["shownParticipantCount"] == MAX_PARTICIPANTS
+    assert view["proposalCount"] == MAX_PROPOSALS + 2
+    assert view["shownProposalCount"] == MAX_PROPOSALS
+    assert empty["nextAttention"]["kind"] == "waiting"
+
+    try:
+        project_pupila_view(state, max_proposals=-1)
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("negative view limit was accepted")
 
 
 if __name__ == "__main__":
@@ -298,6 +427,9 @@ if __name__ == "__main__":
         test_two_canonical_peers_produce_a_pupila_proposal,
         test_malformed_canonical_event_is_rejected,
         test_canonical_replay_is_deterministic_and_keeps_final_multi_state,
+        test_pupila_view_is_bounded_and_redacts_internal_state,
+        test_pupila_view_is_deterministic_after_participant_reordering,
+        test_pupila_view_limits_and_empty_state_are_explicit,
     ]
     for test in tests:
         test()

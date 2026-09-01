@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 
 from pupila_adapter import PupilaAdapter
+from pupila_view import project_pupila_view
 from vizz_adapter import VizzAdapter
 
 
@@ -18,7 +19,13 @@ def main() -> None:
     room = PupilaAdapter()
     room.ingest(user_a, state_a)
     shared = room.ingest(user_b, state_b)
-    print(json.dumps({"vizz": [state_a, state_b], "pupila": shared}, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {"vizz": [state_a, state_b], "pupila": shared, "pupilaView": project_pupila_view(shared)},
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
 
 
 if __name__ == "__main__":
