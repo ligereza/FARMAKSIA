@@ -18,6 +18,7 @@
     {"id": "farmaxia:bridge-090", "path": "canonical_event_bridge.py", "role": "xio_canonical_event_to_metadata_only_boundary", "authority": "computed"},
     {"id": "farmaxia:fixture-090", "path": "fixtures/xio-connectivity-status.json", "role": "synthetic_canonical_event_fixture", "authority": "computed"},
     {"id": "farmaxia:cross-branch-check-090", "path": "run_xio_cross_branch_check.py", "role": "reproducible_xio_to_vizz_boundary_check", "authority": "computed"},
+    {"id": "farmaxia:replay-090", "path": "canonical_event_bridge.py", "role": "deterministic_canonical_event_replay", "authority": "computed"},
     {"id": "farmaxia:tests-090", "path": "run_contract_test.py", "role": "offline_kill_and_contract_tests", "authority": "computed"},
     {"id": "farmaxia:readme-090", "path": "README.md", "role": "scope_and_reproduction_record", "authority": "human_reviewed_record"}
   ],
@@ -26,6 +27,7 @@
     {"id": "farmaxia:implement-vizz-090", "type": "activity", "label": "implement VIZZ visual rendering policy from consented signals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090"], "generated": ["farmaxia:vizz-090"]},
     {"id": "farmaxia:implement-pupila-090", "type": "activity", "label": "implement PUPILA multi-participant emergent proposals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090"], "generated": ["farmaxia:pupila-090"]},
     {"id": "farmaxia:implement-bridge-090", "type": "activity", "label": "bridge canonical XIO events into consented metadata-only VIZZ and PUPILA signals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:pupila-090"], "generated": ["farmaxia:bridge-090", "farmaxia:fixture-090", "farmaxia:cross-branch-check-090"]},
+    {"id": "farmaxia:verify-replay-090", "type": "activity", "label": "replay canonical events without forwarding raw payload content", "agent": "farmaxia:implementer-090", "used": ["farmaxia:bridge-090", "farmaxia:tests-090"], "generated": ["farmaxia:replay-090"]},
     {"id": "farmaxia:verify-090", "type": "activity", "label": "run offline contract and tamper-evidence tests", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:pupila-090", "farmaxia:tests-090"], "generated": []}
   ],
   "queries": [

@@ -227,4 +227,46 @@ class CanonicalEventBridge:
         }
 
 
-__all__ = ["CanonicalEventBridge", "CanonicalEventError"]
+class CanonicalEventReplay:
+    """Replay canonical events into one in-memory VIZZ/PUPILA bridge."""
+
+    def __init__(self, bridge: CanonicalEventBridge | None = None) -> None:
+        self.bridge = bridge or CanonicalEventBridge()
+
+    def run(
+        self,
+        events: Any,
+        raw_context: Mapping[str, Any] | None = None,
+        *,
+        consent: bool,
+    ) -> dict[str, Any]:
+        if isinstance(events, (str, bytes, Mapping)):
+            raise CanonicalEventError("replay events must be an iterable of event objects.")
+        try:
+            iterator = iter(events)
+        except TypeError as exc:
+            raise CanonicalEventError("replay events must be iterable.") from exc
+
+        results: list[dict[str, Any]] = []
+        for raw_event in iterator:
+            results.append(self.bridge.ingest(raw_event, raw_context, consent=consent))
+
+        counts = {"accepted": 0, "blocked": 0, "duplicate": 0}
+        for result in results:
+            status = result["status"]
+            if status in counts:
+                counts[status] += 1
+        final = results[-1] if results else None
+        return {
+            "status": "complete",
+            "eventCount": len(results),
+            "acceptedCount": counts["accepted"],
+            "blockedCount": counts["blocked"],
+            "duplicateCount": counts["duplicate"],
+            "results": results,
+            "finalVizzState": final["vizzState"] if final else None,
+            "finalPupilaState": final["pupilaState"] if final else None,
+        }
+
+
+__all__ = ["CanonicalEventBridge", "CanonicalEventError", "CanonicalEventReplay"]

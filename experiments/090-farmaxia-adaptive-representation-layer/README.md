@@ -51,6 +51,11 @@ El `event_id` externo es idempotente por `session_id`, `peer_id` y `surface_id`.
 PUPILA mantiene además esas tres dimensiones separadas, por lo que dos
 sesiones con el mismo `room_id` no se mezclan.
 
+`CanonicalEventReplay` permite reproducir una secuencia de eventos en memoria
+y devuelve conteos de aceptados, bloqueados y duplicados junto con el estado
+final VIZZ/PUPILA. No es todavía un transporte de red ni un ejecutor de
+acciones.
+
 ## Qué se adopta de ZIGO
 
 - envelopes versionados y hashes deterministas;

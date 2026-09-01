@@ -11,7 +11,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 
 from contracts import append_audit_event, normalize_signal, verify_audit_chain  # noqa: E402
-from canonical_event_bridge import CanonicalEventBridge, CanonicalEventError  # noqa: E402
+from canonical_event_bridge import CanonicalEventBridge, CanonicalEventError, CanonicalEventReplay  # noqa: E402
 from pupila_adapter import PupilaAdapter  # noqa: E402
 from vizz_adapter import VizzAdapter  # noqa: E402
 
@@ -243,6 +243,45 @@ def test_malformed_canonical_event_is_rejected() -> None:
         raise AssertionError("malformed canonical event was accepted")
 
 
+def test_canonical_replay_is_deterministic_and_keeps_final_multi_state() -> None:
+    replay = CanonicalEventReplay()
+    results = replay.run(
+        [
+            canonical_event(
+                "canonical-event-008",
+                peer_id="user-a",
+                event_type="focus.changed",
+                channel="focus",
+                payload={"focused": True},
+            ),
+            canonical_event(
+                "canonical-event-009",
+                peer_id="user-b",
+                event_type="focus.changed",
+                channel="focus",
+                payload={"focused": False},
+            ),
+            canonical_event(
+                "canonical-event-009",
+                peer_id="user-b",
+                event_type="focus.changed",
+                channel="focus",
+                payload={"focused": False},
+            ),
+        ],
+        context(),
+        consent=True,
+    )
+    assert results["status"] == "complete"
+    assert results["eventCount"] == 3
+    assert results["acceptedCount"] == 2
+    assert results["duplicateCount"] == 1
+    assert results["blockedCount"] == 0
+    assert results["finalPupilaState"]["participantCount"] == 2
+    assert results["finalPupilaState"]["proposals"]
+    assert "payload" not in json.dumps(results, ensure_ascii=True)
+
+
 if __name__ == "__main__":
     tests = [
         test_consent_blocks_signal_and_drops_content,
@@ -258,6 +297,7 @@ if __name__ == "__main__":
         test_duplicate_external_event_is_idempotent,
         test_two_canonical_peers_produce_a_pupila_proposal,
         test_malformed_canonical_event_is_rejected,
+        test_canonical_replay_is_deterministic_and_keeps_final_multi_state,
     ]
     for test in tests:
         test()
