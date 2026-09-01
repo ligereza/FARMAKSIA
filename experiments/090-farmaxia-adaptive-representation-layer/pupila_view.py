@@ -140,10 +140,21 @@ def project_pupila_view(
 def _participant_view(value: Any) -> dict[str, Any]:
     if not isinstance(value, Mapping):
         raise PupilaViewError("participant must be an object")
+    sample_count = value.get("sampleCount", 0)
+    if isinstance(sample_count, bool) or not isinstance(sample_count, int) or sample_count < 0:
+        raise PupilaViewError("participant.sampleCount must be a non-negative integer")
+    coverage = value.get("signalCoverage", [])
+    if not isinstance(coverage, list) or any(not isinstance(item, str) for item in coverage):
+        raise PupilaViewError("participant.signalCoverage must be a list of text")
+    safe_coverage = sorted({item.strip()[:40] for item in coverage if item.strip()})[:8]
     return {
         "participantRef": _text(value.get("participantRef"), "participantRef"),
         "policy": _text(value.get("policy"), "policy"),
         "focusState": value.get("focusState") is True,
+        "interaction": {
+            "sampleCount": min(sample_count, 128),
+            "signalCoverage": safe_coverage,
+        },
     }
 
 

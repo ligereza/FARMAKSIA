@@ -66,6 +66,9 @@ nunca conserva texto, coordenadas crudas ni payloads.
 `pupila_view.py` proyecta el estado compartido a una superficie compacta para
 la futura capa transparente. Ordena participantes y propuestas, limita lo que
 se muestra y excluye activity scores, hashes internos, payloads y acciones.
+Cada participante puede exponer sólo un resumen de interacción con cantidad
+acotada y tipos de señal observados; no expone las coordenadas, el texto ni el
+contenido original.
 El estado vacio produce una atencion `waiting`, no una accion automatica.
 `diff_pupila_view` compara dos proyecciones ya redactadas y devuelve sólo los
 cambios seguros, con orden y limite deterministas; no acepta estados internos

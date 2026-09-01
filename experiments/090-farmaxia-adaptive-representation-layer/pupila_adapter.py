@@ -30,6 +30,8 @@ class PupilaAdapter:
             "policy": str(vizz_state.get("policy") or "quiet"),
             "activityScore": float(vizz_state.get("activityScore") or 0.0),
             "focusState": bool(vizz_state.get("focusState")),
+            "sampleCount": int(vizz_state.get("sampleCount") or 0),
+            "signalCoverage": list(vizz_state.get("signalCoverage", [])),
             "stateHash": str(vizz_state.get("stateHash") or ""),
         }
         return self.snapshot(context)
@@ -73,7 +75,13 @@ class PupilaAdapter:
             "surfaceId": context["surfaceId"],
             "participantCount": len(states),
             "participants": [
-                {"participantRef": item["participantRef"], "policy": item["policy"], "focusState": item["focusState"]}
+                {
+                    "participantRef": item["participantRef"],
+                    "policy": item["policy"],
+                    "focusState": item["focusState"],
+                    "sampleCount": item["sampleCount"],
+                    "signalCoverage": item["signalCoverage"],
+                }
                 for item in sorted(states, key=lambda value: value["participantRef"])
             ],
             "proposals": proposals,

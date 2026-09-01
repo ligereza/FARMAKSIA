@@ -344,6 +344,11 @@ def test_canonical_replay_reports_bounded_interaction_metrics() -> None:
             "signalCoverage": ["focus", "keyboard", "pointer"],
         }
     ]
+    final_participant = result["finalPupilaView"]["participants"][0]
+    assert final_participant["interaction"] == {
+        "sampleCount": 3,
+        "signalCoverage": ["focus", "keyboard", "pointer"],
+    }
     serialized = json.dumps(metrics, ensure_ascii=True)
     assert "secret" not in serialized
     assert "never-persist" not in serialized
