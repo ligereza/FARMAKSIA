@@ -63,6 +63,11 @@ señal, más la última política VIZZ observable por participante. Incluye sól
 metadata acotada de `pointer`, `keyboard`, `focus` y otras señales aceptadas;
 nunca conserva texto, coordenadas crudas ni payloads.
 
+Cada resultado incluye `pupilaViewDiffs`, una secuencia determinista de cambios
+entre vistas PUPILA consecutivas. Un consumidor puede actualizar sólo los
+campos modificados y un duplicado produce un diff vacío; el primer elemento
+queda marcado como inicial y no inventa un cambio previo.
+
 `pupila_view.py` proyecta el estado compartido a una superficie compacta para
 la futura capa transparente. Ordena participantes y propuestas, limita lo que
 se muestra y excluye activity scores, hashes internos, payloads y acciones.

@@ -9,7 +9,7 @@ from typing import Any, Mapping
 
 from contracts import normalize_context, normalize_signal
 from pupila_adapter import PupilaAdapter
-from pupila_view import project_pupila_view
+from pupila_view import diff_pupila_view, project_pupila_view
 from vizz_adapter import VizzAdapter
 
 
@@ -261,6 +261,26 @@ class CanonicalEventReplay:
             if status in counts:
                 counts[status] += 1
         final = results[-1] if results else None
+        view_diffs: list[dict[str, Any]] = []
+        previous_view: Mapping[str, Any] | None = None
+        previous_event_id: str | None = None
+        for result in results:
+            current_view = result.get("pupilaView")
+            changes = (
+                diff_pupila_view(previous_view, current_view)
+                if isinstance(previous_view, Mapping) and isinstance(current_view, Mapping)
+                else []
+            )
+            view_diffs.append(
+                {
+                    "eventId": result.get("eventId"),
+                    "status": result.get("status"),
+                    "fromEventId": previous_event_id,
+                    "changes": changes,
+                }
+            )
+            previous_view = current_view if isinstance(current_view, Mapping) else None
+            previous_event_id = result.get("eventId") if isinstance(result.get("eventId"), str) else None
         return {
             "status": "complete",
             "eventCount": len(results),
@@ -269,6 +289,7 @@ class CanonicalEventReplay:
             "duplicateCount": counts["duplicate"],
             "results": results,
             "interactionMetrics": _interaction_metrics(results),
+            "pupilaViewDiffs": view_diffs,
             "finalVizzState": final["vizzState"] if final else None,
             "finalPupilaState": final["pupilaState"] if final else None,
             "finalPupilaView": final["pupilaView"] if final else None,

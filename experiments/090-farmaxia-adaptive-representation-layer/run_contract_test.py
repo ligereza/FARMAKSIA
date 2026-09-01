@@ -294,6 +294,8 @@ def test_canonical_replay_is_deterministic_and_keeps_final_multi_state() -> None
     assert results["finalPupilaState"]["proposals"]
     assert results["finalPupilaView"]["contractType"] == "PupilaOverlayView"
     assert results["finalPupilaView"]["nextAttention"]["kind"] == "proposal"
+    assert results["pupilaViewDiffs"][0]["fromEventId"] is None
+    assert results["pupilaViewDiffs"][-1]["changes"] == []
     assert "payload" not in json.dumps(results, ensure_ascii=True)
 
 
@@ -352,6 +354,11 @@ def test_canonical_replay_reports_bounded_interaction_metrics() -> None:
     serialized = json.dumps(metrics, ensure_ascii=True)
     assert "secret" not in serialized
     assert "never-persist" not in serialized
+    assert any(
+        change["field"] == "participants"
+        for change in result["pupilaViewDiffs"][1]["changes"]
+    )
+    assert result["pupilaViewDiffs"][-1]["changes"] == []
 
 
 def test_pupila_view_is_bounded_and_redacts_internal_state() -> None:
