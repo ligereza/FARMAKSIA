@@ -13,5 +13,5 @@ observed_results:
   - SVG: migracion Adobe aceptada en LUCIDA/ADOBE da90459; 11 tests, verify, smoke y companion check.
   - LUCIDA: RESOLUME 0864be1 y MULTI fb75553 publicados; ambas ramas se verificaron fuera de sus repositorios fuente.
 next_delegation:
-  - XIO: implementar bridge de compatibilidad de ApplicationEvent para LUCIDA/MULTI, con fixture y tests offline.
-  - MOSAIK: implementar fixture/consumidor de compatibilidad con ApplicationEvent sin abrir Resolume ni sockets.
+  - XIO: implementar contrato offline de probe de capacidad para ethernet, wifi, hotspot y router usando el transporte inyectable existente; incluir estados, latencia/loss opcionales, motivo, serializacion y tests sin sockets.
+  - MOSAIK: reforzar la frontera host-neutral de Resolume para aceptar senales externas y devolver resultado host accepted/rejected/unknown con provenance, sequence y timestamp; mantener proposal-only y tests offline.

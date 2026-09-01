@@ -39,6 +39,12 @@ completed:
     evidence: C:\IA\LUCIDA\adobe; 538 archivos en ADOBE, ocho carpetas CHEMSEX, 361 incluidos con hashes verificados, sin node_modules/caches/credenciales; verify, smoke, companion check y 11 tests pasan.
   - item: Se corrigió una dependencia omitida al integrar MOSAIK en RESOLUME.
     evidence: La primera prueba en LUCIDA falló por falta de adapters.vj; se añadió únicamente ese contrato/adapter, y la suite posterior pasó 23 tests con control ASCII limpio.
+  - item: MOSAIK/VJ entregó el consumidor XIO para replay de eventos de aplicación.
+    evidence: C:\IA\VJ en LUCIDA, commit f4e9f21 publicado en origin/LUCIDA; el consumidor conserva provenance, secuencia y resultados, y la suite pasa 43 tests. La integración corrigió una importación circular con un regression-safe lazy import.
+  - item: Se integró el consumidor XIO en la superficie RESOLUME de LUCIDA.
+    evidence: C:\IA\LUCIDA/RESOLUME, commit 5c8e104 publicado; la suite offline pasa 32 tests y el branch mantiene proposal-only, sin sockets ni Resolume real.
+  - item: Se integró el bridge de eventos de aplicación en la superficie MULTI de LUCIDA.
+    evidence: C:\IA\LUCIDA/MULTI, commit 4ed7dc3 publicado; la suite XIO pasa 39 unittest y el bridge valida canal, envelope, schema, deduplicación y secuencia.
 
 current_state:
   files_or_resources:
@@ -47,15 +53,15 @@ current_state:
     - C:\IA\VJ
     - C:\IA\svg\agent-toolkit\generic-interface-layer
     - C:\IA\LUCIDA\ADOBE, RESOLUME y MULTI
-  tests_and_checks: 090 pasa py_compile, seis contratos offline y procedencia. XIO pasa 33 unittest; MOSAIK/VJ pasa 34 pytest; LUCIDA/RESOLUME pasa 23 pytest; LUCIDA/MULTI pasa 33 unittest; LUCIDA/ADOBE pasa verify, smoke, companion check y 11 tests. La suite completa de FARMAKSIA se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
+  tests_and_checks: 090 pasa py_compile, seis contratos offline y procedencia. XIO pasa 39 unittest; MOSAIK/VJ pasa 43 pytest; LUCIDA/RESOLUME pasa 32 pytest; LUCIDA/MULTI pasa 39 unittest; LUCIDA/ADOBE pasa verify, smoke, companion check y 11 tests. La suite completa de FARMAKSIA se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
   assumptions: LUCIDA es el proyecto base conceptual; XIO y VJ deben conservar nombres propios de su eje en sus ramas derivadas; ZIGO es el origen histórico, no el nombre de los productos finales.
   open_questions:
     - Nombre definitivo de las ramas derivadas de XIO y VJ.
     - Qué partes mínimas de generic-interface-layer se incorporan a FARMAXIA sin acoplarlo a SVG.
   blockers: Suite global bloqueada en provenance 018; no tocar ese archivo porque contiene cambios previos del usuario. XIO conserva cambios de usuario sin stage. La publicación pesada de ADOBE puede tardar por sus 513 MiB de iconos visuales, pero la rama ya quedó confirmada en origin/ADOBE.
   research_refs: Extracción ZIGO en SVG y contratos actuales de XIO/VJ.
-  delegation_refs: XIO y VJ recibieron tareas ejecutables con commits, suites y límites de no-main; tras detectar turnos inactivos se reactivaron con entregables concretos. SVG finalizó la extracción y la verificación de ADOBE se hizo en el repositorio destino.
+  delegation_refs: XIO y VJ recibieron tareas ejecutables con commits, suites y límites de no-main; tras detectar turnos inactivos se reactivaron con entregables concretos. SVG finalizó la extracción y la verificación de ADOBE se hizo en el repositorio destino. La última ronda volvió a activar XIO para un probe de conectividad inyectable y MOSAIK para reforzar el host boundary de Resolume.
   last_critique: La orden anterior de renombrar VJ de forma aislada era técnicamente incompleta: el nombre LIMEN existe en dos repositorios y no debía cambiarse sin contrato común. La acción de menor riesgo es separar primero los ejes y renombrar sólo identidades propias en ramas nuevas.
-  estimated_remaining_effort: Medio; separación, publicación e integración mínima ya verificadas. Resta demostrar interoperabilidad entre XIO/MULTI y MOSAIK/RESOLUME mediante un fixture común.
-  next_action: Dirigir la siguiente ronda a un contrato de compatibilidad cross-branch: XIO debe publicar un bridge de ApplicationEvent hacia LUCIDA/MULTI y MOSAIK debe consumir un fixture equivalente en RESOLUME, sin sockets ni Resolume real. Después integrar sólo ese contrato y activar el primer slice verificable de VIZZ/PUPILA sobre eventos reales/replayables.
+  estimated_remaining_effort: Medio; separación, publicación e integración mínima ya verificadas. Resta probar la interoperabilidad con un contrato de capacidad de red y endurecer la frontera de host antes de abrir una integración real.
+  next_action: Esperar la siguiente entrega ejecutable de XIO y MOSAIK, verificar sus diffs y suites, integrar sólo los contratos compatibles en LUCIDA, y después activar el primer slice verificable de VIZZ/PUPILA sobre eventos replayables sin introducir captura invasiva.
   next_checkpoint_trigger: Después de que ambos agentes respondan o tras la primera revisión de 5 minutos.
