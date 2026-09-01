@@ -1,0 +1,50 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:090-adaptive-representation-layer",
+  "status": "offline_contract_slice",
+  "purpose": "Adapt the generic ZIGO interface-layer structure into distinct VIZZ and PUPILA metadata-only adapters.",
+  "agents": [
+    {"id": "farmaxia:designer-090", "type": "agent", "role": "defines_separation_between_vizz_and_pupila"},
+    {"id": "farmaxia:implementer-090", "type": "software_agent", "role": "implements_offline_python_contract_slice", "version": "3.13"}
+  ],
+  "source_boundaries": [
+    {"source": "C:/IA/svg/agent-toolkit/generic-interface-layer", "role": "architectural_reference", "copied_assets": false},
+    {"source": "C:/IA/FARMAXIA", "role": "target_repository", "copied_assets": false}
+  ],
+  "entities": [
+    {"id": "farmaxia:contracts-090", "path": "contracts.py", "role": "versioned_context_signal_audit_contracts", "authority": "computed"},
+    {"id": "farmaxia:vizz-090", "path": "vizz_adapter.py", "role": "local_visual_policy_from_consented_metadata", "authority": "computed"},
+    {"id": "farmaxia:pupila-090", "path": "pupila_adapter.py", "role": "multi_participant_emergent_proposals", "authority": "computed"},
+    {"id": "farmaxia:tests-090", "path": "run_contract_test.py", "role": "offline_kill_and_contract_tests", "authority": "computed"},
+    {"id": "farmaxia:readme-090", "path": "README.md", "role": "scope_and_reproduction_record", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:implement-contracts-090", "type": "activity", "label": "implement metadata-only context, signal and audit contracts", "agent": "farmaxia:implementer-090", "used": [], "generated": ["farmaxia:contracts-090"]},
+    {"id": "farmaxia:implement-vizz-090", "type": "activity", "label": "implement VIZZ visual rendering policy from consented signals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090"], "generated": ["farmaxia:vizz-090"]},
+    {"id": "farmaxia:implement-pupila-090", "type": "activity", "label": "implement PUPILA multi-participant emergent proposals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090"], "generated": ["farmaxia:pupila-090"]},
+    {"id": "farmaxia:verify-090", "type": "activity", "label": "run offline contract and tamper-evidence tests", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:pupila-090", "farmaxia:tests-090"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:vizz-query-090", "expression": "does VIZZ produce a non-blocking visual policy from consented metadata without camera or raw content", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:tests-090"]},
+    {"id": "farmaxia:pupila-query-090", "expression": "does PUPILA produce an explicit reversible proposal from two same-room participant states without executing an action", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:pupila-090", "farmaxia:tests-090"]}
+  ],
+  "assumptions": [
+    "The first reusable slice can run in Python standard tooling without a GUI or host plugin.",
+    "A visual policy is useful before gaze is available, provided it is labeled as a rendering heuristic.",
+    "Multi-user coordination should exchange state summaries, not raw interaction content."
+  ],
+  "kill_tests": [
+    "missing consent is blocked",
+    "unconsented participant presence is not registered",
+    "keyboard text is not serialized",
+    "VIZZ remains camera-optional",
+    "cross-room PUPILA state is rejected",
+    "proposals contain no executable action",
+    "tampering invalidates the audit chain"
+  ],
+  "unknowns": [
+    "Which host transport will be selected for the first real adapter",
+    "Whether a transparent overlay should be click-through or temporarily focusable per host",
+    "Which observable task outcome will validate that a representation proposal helped"
+  ]
+}

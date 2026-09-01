@@ -114,6 +114,13 @@ def main() -> None:
         "experiments/081-farmaxia-window-proxy-sandbox/provenance.json",
         "experiments/082-farmaxia-selected-window-preview/provenance.json",
         "experiments/083-farmaxia-lighting-surface-contract/provenance.json",
+        "experiments/084-vizz-distance-scale-experiment/provenance.json",
+        "experiments/085-vizz-blender-focus-distance/provenance.json",
+        "experiments/086-vizz-blender-live-distance-bridge/provenance.json",
+        "experiments/087-vizz-touchdesigner-state-renderer/provenance.json",
+        "experiments/088-vizz-state-replay-preflight/provenance.json",
+        "experiments/089-vizz-dual-sensor-closed-calibration/provenance.json",
+        "experiments/090-farmaxia-adaptive-representation-layer/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1356,6 +1363,103 @@ def main() -> None:
         "FARMAXIA_083_LIGHTING_SURFACE_KILL_TESTS_VALID",
     )
     command("provenance 083", python_script("research/tools/validate_provenance.py", provenance[79]), "PROVENANCE_VALID")
+    command(
+        "experiment FARMAKSIA VIZZ distance scale 084",
+        python_script("experiments/084-vizz-distance-scale-experiment/run_experiment.py"),
+        '"status": "VIZZ_DISTANCE_SCALE_CONTRACT_VERIFIED"',
+    )
+    command(
+        "contract test FARMAKSIA VIZZ distance scale 084",
+        python_script("experiments/084-vizz-distance-scale-experiment/run_contract_test.py"),
+        "FARMAXIA_084_VIZZ_DISTANCE_SCALE_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA VIZZ distance scale 084",
+        python_script("experiments/084-vizz-distance-scale-experiment/run_kill_test.py"),
+        "FARMAXIA_084_VIZZ_DISTANCE_SCALE_KILL_TESTS_VALID",
+    )
+    command(
+        "trace analyzer test FARMAKSIA VIZZ distance scale 084",
+        python_script("experiments/084-vizz-distance-scale-experiment/run_analyzer_test.py"),
+        "FARMAXIA_084_VIZZ_TRACE_ANALYZER_TEST_VALID",
+    )
+    command("provenance 084", python_script("research/tools/validate_provenance.py", provenance[80]), "PROVENANCE_VALID")
+
+    command(
+        "contract test FARMAKSIA VIZZ Blender focus distance 085",
+        python_script("experiments/085-vizz-blender-focus-distance/run_contract_test.py"),
+        "FARMAXIA_085_VIZZ_BLENDER_FOCUS_DISTANCE_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA VIZZ Blender focus distance 085",
+        python_script("experiments/085-vizz-blender-focus-distance/run_kill_test.py"),
+        "FARMAXIA_085_VIZZ_BLENDER_FOCUS_DISTANCE_KILL_TESTS_VALID",
+    )
+    command("provenance 085", python_script("research/tools/validate_provenance.py", provenance[81]), "PROVENANCE_VALID")
+
+    command(
+        "contract test FARMAKSIA VIZZ Blender live distance 086",
+        python_script("experiments/086-vizz-blender-live-distance-bridge/run_contract_test.py"),
+        "FARMAXIA_086_VIZZ_BLENDER_LIVE_DISTANCE_CONTRACT_VALID",
+    )
+    command(
+        "kill test FARMAKSIA VIZZ Blender live distance 086",
+        python_script("experiments/086-vizz-blender-live-distance-bridge/run_kill_test.py"),
+        "FARMAXIA_086_VIZZ_BLENDER_LIVE_DISTANCE_KILL_TESTS_VALID",
+    )
+    command("provenance 086", python_script("research/tools/validate_provenance.py", provenance[82]), "PROVENANCE_VALID")
+
+    command(
+        "contract test FARMAKSIA VIZZ TouchDesigner state renderer 087",
+        python_script("experiments/087-vizz-touchdesigner-state-renderer/run_contract_test.py"),
+        "VIZZ_087_CONTRACT=PASS",
+    )
+    command("provenance 087", python_script("research/tools/validate_provenance.py", provenance[83]), "PROVENANCE_VALID")
+
+    command(
+        "contract test FARMAKSIA VIZZ state replay 088",
+        python_script("experiments/088-vizz-state-replay-preflight/run_contract_test.py"),
+        "VIZZ_088_REPLAY_CONTRACT=PASS",
+    )
+    command(
+        "replay fixture FARMAKSIA VIZZ state 088",
+        python_script(
+            "experiments/088-vizz-state-replay-preflight/run_replay.py",
+            "--input",
+            "experiments/088-vizz-state-replay-preflight/fixtures/sequence.jsonl",
+            "--now-ms",
+            "1100",
+        ),
+        '"reason":"SEQUENCE_NOT_MONOTONIC"',
+    )
+    command("provenance 088", python_script("research/tools/validate_provenance.py", provenance[84]), "PROVENANCE_VALID")
+
+    command(
+        "contract test FARMAKSIA VIZZ dual sensor closed calibration 089",
+        python_script("experiments/089-vizz-dual-sensor-closed-calibration/run_contract_test.py"),
+        "FARMAXIA_089_DUAL_SENSOR_CONTRACT_VALID",
+    )
+    command(
+        "dry-run FARMAKSIA VIZZ dual sensor closed calibration 089",
+        python_script(
+            "experiments/089-vizz-dual-sensor-closed-calibration/run_dual_calibration.py",
+            "--dry-run",
+        ),
+        '"samples_before_click": true',
+    )
+    command("provenance 089", python_script("research/tools/validate_provenance.py", provenance[85]), "PROVENANCE_VALID")
+
+    command(
+        "contract test FARMAKSIA adaptive representation layer 090",
+        python_script("experiments/090-farmaxia-adaptive-representation-layer/run_contract_test.py"),
+        "FARMAXIA_090_CONTRACT_VALID",
+    )
+    command(
+        "offline demo FARMAKSIA adaptive representation layer 090",
+        python_script("experiments/090-farmaxia-adaptive-representation-layer/run_demo.py"),
+        '"participantCount": 2',
+    )
+    command("provenance 090", python_script("research/tools/validate_provenance.py", provenance[86]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

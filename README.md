@@ -98,6 +98,12 @@ parámetros de representación; no son afirmaciones sobre neurotransmisores.
 | KETAMINE | en cuarentena; sin prototipo activo ni teoría forzada |
 | VIZZ | flujo 032/033 y geometría 052/053: runtime CUDA experimental con compuerta privacy-first; no toda función requiere cámara; precisión y eficacia desconocidas |
 
+El experimento 090 convierte la extracción histórica de ZIGO en una capa local
+reutilizable para dos ejes distintos: VIZZ produce políticas visuales
+metadata-only y PUPILA hace emerger propuestas transparentes para varios
+participantes. Comparten contratos y auditoría, pero no comparten decisiones de
+producto ni ejecutan acciones automáticamente.
+
 No se implementan operadores como API ni se fija arquitectura mientras sus
 kill tests sigan abiertos.
 
@@ -180,6 +186,9 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Sandbox nativo de ventana proxy reversible](experiments/081-farmaxia-window-proxy-sandbox/README.md)
 - [Preview pasivo de ventana seleccionada](experiments/082-farmaxia-selected-window-preview/README.md)
 - [Contrato de superficie grandMA3 → Titan](experiments/083-farmaxia-lighting-surface-contract/README.md)
+- [Escala visual relativa VIZZ: distancia, pose y Landolt C](experiments/084-vizz-distance-scale-experiment/README.md)
+- [Contrato de renderer VIZZ para TouchDesigner](experiments/087-vizz-touchdesigner-state-renderer/README.md)
+- [Replay temporal del estado VIZZ antes de TouchDesigner](experiments/088-vizz-state-replay-preflight/README.md)
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)
@@ -192,11 +201,13 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Política de conflicto entre sidecars media](research/decisions/077-media-sidecar-conflict-policy.md)
 - [Adopción real de pywinauto/UIA](research/decisions/078-pywinauto-adoption.md)
 - [Adaptadores nativos de estado Excel/Blender](research/decisions/079-excel-blender-native-state-adapters.md)
+- [Capa adaptativa VIZZ/PUPILA derivada de ZIGO](experiments/090-farmaxia-adaptive-representation-layer/README.md)
 - [Kernel de transiciones nativas para X-ANA-X](research/decisions/080-native-transition-kernel.md)
 - [Puente de input consentido y contexto UIA](research/decisions/081-consented-input-semantic-bridge.md)
 - [Correlación temporal de input y estado nativo](experiments/080-farmaxia-input-native-delta-correlation/results.md)
 - [Decisión del renderer proxy visual](research/decisions/083-window-proxy-renderer.md)
 - [Investigación de interfaz grandMA3/Titan](research/literature/024-grandma-titan-interface-research.md)
+- [ONU, armas autónomas y control humano significativo](research/literature/029-un-autonomous-weapons-policy.md)
 - [Decisión del adaptador visual grandMA3 → Titan](research/decisions/084-grandma-titan-visual-adapter.md)
 - [Auditoría profunda de referencias open source y científicas](research/literature/023-open-source-reference-audit.md)
 - [Mercado disponible y capas progresivas de FARMAKSIA](research/decisions/087-farmaxia-market-entry-progressive-layers.md)
@@ -221,6 +232,8 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Cámara óptica VIZZ 045: objeto, foco y sensor](experiments/045-vizz-single-eye-camera/README.md)
 - [Investigación de calibración y herramientas open source VIZZ](research/literature/017-vizz-calibration-open-source.md)
 - [Investigación de runtime Python GPU VIZZ](research/literature/018-vizz-python-gpu-runtime.md)
+- [Investigación de renderer adaptativo VIZZ + TouchDesigner](research/literature/019-vizz-touchdesigner-adaptive-renderer.md)
+- [Decisión de frontera de runtime VIZZ + TouchDesigner](research/decisions/086-vizz-touchdesigner-runtime-boundary.md)
 - [Decisión de flujo VIZZ calibración/runtime](research/decisions/045-vizz-flow-split.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
