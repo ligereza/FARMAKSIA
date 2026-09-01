@@ -13,4 +13,23 @@ decision: coordinated
 reason: La evidencia muestra nombres LIMEN reales en XIO y VJ, mientras que la extracción de SVG tiene otro contexto. La separación por contratos es reversible y permite avanzar sin tocar main.
 confidence: alta para el límite de alcance; media para los nombres concretos hasta revisar cada agente.
 verification_signal: Cada agente debe devolver rama, diff limitado a identidad, tests y confirmación explícita de que main no cambió.
-next_checkpoint: Comparar respuestas de XIO/VJ y luego inspeccionar sólo diffs de sus ramas.
+next_checkpoint: Integrar sólo contratos que crucen una prueba real entre repositorios y auditar los siguientes commits de XIO/VJ.
+
+## Current review
+
+observed_failure: Ambos agentes quedaron idle después de completar una tarea;
+una instrucción ambigua podía producir sólo "orden recibida" sin trabajo nuevo.
+corrective_action: Enviar tareas con archivo objetivo, cambio mínimo, test
+obligatorio, commit y push; verificar el repositorio directamente después.
+evidence: XIO produced d8a13f0 and 45132fd; MOSAIK produced e08b8b9 and
+e19de67. All four commits were verified against their source trees. The source
+XIO branch has 55 passing tests and the source MOSAIK branch has 75 passing
+tests.
+important_boundary: connectivity.status is valid transport evidence, but it is
+not a VJ phase. MULTI transports it; RESOLUME rejects it without mutating
+replay; VIZZ/PUPILA consumes only a bounded metadata projection.
+selected_next_action: Continue the 090 bridge and keep agent tasks bounded by
+capability routing and cross-domain rejection. Do not add a real socket or GUI
+until authentication, cancellation and observable outcomes are specified.
+forecast: High probability of a stable offline vertical slice; low probability
+of meaningful universal-app claims until host adapters and task outcomes exist.

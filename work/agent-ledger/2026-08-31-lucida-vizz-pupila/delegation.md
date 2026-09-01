@@ -13,5 +13,6 @@ observed_results:
   - SVG: migracion Adobe aceptada en LUCIDA/ADOBE da90459; 11 tests, verify, smoke y companion check.
   - LUCIDA: RESOLUME 0864be1 y MULTI fb75553 publicados; ambas ramas se verificaron fuera de sus repositorios fuente.
 next_delegation:
-  - XIO: convertir ConnectionStatus host-supplied en ApplicationEvent connectivity.status, conservando medicion, provenance y raw_hash sin sockets ni acciones.
-  - MOSAIK: agregar reconstruccion y validacion de HostResult accepted/rejected/unknown, con round-trip y negativos, sin afirmar ejecucion de Resolume.
+  - XIO: extender el gate opcional de capacidades sólo si aparece un caso de routing reproducible; probar compatibilidad hacia atras y no tocar transporte real.
+  - MOSAIK: mantener la frontera no-VJ y añadir sólo pruebas que impidan convertir eventos de transporte en fases Resolume; no abrir host ni ejecutar acciones.
+  - Director: auditar cada commit por diff, suite, push y ausencia de assets/credenciales antes de extraerlo a LUCIDA o FARMAXIA.

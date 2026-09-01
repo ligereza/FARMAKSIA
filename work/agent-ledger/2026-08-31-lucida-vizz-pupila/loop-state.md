@@ -53,6 +53,16 @@ completed:
     evidence: C:\IA\VJ en LUCIDA, commits 9b3c2b3 y 6ff293d publicados; ProposalDecision, HostSignalBoundary y receipts de auditoria distinguen accepted/rejected/unknown de ejecucion real. La suite pasa 53 pytest.
   - item: Se integró la frontera host en LUCIDA/RESOLUME.
     evidence: C:\IA\LUCIDA/RESOLUME, commit 2a43ed2 publicado; la suite pasa 42 pytest y conserva proposal-only, replay offline y ausencia de sockets/Resolume real.
+  - item: XIO endureció la deduplicación y serialización de ConnectivityStatus.
+    evidence: C:\IA\XIO en codex/xio-transport, commit d8a13f0 publicado; la suite completa de XIO_LAYER pasa 55 tests y cubre mediciones stale, replay idempotente y estados malformados sin abrir sockets.
+  - item: XIO agregó un gate opcional de capacidades para fan-out.
+    evidence: C:\IA\XIO en codex/xio-transport, commit 45132fd publicado; un peer sin la capacidad requerida recibe capability_missing y no se envía el signal; la suite completa pasa 55 tests.
+  - item: MOSAIK endureció HostResult y la frontera de eventos no-VJ.
+    evidence: C:\IA\VJ en LUCIDA, commits e08b8b9 y e19de67 publicados; HostResult valida campos, round-trip y estados; connectivity.status/transport es rechazado sin inventar fase ni mutar replay; la suite completa pasa 75 tests.
+  - item: Se integraron los contratos nuevos en LUCIDA.
+    evidence: LUCIDA/MULTI commits 659a90a y 99b9d96, 55 unittest; LUCIDA/RESOLUME commit e2f2cb1, 63 pytest; todos publicados y sin incluir adobe/.
+  - item: Se construyó el primer puente real XIO -> VIZZ/PUPILA en FARMAXIA.
+    evidence: Experimento 090 valida ApplicationEvent canónico, conserva lineage, elimina payload crudo, bloquea sin consentimiento, deduplica por session/peer/surface y separa sesiones PUPILA; contrato offline pasa 13 tests y el cross-branch check con XIO real pasa.
 
 current_state:
   files_or_resources:
@@ -61,15 +71,15 @@ current_state:
     - C:\IA\VJ
     - C:\IA\svg\agent-toolkit\generic-interface-layer
     - C:\IA\LUCIDA\ADOBE, RESOLUME y MULTI
-  tests_and_checks: 090 pasa py_compile, seis contratos offline y procedencia. XIO pasa 44 unittest; MOSAIK/VJ pasa 53 pytest; LUCIDA/RESOLUME pasa 42 pytest; LUCIDA/MULTI pasa 44 unittest; LUCIDA/ADOBE pasa verify, smoke, companion check y 11 tests. La suite completa de FARMAKSIA se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
+  tests_and_checks: 090 pasa contrato offline con 13 tests, demo y cross-branch check con XIO real. XIO pasa 55 unittest; MOSAIK/VJ pasa 75 pytest; LUCIDA/RESOLUME pasa 63 pytest; LUCIDA/MULTI pasa 55 unittest; LUCIDA/ADOBE pasa verify, smoke, companion check y 11 tests. La suite completa de FARMAKSIA se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
   assumptions: LUCIDA es el proyecto base conceptual; XIO y VJ deben conservar nombres propios de su eje en sus ramas derivadas; ZIGO es el origen histórico, no el nombre de los productos finales.
   open_questions:
     - Nombre definitivo de las ramas derivadas de XIO y VJ.
     - Qué partes mínimas de generic-interface-layer se incorporan a FARMAXIA sin acoplarlo a SVG.
   blockers: Suite global bloqueada en provenance 018; no tocar ese archivo porque contiene cambios previos del usuario. XIO conserva cambios de usuario sin stage. La publicación pesada de ADOBE puede tardar por sus 513 MiB de iconos visuales, pero la rama ya quedó confirmada en origin/ADOBE. Ninguna rama declara todavía integración real con sockets, router, Resolume o Adobe.
   research_refs: Extracción ZIGO en SVG y contratos actuales de XIO/VJ.
-  delegation_refs: XIO y VJ recibieron tareas ejecutables con commits, suites y límites de no-main; tras detectar turnos inactivos se reactivaron con entregables concretos. SVG finalizó la extracción y la verificación de ADOBE se hizo en el repositorio destino. XIO entregó 61b3bd2 y MOSAIK entregó 6ff293d después de corregir un NameError y un mismatch de event_id detectados por la suite; ambos cambios quedaron integrados en LUCIDA.
-  last_critique: La orden anterior de renombrar VJ de forma aislada era técnicamente incompleta: el nombre LIMEN existe en dos repositorios y no debía cambiarse sin contrato común. La acción de menor riesgo es separar primero los ejes y renombrar sólo identidades propias en ramas nuevas.
-  estimated_remaining_effort: Medio; separación, publicación e integración de contratos ya verificadas. Resta demostrar una sesión cross-branch reproducible y después conectar VIZZ/PUPILA a eventos replayables sin introducir captura invasiva.
-  next_action: XIO debe convertir ConnectivityStatus medido por el host en ApplicationEvent connectivity.status; MOSAIK debe validar y reconstruir HostResult. Tras probar ambos cambios, integrar el evento en LUCIDA/MULTI y verificar el recorrido cross-branch sin red real. Después extraer el primer contrato común que VIZZ/PUPILA puedan consumir.
-  next_checkpoint_trigger: Después de que ambos agentes respondan o tras la primera revisión de 5 minutos.
+  delegation_refs: XIO y VJ recibieron tareas ejecutables con commits, suites y límites de no-main; tras detectar turnos inactivos se reactivaron con entregables concretos y ahora ambos producen commits verificables. SVG finalizó la extracción y la verificación de ADOBE se hizo en el repositorio destino. Los cambios 45132fd, d8a13f0, e19de67 y e08b8b9 fueron auditados e integrados selectivamente en LUCIDA.
+  last_critique: La hipótesis evento canónico universal tenía un riesgo real: transportar no implica que un dominio VJ deba interpretarlo como fase. La prueba cross-branch confirmó que la separación correcta es transportar y preservar provenance en MULTI, pero rechazar explícitamente el evento en RESOLUME. El puente 090 adopta el evento sólo como metadata para VIZZ/PUPILA y no reenvía payload crudo.
+  estimated_remaining_effort: Medio-bajo para el primer vertical offline; alto para transporte real, overlays y outcomes de aprendizaje. El siguiente avance debe demostrar una ruta de señales de interacción observable y reversible, no más contratos abstractos.
+  next_action: Mantener XIO en el hito de ruteo por capacidades y MOSAIK en la frontera no-VJ; el director debe auditar sus próximos commits. En FARMAXIA, convertir el bridge 090 en un adaptador de replay con señales pointer/keyboard/focus, probar la política VIZZ y la propuesta PUPILA por sesiones y dejar el transporte real fuera hasta fijar autenticación.
+  next_checkpoint_trigger: Próxima revisión después de dos commits verificables de agentes o de la siguiente integración de 090.

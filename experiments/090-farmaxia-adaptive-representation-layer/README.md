@@ -38,6 +38,19 @@ propuesta emergente reversible
 aceptación explícita (fuera de este slice)
 ```
 
+## Puente de eventos canónicos
+
+`canonical_event_bridge.py` permite que XIO entregue un evento de aplicación a
+VIZZ/PUPILA sin acoplar el experimento a la implementación de XIO. El puente
+valida el sobre, conserva la procedencia y transforma sólo un resumen
+metadata-only. Nunca copia el `payload` completo: conectividad se convierte en
+`presence`, teclado conserva sólo `count` y `shortcut`, y las demás señales
+usan campos acotados.
+
+El `event_id` externo es idempotente por `session_id`, `peer_id` y `surface_id`.
+PUPILA mantiene además esas tres dimensiones separadas, por lo que dos
+sesiones con el mismo `room_id` no se mezclan.
+
 ## Qué se adopta de ZIGO
 
 - envelopes versionados y hashes deterministas;
@@ -62,10 +75,12 @@ Desde `C:\IA\FARMAXIA`:
 ```powershell
 .\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_contract_test.py
 .\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_demo.py
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_cross_branch_check.py
 ```
 
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
-procesos de usuario.
+procesos de usuario. El tercer comando importa sólo los contratos locales de
+XIO para probar la frontera real; no abre red.
 
 ## Kill tests
 
@@ -75,11 +90,14 @@ procesos de usuario.
 - PUPILA no acepta estados de otra sala;
 - una propuesta no contiene una acción ejecutable;
 - alterar un evento rompe la cadena de auditoría;
+- un evento canónico duplicado no aumenta muestras;
+- un evento canónico sin consentimiento no se registra;
+- una sesion distinta no hereda participantes de otra sesion;
 - la capa no bloquea ni captura el input de la aplicación.
 
 ## Siguiente hito
 
-Añadir un transporte loopback autenticado y un adaptador real de una sola
-superficie, primero en modo observador. La ventana transparente sólo se
-implementará cuando el transporte pueda demostrar que es no bloqueante,
-cancelable y reversible.
+Añadir un replay de señales de interacción `pointer`, `keyboard` y `focus`
+alimentado por el evento canónico, primero en modo observador. La ventana
+transparente y el transporte real quedan fuera hasta demostrar autenticación,
+no bloqueo, cancelación y reversibilidad.

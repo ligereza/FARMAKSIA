@@ -1,0 +1,22 @@
+{
+  "event_id": "canonical-event-001",
+  "schema_version": 1,
+  "source_app": "XIO",
+  "event_type": "connectivity.status",
+  "channel": "transport",
+  "payload": {
+    "state": "connected",
+    "transport": "ethernet",
+    "secret": "fixture-only-do-not-export"
+  },
+  "source_timestamp": "2026-09-01T12:00:00Z",
+  "received_timestamp": "2026-09-01T12:00:00.050Z",
+  "session_id": "session-demo",
+  "peer_id": "user-a",
+  "sequence": 1,
+  "raw_hash": "sha256:canonical-event-fixture",
+  "provenance": {
+    "rootId": "xio-root-1",
+    "measuredBy": "host"
+  }
+}

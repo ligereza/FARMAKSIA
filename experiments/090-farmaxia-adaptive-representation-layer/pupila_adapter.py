@@ -12,7 +12,11 @@ class PupilaAdapter:
     """Connects states without sharing private signal content or taking action."""
 
     def __init__(self) -> None:
-        self._states: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+        self._states: dict[tuple[str, str, str], dict[str, dict[str, Any]]] = defaultdict(dict)
+
+    @staticmethod
+    def _state_key(context: dict[str, Any]) -> tuple[str, str, str]:
+        return (context["sessionId"], context["roomId"], context["surfaceId"])
 
     def ingest(self, raw_context: dict[str, Any] | None, vizz_state: dict[str, Any]) -> dict[str, Any]:
         context = normalize_context(raw_context)
@@ -21,7 +25,7 @@ class PupilaAdapter:
         participant = str(vizz_state.get("participantRef") or "participant-local")
         if vizz_state.get("consent") is not True:
             return self.snapshot(context)
-        self._states[context["roomId"]][participant] = {
+        self._states[self._state_key(context)][participant] = {
             "participantRef": participant,
             "policy": str(vizz_state.get("policy") or "quiet"),
             "activityScore": float(vizz_state.get("activityScore") or 0.0),
@@ -32,22 +36,22 @@ class PupilaAdapter:
 
     def snapshot(self, raw_context: dict[str, Any] | None) -> dict[str, Any]:
         context = normalize_context(raw_context)
-        states = list(self._states.get(context["roomId"], {}).values())
+        states = list(self._states.get(self._state_key(context), {}).values())
         active = [item for item in states if item["activityScore"] > 0.18]
         blocked = [item for item in states if item["policy"] == "guide"]
         proposals: list[dict[str, Any]] = []
         if len(states) >= 2 and blocked and active:
-            kind, reason = "peer-bridge", "un participante requiere una guía mientras otro progresa"
+            kind, reason = "peer-bridge", "one participant needs guidance while another progresses"
         elif len(states) >= 2 and len({item["policy"] for item in states}) > 1:
-            kind, reason = "shared-checkpoint", "el grupo tiene ritmos distintos y conviene sincronizar el siguiente paso"
+            kind, reason = "shared-checkpoint", "participants have different rhythms and may need a shared next step"
         elif len(states) >= 2:
-            kind, reason = "co-presence", "hay más de un participante en la misma superficie de trabajo"
+            kind, reason = "co-presence", "more than one participant shares the work surface"
         else:
             kind, reason = None, None
         if kind:
             proposal = {
                 "schemaVersion": 1,
-                "proposalId": deterministic_id("pupila-proposal", {"roomId": context["roomId"], "kind": kind, "stateHashes": sorted(item["stateHash"] for item in states)}),
+                "proposalId": deterministic_id("pupila-proposal", {"sessionId": context["sessionId"], "roomId": context["roomId"], "surfaceId": context["surfaceId"], "kind": kind, "stateHashes": sorted(item["stateHash"] for item in states)}),
                 "adapter": "pupila",
                 "roomId": context["roomId"],
                 "surfaceId": context["surfaceId"],
@@ -64,6 +68,7 @@ class PupilaAdapter:
         return {
             "schemaVersion": 1,
             "adapter": "pupila",
+            "sessionId": context["sessionId"],
             "roomId": context["roomId"],
             "surfaceId": context["surfaceId"],
             "participantCount": len(states),

@@ -35,7 +35,14 @@ class VizzAdapter:
         focused = [item["value"]["focused"] for item in recent if item["kind"] == "focus"]
         focus_state = focused[-1] if focused else False
         gaze_quality = [item["value"]["quality"] for item in recent if item["kind"] == "gaze"]
-        activity = clamp((len(recent) / 12.0) * 0.65 + min(1.0, kinds["keyboard"] / 4.0) * 0.2 + min(1.0, kinds["pointer"] / 8.0) * 0.15)
+        interaction_kinds = {"pointer", "keyboard", "focus", "gaze"}
+        interaction_recent = [item for item in recent if item["kind"] in interaction_kinds]
+        interaction_counts = Counter(item["kind"] for item in interaction_recent)
+        activity = clamp(
+            (len(interaction_recent) / 12.0) * 0.65
+            + min(1.0, interaction_counts["keyboard"] / 4.0) * 0.2
+            + min(1.0, interaction_counts["pointer"] / 8.0) * 0.15
+        )
         coverage = sorted(kinds)
         if not recent:
             policy, reason = "quiet", "no-consented-signal"
