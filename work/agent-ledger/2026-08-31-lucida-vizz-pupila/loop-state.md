@@ -81,6 +81,14 @@ completed:
     evidence: C:\IA\VJ en rama LUCIDA, commit 828467c publicado; diff_overlay_view valida vistas proyectadas, compara sólo campos seguros y limita cambios; la suite completa pasa 82 pytest.
   - item: LUCIDA/MULTI adoptó el snapshot del registry de XIO.
     evidence: C:\IA\LUCIDA en rama MULTI, commit f016a1c publicado; el contrato y sus pruebas pasan 61 unittest, y adobe/ permanece sin seguimiento.
+  - item: XIO extendió el registry con un plan declarativo de rutas.
+    evidence: C:\IA\XIO en codex/xio-transport, commit c95fab2 publicado; route_plan informa matched/no_match y candidatos sin ejecutar adapters; la suite completa pasa 73 unittest.
+  - item: MOSAIK/VJ expuso el diff de overlay desde el orquestador.
+    evidence: C:\IA\VJ en rama LUCIDA, commit 433c3ab publicado; diff_overlay_view acepta estados o mappings, proyecta por la vista acotada y evita metadata privada; la suite completa pasa 85 pytest.
+  - item: LUCIDA/MULTI adoptó la consulta de candidatos y su plan declarativo.
+    evidence: C:\IA\LUCIDA en rama MULTI, commit 6799f43 publicado; candidates filtra por evento/capacidad y devuelve no-match explícito; la suite pasa 65 unittest.
+  - item: FARMAXIA añadió diff incremental para PUPILA.
+    evidence: Experimento 090, commit d17146f publicado en main; diff_pupila_view compara sólo campos proyectados y rechaza payloads/acciones; contrato offline pasa 19 tests.
 
 current_state:
   files_or_resources:
@@ -89,7 +97,7 @@ current_state:
     - C:\IA\VJ
     - C:\IA\svg\agent-toolkit\generic-interface-layer
     - C:\IA\LUCIDA\ADOBE, RESOLUME y MULTI
-  tests_and_checks: 090 pasa contrato offline con 17 tests, demo y cross-branch check con XIO real. XIO pasa 66 unittest en 5e1be8d; MOSAIK/VJ pasa 82 pytest en 828467c; LUCIDA/RESOLUME pasa 63 pytest; LUCIDA/MULTI pasa 61 unittest en f016a1c; LUCIDA/ADOBE pasa verify, smoke, companion check y 11 tests. La suite completa de FARMAKSIA se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
+  tests_and_checks: 090 pasa contrato offline con 19 tests, demo y cross-branch check con XIO real. XIO pasa 73 unittest en c95fab2; MOSAIK/VJ pasa 85 pytest en 433c3ab; LUCIDA/RESOLUME pasa 63 pytest; LUCIDA/MULTI pasa 65 unittest en 6799f43; LUCIDA/ADOBE pasa verify, smoke, companion check y 11 tests. La suite completa de FARMAKSIA se detiene antes de 090 por un hash mismatch preexistente en la procedencia de X-ANA-X 018.
   assumptions: LUCIDA es el proyecto base conceptual; XIO y VJ deben conservar nombres propios de su eje en sus ramas derivadas; ZIGO es el origen histórico, no el nombre de los productos finales.
   open_questions:
     - Nombre definitivo de las ramas derivadas de XIO y VJ.
@@ -99,5 +107,5 @@ current_state:
   delegation_refs: XIO y VJ recibieron tareas ejecutables con archivo objetivo, suite, commit y push; tras detectar turnos inactivos se corrigió la dirección. XIO entregó 1f543f9 y 173e96e y ahora tiene una tarea activa para publicar un snapshot JSON-safe del registry; MOSAIK entregó abf4220, e53166e y eb0b97e y ahora tiene una tarea activa para calcular parches deterministas de la vista. SVG finalizó la extracción y la verificación de ADOBE se hizo en el repositorio destino. Los cambios de capacidades, conectividad, frontera host, registro de adaptadores, overlay y PUPILA fueron auditados e integrados selectivamente en LUCIDA/FARMAXIA.
   last_critique: La hipótesis evento canónico universal tenía un riesgo real: transportar no implica que un dominio VJ deba interpretarlo como fase. La prueba cross-branch confirmó que la separación correcta es transportar y preservar provenance en MULTI, pero rechazar explícitamente el evento en RESOLUME. El puente 090 adopta el evento sólo como metadata para VIZZ/PUPILA y no reenvía payload crudo.
   estimated_remaining_effort: Medio-bajo para el primer vertical offline; alto para transporte real, overlays y outcomes de aprendizaje. El siguiente avance debe demostrar una ruta de señales de interacción observable y reversible, no más contratos abstractos.
-  next_action: Verificar los dos agentes por sus repositorios, no por sus mensajes: aceptar sólo sus commits publicados y suites completas. El snapshot XIO ya está integrado en MULTI; el siguiente cruce es llevar el diff seguro de MOSAIK a la superficie consumidora sin copiar assets. En FARMAXIA, extender el replay con pointer/keyboard/focus y medir la política VIZZ/PUPILA por sesiones; dejar el transporte real fuera hasta fijar autenticación.
+  next_action: Dejar a XIO y MOSAIK dirigiendo sus objetivos amplios y auditarlos por commits y suites, no por duración ni mensajes. Integrar en la siguiente revisión el route_plan de XIO y el diff de MOSAIK en las superficies LUCIDA correspondientes, sin copiar assets. En FARMAXIA, extender el replay con pointer/keyboard/focus y medir la política VIZZ/PUPILA por sesiones; dejar el transporte real fuera hasta fijar autenticación.
   next_checkpoint_trigger: Próxima revisión después de dos commits verificables de agentes o de la siguiente integración de 090.
