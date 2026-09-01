@@ -115,7 +115,7 @@ latest_iteration_2026_09_01:
   delegation:
     - XIO continues from dc374bf with a replayable local event source and one LUCIDA/MULTI integration fixture; acceptance is full suite, commit and push.
     - MOSAIK continues from 94bcc81 with a host-neutral overlay consumer smoke path for JSON, diff and revision cursor; acceptance is full suite, commit and push.
-  own_change: Experiment 090 replay now emits bounded interactionMetrics for accepted, blocked and duplicate signals plus latest metadata-only VIZZ policy per participant.
-  evidence: 090 contract passes 19 tests, demo passes, and XIO cross-branch check passes.
+  own_change: Experiment 090 replay now emits bounded interactionMetrics and its cross-branch check replays XIO connectivity plus focus, pointer, keyboard and a duplicate through VIZZ/PUPILA.
+  evidence: 090 contract passes 19 tests, demo passes, cross-branch replay reports 4 accepted and 1 duplicate, payloadForwarded=false, and a safe final PUPILA view.
   prediction: The next useful proof is a replay boundary crossing between XIO and LUCIDA, not another standalone schema. Qualitative confidence medium-high.
   next_action: Wait for agent completion or attention, then verify commits and suites once; integrate only the cross-repository fixture that passes.

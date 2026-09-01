@@ -99,8 +99,10 @@ Desde `C:\IA\FARMAXIA`:
 ```
 
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
-procesos de usuario. El tercer comando importa sólo los contratos locales de
-XIO para probar la frontera real; no abre red.
+procesos de usuario. El tercer comando genera un evento de conectividad con los
+contratos reales de XIO y lo reproduce junto con `focus`, `pointer` y
+`keyboard`, incluyendo un duplicado. Verifica la frontera completa sin abrir
+red.
 
 ## Kill tests
 
