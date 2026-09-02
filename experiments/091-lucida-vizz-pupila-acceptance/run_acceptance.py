@@ -62,6 +62,7 @@ def _load_engine(lucida_root: Path):
         AdapterRegistry,
         ContractRegistry,
         LucidaPipeline,
+        build_overlay_frame,
         register_vizz_pupila_routes,
     )
 
@@ -74,6 +75,7 @@ def _load_engine(lucida_root: Path):
         AdapterRegistry,
         ContractRegistry,
         LucidaPipeline,
+        build_overlay_frame,
         register_vizz_pupila_routes,
         lucida_root,
         loaded_path,
@@ -88,6 +90,7 @@ def main() -> int:
         AdapterRegistry,
         ContractRegistry,
         LucidaPipeline,
+        build_overlay_frame,
         register_vizz_pupila_routes,
         lucida_root,
         loaded_path,
@@ -127,6 +130,7 @@ def main() -> int:
         ),
         state=first.state,
     )
+    frame = build_overlay_frame(second.plan).to_dict()
     report = {
         "lucidaRoot": str(lucida_root),
         "loadedLucidaPath": str(loaded_path),
@@ -136,6 +140,10 @@ def main() -> int:
         "activeProposalCount": len(second.state.active_proposals),
         "renderItemCount": len(second.plan.items),
         "renderSource": second.plan.items[0]["source"] if second.plan.items else None,
+        "overlayElementCount": len(frame["elements"]),
+        "overlayTransparent": frame["transparent"],
+        "overlayClickThrough": frame["click_through"],
+        "overlayBlocking": frame["blocking"],
         "rawPayloadForwarded": False,
         "networkOpened": False,
         "guiOpened": False,
@@ -145,6 +153,10 @@ def main() -> int:
     assert report["activeProposalCount"] == 1
     assert report["renderItemCount"] == 1
     assert report["renderSource"] == "pupila"
+    assert report["overlayElementCount"] == 1
+    assert report["overlayTransparent"] is True
+    assert report["overlayClickThrough"] is True
+    assert report["overlayBlocking"] is False
     print(json.dumps(report, sort_keys=True))
     return 0
 
