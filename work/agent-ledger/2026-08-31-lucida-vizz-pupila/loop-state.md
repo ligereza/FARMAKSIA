@@ -229,3 +229,13 @@ latest_hito_2026_09_01_explicit_xio_root:
   kill_test: An absent or outside XIO checkout now fails before the route check can pass; the report exposes xioRoot and loadedXioPath for audit.
   boundary_confirmed: The fix changes only FARMAXIA verification provenance; it does not modify XIO, LUCIDA, host rendering, network transport or user dirty files.
   next_action: Publish the corrected FARMAXIA gate, then audit agent branches only after a new verifiable commit; do not add speculative runtime work.
+
+latest_hito_2026_09_01_agent_audit_after_root_fix:
+  selected_action: audit_new_published_agent_hitos_once
+  evidence:
+    - XIO published 04328ae was audited in a clean worktree: 105 tests passed and one Windows concurrency test failed in JsonLineHandoffStore file locking with PermissionError during lock flush/release.
+    - MOSAIK/LUCIDA published 60b9756 was audited in a clean worktree: 106 tests passed.
+    - FARMAXIA integration against the exact clean XIO and LUCIDA roots passed 3/3; this does not override the XIO suite failure.
+  decision: Keep XIO outside integration acceptance until its published branch passes the complete suite; keep LUCIDA eligible for its own boundary, without merging either tree.
+  limitation: The failure is in XIO persistence concurrency on Windows and must be repaired in XIO, not patched through FARMAXIA.
+  next_action: Continue the own FARMAXIA objective from verified contracts; re-audit XIO only after a new published commit and do not poll continuously.

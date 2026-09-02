@@ -55,3 +55,13 @@ strongest_failure_mode: Python module caching or an invalid checkout could still
 decision: accept
 reason: The loader runs in a fresh subprocess, inserts the requested checkout first, and rejects a resolved XIO package outside that checkout. The change preserves all application ownership boundaries and does not enable network or host actions.
 next_checkpoint: Publish this narrow fix, then audit new agent commits once rather than polling continuously.
+
+## 2026-09-01 agent hito audit after root fix
+
+observed_state: XIO published 04328ae and MOSAIK/LUCIDA published 60b9756. The exact-root FARMAXIA seam passes, but the complete clean XIO suite has one reproducible Windows concurrency failure in the persistence lock.
+selected_action: Keep XIO unaccepted and avoid editing its branch; accept the independent LUCIDA audit result and continue using only verified FARMAXIA contracts.
+strongest_failure_mode: Treating a passing cross-repository smoke seam as sufficient while a source repository's full persistence suite is red.
+evidence: XIO clean suite 105 passed, 1 failed; LUCIDA clean suite 106 passed; FARMAXIA exact-root integration 3/3; no network, GUI or host action.
+decision: reject_xio_for_integration
+reason: The failure is in the source lock implementation and cannot be resolved by a FARMAXIA adapter without hiding a source defect. The autonomous XIO objective remains active and can repair its own branch.
+next_checkpoint: Audit XIO again only after a new published commit; continue the own goal without sending idle prompts.
