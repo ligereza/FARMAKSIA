@@ -14,6 +14,10 @@ sys.path.insert(0, str(SOURCE_ROOT))
 
 from pupila_adapter import PupilaAdapter  # noqa: E402
 from vizz_adapter import VizzAdapter  # noqa: E402
+from lucida_engine_envelope import (  # noqa: E402
+    pupila_room_to_lucida_value,
+    vizz_state_to_lucida_value,
+)
 
 
 def _context(participant: str) -> dict[str, object]:
@@ -39,49 +43,6 @@ def _focus_signal(participant: str, at_ms: int, focused: bool) -> dict[str, obje
         "atMs": at_ms,
         "value": {"focused": focused},
         "consent": True,
-    }
-
-
-def _engine_event_from_vizz(state: dict[str, object]) -> dict[str, object]:
-    return {
-        "session_id": str(state["sessionId"]),
-        "event_id": "vizz-091-user-a",
-        "timestamp": "2026-09-02T12:00:00Z",
-        "sequence": 1,
-        "event_type": "focus.state",
-        "summary": {"focused": bool(state["focusState"])},
-    }
-
-
-def _engine_event_from_pupila(room: dict[str, object]) -> dict[str, object]:
-    proposals = room.get("proposals")
-    if not isinstance(proposals, list) or len(proposals) != 1:
-        raise AssertionError("experiment 090 did not produce one coordination proposal")
-    proposal = proposals[0]
-    if not isinstance(proposal, dict):
-        raise AssertionError("experiment 090 proposal is not an object")
-    reason = str(proposal["reason"])
-    return {
-        "session_id": str(room["sessionId"]),
-        "event_id": "pupila-091-room",
-        "timestamp": "2026-09-02T12:00:01Z",
-        "sequence": 1,
-        "event_type": "coordination.proposal",
-        "summary": {
-            "participant_count": int(room["participantCount"]),
-            "proposal_kind": str(proposal["kind"]),
-            "proposal_state": str(proposal["state"]),
-        },
-        "proposal": {
-            "proposal_id": str(proposal["proposalId"]),
-            "kind": str(proposal["kind"]).replace("-", "_"),
-            "title": "PUPILA coordination proposal",
-            "body": reason,
-            "priority": 60,
-            "ttl_ms": 3000,
-            "requires_confirmation": True,
-            "reversible": True,
-        },
     }
 
 
@@ -147,13 +108,23 @@ def main() -> int:
     first = pipeline.apply(
         adapter_id="vizz.metadata",
         contract_id="vizz.perception.v1",
-        value=_engine_event_from_vizz(state_a),
+        value=vizz_state_to_lucida_value(
+            state_a,
+            event_id="vizz-091-user-a",
+            timestamp="2026-09-02T12:00:00Z",
+            sequence=1,
+        ),
         state=state,
     )
     second = pipeline.apply(
         adapter_id="pupila.coordination",
         contract_id="pupila.coordination.v1",
-        value=_engine_event_from_pupila(room),
+        value=pupila_room_to_lucida_value(
+            room,
+            event_id="pupila-091-room",
+            timestamp="2026-09-02T12:00:01Z",
+            sequence=1,
+        ),
         state=first.state,
     )
     report = {

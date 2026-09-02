@@ -32,6 +32,11 @@ from lucida_render_budget import (  # noqa: E402
     assess_render_update,
 )
 from vizz_adapter import VizzAdapter  # noqa: E402
+from lucida_engine_envelope import (  # noqa: E402
+    LucidaEnvelopeError,
+    pupila_room_to_lucida_value,
+    vizz_state_to_lucida_value,
+)
 
 
 def context(room: str = "room-demo", participant: str = "user-a") -> dict[str, object]:
@@ -160,6 +165,51 @@ def test_pupila_does_not_mix_sessions_with_same_room_id() -> None:
     assert room_a["participantCount"] == 1
     assert room_b["participantCount"] == 1
     assert room_a["sessionId"] != room_b["sessionId"]
+
+
+def test_lucida_envelope_projects_real_090_states_without_payloads() -> None:
+    vizz = VizzAdapter()
+    pupila = PupilaAdapter()
+    state_a = vizz.ingest(context(participant="user-a"), signal("user-a", "focus", 100, {"focused": True}))
+    state_b = vizz.ingest(context(participant="user-b"), signal("user-b", "focus", 100, {"focused": False}))
+    pupila.ingest(context(participant="user-a"), state_a)
+    room = pupila.ingest(context(participant="user-b"), state_b)
+
+    vizz_value = vizz_state_to_lucida_value(
+        state_a,
+        event_id="vizz-envelope-001",
+        timestamp="2026-09-02T12:00:00Z",
+        sequence=1,
+    )
+    pupila_value = pupila_room_to_lucida_value(
+        room,
+        event_id="pupila-envelope-001",
+        timestamp="2026-09-02T12:00:01Z",
+        sequence=1,
+    )
+    assert vizz_value["summary"] == {"focused": True}
+    assert pupila_value["summary"]["participant_count"] == 2
+    assert "payload" not in json.dumps(vizz_value | pupila_value, ensure_ascii=True)
+
+
+def test_lucida_envelope_rejects_non_ascii_proposal_reason() -> None:
+    with pytest.raises(LucidaEnvelopeError, match="ASCII"):
+        pupila_room_to_lucida_value(
+            {
+                "sessionId": "session-1",
+                "participantCount": 1,
+                "proposals": [{
+                    "proposalId": "proposal-1",
+                    "kind": "co-presence",
+                    "state": "proposed",
+                    "reason": "razon con " + chr(0xF3),
+                    "action": None,
+                }],
+            },
+            event_id="event-1",
+            timestamp="2026-09-02T12:00:00Z",
+            sequence=1,
+        )
 
 
 def test_audit_chain_is_replayable_and_tamper_evident() -> None:

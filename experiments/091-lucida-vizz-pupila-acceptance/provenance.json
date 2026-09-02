@@ -34,6 +34,13 @@
       "authority": "computed"
     },
     {
+      "id": "farmaxia:source-envelope-090",
+      "type": "entity",
+      "path": "../090-farmaxia-adaptive-representation-layer/lucida_engine_envelope.py",
+      "role": "source_owned_lucida_envelope_adapter",
+      "authority": "computed"
+    },
+    {
       "id": "farmaxia:acceptance-runner-091",
       "type": "entity",
       "path": "run_acceptance.py",
@@ -54,7 +61,7 @@
       "type": "activity",
       "label": "build_explicit_vizz_pupila_to_lucida_acceptance",
       "agent": "farmaxia:python-runner-091",
-      "used": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090"],
+      "used": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090", "farmaxia:source-envelope-090"],
       "generated": ["farmaxia:acceptance-runner-091"]
     },
     {
@@ -71,7 +78,7 @@
       "id": "farmaxia:query-091-route",
       "expression": "do_redacted_vizz_and_pupila_states_reach_lucida_through_explicit_routes",
       "authority": "experiment_defined",
-      "required_entities": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090", "farmaxia:acceptance-runner-091"]
+      "required_entities": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090", "farmaxia:source-envelope-090", "farmaxia:acceptance-runner-091"]
     },
     {
       "id": "farmaxia:query-091-safety",
