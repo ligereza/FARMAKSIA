@@ -162,3 +162,10 @@ latest_hito_2026_09_01_xio_handoff_store:
   limitation: This proves restart-safe local replay only. It does not authorize delivery, open sockets, or establish authentication for a real network transport.
   prediction: Local persistence is now a usable bridge seam for LUCIDA/MULTI. The next meaningful risk is caller authorization and conflict handling at delivery time; it should be tested with explicit rejection before any real transport is enabled.
   next_action: Build one offline delivery-denial kill test using the restored handoff and a revoked capability, then audit the agent branches again after their next published commits.
+
+latest_hito_2026_09_01_revoked_delivery:
+  selected_action: deny_restored_handoff_before_transport
+  own_change: Extended the persisted XIO handoff check with a revoked capability kill test. The restored handoff is passed to the delivery boundary, which must reject it before invoking the transport.
+  evidence: The route check passes with deliveryStatus=rejected, revokedDeliveryTransportCalls=0, verified audit, one restored handoff and two restored multi-participant handoffs. FARMAXIA 090 remains valid with 19 tests. No socket or host side effect was attempted.
+  prediction: The permission boundary behaves correctly for the local path. A real transport should remain disabled until authentication, expiry, replay protection and user-visible acceptance are specified as separate contracts.
+  next_action: Audit the next XIO and LUCIDA commits once; if no new commits are ready, consolidate the offline checks into one reproducible integration command instead of adding another feature layer.

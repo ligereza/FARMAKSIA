@@ -19,9 +19,13 @@ from XIO_LAYER.adapters import (  # noqa: E402
     ProtocolEventAdapter,
     SourceAdapterRegistry,
 )
-from XIO_LAYER.adapters.handoff import PrivacyPolicy, prepare_adapter_handoff  # noqa: E402
+from XIO_LAYER.adapters.handoff import (  # noqa: E402
+    PrivacyPolicy,
+    deliver_adapter_handoff,
+    prepare_adapter_handoff,
+)
 from XIO_LAYER.adapters.lucida_bridge import transport_to_application_event  # noqa: E402
-from XIO_LAYER.core.audit import AuditLedger  # noqa: E402
+from XIO_LAYER.core.audit import AuditLedger, PermissionRegistry  # noqa: E402
 from XIO_LAYER.core.transport import Endpoint, NetworkMedium, NetworkScope, OscEnvelope  # noqa: E402
 from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
 
@@ -137,6 +141,29 @@ def main() -> int:
     assert len(restored) == 1
     restored_handoff = restored[0]
     assert restored_handoff.event.to_dict() == handoff.event.to_dict()
+
+    class CountingTransport:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def send(self, message: object) -> None:
+            self.calls += 1
+            raise AssertionError("revoked handoff must not reach transport")
+
+    permissions = PermissionRegistry()
+    permissions.grant("farmaxia-check", "handoff.deliver")
+    permissions.revoke("farmaxia-check", "handoff.deliver")
+    transport = CountingTransport()
+    delivery = deliver_adapter_handoff(
+        restored_handoff,
+        transport,
+        audit,
+        permissions=permissions,
+    )
+    assert delivery.status == "rejected"
+    assert delivery.error == "permission_missing_or_revoked"
+    assert transport.calls == 0
+    assert audit.verify() is True
     replay = CanonicalEventReplay().run(
         [restored_handoff.event.to_dict()],
         {
@@ -155,6 +182,9 @@ def main() -> int:
         "roundTripEventPreserved": recovered.event_id == handoff.event.event_id,
         "persistedHandoffRestored": len(restored) == 1,
         "restoredEventPreserved": restored_handoff.event.to_dict() == handoff.event.to_dict(),
+        "revokedDeliveryStatus": delivery.status,
+        "revokedDeliveryTransportCalls": transport.calls,
+        "revokedDeliveryNoSideEffect": transport.calls == 0,
         "auditVerified": audit.verify(),
         "executionAttempted": False,
         "pupilaAcceptedCount": replay["acceptedCount"],
@@ -174,6 +204,9 @@ def main() -> int:
     assert summary["pupilaSignalCoverage"] == ["task"]
     assert summary["persistedHandoffRestored"] is True
     assert summary["restoredEventPreserved"] is True
+    assert summary["revokedDeliveryStatus"] == "rejected"
+    assert summary["revokedDeliveryTransportCalls"] == 0
+    assert summary["revokedDeliveryNoSideEffect"] is True
 
     multi_handoffs = [
         _prepare_multi_handoff(
