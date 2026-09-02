@@ -79,6 +79,13 @@ El estado vacio produce una atencion `waiting`, no una accion automatica.
 cambios seguros, con orden y limite deterministas; no acepta estados internos
 ni añade un canal de acciones.
 
+`pupila_lucida_projection.py` conecta una vista PUPILA ya redactada con el
+contrato generico de overlay de LUCIDA. Es una proyeccion deliberadamente
+lossy: conserva conteos y propuestas de coordinacion, pero descarta
+participantes, cobertura de senales, sala, actividad y payloads. No convierte
+participantes en capacidades de la aplicacion ni afirma semantica de Resolume,
+Adobe, atencion o aprendizaje.
+
 ## Qué se adopta de ZIGO
 
 - envelopes versionados y hashes deterministas;
@@ -134,6 +141,16 @@ misma sala y superficie. El replay conserva ambos participantes, genera la
 propuesta `co-presence` y entrega el diff de la segunda vista. Esto prueba la
 coordinación de la capa multi sin fingir que un evento OSC genérico contiene
 significado de foco, comprensión o rendimiento.
+
+El consumidor host-neutral de LUCIDA se verifica aplicando los snapshots y
+diffs derivados de PUPILA:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_lucida_pupila_consumer_check.py --lucida-root C:\IA\VJ
+```
+
+El checkout local debe estar en la rama `LUCIDA`. El chequeo sólo usa memoria:
+no abre red, GUI ni acciones del host.
 
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
 procesos de usuario. El tercer comando genera un evento de conectividad con los

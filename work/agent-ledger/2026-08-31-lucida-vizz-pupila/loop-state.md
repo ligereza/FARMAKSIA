@@ -139,3 +139,11 @@ agent_audit_2026_09_01:
   mosaik_vj: origin/LUCIDA at de2d827; targeted LUCIDA suite passes 93 pytest. The active checkout is IMAGO with 8 tests passing, so no IMAGO changes were treated as LUCIDA integration.
   correction: The first VJ audit accidentally ran from FARMAXIA and produced import-collection mismatches; it was discarded and repeated from a clean LUCIDA worktree.
   decision: Continue only from the published XIO and LUCIDA branches; do not merge IMAGO or unrelated local changes into FARMAXIA.
+
+latest_hito_2026_09_01_pupila_lucida_consumer:
+  selected_action: connect_pupila_diff_to_lucida_consumer
+  own_change: Added an explicit lossy adapter from the bounded PUPILA view to the generic LUCIDA overlay contract, plus an integration check that feeds the resulting snapshot and diff into the real LUCIDA OverlayConsumer with its revision cursor.
+  evidence: The check passes with two consented PUPILA participants, one shared-checkpoint proposal, one LUCIDA delta of four fields, proposal-only safety, no automatic actions, no external side effects and no raw payload forwarding. The FARMAXIA 090 contract remains valid with 19 tests.
+  limitation: The adapter intentionally drops participant references, signal coverage, room, activity and source payloads. It is not a semantic claim that participants are host capabilities, and it does not execute or control the host application.
+  prediction: The offline cross-repository seam is now demonstrated. The remaining high-risk work is runtime authentication and host rendering, not another schema; keep those out until the consumer contract is reviewed by the agent branch.
+  next_action: Audit the next published LUCIDA consumer and XIO fixture commits once, then decide whether to promote this adapter into a shared package or keep it as an experiment boundary.
