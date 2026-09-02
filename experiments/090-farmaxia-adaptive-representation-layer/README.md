@@ -116,6 +116,16 @@ cuarto comando con un checkout local de esa rama:
 Ese comando requiere que la ruta indicada contenga `XIO_LAYER` de la rama
 `MULTI`; no cambia ramas ni abre sockets.
 
+El flujo de selección y handoff de XIO se verifica con:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_route_handoff_check.py
+```
+
+El chequeo exige una ruta coincidente, selecciona el adaptador explícitamente,
+redacta el payload mediante una allowlist, conserva el envelope de
+`application-event` y sólo prepara el handoff. No entrega ni ejecuta acciones.
+
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
 procesos de usuario. El tercer comando genera un evento de conectividad con los
 contratos reales de XIO y lo reproduce junto con `focus`, `pointer` y
