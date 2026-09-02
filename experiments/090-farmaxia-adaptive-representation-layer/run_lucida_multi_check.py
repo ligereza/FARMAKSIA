@@ -1,4 +1,4 @@
-"""Verify one XIO event across the LUCIDA/MULTI transport boundary."""
+"""Verify multiple XIO participants across the LUCIDA/MULTI boundary."""
 
 from __future__ import annotations
 
@@ -27,34 +27,60 @@ def main() -> int:
     from XIO_LAYER.core.events import ApplicationEvent  # noqa: E402
     from XIO_LAYER.core.transport import Endpoint, NetworkMedium, NetworkScope  # noqa: E402
     from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
-    from run_xio_cross_branch_check import build_event, build_interaction_event  # noqa: E402
+    from run_xio_cross_branch_check import build_event  # noqa: E402
 
     connectivity_event = build_event(Path(args.xio_root)).to_dict()
-    interaction_event = build_interaction_event(
-        "xio-multi-focus-001",
+    checked_at = datetime(2026, 9, 1, 12, 0, 2, tzinfo=timezone.utc)
+    interaction_event = ApplicationEvent(
+        event_id="xio-multi-focus-001",
+        source_app="XIO",
         event_type="focus.changed",
         channel="focus",
-        sequence=2,
         payload={"focused": True},
+        source_timestamp=checked_at,
+        received_timestamp=checked_at,
+        session_id="session-cross-branch",
+        peer_id="peer-1",
+        sequence=2,
+        provenance={"rootId": "xio-root-interaction", "measuredBy": "host"},
     )
-    source_event = ApplicationEvent.from_dict(connectivity_event)
-    message = application_event_to_transport(
-        source_event,
-        source="xio-host",
-        destination=Endpoint(
-            "memory",
-            "lucida-multi",
-            medium=NetworkMedium.ETHERNET,
-            scope=NetworkScope.LAN,
-        ),
-        sent_at=datetime(2026, 9, 1, 12, 0, 2, tzinfo=timezone.utc),
-        message_id="xio-multi-message-001",
+    second_event = ApplicationEvent(
+        event_id="xio-multi-focus-002",
+        source_app="XIO",
+        event_type="focus.changed",
+        channel="focus",
+        payload={"focused": False},
+        source_timestamp=checked_at,
+        received_timestamp=checked_at,
+        session_id="session-cross-branch",
+        peer_id="peer-2",
+        sequence=3,
+        provenance={"rootId": "xio-root-interaction", "measuredBy": "host"},
     )
-    recovered = transport_to_application_event(message)
-    assert recovered.to_dict() == source_event.to_dict()
+    source_events = [ApplicationEvent.from_dict(connectivity_event), interaction_event, second_event]
+    messages = [
+        application_event_to_transport(
+            event,
+            source="xio-host",
+            destination=Endpoint(
+                "memory",
+                "lucida-multi",
+                medium=NetworkMedium.ETHERNET,
+                scope=NetworkScope.LAN,
+            ),
+            sent_at=checked_at,
+            message_id=f"xio-multi-message-{index:03d}",
+        )
+        for index, event in enumerate(source_events, start=1)
+    ]
+    recovered_events = [transport_to_application_event(message) for message in messages]
+    assert all(
+        recovered.to_dict() == source.to_dict()
+        for recovered, source in zip(recovered_events, source_events)
+    )
 
     report = CanonicalEventReplay().run(
-        [connectivity_event, interaction_event],
+        [event.to_dict() for event in recovered_events],
         {
             "roomId": "room-cross",
             "surfaceId": "surface-cross",
@@ -63,17 +89,29 @@ def main() -> int:
         consent=True,
     )
     summary = {
-        "transportChannel": message.channel,
+        "transportChannel": messages[0].channel,
+        "transportedEventCount": len(messages),
         "roundTripPreserved": True,
-        "eventIdPreserved": recovered.event_id == source_event.event_id,
-        "provenancePreserved": recovered.raw_hash == source_event.raw_hash,
+        "eventIdsPreserved": all(
+            recovered.event_id == source.event_id
+            for recovered, source in zip(recovered_events, source_events)
+        ),
+        "provenancePreserved": all(
+            recovered.raw_hash == source.raw_hash
+            for recovered, source in zip(recovered_events, source_events)
+        ),
         "farmaxiaAcceptedCount": report["acceptedCount"],
         "farmaxiaFinalView": report["finalPupilaView"],
         "farmaxiaViewDiffCount": len(report["pupilaViewDiffs"]),
         "payloadForwarded": any("payload" in result for result in report["results"]),
     }
-    assert summary["farmaxiaAcceptedCount"] == 2
-    assert summary["farmaxiaViewDiffCount"] == 2
+    assert summary["transportedEventCount"] == 3
+    assert summary["eventIdsPreserved"] is True
+    assert summary["provenancePreserved"] is True
+    assert summary["farmaxiaAcceptedCount"] == 3
+    assert summary["farmaxiaFinalView"]["participantCount"] == 2
+    assert summary["farmaxiaFinalView"]["proposals"][0]["kind"] == "shared-checkpoint"
+    assert summary["farmaxiaViewDiffCount"] == 3
     assert summary["payloadForwarded"] is False
     print(json.dumps(summary, sort_keys=True))
     return 0

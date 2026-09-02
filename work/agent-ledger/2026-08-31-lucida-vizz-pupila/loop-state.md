@@ -126,3 +126,10 @@ latest_hito_2026_09_01_route_multi:
   evidence: The contract suite passes 19 tests; the route check reports multiAcceptedCount=2, multiParticipantCount=2, multiProposalKind=co-presence, preserved round-trip event IDs, verified audit chain, empty projected payload and executionAttempted=false. The XIO cross-branch replay also passes with 4 accepted events and 1 duplicate.
   prediction: The next high-value boundary is consuming this two-participant view through LUCIDA/MULTI without a GUI or host-specific action. Qualitative confidence medium-high.
   next_action: Run the existing LUCIDA/MULTI fixture against the new multi-participant contract, then commit only if the cross-repository replay preserves both participants, provenance and proposal-only safety.
+
+latest_hito_2026_09_01_lucida_multi:
+  selected_action: prove_transport_of_multi_participant_view
+  own_change: Extended the LUCIDA/MULTI boundary fixture so three application events are transported and round-tripped before replay: connectivity for peer-1, focused interaction for peer-1 and unfocused interaction for peer-2.
+  evidence: The fixture passes with transportedEventCount=3, eventIdsPreserved=true, provenancePreserved=true, farmaxiaAcceptedCount=3, participantCount=2, proposal kind shared-checkpoint, three deterministic view diffs and payloadForwarded=false. The 090 contract remains valid with 19 tests and the XIO cross-branch replay remains valid with 4 accepted events plus 1 duplicate.
+  prediction: The offline architecture now demonstrates the intended first integration seam. The next risk is not another envelope but consumer behavior: a host-neutral reader must apply JSON/diff/revision data without blocking or executing actions. Qualitative confidence medium-high.
+  next_action: Audit the active MOSAIK/VJ consumer commit and the active XIO source fixture once each has a new verifiable commit; otherwise continue strengthening FARMAXIA replay invariants without opening real network or GUI integrations.
