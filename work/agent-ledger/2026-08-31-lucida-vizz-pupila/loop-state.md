@@ -119,3 +119,10 @@ latest_iteration_2026_09_01:
   evidence: 090 contract passes 19 tests; route handoff reports matched/XIO/prepared, empty projected payload, verified audit, preserved round-trip event, executionAttempted=false, and PUPILA receives one task-classified participant without inventing focus, pointer, or keyboard semantics.
   prediction: The next useful proof is a replay boundary crossing between XIO and LUCIDA, not another standalone schema. Qualitative confidence medium-high.
   next_action: Wait for agent completion or attention, then verify commits and suites once; integrate only the cross-repository fixture that passes.
+
+latest_hito_2026_09_01_route_multi:
+  selected_action: prove_multi_participant_handoff
+  own_change: Extended the XIO route handoff check with two independently selected and redacted participants sharing one session, room and surface. The replay now verifies participant accumulation, incremental PUPILA view changes and an emergent co-presence proposal.
+  evidence: The contract suite passes 19 tests; the route check reports multiAcceptedCount=2, multiParticipantCount=2, multiProposalKind=co-presence, preserved round-trip event IDs, verified audit chain, empty projected payload and executionAttempted=false. The XIO cross-branch replay also passes with 4 accepted events and 1 duplicate.
+  prediction: The next high-value boundary is consuming this two-participant view through LUCIDA/MULTI without a GUI or host-specific action. Qualitative confidence medium-high.
+  next_action: Run the existing LUCIDA/MULTI fixture against the new multi-participant contract, then commit only if the cross-repository replay preserves both participants, provenance and proposal-only safety.

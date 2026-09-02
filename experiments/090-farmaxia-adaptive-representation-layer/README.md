@@ -129,6 +129,12 @@ El mismo handoff preparado se reproduce después en VIZZ/PUPILA y termina en
 una vista de participante; la señal queda clasificada como `task` porque el
 contrato universal no inventa que un OSC genérico sea foco, puntero o teclado.
 
+El mismo chequeo prepara además dos handoffs de participantes distintos en la
+misma sala y superficie. El replay conserva ambos participantes, genera la
+propuesta `co-presence` y entrega el diff de la segunda vista. Esto prueba la
+coordinación de la capa multi sin fingir que un evento OSC genérico contiene
+significado de foco, comprensión o rendimiento.
+
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
 procesos de usuario. El tercer comando genera un evento de conectividad con los
 contratos reales de XIO y lo reproduce junto con `focus`, `pointer` y
@@ -151,7 +157,7 @@ red.
 
 ## Siguiente hito
 
-Conectar `interactionMetrics` y el diff de PUPILA a un fixture compartido con
-LUCIDA/MULTI, primero en modo observador. La ventana transparente y el
+Conectar el fixture de dos participantes a un envelope compartido de
+LUCIDA/MULTI y probar su consumo host-neutral. La ventana transparente y el
 transporte real quedan fuera hasta demostrar autenticación, no bloqueo,
 cancelación y reversibilidad.
