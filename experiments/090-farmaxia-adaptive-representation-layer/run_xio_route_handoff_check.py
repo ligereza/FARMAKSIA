@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 import json
 from pathlib import Path
 import sys
+import tempfile
 
 
 HERE = Path(__file__).resolve().parent
@@ -13,7 +14,11 @@ XIO_ROOT = Path(r"C:\IA\XIO")
 sys.path.insert(0, str(XIO_ROOT))
 sys.path.insert(0, str(HERE))
 
-from XIO_LAYER.adapters import ProtocolEventAdapter, SourceAdapterRegistry  # noqa: E402
+from XIO_LAYER.adapters import (  # noqa: E402
+    JsonLineHandoffStore,
+    ProtocolEventAdapter,
+    SourceAdapterRegistry,
+)
 from XIO_LAYER.adapters.handoff import PrivacyPolicy, prepare_adapter_handoff  # noqa: E402
 from XIO_LAYER.adapters.lucida_bridge import transport_to_application_event  # noqa: E402
 from XIO_LAYER.core.audit import AuditLedger  # noqa: E402
@@ -125,8 +130,15 @@ def main() -> int:
         handoff_id="handoff-route-001",
     )
     recovered = transport_to_application_event(handoff.message)
+    with tempfile.TemporaryDirectory() as directory:
+        store = JsonLineHandoffStore(Path(directory) / "handoffs.jsonl")
+        assert store.append(handoff) is True
+        restored = store.replay(caller_id="farmaxia-check")
+    assert len(restored) == 1
+    restored_handoff = restored[0]
+    assert restored_handoff.event.to_dict() == handoff.event.to_dict()
     replay = CanonicalEventReplay().run(
-        [handoff.event.to_dict()],
+        [restored_handoff.event.to_dict()],
         {
             "roomId": "room-route-check",
             "surfaceId": "surface-route-check",
@@ -141,6 +153,8 @@ def main() -> int:
         "projectedPayloadKeys": sorted(handoff.event.payload),
         "transportChannel": handoff.message.channel,
         "roundTripEventPreserved": recovered.event_id == handoff.event.event_id,
+        "persistedHandoffRestored": len(restored) == 1,
+        "restoredEventPreserved": restored_handoff.event.to_dict() == handoff.event.to_dict(),
         "auditVerified": audit.verify(),
         "executionAttempted": False,
         "pupilaAcceptedCount": replay["acceptedCount"],
@@ -158,6 +172,8 @@ def main() -> int:
     assert summary["pupilaViewDiffCount"] == 1
     assert summary["pupilaParticipantCount"] == 1
     assert summary["pupilaSignalCoverage"] == ["task"]
+    assert summary["persistedHandoffRestored"] is True
+    assert summary["restoredEventPreserved"] is True
 
     multi_handoffs = [
         _prepare_multi_handoff(
@@ -180,8 +196,14 @@ def main() -> int:
         ),
     ]
     multi_recovered = [item[1] for item in multi_handoffs]
+    with tempfile.TemporaryDirectory() as directory:
+        multi_store = JsonLineHandoffStore(Path(directory) / "multi-handoffs.jsonl")
+        for handoff, _ in multi_handoffs:
+            assert multi_store.append(handoff) is True
+        restored_multi = multi_store.replay(caller_id="farmaxia-multi-check")
+    assert len(restored_multi) == 2
     multi_replay = CanonicalEventReplay().run(
-        [item[0].event.to_dict() for item in multi_handoffs],
+        [item.event.to_dict() for item in restored_multi],
         {
             "roomId": "room-route-multi",
             "surfaceId": "surface-route-multi",
@@ -204,6 +226,11 @@ def main() -> int:
             recovered.event_id == handoff.event.event_id
             for (handoff, _), recovered in zip(multi_handoffs, multi_recovered)
         ),
+        "multiPersistedHandoffCount": len(restored_multi),
+        "multiRestoredEventsPreserved": all(
+            restored.event.to_dict() == original.event.to_dict()
+            for restored, (original, _) in zip(restored_multi, multi_handoffs)
+        ),
         "multiAuditVerified": audit.verify(),
         "executionAttempted": False,
     }
@@ -213,6 +240,8 @@ def main() -> int:
     assert "participants" in multi_summary["multiDiffFields"]
     assert "proposals" in multi_summary["multiDiffFields"]
     assert multi_summary["multiRoundTripEventPreserved"] is True
+    assert multi_summary["multiPersistedHandoffCount"] == 2
+    assert multi_summary["multiRestoredEventsPreserved"] is True
     assert multi_summary["multiAuditVerified"] is True
     assert multi_summary["executionAttempted"] is False
 

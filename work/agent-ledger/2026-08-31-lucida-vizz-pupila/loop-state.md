@@ -154,3 +154,11 @@ latest_hito_2026_09_01_atomic_overlay:
   evidence: The check passes against MOSAIK/LUCIDA 49c982a: two PUPILA participants produce one shared-checkpoint proposal, one atomic update with four fields is applied, the tampered update is rejected atomically, safety remains proposal_only and the 090 contract remains at 19 passing tests.
   prediction: The first offline adapter seam is now robust enough for a review or shared-package decision. Runtime transport and GUI rendering remain separate risks and are not being introduced yet.
   next_action: Check whether XIO has published the replay fixture requested from f725626; if so, audit it once and connect only its deterministic source to the existing bridge.
+
+latest_hito_2026_09_01_xio_handoff_store:
+  selected_action: replay_persisted_xio_handoffs
+  own_change: Extended the route handoff check to persist prepared XIO handoffs in the published JsonLineHandoffStore, restore them with an explicit caller identity, and feed only the restored redacted events into FARMAXIA.
+  evidence: XIO origin/codex/xio-transport e6641ac passes 93 unittest. FARMAXIA route check passes with one restored handoff and two restored multi-participant handoffs; event content remains identical, projected payload keys remain empty, the audit verifies and executionAttempted remains false. The 090 contract remains valid with 19 tests.
+  limitation: This proves restart-safe local replay only. It does not authorize delivery, open sockets, or establish authentication for a real network transport.
+  prediction: Local persistence is now a usable bridge seam for LUCIDA/MULTI. The next meaningful risk is caller authorization and conflict handling at delivery time; it should be tested with explicit rejection before any real transport is enabled.
+  next_action: Build one offline delivery-denial kill test using the restored handoff and a revoked capability, then audit the agent branches again after their next published commits.
