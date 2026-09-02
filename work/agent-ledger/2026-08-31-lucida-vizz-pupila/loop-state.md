@@ -176,3 +176,22 @@ latest_hito_2026_09_01_offline_integration_command:
   evidence: Core mode passes 3/3 checks. Extended mode passes 4/4 checks with a temporary origin/MULTI checkout: FARMAXIA contract 19 tests, XIO route/persistence/permission pass, LUCIDA atomic consumer pass, and LUCIDA/MULTI transport preserves 3 events, 2 participants and one shared-checkpoint proposal.
   prediction: The first offline vertical is now easy to rerun and audit; adding more abstraction before a real consumer need would have diminishing value. The next decision should be whether to promote the projection into a shared package after the agent branches stabilize.
   next_action: Keep the runner as the acceptance gate and audit the next published XIO/LUCIDA commits once; do not enable real network or GUI integration yet.
+
+latest_hito_2026_09_01_resume_after_idle:
+  selected_action: resume_and_verify
+  reason: An agent turn had completed and another had no new observable work; an extensible objective alone does not keep a turn alive.
+  delegation: Sent one concrete next objective to XIO and one to MOSAIK/VJ, each bounded by branch, files, full suite, commit and push, with no user confirmation required.
+  evidence: XIO is active on its next turn; LUCIDA has no new published commit beyond 49c982a, so the unverified 206b844 claim was not accepted as repository state.
+  own_check: Correct runner path executed successfully.
+  own_evidence: Offline integration passed 3/3 checks; 19 contract tests, persisted XIO handoff and revoked-delivery kill test, and atomic PUPILA/LUCIDA consumer check; networkOpened=false, guiOpened=false, hostActionsExecuted=false.
+  limitation: The current assistant turn still ends after this response; no hidden infinite process is claimed. Continuity requires a new active turn or explicit automation.
+  next_action: Do not poll continuously. Wait for a verifiable agent result, then audit the exact branch commit and suite once; continue FARMAXIA only when the next change has a measurable acceptance signal.
+
+latest_hito_2026_09_01_agent_audit:
+  selected_action: verify_published_agent_hitos
+  evidence:
+    - XIO origin/codex/xio-transport published 59de577 feat: harden persisted handoff integrity; full XIO suite passed 95 tests.
+    - VJ origin/LUCIDA published c26d6f3 feat: replay atomic overlay updates; full LUCIDA suite passed 98 tests in the current checkout and git diff --check found no whitespace errors.
+  limitation: VJ has post-commit working-tree changes in the same overlay files; they were not staged, merged or treated as part of c26d6f3.
+  own_check: The FARMAXIA offline integration runner previously passed 3/3 and was rerun successfully after the path correction.
+  next_action: Audit the next agent commits once, then integrate only a reproducible cross-repository change; do not add speculative runtime transport or GUI work.

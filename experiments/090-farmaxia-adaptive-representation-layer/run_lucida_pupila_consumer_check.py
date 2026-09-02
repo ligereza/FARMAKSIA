@@ -61,7 +61,7 @@ def main() -> int:
 
     lucida_root = Path(args.lucida_root).resolve()
     sys.path.insert(0, str(lucida_root))
-    from lucida.overlay import diff_overlay_view  # noqa: E402
+    from lucida.overlay import diff_overlay_view, overlay_view_digest  # noqa: E402
     from lucida.overlay_consumer import (  # noqa: E402
         OverlayConsumer,
         OverlayConsumerConflictError,
@@ -95,6 +95,7 @@ def main() -> int:
             "surface": "LUCIDA",
             "mode": "read_only",
             "view": views[index],
+            "view_digest": overlay_view_digest(views[index]),
             "changes": changes,
             "cursor": cursor,
             "safety": {
