@@ -27,6 +27,10 @@ from lucida_render_plan import (  # noqa: E402
     LucidaRenderPlanError,
     build_lucida_render_plan,
 )
+from lucida_render_budget import (  # noqa: E402
+    LucidaRenderBudgetError,
+    assess_render_update,
+)
 from vizz_adapter import VizzAdapter  # noqa: E402
 
 
@@ -692,6 +696,70 @@ def test_lucida_render_plan_rejects_unsafe_view_fields() -> None:
         raise AssertionError("unsafe LUCIDA render input was accepted")
 
 
+def test_lucida_render_budget_coalesces_fast_updates() -> None:
+    view = project_pupila_for_lucida(
+        project_pupila_view(
+            {
+                "sessionId": "session-budget",
+                "roomId": "room-budget",
+                "surfaceId": "surface-budget",
+                "participants": [],
+                "proposals": [],
+            }
+        )
+    )
+    plan = build_lucida_render_plan(view)
+    changed = {**plan, "phase": "active"}
+
+    initial = assess_render_update(None, plan, elapsed_ms=None)
+    duplicate = assess_render_update(plan, plan, elapsed_ms=1)
+    held = assess_render_update(plan, changed, elapsed_ms=1)
+    emitted = assess_render_update(plan, changed, elapsed_ms=34)
+
+    assert initial["decision"] == "emit"
+    assert duplicate["decision"] == "drop_unchanged"
+    assert held["decision"] == "hold_coalesced"
+    assert emitted["decision"] == "emit"
+    assert emitted["minimumIntervalMs"] == 34
+    assert emitted["retainsPlan"] is False
+    assert emitted["opensWindow"] is False
+    assert emitted["executesHostAction"] is False
+
+
+def test_lucida_render_budget_rejects_invalid_timing_and_plan() -> None:
+    view = project_pupila_for_lucida(
+        project_pupila_view(
+            {
+                "sessionId": "session-budget-invalid",
+                "roomId": "room-budget-invalid",
+                "surfaceId": "surface-budget-invalid",
+                "participants": [],
+                "proposals": [],
+            }
+        )
+    )
+    plan = build_lucida_render_plan(view)
+    for kwargs in (
+        {"elapsed_ms": -1},
+        {"elapsed_ms": float("nan")},
+        {"elapsed_ms": 1, "max_hz": 0},
+    ):
+        try:
+            assess_render_update(plan, {**plan, "phase": "active"}, **kwargs)
+        except LucidaRenderBudgetError:
+            pass
+        else:
+            raise AssertionError("invalid render budget input was accepted")
+
+    unsafe = {**plan, "elements": [{"action": "must-not-enter"}]}
+    try:
+        assess_render_update(None, unsafe, elapsed_ms=None)
+    except LucidaRenderBudgetError:
+        pass
+    else:
+        raise AssertionError("unsafe render plan was accepted by the budget")
+
+
 if __name__ == "__main__":
     tests = [
         test_consent_blocks_signal_and_drops_content,
@@ -717,6 +785,8 @@ if __name__ == "__main__":
         test_boundary_matrix_rejects_cross_surface_contamination,
         test_lucida_render_plan_is_deterministic_and_non_blocking,
         test_lucida_render_plan_rejects_unsafe_view_fields,
+        test_lucida_render_budget_coalesces_fast_updates,
+        test_lucida_render_budget_rejects_invalid_timing_and_plan,
     ]
     for test in tests:
         test()

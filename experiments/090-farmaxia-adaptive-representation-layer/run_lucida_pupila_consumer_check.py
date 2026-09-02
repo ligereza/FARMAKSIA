@@ -14,6 +14,7 @@ sys.path.insert(0, str(HERE))
 from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
 from pupila_lucida_projection import project_pupila_for_lucida  # noqa: E402
 from lucida_render_plan import build_lucida_render_plan  # noqa: E402
+from lucida_render_budget import assess_render_update  # noqa: E402
 
 
 def _event(event_id: str, peer_id: str, sequence: int, focused: bool) -> dict[str, object]:
@@ -137,6 +138,13 @@ def main() -> int:
 
     final_view = consumer.view
     render_plan = build_lucida_render_plan(final_view)
+    first_render_plan = build_lucida_render_plan(views[0])
+    render_budget_decisions = [
+        assess_render_update(None, first_render_plan, elapsed_ms=None)["decision"],
+        assess_render_update(first_render_plan, first_render_plan, elapsed_ms=1)["decision"],
+        assess_render_update(first_render_plan, render_plan, elapsed_ms=1)["decision"],
+        assess_render_update(first_render_plan, render_plan, elapsed_ms=34)["decision"],
+    ]
     summary = {
         "lucidaRoot": str(lucida_root),
         "loadedLucidaPath": str(loaded_lucida_path),
@@ -150,6 +158,7 @@ def main() -> int:
         "lucidaRenderElementCount": len(render_plan["elements"]),
         "lucidaRenderIntensity": render_plan["intensity"],
         "lucidaRenderClickThrough": render_plan["clickThrough"],
+        "lucidaRenderBudgetDecisions": render_budget_decisions,
         "automaticActions": False,
         "externalSideEffects": False,
         "rawPayloadForwarded": any("payload" in result for result in report["results"]),
@@ -164,6 +173,12 @@ def main() -> int:
     assert summary["lucidaRenderElementCount"] == 3
     assert summary["lucidaRenderIntensity"] == "high"
     assert summary["lucidaRenderClickThrough"] is True
+    assert summary["lucidaRenderBudgetDecisions"] == [
+        "emit",
+        "drop_unchanged",
+        "hold_coalesced",
+        "emit",
+    ]
     assert summary["lucidaSafety"]["proposal_only"] is True
     assert summary["lucidaSafety"]["automatic_actions"] is False
     assert summary["lucidaSafety"]["external_side_effects"] is False

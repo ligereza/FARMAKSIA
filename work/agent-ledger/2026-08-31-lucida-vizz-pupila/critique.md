@@ -95,3 +95,14 @@ strongest_failure_mode: Mistaking a green offline seam for a live host integrati
 decision: accept_offline_only
 reason: Full clean source suites and the exact-root cross-repository checks are green. Live transport, renderer and host-specific behavior remain deliberately outside scope.
 next_checkpoint: Keep the agents autonomous and audit only after new commits; define the next host-neutral observable outcome before adding integration code.
+
+## 2026-09-01 render cadence decision
+
+observed_problem: The render plan was safe but had no explicit rate policy, so a future host could recompute visual work for every incoming signal and reproduce the earlier flicker/performance risk.
+selected_action: Add a stateless 30 Hz budget decision at the render-plan boundary, with duplicate suppression and coalescing rather than a new host renderer.
+alternatives: Emit every event gives lowest visual latency but risks redundant work; fixed sleep would block and complicate cancellation; a pure decision lets LUCIDA schedule or discard without FARMAXIA owning a clock.
+strongest_failure_mode: A budget could hide a meaningful visual change or accept an unsafe plan.
+evidence: Same plan is dropped; a changed plan at 1 ms is held; the same change at 34 ms emits; invalid timing and unsafe fields fail; consumer integration reports the four expected decisions.
+decision: accept_as_host_neutral_policy
+reason: The function has no sleep, retained state, GUI, network or host action. It bounds work while leaving scheduling and rendering to LUCIDA.
+next_checkpoint: Publish after the full 090 gate passes; only add a real scheduler after LUCIDA defines its runtime tick and cancellation contract.

@@ -267,3 +267,12 @@ latest_hito_2026_09_01_agent_repair_audit:
   decision: XIO and LUCIDA published contracts are eligible for the current offline integration; the earlier XIO rejection is closed.
   limitation: This remains an offline contract gate; it does not prove live network authentication, GUI rendering, Adobe behavior or Resolume behavior.
   next_action: Keep branch-specific autonomy active, avoid another schema layer, and select the next own task from a measurable host-neutral behavior rather than adding speculative host integration.
+
+latest_hito_2026_09_01_render_budget:
+  selected_action: bound_transparent_render_cadence
+  reason: A transparent layer must not rebuild or emit visual work for every high-frequency input signal; otherwise it can flicker and waste GPU/CPU even when the view is unchanged.
+  own_change: Added a pure render-budget decision function with 30 Hz default, duplicate dropping, fast-change coalescing, strict plan validation and explicit no-window/no-host-action outputs. Wired it into the LUCIDA consumer check.
+  evidence: FARMAXIA contract passes the new cadence tests; consumer decisions are emit, drop_unchanged, hold_coalesced, emit; the exact-root integration remains offline and proposal-only.
+  kill_test: Invalid timing, unsafe render fields and plans exceeding the element bound are rejected; no scheduler, window or host operation is invoked.
+  boundary_confirmed: The budget belongs to the generic render-plan boundary; VIZZ/PUPILA still produce metadata/proposals, XIO still owns signals/transport, and Adobe/Resolume remain outside this code.
+  next_action: Run the complete contract and exact-root gate, then publish only if the cadence behavior is deterministic and no existing consumer contract breaks.

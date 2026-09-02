@@ -92,6 +92,12 @@ claves de mensaje. Mantiene `transparent`, `clickThrough` y `blocking` como
 parte del contrato de salida. No abre una ventana ni decide como se dibuja
 dentro de Adobe o Resolume; LUCIDA sera responsable del renderer del host.
 
+`lucida_render_budget.py` agrega una politica de cadencia separada del estado:
+30 Hz por defecto, descarte de planes identicos y coalescencia de cambios que
+llegan antes del intervalo minimo. Es una decision pura para que el renderer
+no haga trabajo por cada senal ni genere parpadeo; no duerme, no retiene planes
+y no ejecuta acciones.
+
 `boundary_matrix.py` es una guardia estructural offline. Comprueba que cada
 checkout tenga los marcadores de su responsabilidad y no tenga marcadores
 directos de otra superficie. Sirve para detectar una mezcla accidental de
@@ -108,6 +114,7 @@ si sola que el comportamiento semantico de una aplicacion sea correcto.
 - límites locales sin shell, credenciales ni captura cruda.
 - guardia de limites entre repositorios y superficies.
 - plan de renderizado generico para la futura capa flotante.
+- presupuesto de cadencia para evitar actualizaciones redundantes o demasiado rapidas.
 
 ## Qué no se adopta todavía
 
