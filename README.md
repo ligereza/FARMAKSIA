@@ -32,6 +32,44 @@ cuando eso mejora la experiencia del usuario y del entorno, sin convertir la
 interfaz en una autorización para realizar actividades peligrosas bajo
 intoxicación.
 
+## Mapa de responsabilidades
+
+La misma idea puede cruzar varios repositorios, pero cada repositorio posee
+una responsabilidad distinta. No se deben copiar implementaciones, assets o
+configuraciones entre ellos sólo porque compartan conceptos.
+
+| Superficie | Responsabilidad | No es |
+|---|---|---|
+| FARMAXIA | teoría, contratos, experimentos offline, procedencia y aceptación | el runtime de Adobe, Resolume, red o GUI de producción |
+| LUCIDA | capa flotante, transparente, host-neutral y reversible | un router, una base de datos o un plugin específico por defecto |
+| LUCIDA/ADOBE | adaptación de la capa a Adobe | la capa multiusuario universal |
+| LUCIDA/RESOLUME | adaptación de la capa al flujo VJ/Resolume | la implementación general de XIO |
+| LUCIDA/MULTI | frontera de consumo multiusuario dentro de LUCIDA | la captura o el transporte de red propietario |
+| XIO | señales, conectividad, registro, selección de adaptadores, handoff y replay | una ventana flotante o un renderer de Adobe/Resolume |
+| VIZZ | política de representación sensorial y orientación visual | el transporte multiusuario o una garantía de eye tracking |
+| PUPILA | estado compartido y propuestas emergentes entre participantes | un router, una acción automática o un diagnóstico humano |
+| MOSAIK/VJ | dominio de producción VJ y sus adaptadores/replays | el contrato universal de XIO |
+
+La relación prevista es:
+
+```text
+Adobe / Resolume / otras apps
+              ↓ señales y estados
+             XIO
+              ↓ eventos redacted y handoff autorizado
+       VIZZ / PUPILA en FARMAXIA
+              ↓ vista segura y propuesta
+       LUCIDA como capa flotante
+              ↓ adaptador concreto
+     LUCIDA/ADOBE o LUCIDA/RESOLUME
+```
+
+`XIO` puede transportar señales entre equipos, pero no decide cómo se dibuja
+la capa. `LUCIDA` puede presentar una vista flotante, pero no debe inventar
+semántica de Adobe, Resolume, aprendizaje o mirada. `VIZZ` y `PUPILA` pueden
+producir políticas y propuestas, pero no ejecutan acciones del host sin una
+frontera explícita de autorización.
+
 Las tres hipótesis forman una gramática funcional, no tres productos aislados:
 
 ```text
