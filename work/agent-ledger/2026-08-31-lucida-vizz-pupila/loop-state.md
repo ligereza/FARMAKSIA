@@ -276,3 +276,14 @@ latest_hito_2026_09_01_render_budget:
   kill_test: Invalid timing, unsafe render fields and plans exceeding the element bound are rejected; no scheduler, window or host operation is invoked.
   boundary_confirmed: The budget belongs to the generic render-plan boundary; VIZZ/PUPILA still produce metadata/proposals, XIO still owns signals/transport, and Adobe/Resolume remain outside this code.
   next_action: Run the complete contract and exact-root gate, then publish only if the cadence behavior is deterministic and no existing consumer contract breaks.
+
+latest_hito_2026_09_01_current_surface_audit:
+  selected_action: verify_current_surface_separation
+  evidence:
+    - XIO published 295d75d passes 111 tests in a clean audit worktree.
+    - MOSAIK/LUCIDA published b8a8d0c passes 112 tests in a clean audit worktree.
+    - LUCIDA ADOBE da90459, RESOLUME e2f2cb1 and MULTI 6799f43 plus FARMAXIA 090 pass the six-role boundary matrix 6/6.
+    - The exact-root FARMAXIA extended gate passes 4/4 with 25 FARMAXIA contract tests, separate XIO and MULTI package paths, and render decisions emit/drop_unchanged/hold_coalesced/emit.
+  decision: Keep all six surfaces separate and use the published XIO and LUCIDA contracts in the offline gate.
+  limitation: This proves repository and contract compatibility only; it does not prove live Adobe/Resolume operation, network authentication or visual quality.
+  next_action: Let XIO and MOSAIK/LUCIDA continue their branch-specific objectives; audit only a new published hito and avoid speculative cross-host code.

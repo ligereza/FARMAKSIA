@@ -106,3 +106,13 @@ evidence: Same plan is dropped; a changed plan at 1 ms is held; the same change 
 decision: accept_as_host_neutral_policy
 reason: The function has no sleep, retained state, GUI, network or host action. It bounds work while leaving scheduling and rendering to LUCIDA.
 next_checkpoint: Publish after the full 090 gate passes; only add a real scheduler after LUCIDA defines its runtime tick and cancellation contract.
+
+## 2026-09-01 current surface audit
+
+observed_state: Current clean published checkouts remain separated across FARMAXIA, XIO, MOSAIK/LUCIDA, LUCIDA/ADOBE, LUCIDA/RESOLUME and LUCIDA/MULTI.
+selected_action: Accept the current offline vertical and stop adding structural glue until a new host-neutral outcome is justified.
+evidence: XIO 295d75d 111 tests; MOSAIK/LUCIDA b8a8d0c 112 tests; six-role boundary matrix 6/6; exact-root offline integration 4/4; no network, GUI or host actions.
+strongest_failure_mode: Prematurely merging application-specific renderer or transport code into the universal layer because the repository boundaries are already green.
+decision: hold_scope
+reason: The current evidence supports the separation and the bounded render cadence, but not live host behavior. More schemas now would add maintenance without proving the central goal.
+next_checkpoint: Re-audit after a new agent commit or a concrete host-neutral failure; preserve the autonomous branch objectives in the meantime.
