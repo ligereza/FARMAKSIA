@@ -61,7 +61,22 @@ def main() -> int:
     args = parser.parse_args()
 
     lucida_root = Path(args.lucida_root).resolve()
+    if not lucida_root.is_dir():
+        raise FileNotFoundError(f"LUCIDA root does not exist: {lucida_root}")
+    for module_name in list(sys.modules):
+        if module_name == "lucida" or module_name.startswith("lucida."):
+            del sys.modules[module_name]
     sys.path.insert(0, str(lucida_root))
+    import lucida  # noqa: PLC0415
+
+    loaded_lucida_path = Path(lucida.__file__).resolve()
+    try:
+        loaded_lucida_path.relative_to(lucida_root)
+    except ValueError as error:
+        raise AssertionError(
+            f"loaded LUCIDA package is outside requested root: {loaded_lucida_path}"
+        ) from error
+
     from lucida.overlay import diff_overlay_view, overlay_view_digest  # noqa: E402
     from lucida.overlay_consumer import (  # noqa: E402
         OverlayConsumer,
@@ -123,6 +138,8 @@ def main() -> int:
     final_view = consumer.view
     render_plan = build_lucida_render_plan(final_view)
     summary = {
+        "lucidaRoot": str(lucida_root),
+        "loadedLucidaPath": str(loaded_lucida_path),
         "pupilaAcceptedCount": report["acceptedCount"],
         "pupilaParticipantCount": report["finalPupilaView"]["participantCount"],
         "pupilaProposalKind": report["finalPupilaView"]["proposals"][0]["kind"],

@@ -65,3 +65,13 @@ evidence: XIO clean suite 105 passed, 1 failed; LUCIDA clean suite 106 passed; F
 decision: reject_xio_for_integration
 reason: The failure is in the source lock implementation and cannot be resolved by a FARMAXIA adapter without hiding a source defect. The autonomous XIO objective remains active and can repair its own branch.
 next_checkpoint: Audit XIO again only after a new published commit; continue the own goal without sending idle prompts.
+
+## 2026-09-01 LUCIDA checkout provenance repair
+
+observed_failure: The LUCIDA consumer runner accepted an explicit root but could import a package from an already loaded or unintended environment path without reporting it.
+selected_action: Clear the LUCIDA module cache in the fresh check process, load the requested root first, assert the resolved package path is inside it, and expose both paths in the report.
+evidence: Clean MOSAIK/LUCIDA 60b9756 passes 106 tests and the consumer check passes; invalid-root invocation fails; no network, GUI or host action occurs.
+strongest_failure_mode: A cross-repository acceptance result could look green while exercising a different LUCIDA checkout.
+decision: accept
+reason: The loader now makes the source checkout auditable and preserves the role boundary; this is a verification repair, not a host integration.
+next_checkpoint: Publish after exact-root contract and negative-path checks; do not add another runtime layer until the external XIO lock failure is resolved.

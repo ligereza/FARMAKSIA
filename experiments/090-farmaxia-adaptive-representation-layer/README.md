@@ -172,7 +172,9 @@ diffs derivados de PUPILA:
 ```
 
 El checkout local debe estar en la rama `LUCIDA`. El chequeo sólo usa memoria:
-no abre red, GUI ni acciones del host.
+no abre red, GUI ni acciones del host. El resultado incluye `lucidaRoot` y
+`loadedLucidaPath`, y falla si el paquete cargado queda fuera del checkout
+solicitado.
 
 La guardia estructural se ejecuta con roles y rutas explicitos:
 

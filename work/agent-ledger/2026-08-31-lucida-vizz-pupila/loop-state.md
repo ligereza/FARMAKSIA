@@ -239,3 +239,12 @@ latest_hito_2026_09_01_agent_audit_after_root_fix:
   decision: Keep XIO outside integration acceptance until its published branch passes the complete suite; keep LUCIDA eligible for its own boundary, without merging either tree.
   limitation: The failure is in XIO persistence concurrency on Windows and must be repaired in XIO, not patched through FARMAXIA.
   next_action: Continue the own FARMAXIA objective from verified contracts; re-audit XIO only after a new published commit and do not poll continuously.
+
+latest_hito_2026_09_01_lucida_root_provenance:
+  selected_action: repair_lucida_acceptance_checkout_provenance
+  observed_failure: The LUCIDA consumer check accepted --lucida-root but did not prove that the imported lucida package came from that checkout.
+  own_change: Added explicit LUCIDA root loading, module-cache clearing, resolved package-path verification and root/path reporting.
+  evidence: The check passes against the clean MOSAIK/LUCIDA checkout at 60b9756; the invalid-root kill test fails before import; the FARMAXIA contract remains at 23 tests.
+  kill_test: A missing or outside LUCIDA checkout cannot produce a passing consumer result.
+  boundary_confirmed: The change affects only FARMAXIA verification provenance; LUCIDA remains the host-neutral floating consumer and no host action is opened.
+  next_action: Run the full exact-root gate, publish only this narrow verification repair, then audit agent branches once after a new commit.
