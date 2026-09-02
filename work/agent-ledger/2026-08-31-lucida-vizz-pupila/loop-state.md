@@ -133,3 +133,9 @@ latest_hito_2026_09_01_lucida_multi:
   evidence: The fixture passes with transportedEventCount=3, eventIdsPreserved=true, provenancePreserved=true, farmaxiaAcceptedCount=3, participantCount=2, proposal kind shared-checkpoint, three deterministic view diffs and payloadForwarded=false. The 090 contract remains valid with 19 tests and the XIO cross-branch replay remains valid with 4 accepted events plus 1 duplicate.
   prediction: The offline architecture now demonstrates the intended first integration seam. The next risk is not another envelope but consumer behavior: a host-neutral reader must apply JSON/diff/revision data without blocking or executing actions. Qualitative confidence medium-high.
   next_action: Audit the active MOSAIK/VJ consumer commit and the active XIO source fixture once each has a new verifiable commit; otherwise continue strengthening FARMAXIA replay invariants without opening real network or GUI integrations.
+
+agent_audit_2026_09_01:
+  xio: origin/codex/xio-transport at f725626; 90 unittest pass. The checkout contains unrelated user worktree changes and none were staged.
+  mosaik_vj: origin/LUCIDA at de2d827; targeted LUCIDA suite passes 93 pytest. The active checkout is IMAGO with 8 tests passing, so no IMAGO changes were treated as LUCIDA integration.
+  correction: The first VJ audit accidentally ran from FARMAXIA and produced import-collection mismatches; it was discarded and repeated from a clean LUCIDA worktree.
+  decision: Continue only from the published XIO and LUCIDA branches; do not merge IMAGO or unrelated local changes into FARMAXIA.
