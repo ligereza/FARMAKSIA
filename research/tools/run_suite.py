@@ -121,6 +121,7 @@ def main() -> None:
         "experiments/088-vizz-state-replay-preflight/provenance.json",
         "experiments/089-vizz-dual-sensor-closed-calibration/provenance.json",
         "experiments/090-farmaxia-adaptive-representation-layer/provenance.json",
+        "experiments/091-lucida-vizz-pupila-acceptance/provenance.json",
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
@@ -1460,6 +1461,7 @@ def main() -> None:
         '"participantCount": 2',
     )
     command("provenance 090", python_script("research/tools/validate_provenance.py", provenance[86]), "PROVENANCE_VALID")
+    command("provenance 091", python_script("research/tools/validate_provenance.py", provenance[87]), "PROVENANCE_VALID")
 
     command("experiment 004", python_script("experiments/004-ketamine-investment/run_experiment.py"))
     command("provenance 004", python_script("research/tools/validate_provenance.py", provenance[3]), "PROVENANCE_VALID")

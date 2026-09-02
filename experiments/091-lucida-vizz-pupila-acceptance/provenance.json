@@ -1,0 +1,104 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:091-lucida-vizz-pupila-acceptance",
+  "status": "offline_contract_acceptance",
+  "purpose": "Route redacted VIZZ and PUPILA states from experiment 090 through an explicitly selected LUCIDA engine checkout.",
+  "source_experiment": "090-farmaxia-adaptive-representation-layer",
+  "required_input": "lucida_root_with_domain_adapters",
+  "outputs": ["explicit_route_report", "state_revision", "render_item_count", "side_effect_flags"],
+  "agents": [
+    {
+      "id": "farmaxia:designer-091",
+      "type": "agent",
+      "role": "defines_explicit_cross_repository_acceptance_boundary"
+    },
+    {
+      "id": "farmaxia:python-runner-091",
+      "type": "software_agent",
+      "role": "runs_offline_redacted_state_acceptance"
+    }
+  ],
+  "entities": [
+    {
+      "id": "farmaxia:source-vizz-090",
+      "type": "entity",
+      "path": "../090-farmaxia-adaptive-representation-layer/vizz_adapter.py",
+      "role": "existing_vizz_metadata_source",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:source-pupila-090",
+      "type": "entity",
+      "path": "../090-farmaxia-adaptive-representation-layer/pupila_adapter.py",
+      "role": "existing_pupila_metadata_source",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:acceptance-runner-091",
+      "type": "entity",
+      "path": "run_acceptance.py",
+      "role": "explicit_lucida_engine_acceptance_runner",
+      "authority": "computed"
+    },
+    {
+      "id": "farmaxia:readme-091",
+      "type": "entity",
+      "path": "README.md",
+      "role": "reproduction_protocol",
+      "authority": "human_reviewed_record"
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:build-091",
+      "type": "activity",
+      "label": "build_explicit_vizz_pupila_to_lucida_acceptance",
+      "agent": "farmaxia:python-runner-091",
+      "used": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090"],
+      "generated": ["farmaxia:acceptance-runner-091"]
+    },
+    {
+      "id": "farmaxia:verify-091",
+      "type": "activity",
+      "label": "verify_path_provenance_and_no_side_effects",
+      "agent": "farmaxia:python-runner-091",
+      "used": ["farmaxia:acceptance-runner-091", "farmaxia:readme-091"],
+      "generated": []
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query-091-route",
+      "expression": "do_redacted_vizz_and_pupila_states_reach_lucida_through_explicit_routes",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090", "farmaxia:acceptance-runner-091"]
+    },
+    {
+      "id": "farmaxia:query-091-safety",
+      "expression": "does_the_acceptance_runner_open_no_network_gui_or_host_action",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:acceptance-runner-091"]
+    }
+  ],
+  "privacy": {
+    "raw_frames": false,
+    "raw_keyboard": false,
+    "documents": false,
+    "credentials": false,
+    "network": false,
+    "gui": false
+  },
+  "kill_tests": [
+    "missing_lucida_root_fails",
+    "missing_domain_adapter_file_fails",
+    "loaded_lucida_package_outside_selected_root_fails",
+    "unknown_or_raw_domain_fields_fail_in_lucida_adapter",
+    "proposal_is_confirmation_required_and_reversible",
+    "render_plan_has_no_host_action"
+  ],
+  "unknowns": [
+    "whether_live_source_envelopes_can_match_the_exact_contract_without_a_source_adapter",
+    "whether_transport_and_overlay_can_be_added_without_interference",
+    "whether_any_visual_or_learning_outcome_improves"
+  ]
+}
