@@ -106,6 +106,16 @@ Desde `C:\IA\FARMAXIA`:
 .\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_cross_branch_check.py
 ```
 
+Para verificar el envelope de transporte exacto de LUCIDA/MULTI, ejecutar el
+cuarto comando con un checkout local de esa rama:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_lucida_multi_check.py --lucida-multi-root C:\IA\LUCIDA
+```
+
+Ese comando requiere que la ruta indicada contenga `XIO_LAYER` de la rama
+`MULTI`; no cambia ramas ni abre sockets.
+
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
 procesos de usuario. El tercer comando genera un evento de conectividad con los
 contratos reales de XIO y lo reproduce junto con `focus`, `pointer` y
