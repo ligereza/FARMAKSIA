@@ -5,6 +5,7 @@ from __future__ import annotations
 from pathlib import Path
 import sys
 import json
+from tempfile import TemporaryDirectory
 
 
 HERE = Path(__file__).resolve().parent
@@ -12,6 +13,7 @@ sys.path.insert(0, str(HERE))
 
 from contracts import append_audit_event, normalize_signal, verify_audit_chain  # noqa: E402
 from canonical_event_bridge import CanonicalEventBridge, CanonicalEventError, CanonicalEventReplay  # noqa: E402
+from boundary_matrix import inspect_matrix  # noqa: E402
 from pupila_adapter import PupilaAdapter  # noqa: E402
 from pupila_view import (  # noqa: E402
     MAX_DIFF_CHANGES,
@@ -566,6 +568,60 @@ def test_pupila_view_diff_rejects_unsafe_or_invalid_views() -> None:
         raise AssertionError("unsafe PUPILA safety was accepted")
 
 
+def test_boundary_matrix_accepts_separated_surfaces() -> None:
+    with TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        farmaxia = root / "farmaxia"
+        vj = root / "vj"
+        adobe = root / "adobe"
+        resolume = root / "resolume"
+        multi = root / "multi"
+        xio = root / "xio"
+        for path in (farmaxia, vj, adobe, resolume, multi, xio):
+            path.mkdir()
+        for name in (
+            "canonical_event_bridge.py",
+            "pupila_adapter.py",
+            "pupila_view.py",
+            "vizz_adapter.py",
+        ):
+            (farmaxia / name).touch()
+        (vj / "lucida").mkdir()
+        (adobe / "adobe").mkdir()
+        for name in ("lucida", "resolume", "adapters"):
+            (resolume / name).mkdir()
+        for name in ("XIO_LAYER", "multi"):
+            (multi / name).mkdir()
+        (xio / "XIO_LAYER").mkdir()
+
+        report = inspect_matrix(
+            {
+                "farmaxia_vizz_pupila": farmaxia,
+                "vj_lucida": vj,
+                "lucida_adobe": adobe,
+                "lucida_resolume": resolume,
+                "lucida_multi": multi,
+                "xio": xio,
+            }
+        )
+        assert report["status"] == "PASS"
+        assert report["failedCount"] == 0
+        assert report["networkOpened"] is False
+        assert report["guiOpened"] is False
+        assert report["hostActionsExecuted"] is False
+
+
+def test_boundary_matrix_rejects_cross_surface_contamination() -> None:
+    with TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        (root / "adobe").mkdir()
+        (root / "XIO_LAYER").mkdir()
+        report = inspect_matrix({"lucida_adobe": root})
+        assert report["status"] == "FAIL"
+        assert report["failedCount"] == 1
+        assert report["checks"][0]["forbidden"] == ["XIO_LAYER"]
+
+
 if __name__ == "__main__":
     tests = [
         test_consent_blocks_signal_and_drops_content,
@@ -587,6 +643,8 @@ if __name__ == "__main__":
         test_pupila_view_limits_and_empty_state_are_explicit,
         test_pupila_view_diff_is_deterministic_bounded_and_redacted,
         test_pupila_view_diff_rejects_unsafe_or_invalid_views,
+        test_boundary_matrix_accepts_separated_surfaces,
+        test_boundary_matrix_rejects_cross_surface_contamination,
     ]
     for test in tests:
         test()

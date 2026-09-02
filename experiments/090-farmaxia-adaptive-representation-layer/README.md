@@ -86,6 +86,12 @@ participantes, cobertura de senales, sala, actividad y payloads. No convierte
 participantes en capacidades de la aplicacion ni afirma semantica de Resolume,
 Adobe, atencion o aprendizaje.
 
+`boundary_matrix.py` es una guardia estructural offline. Comprueba que cada
+checkout tenga los marcadores de su responsabilidad y no tenga marcadores
+directos de otra superficie. Sirve para detectar una mezcla accidental de
+Adobe, Resolume, MULTI, XIO o la capa VIZZ/PUPILA; no pretende demostrar por
+si sola que el comportamiento semantico de una aplicacion sea correcto.
+
 ## Qué se adopta de ZIGO
 
 - envelopes versionados y hashes deterministas;
@@ -94,6 +100,7 @@ Adobe, atencion o aprendizaje.
 - propuestas explícitas, reversibles y no ejecutables;
 - auditoría encadenada y replay offline;
 - límites locales sin shell, credenciales ni captura cruda.
+- guardia de limites entre repositorios y superficies.
 
 ## Qué no se adopta todavía
 
@@ -151,6 +158,19 @@ diffs derivados de PUPILA:
 
 El checkout local debe estar en la rama `LUCIDA`. El chequeo sólo usa memoria:
 no abre red, GUI ni acciones del host.
+
+La guardia estructural se ejecuta con roles y rutas explicitos:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_boundary_matrix_check.py `
+  --root farmaxia_vizz_pupila=C:\IA\FARMAXIA\experiments\090-farmaxia-adaptive-representation-layer `
+  --root vj_lucida=C:\IA\VJ `
+  --root xio=C:\IA\XIO
+```
+
+Para `lucida_adobe`, `lucida_resolume` y `lucida_multi`, usar checkouts
+separados de las ramas correspondientes. La guardia sólo mira hijos directos
+de cada ruta y nunca cambia de rama.
 
 Los tres checks principales pueden ejecutarse juntos:
 

@@ -22,6 +22,8 @@
     {"id": "farmaxia:pupila-view-090", "path": "pupila_view.py", "role": "bounded_multi_participant_overlay_projection", "authority": "computed"},
     {"id": "farmaxia:pupila-diff-090", "path": "pupila_view.py", "role": "bounded_incremental_pupila_view_projection", "authority": "computed"},
     {"id": "farmaxia:tests-090", "path": "run_contract_test.py", "role": "offline_kill_and_contract_tests", "authority": "computed"},
+    {"id": "farmaxia:boundary-guard-090", "path": "boundary_matrix.py", "role": "cross_surface_responsibility_guard", "authority": "computed"},
+    {"id": "farmaxia:boundary-report-090", "path": "run_boundary_matrix_check.py", "role": "reproducible_boundary_matrix_runner", "authority": "computed"},
     {"id": "farmaxia:readme-090", "path": "README.md", "role": "scope_and_reproduction_record", "authority": "human_reviewed_record"}
   ],
   "activities": [
@@ -33,11 +35,13 @@
     {"id": "farmaxia:implement-pupila-view-090", "type": "activity", "label": "project shared PUPILA state into bounded proposal-only overlay data", "agent": "farmaxia:implementer-090", "used": ["farmaxia:pupila-090", "farmaxia:tests-090"], "generated": ["farmaxia:pupila-view-090"]},
     {"id": "farmaxia:implement-pupila-diff-090", "type": "activity", "label": "project bounded deterministic changes between PUPILA overlay views", "agent": "farmaxia:implementer-090", "used": ["farmaxia:pupila-view-090", "farmaxia:tests-090"], "generated": ["farmaxia:pupila-diff-090"]},
     {"id": "farmaxia:verify-090", "type": "activity", "label": "run offline contract and tamper-evidence tests", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:pupila-090", "farmaxia:tests-090"], "generated": []}
+    ,{"id": "farmaxia:verify-boundaries-090", "type": "activity", "label": "verify direct repository markers do not cross surface responsibilities", "agent": "farmaxia:implementer-090", "used": ["farmaxia:boundary-guard-090", "farmaxia:tests-090"], "generated": ["farmaxia:boundary-report-090"]}
   ],
   "queries": [
     {"id": "farmaxia:vizz-query-090", "expression": "does VIZZ produce a non-blocking visual policy from consented metadata without camera or raw content", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:tests-090"]},
     {"id": "farmaxia:pupila-query-090", "expression": "does PUPILA produce an explicit reversible proposal from two same-room participant states without executing an action", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:pupila-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:bridge-query-090", "expression": "does the bridge accept canonical XIO events while dropping raw payload content and preserving lineage", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:bridge-090", "farmaxia:fixture-090", "farmaxia:tests-090"]}
+    ,{"id": "farmaxia:boundary-query-090", "expression": "do the named repository surfaces expose required markers without direct markers from another responsibility", "authority": "experiment_defined", "required_entities": ["farmaxia:boundary-guard-090", "farmaxia:boundary-report-090", "farmaxia:tests-090"]}
   ],
   "assumptions": [
     "The first reusable slice can run in Python standard tooling without a GUI or host plugin.",
@@ -56,6 +60,7 @@
     "PUPILA does not mix sessions that reuse a room id",
     "proposals contain no executable action",
     "tampering invalidates the audit chain"
+    ,"a host surface carrying a forbidden role marker fails the boundary guard"
   ],
   "unknowns": [
     "Which host transport will be selected for the first real adapter",

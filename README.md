@@ -240,6 +240,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Adopción real de pywinauto/UIA](research/decisions/078-pywinauto-adoption.md)
 - [Adaptadores nativos de estado Excel/Blender](research/decisions/079-excel-blender-native-state-adapters.md)
 - [Capa adaptativa VIZZ/PUPILA derivada de ZIGO](experiments/090-farmaxia-adaptive-representation-layer/README.md)
+- [Guardia de limites entre superficies](experiments/090-farmaxia-adaptive-representation-layer/run_boundary_matrix_check.py)
 - [Kernel de transiciones nativas para X-ANA-X](research/decisions/080-native-transition-kernel.md)
 - [Puente de input consentido y contexto UIA](research/decisions/081-consented-input-semantic-bridge.md)
 - [Correlación temporal de input y estado nativo](experiments/080-farmaxia-input-native-delta-correlation/results.md)
