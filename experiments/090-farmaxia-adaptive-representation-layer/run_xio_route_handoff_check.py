@@ -18,6 +18,7 @@ from XIO_LAYER.adapters.handoff import PrivacyPolicy, prepare_adapter_handoff  #
 from XIO_LAYER.adapters.lucida_bridge import transport_to_application_event  # noqa: E402
 from XIO_LAYER.core.audit import AuditLedger  # noqa: E402
 from XIO_LAYER.core.transport import Endpoint, NetworkMedium, NetworkScope, OscEnvelope  # noqa: E402
+from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
 
 
 def main() -> int:
@@ -66,6 +67,15 @@ def main() -> int:
         handoff_id="handoff-route-001",
     )
     recovered = transport_to_application_event(handoff.message)
+    replay = CanonicalEventReplay().run(
+        [handoff.event.to_dict()],
+        {
+            "roomId": "room-route-check",
+            "surfaceId": "surface-route-check",
+            "task": "route-handoff-to-pupila",
+        },
+        consent=True,
+    )
     summary = {
         "routeStatus": route_plan["status"],
         "selectedSource": selection.source_app,
@@ -75,6 +85,10 @@ def main() -> int:
         "roundTripEventPreserved": recovered.event_id == handoff.event.event_id,
         "auditVerified": audit.verify(),
         "executionAttempted": False,
+        "pupilaAcceptedCount": replay["acceptedCount"],
+        "pupilaViewDiffCount": len(replay["pupilaViewDiffs"]),
+        "pupilaParticipantCount": replay["finalPupilaView"]["participantCount"],
+        "pupilaSignalCoverage": replay["finalPupilaView"]["participants"][0]["interaction"]["signalCoverage"],
     }
     assert summary["routeStatus"] == "matched"
     assert summary["selectedSource"] == "XIO"
@@ -82,6 +96,10 @@ def main() -> int:
     assert summary["transportChannel"] == "application-event"
     assert summary["roundTripEventPreserved"] is True
     assert summary["auditVerified"] is True
+    assert summary["pupilaAcceptedCount"] == 1
+    assert summary["pupilaViewDiffCount"] == 1
+    assert summary["pupilaParticipantCount"] == 1
+    assert summary["pupilaSignalCoverage"] == ["task"]
     print(json.dumps(summary, sort_keys=True))
     return 0
 

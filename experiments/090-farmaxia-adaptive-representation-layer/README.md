@@ -125,6 +125,9 @@ El flujo de selección y handoff de XIO se verifica con:
 El chequeo exige una ruta coincidente, selecciona el adaptador explícitamente,
 redacta el payload mediante una allowlist, conserva el envelope de
 `application-event` y sólo prepara el handoff. No entrega ni ejecuta acciones.
+El mismo handoff preparado se reproduce después en VIZZ/PUPILA y termina en
+una vista de participante; la señal queda clasificada como `task` porque el
+contrato universal no inventa que un OSC genérico sea foco, puntero o teclado.
 
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
 procesos de usuario. El tercer comando genera un evento de conectividad con los
