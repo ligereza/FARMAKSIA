@@ -62,7 +62,10 @@ def main() -> int:
     lucida_root = Path(args.lucida_root).resolve()
     sys.path.insert(0, str(lucida_root))
     from lucida.overlay import diff_overlay_view  # noqa: E402
-    from lucida.overlay_consumer import OverlayConsumer  # noqa: E402
+    from lucida.overlay_consumer import (  # noqa: E402
+        OverlayConsumer,
+        OverlayConsumerConflictError,
+    )
 
     report = CanonicalEventReplay().run(
         [
@@ -85,10 +88,34 @@ def main() -> int:
     applied_diffs = []
     for index in range(1, len(views)):
         changes = diff_overlay_view(views[index - 1], views[index])
-        consumer.apply_delta(
-            changes,
-            _cursor(index, report["results"][index]["eventId"]),
-        )
+        cursor = _cursor(index, report["results"][index]["eventId"])
+        update = {
+            "contract_type": "LucidaOverlayUpdate",
+            "schema_version": "0.1",
+            "surface": "LUCIDA",
+            "mode": "read_only",
+            "view": views[index],
+            "changes": changes,
+            "cursor": cursor,
+            "safety": {
+                "proposal_only": True,
+                "automatic_actions": False,
+                "external_side_effects": False,
+            },
+        }
+        before_failed_update = consumer.state
+        tampered_update = {
+            **update,
+            "view": {**views[index], "status": "tampered"},
+        }
+        try:
+            consumer.apply_update(tampered_update)
+        except OverlayConsumerConflictError:
+            pass
+        else:
+            raise AssertionError("tampered atomic update was accepted")
+        assert consumer.state == before_failed_update
+        consumer.apply_update(update)
         applied_diffs.append(changes)
 
     final_view = consumer.view
@@ -96,7 +123,7 @@ def main() -> int:
         "pupilaAcceptedCount": report["acceptedCount"],
         "pupilaParticipantCount": report["finalPupilaView"]["participantCount"],
         "pupilaProposalKind": report["finalPupilaView"]["proposals"][0]["kind"],
-        "lucidaAppliedDeltaCount": consumer.state.applied_delta_count,
+        "lucidaAppliedUpdateCount": consumer.state.applied_delta_count,
         "lucidaFinalProposalCount": len(final_view["pending_proposals"]),
         "lucidaFinalProposalOperation": final_view["pending_proposals"][0]["operation"],
         "lucidaSafety": final_view["safety"],
@@ -108,7 +135,7 @@ def main() -> int:
     assert summary["pupilaAcceptedCount"] == 2
     assert summary["pupilaParticipantCount"] == 2
     assert summary["pupilaProposalKind"] == "shared-checkpoint"
-    assert summary["lucidaAppliedDeltaCount"] == 1
+    assert summary["lucidaAppliedUpdateCount"] == 1
     assert summary["lucidaFinalProposalCount"] == 1
     assert summary["lucidaFinalProposalOperation"] == "pupila.coordinate"
     assert summary["lucidaSafety"]["proposal_only"] is True

@@ -147,3 +147,10 @@ latest_hito_2026_09_01_pupila_lucida_consumer:
   limitation: The adapter intentionally drops participant references, signal coverage, room, activity and source payloads. It is not a semantic claim that participants are host capabilities, and it does not execute or control the host application.
   prediction: The offline cross-repository seam is now demonstrated. The remaining high-risk work is runtime authentication and host rendering, not another schema; keep those out until the consumer contract is reviewed by the agent branch.
   next_action: Audit the next published LUCIDA consumer and XIO fixture commits once, then decide whether to promote this adapter into a shared package or keep it as an experiment boundary.
+
+latest_hito_2026_09_01_atomic_overlay:
+  selected_action: verify_atomic_lucida_update_consumption
+  own_change: Updated the PUPILA-to-LUCIDA integration check to consume the new atomic update envelope containing view, complete diff and revision cursor. Added a tamper test proving a candidate view mismatch is rejected without mutating the consumer state.
+  evidence: The check passes against MOSAIK/LUCIDA 49c982a: two PUPILA participants produce one shared-checkpoint proposal, one atomic update with four fields is applied, the tampered update is rejected atomically, safety remains proposal_only and the 090 contract remains at 19 passing tests.
+  prediction: The first offline adapter seam is now robust enough for a review or shared-package decision. Runtime transport and GUI rendering remain separate risks and are not being introduced yet.
+  next_action: Check whether XIO has published the replay fixture requested from f725626; if so, audit it once and connect only its deterministic source to the existing bridge.
