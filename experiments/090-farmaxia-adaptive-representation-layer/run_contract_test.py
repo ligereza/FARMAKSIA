@@ -22,6 +22,11 @@ from pupila_view import (  # noqa: E402
     diff_pupila_view,
     project_pupila_view,
 )
+from pupila_lucida_projection import project_pupila_for_lucida  # noqa: E402
+from lucida_render_plan import (  # noqa: E402
+    LucidaRenderPlanError,
+    build_lucida_render_plan,
+)
 from vizz_adapter import VizzAdapter  # noqa: E402
 
 
@@ -622,6 +627,71 @@ def test_boundary_matrix_rejects_cross_surface_contamination() -> None:
         assert report["checks"][0]["forbidden"] == ["XIO_LAYER"]
 
 
+def test_lucida_render_plan_is_deterministic_and_non_blocking() -> None:
+    view = project_pupila_for_lucida(
+        project_pupila_view(
+            {
+                "sessionId": "session-render",
+                "roomId": "room-render",
+                "surfaceId": "surface-render",
+                "participants": [
+                    {"participantRef": "user-a", "policy": "guide", "focusState": True},
+                    {"participantRef": "user-b", "policy": "anchor", "focusState": False},
+                ],
+                "proposals": [
+                    {
+                        "proposalId": "proposal-render",
+                        "kind": "shared-checkpoint",
+                        "reason": "The shared surface needs a visible checkpoint.",
+                        "state": "proposed",
+                        "requiresExplicitAcceptance": True,
+                        "reversible": True,
+                    }
+                ],
+            }
+        )
+    )
+    first = build_lucida_render_plan(view)
+    second = build_lucida_render_plan(view)
+    serialized = json.dumps(first, sort_keys=True)
+
+    assert first == second
+    assert first["contractType"] == "LucidaRenderPlan"
+    assert first["transparent"] is True
+    assert first["clickThrough"] is True
+    assert first["blocking"] is False
+    assert first["intensity"] == "high"
+    assert first["safety"]["proposalOnly"] is True
+    assert first["safety"]["automaticActions"] is False
+    assert first["safety"]["externalSideEffects"] is False
+    assert first["safety"]["rawPayloadIncluded"] is False
+    assert '"action":' not in serialized
+    assert '"payload":' not in serialized
+    assert '"coordinates":' not in serialized
+
+
+def test_lucida_render_plan_rejects_unsafe_view_fields() -> None:
+    view = project_pupila_for_lucida(
+        project_pupila_view(
+            {
+                "sessionId": "session-render-invalid",
+                "roomId": "room-render-invalid",
+                "surfaceId": "surface-render-invalid",
+                "participants": [],
+                "proposals": [],
+            }
+        )
+    )
+    unsafe = dict(view)
+    unsafe["rawPayload"] = {"secret": "must-not-enter"}
+    try:
+        build_lucida_render_plan(unsafe)
+    except LucidaRenderPlanError:
+        pass
+    else:
+        raise AssertionError("unsafe LUCIDA render input was accepted")
+
+
 if __name__ == "__main__":
     tests = [
         test_consent_blocks_signal_and_drops_content,
@@ -645,6 +715,8 @@ if __name__ == "__main__":
         test_pupila_view_diff_rejects_unsafe_or_invalid_views,
         test_boundary_matrix_accepts_separated_surfaces,
         test_boundary_matrix_rejects_cross_surface_contamination,
+        test_lucida_render_plan_is_deterministic_and_non_blocking,
+        test_lucida_render_plan_rejects_unsafe_view_fields,
     ]
     for test in tests:
         test()

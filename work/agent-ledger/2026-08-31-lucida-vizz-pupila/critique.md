@@ -33,3 +33,15 @@ capability routing and cross-domain rejection. Do not add a real socket or GUI
 until authentication, cancellation and observable outcomes are specified.
 forecast: High probability of a stable offline vertical slice; low probability
 of meaningful universal-app claims until host adapters and task outcomes exist.
+
+## 2026-09-01 autonomous boundary audit
+
+objective: Keep XIO, LUCIDA, ADOBE, RESOLUME, VIZZ and PUPILA progressing without crossing ownership boundaries.
+observed_state: Published XIO 374aafa passes 99 tests in a clean audit worktree. The active XIO checkout has newer uncommitted event-log changes and currently reports 1 failure in 101 tests; that state is not eligible for integration.
+observed_state_vj: Published LUCIDA 7d49244 passes 102 tests; FARMAXIA offline integration passes 3/3.
+strongest_failure_mode: Treating an active dirty checkout as a published capability would silently integrate an unverified event or transport behavior.
+alternatives: Wait for XIO to self-verify; inspect or edit XIO directly; continue FARMAXIA using the last published contract. The first and third preserve ownership and reviewability; direct edits would interfere with the autonomous agent.
+selected_action: continue_with_published_contracts
+decision_delta: Do not integrate the active XIO working tree until its own test failure is resolved and a new published commit passes in a clean audit.
+verification_signal: Clean published XIO worktree passes 99 tests; current FARMAXIA integration passes 3/3; LUCIDA passes 102 tests.
+next_checkpoint: Re-audit XIO only after a new published commit; keep VJ/LUCIDA branch-specific and do not merge host-specific code into FARMAXIA.

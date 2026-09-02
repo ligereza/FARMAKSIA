@@ -195,3 +195,28 @@ latest_hito_2026_09_01_agent_audit:
   limitation: VJ has post-commit working-tree changes in the same overlay files; they were not staged, merged or treated as part of c26d6f3.
   own_check: The FARMAXIA offline integration runner previously passed 3/3 and was rerun successfully after the path correction.
   next_action: Audit the next agent commits once, then integrate only a reproducible cross-repository change; do not add speculative runtime transport or GUI work.
+
+latest_hito_2026_09_01_boundary_and_digest:
+  selected_action: repair_contract_and_document_boundaries
+  observed_failure: The published LUCIDA update contract required view_digest, while the FARMAXIA PUPILA consumer fixture still emitted the pre-integrity envelope.
+  own_change: Added the deterministic LUCIDA view_digest to the FARMAXIA consumer check and documented the ownership map for FARMAXIA, LUCIDA, ADOBE, RESOLUME, MULTI, XIO, VIZZ, PUPILA and MOSAIK/VJ.
+  evidence: The offline integration passed 4/4 with the real LUCIDA/MULTI branch; FARMAXIA 090 contract passed 19 tests; XIO passed 95 tests; LUCIDA passed 98 tests. Published FARMAXIA commits are 4b32b23 and 7e4b3d8.
+  boundary_confirmed: XIO owns signals and transport; LUCIDA owns the floating host-neutral layer; ADOBE and RESOLUME remain specialized surfaces; VIZZ and PUPILA produce bounded policy/proposals and do not execute host actions.
+  next_action: Let the agents continue their current branch-specific work, then audit exact published commits once. Integrate only changes that preserve these boundaries and pass the cross-repository runner.
+
+latest_hito_2026_09_01_boundary_guard:
+  selected_action: add_reproducible_surface_boundary_guard
+  own_change: Added boundary_matrix.py and run_boundary_matrix_check.py, with acceptance tests and provenance, to verify required and forbidden direct markers for FARMAXIA VIZZ/PUPILA, VJ LUCIDA, LUCIDA ADOBE/RESOLUME/MULTI and XIO.
+  evidence: Six explicit roots passed the boundary matrix; FARMAXIA 090 contract passed 21 tests; offline integration remained green; no network, GUI or host action was opened. Published commit is 573b6ca.
+  failure_repaired: The first branch-matrix invocation failed only because PowerShell split ROLE=PATH arguments; the corrected invocation passed without changing the implementation.
+  boundary_confirmed: ADOBE and RESOLUME remain host-specific LUCIDA surfaces; MULTI remains the LUCIDA-side multi-user surface; XIO remains signal and transport infrastructure; VIZZ/PUPILA remain bounded policy/proposal layers.
+  next_action: Continue monitoring branch-specific autonomous objectives and audit only new published evidence. Do not merge application-specific code into FARMAXIA or add real runtime transport before authentication and cancellation are specified.
+
+latest_hito_2026_09_01_autonomous_agent_audit:
+  selected_action: continue_with_published_contracts
+  evidence:
+    - XIO published 374aafa passes 99 tests in a clean audit worktree; its active checkout has newer uncommitted event-log changes and one failing test, so those changes remain outside FARMAXIA.
+    - MOSAIK/VJ published 7d49244 passes 102 tests.
+    - FARMAXIA offline integration passes 3/3 with no network, GUI or host actions.
+  boundary_confirmed: XIO remains the signal and transport owner; LUCIDA remains the floating host-neutral surface; ADOBE and RESOLUME remain separate LUCIDA adapters; VIZZ/PUPILA remain bounded representation and proposal layers.
+  next_action: Re-audit XIO after its autonomous objective publishes a clean commit; continue the FARMAXIA slice only from published contracts and keep the goal active.

@@ -13,6 +13,7 @@ sys.path.insert(0, str(HERE))
 
 from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
 from pupila_lucida_projection import project_pupila_for_lucida  # noqa: E402
+from lucida_render_plan import build_lucida_render_plan  # noqa: E402
 
 
 def _event(event_id: str, peer_id: str, sequence: int, focused: bool) -> dict[str, object]:
@@ -120,6 +121,7 @@ def main() -> int:
         applied_diffs.append(changes)
 
     final_view = consumer.view
+    render_plan = build_lucida_render_plan(final_view)
     summary = {
         "pupilaAcceptedCount": report["acceptedCount"],
         "pupilaParticipantCount": report["finalPupilaView"]["participantCount"],
@@ -128,6 +130,9 @@ def main() -> int:
         "lucidaFinalProposalCount": len(final_view["pending_proposals"]),
         "lucidaFinalProposalOperation": final_view["pending_proposals"][0]["operation"],
         "lucidaSafety": final_view["safety"],
+        "lucidaRenderElementCount": len(render_plan["elements"]),
+        "lucidaRenderIntensity": render_plan["intensity"],
+        "lucidaRenderClickThrough": render_plan["clickThrough"],
         "automaticActions": False,
         "externalSideEffects": False,
         "rawPayloadForwarded": any("payload" in result for result in report["results"]),
@@ -139,6 +144,9 @@ def main() -> int:
     assert summary["lucidaAppliedUpdateCount"] == 1
     assert summary["lucidaFinalProposalCount"] == 1
     assert summary["lucidaFinalProposalOperation"] == "pupila.coordinate"
+    assert summary["lucidaRenderElementCount"] == 3
+    assert summary["lucidaRenderIntensity"] == "high"
+    assert summary["lucidaRenderClickThrough"] is True
     assert summary["lucidaSafety"]["proposal_only"] is True
     assert summary["lucidaSafety"]["automatic_actions"] is False
     assert summary["lucidaSafety"]["external_side_effects"] is False

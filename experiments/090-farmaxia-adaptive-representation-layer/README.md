@@ -86,6 +86,12 @@ participantes, cobertura de senales, sala, actividad y payloads. No convierte
 participantes en capacidades de la aplicacion ni afirma semantica de Resolume,
 Adobe, atencion o aprendizaje.
 
+`lucida_render_plan.py` es el siguiente borde de la futura ventana flotante:
+convierte esa vista segura en elementos visuales genericos, intensidad y
+claves de mensaje. Mantiene `transparent`, `clickThrough` y `blocking` como
+parte del contrato de salida. No abre una ventana ni decide como se dibuja
+dentro de Adobe o Resolume; LUCIDA sera responsable del renderer del host.
+
 `boundary_matrix.py` es una guardia estructural offline. Comprueba que cada
 checkout tenga los marcadores de su responsabilidad y no tenga marcadores
 directos de otra superficie. Sirve para detectar una mezcla accidental de
@@ -101,6 +107,7 @@ si sola que el comportamiento semantico de una aplicacion sea correcto.
 - auditoría encadenada y replay offline;
 - límites locales sin shell, credenciales ni captura cruda.
 - guardia de limites entre repositorios y superficies.
+- plan de renderizado generico para la futura capa flotante.
 
 ## Qué no se adopta todavía
 
@@ -187,6 +194,10 @@ procesos de usuario. El tercer comando genera un evento de conectividad con los
 contratos reales de XIO y lo reproduce junto con `focus`, `pointer` y
 `keyboard`, incluyendo un duplicado. Verifica la frontera completa sin abrir
 red.
+
+El chequeo del consumidor tambien verifica el primer plan visual de LUCIDA:
+elementos acotados, `clickThrough=true`, `blocking=false` y ninguna accion,
+coordenada o carga cruda en la salida.
 
 ## Kill tests
 
