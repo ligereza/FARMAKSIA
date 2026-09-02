@@ -152,6 +152,16 @@ diffs derivados de PUPILA:
 El checkout local debe estar en la rama `LUCIDA`. El chequeo sólo usa memoria:
 no abre red, GUI ni acciones del host.
 
+Los tres checks principales pueden ejecutarse juntos:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_offline_integration.py --lucida-root C:\IA\VJ
+```
+
+Si también existe un checkout de la rama `MULTI`, se puede añadir
+`--lucida-multi-root C:\IA\LUCIDA-MULTI-CHECK` para incluir el transporte
+LUCIDA/MULTI en el mismo reporte.
+
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
 procesos de usuario. El tercer comando genera un evento de conectividad con los
 contratos reales de XIO y lo reproduce junto con `focus`, `pointer` y

@@ -169,3 +169,10 @@ latest_hito_2026_09_01_revoked_delivery:
   evidence: The route check passes with deliveryStatus=rejected, revokedDeliveryTransportCalls=0, verified audit, one restored handoff and two restored multi-participant handoffs. FARMAXIA 090 remains valid with 19 tests. No socket or host side effect was attempted.
   prediction: The permission boundary behaves correctly for the local path. A real transport should remain disabled until authentication, expiry, replay protection and user-visible acceptance are specified as separate contracts.
   next_action: Audit the next XIO and LUCIDA commits once; if no new commits are ready, consolidate the offline checks into one reproducible integration command instead of adding another feature layer.
+
+latest_hito_2026_09_01_offline_integration_command:
+  selected_action: consolidate_offline_integration_checks
+  own_change: Added one runner that executes the FARMAXIA contract, XIO route persistence and revoked-delivery boundary, PUPILA-to-LUCIDA atomic consumer check, and optionally the LUCIDA/MULTI transport check. It reports structured pass/fail status and explicitly records that no network, GUI or host action was opened.
+  evidence: Core mode passes 3/3 checks. Extended mode passes 4/4 checks with a temporary origin/MULTI checkout: FARMAXIA contract 19 tests, XIO route/persistence/permission pass, LUCIDA atomic consumer pass, and LUCIDA/MULTI transport preserves 3 events, 2 participants and one shared-checkpoint proposal.
+  prediction: The first offline vertical is now easy to rerun and audit; adding more abstraction before a real consumer need would have diminishing value. The next decision should be whether to promote the projection into a shared package after the agent branches stabilize.
+  next_action: Keep the runner as the acceptance gate and audit the next published XIO/LUCIDA commits once; do not enable real network or GUI integration yet.
