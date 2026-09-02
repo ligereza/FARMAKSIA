@@ -85,3 +85,13 @@ strongest_failure_mode: A cross-repository test could report a green MULTI trans
 decision: accept
 reason: The two roots are now independent and auditable, with explicit negative-path validation. No application host or network behavior is introduced.
 next_checkpoint: Publish this narrow gate repair, then defer new features until XIO publishes a clean fix for its Windows persistence lock failure.
+
+## 2026-09-01 repaired agent contract acceptance
+
+observed_state: XIO 3944a0b now passes 108 clean tests and MOSAIK/LUCIDA 10810c3 passes 111 clean tests. The earlier XIO lock failure is resolved in the published branch.
+selected_action: Reopen XIO for the offline acceptance gate while keeping the gate exact-root and offline.
+evidence: FARMAXIA extended integration passes 4/4; the report distinguishes XIO, LUCIDA and MULTI package paths; no network, GUI or host action occurs.
+strongest_failure_mode: Mistaking a green offline seam for a live host integration or silently accepting the dirty agent worktree instead of the published commit.
+decision: accept_offline_only
+reason: Full clean source suites and the exact-root cross-repository checks are green. Live transport, renderer and host-specific behavior remain deliberately outside scope.
+next_checkpoint: Keep the agents autonomous and audit only after new commits; define the next host-neutral observable outcome before adding integration code.

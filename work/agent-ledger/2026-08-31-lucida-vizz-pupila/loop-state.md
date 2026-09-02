@@ -257,3 +257,13 @@ latest_hito_2026_09_01_multi_roots_provenance:
   kill_test: A missing XIO or MULTI root fails before a cross-root report can pass; the report exposes both resolved package paths.
   boundary_confirmed: FARMAXIA remains a verifier; XIO remains event/transport source, MULTI remains the multi transport surface, and no network or host action is opened.
   next_action: Run the four-check exact-root gate, publish this provenance repair, then re-audit agents only after a new published commit.
+
+latest_hito_2026_09_01_agent_repair_audit:
+  selected_action: accept_new_published_agent_contracts
+  evidence:
+    - XIO published 3944a0b was audited in a clean worktree: 108 tests passed, including the previously failing Windows persistence concurrency test.
+    - MOSAIK/LUCIDA published 10810c3 was audited in a clean worktree: 111 tests passed.
+    - The exact-root FARMAXIA extended gate passed 4/4: 23 FARMAXIA contract tests, XIO route/persistence/permission, PUPILA-to-LUCIDA consumer and LUCIDA/MULTI transport.
+  decision: XIO and LUCIDA published contracts are eligible for the current offline integration; the earlier XIO rejection is closed.
+  limitation: This remains an offline contract gate; it does not prove live network authentication, GUI rendering, Adobe behavior or Resolume behavior.
+  next_action: Keep branch-specific autonomy active, avoid another schema layer, and select the next own task from a measurable host-neutral behavior rather than adding speculative host integration.
