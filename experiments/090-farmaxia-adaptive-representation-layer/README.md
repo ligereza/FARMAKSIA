@@ -137,6 +137,11 @@ cuarto comando con un checkout local de esa rama:
 Ese comando requiere que la ruta indicada contenga `XIO_LAYER` de la rama
 `MULTI`; no cambia ramas ni abre sockets.
 
+El chequeo usa dos fuentes de forma separada: genera el evento de conectividad
+desde `--xio-root` y carga el transporte desde `--lucida-multi-root`. El reporte
+incluye `loadedXioPath` y `loadedLucidaMultiPath`; asi una copia de `XIO_LAYER`
+incluida en MULTI no puede ocultar el checkout XIO que se queria auditar.
+
 El flujo de selección y handoff de XIO se verifica con:
 
 ```powershell

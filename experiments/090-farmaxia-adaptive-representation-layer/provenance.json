@@ -27,6 +27,7 @@
     {"id": "farmaxia:render-plan-090", "path": "lucida_render_plan.py", "role": "bounded_transparent_surface_render_plan", "authority": "computed"},
     {"id": "farmaxia:xio-root-provenance-090", "path": "run_xio_route_handoff_check.py", "role": "explicit_xio_checkout_provenance_guard", "authority": "computed"},
     {"id": "farmaxia:lucida-root-provenance-090", "path": "run_lucida_pupila_consumer_check.py", "role": "explicit_lucida_checkout_provenance_guard", "authority": "computed"},
+    {"id": "farmaxia:multi-roots-provenance-090", "path": "run_lucida_multi_check.py", "role": "separate_xio_and_lucida_multi_checkout_provenance_guard", "authority": "computed"},
     {"id": "farmaxia:readme-090", "path": "README.md", "role": "scope_and_reproduction_record", "authority": "human_reviewed_record"}
   ],
   "activities": [
@@ -42,6 +43,7 @@
     ,{"id": "farmaxia:build-render-plan-090", "type": "activity", "label": "convert a safe LUCIDA view into bounded non-blocking visual elements", "agent": "farmaxia:implementer-090", "used": ["farmaxia:pupila-view-090", "farmaxia:boundary-guard-090", "farmaxia:tests-090"], "generated": ["farmaxia:render-plan-090"]}
     ,{"id": "farmaxia:verify-xio-root-090", "type": "activity", "label": "load and report the explicitly requested XIO checkout", "agent": "farmaxia:implementer-090", "used": ["farmaxia:cross-branch-check-090", "farmaxia:tests-090"], "generated": ["farmaxia:xio-root-provenance-090"]}
     ,{"id": "farmaxia:verify-lucida-root-090", "type": "activity", "label": "load and report the explicitly requested LUCIDA checkout", "agent": "farmaxia:implementer-090", "used": ["farmaxia:pupila-view-090", "farmaxia:tests-090"], "generated": ["farmaxia:lucida-root-provenance-090"]}
+    ,{"id": "farmaxia:verify-multi-roots-090", "type": "activity", "label": "separate XIO event generation from LUCIDA MULTI transport loading", "agent": "farmaxia:implementer-090", "used": ["farmaxia:xio-root-provenance-090", "farmaxia:lucida-root-provenance-090", "farmaxia:tests-090"], "generated": ["farmaxia:multi-roots-provenance-090"]}
   ],
   "queries": [
     {"id": "farmaxia:vizz-query-090", "expression": "does VIZZ produce a non-blocking visual policy from consented metadata without camera or raw content", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:tests-090"]},
@@ -51,6 +53,7 @@
     ,{"id": "farmaxia:render-query-090", "expression": "can a safe VIZZ/PUPILA view become a transparent non-blocking LUCIDA render plan without raw payloads or host actions", "authority": "experiment_defined", "required_entities": ["farmaxia:render-plan-090", "farmaxia:pupila-view-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:xio-root-query-090", "expression": "does the XIO route check load the package from the exact checkout selected by the acceptance runner", "authority": "experiment_defined", "required_entities": ["farmaxia:xio-root-provenance-090", "farmaxia:cross-branch-check-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:lucida-root-query-090", "expression": "does the LUCIDA consumer check load the package from the exact checkout selected by the acceptance runner", "authority": "experiment_defined", "required_entities": ["farmaxia:lucida-root-provenance-090", "farmaxia:pupila-view-090", "farmaxia:tests-090"]}
+    ,{"id": "farmaxia:multi-roots-query-090", "expression": "does the MULTI check use the requested XIO checkout for event generation and the requested MULTI checkout for transport", "authority": "experiment_defined", "required_entities": ["farmaxia:multi-roots-provenance-090", "farmaxia:xio-root-provenance-090", "farmaxia:tests-090"]}
   ],
   "assumptions": [
     "The first reusable slice can run in Python standard tooling without a GUI or host plugin.",
@@ -73,6 +76,7 @@
     ,"a render plan never includes raw payloads, host actions or blocking behavior"
     ,"an XIO route check fails when the loaded package is outside the requested checkout"
     ,"a LUCIDA consumer check fails when the loaded package is outside the requested checkout"
+    ,"the MULTI check reports distinct XIO and MULTI package paths and fails for a missing root"
   ],
   "unknowns": [
     "Which host transport will be selected for the first real adapter",

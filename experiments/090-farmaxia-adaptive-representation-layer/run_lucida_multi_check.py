@@ -12,24 +12,85 @@ import sys
 HERE = Path(__file__).resolve().parent
 
 
+def _clear_xio_modules() -> None:
+    for module_name in list(sys.modules):
+        if module_name == "XIO_LAYER" or module_name.startswith("XIO_LAYER."):
+            del sys.modules[module_name]
+
+
+def _load_xio_event(xio_root: Path) -> tuple[dict[str, object], str]:
+    if not xio_root.is_dir():
+        raise FileNotFoundError(f"XIO root does not exist: {xio_root}")
+    _clear_xio_modules()
+    sys.path.insert(0, str(xio_root))
+    import XIO_LAYER  # noqa: PLC0415
+
+    loaded_xio_path = Path(XIO_LAYER.__file__).resolve()
+    try:
+        loaded_xio_path.relative_to(xio_root)
+    except ValueError as error:
+        raise AssertionError(
+            f"loaded XIO package is outside requested root: {loaded_xio_path}"
+        ) from error
+
+    from run_xio_cross_branch_check import build_event  # noqa: PLC0415
+
+    return build_event(xio_root).to_dict(), str(loaded_xio_path)
+
+
+def _load_multi_transport(multi_root: Path) -> tuple[object, object, object, object, object, object, str]:
+    if not multi_root.is_dir():
+        raise FileNotFoundError(f"LUCIDA MULTI root does not exist: {multi_root}")
+    _clear_xio_modules()
+    sys.path.insert(0, str(multi_root))
+    import XIO_LAYER  # noqa: PLC0415
+
+    loaded_multi_path = Path(XIO_LAYER.__file__).resolve()
+    try:
+        loaded_multi_path.relative_to(multi_root)
+    except ValueError as error:
+        raise AssertionError(
+            f"loaded LUCIDA MULTI package is outside requested root: {loaded_multi_path}"
+        ) from error
+
+    from XIO_LAYER.adapters.lucida_bridge import (  # noqa: PLC0415
+        application_event_to_transport,
+        transport_to_application_event,
+    )
+    from XIO_LAYER.core.events import ApplicationEvent  # noqa: PLC0415
+    from XIO_LAYER.core.transport import Endpoint, NetworkMedium, NetworkScope  # noqa: PLC0415
+    return (
+        application_event_to_transport,
+        transport_to_application_event,
+        ApplicationEvent,
+        Endpoint,
+        NetworkMedium,
+        NetworkScope,
+        str(loaded_multi_path),
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--xio-root", default=r"C:\IA\XIO")
     parser.add_argument("--lucida-multi-root", required=True)
     args = parser.parse_args()
 
-    sys.path.insert(0, str(Path(args.lucida_multi_root)))
     sys.path.insert(0, str(HERE))
-    from XIO_LAYER.adapters.lucida_bridge import (  # noqa: E402
+    from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
+
+    xio_root = Path(args.xio_root).resolve()
+    multi_root = Path(args.lucida_multi_root).resolve()
+    connectivity_event, loaded_xio_path = _load_xio_event(xio_root)
+    (
         application_event_to_transport,
         transport_to_application_event,
-    )
-    from XIO_LAYER.core.events import ApplicationEvent  # noqa: E402
-    from XIO_LAYER.core.transport import Endpoint, NetworkMedium, NetworkScope  # noqa: E402
-    from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
-    from run_xio_cross_branch_check import build_event  # noqa: E402
-
-    connectivity_event = build_event(Path(args.xio_root)).to_dict()
+        ApplicationEvent,
+        Endpoint,
+        NetworkMedium,
+        NetworkScope,
+        loaded_multi_path,
+    ) = _load_multi_transport(multi_root)
     checked_at = datetime(2026, 9, 1, 12, 0, 2, tzinfo=timezone.utc)
     interaction_event = ApplicationEvent(
         event_id="xio-multi-focus-001",
@@ -89,6 +150,10 @@ def main() -> int:
         consent=True,
     )
     summary = {
+        "xioRoot": str(xio_root),
+        "loadedXioPath": loaded_xio_path,
+        "lucidaMultiRoot": str(multi_root),
+        "loadedLucidaMultiPath": loaded_multi_path,
         "transportChannel": messages[0].channel,
         "transportedEventCount": len(messages),
         "roundTripPreserved": True,

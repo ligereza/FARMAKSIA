@@ -248,3 +248,12 @@ latest_hito_2026_09_01_lucida_root_provenance:
   kill_test: A missing or outside LUCIDA checkout cannot produce a passing consumer result.
   boundary_confirmed: The change affects only FARMAXIA verification provenance; LUCIDA remains the host-neutral floating consumer and no host action is opened.
   next_action: Run the full exact-root gate, publish only this narrow verification repair, then audit agent branches once after a new commit.
+
+latest_hito_2026_09_01_multi_roots_provenance:
+  selected_action: separate_xio_generation_from_multi_transport
+  observed_failure: The MULTI runner imported its own copied XIO_LAYER before using --xio-root, so the explicit XIO source could be ignored.
+  own_change: Added two-phase loading: connectivity event generation from the requested XIO root, then transport and event restoration from the requested MULTI root, with path assertions for both.
+  evidence: The clean MULTI check passes with loadedXioPath inside the selected XIO checkout and loadedLucidaMultiPath inside the selected MULTI checkout; transportedEventCount=3, farmaxiaAcceptedCount=3 and payloadForwarded=false.
+  kill_test: A missing XIO or MULTI root fails before a cross-root report can pass; the report exposes both resolved package paths.
+  boundary_confirmed: FARMAXIA remains a verifier; XIO remains event/transport source, MULTI remains the multi transport surface, and no network or host action is opened.
+  next_action: Run the four-check exact-root gate, publish this provenance repair, then re-audit agents only after a new published commit.

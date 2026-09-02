@@ -75,3 +75,13 @@ strongest_failure_mode: A cross-repository acceptance result could look green wh
 decision: accept
 reason: The loader now makes the source checkout auditable and preserves the role boundary; this is a verification repair, not a host integration.
 next_checkpoint: Publish after exact-root contract and negative-path checks; do not add another runtime layer until the external XIO lock failure is resolved.
+
+## 2026-09-01 MULTI dual-root provenance repair
+
+observed_failure: The MULTI fixture carried a copy of XIO_LAYER, and its import order could make --xio-root ineffective even while the command appeared successful.
+selected_action: Load and verify XIO first only for the connectivity event, clear the package cache, then load and verify the MULTI checkout for transport and restoration.
+evidence: Clean exact-root MULTI check passes; the report distinguishes both package paths and preserves three events, provenance and round trips without forwarding payloads.
+strongest_failure_mode: A cross-repository test could report a green MULTI transport while silently using stale XIO code.
+decision: accept
+reason: The two roots are now independent and auditable, with explicit negative-path validation. No application host or network behavior is introduced.
+next_checkpoint: Publish this narrow gate repair, then defer new features until XIO publishes a clean fix for its Windows persistence lock failure.
