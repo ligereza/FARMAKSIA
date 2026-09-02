@@ -45,3 +45,13 @@ selected_action: continue_with_published_contracts
 decision_delta: Do not integrate the active XIO working tree until its own test failure is resolved and a new published commit passes in a clean audit.
 verification_signal: Clean published XIO worktree passes 99 tests; current FARMAXIA integration passes 3/3; LUCIDA passes 102 tests.
 next_checkpoint: Re-audit XIO only after a new published commit; keep VJ/LUCIDA branch-specific and do not merge host-specific code into FARMAXIA.
+
+## 2026-09-01 acceptance provenance repair
+
+observed_failure: The consolidated runner exposed --xio-root, but the route check imported a hard-coded XIO path, so an audit could pass against the wrong checkout.
+selected_action: Make the route check load the requested root, assert the loaded package path is inside it, report both paths, and forward the argument from the consolidated runner.
+evidence: Exact-root extended integration passed 4/4; clean published XIO b58ccfa passed 103 tests; clean published MOSAIK/LUCIDA ee0f3c9 passed 104 tests; FARMAXIA contract passed 23 tests.
+strongest_failure_mode: Python module caching or an invalid checkout could still make provenance ambiguous if the loader did not assert the resolved package path.
+decision: accept
+reason: The loader runs in a fresh subprocess, inserts the requested checkout first, and rejects a resolved XIO package outside that checkout. The change preserves all application ownership boundaries and does not enable network or host actions.
+next_checkpoint: Publish this narrow fix, then audit new agent commits once rather than polling continuously.

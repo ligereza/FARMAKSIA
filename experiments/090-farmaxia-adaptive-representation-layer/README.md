@@ -143,9 +143,17 @@ El flujo de selección y handoff de XIO se verifica con:
 .\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_route_handoff_check.py
 ```
 
+Para auditar un checkout concreto de XIO, indicar la ruta explícitamente:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_route_handoff_check.py --xio-root C:\IA\XIO
+```
+
 El chequeo exige una ruta coincidente, selecciona el adaptador explícitamente,
 redacta el payload mediante una allowlist, conserva el envelope de
-`application-event` y sólo prepara el handoff. No entrega ni ejecuta acciones.
+`application-event` y sólo prepara el handoff. El resultado incluye `xioRoot` y
+`loadedXioPath`; el chequeo falla si el paquete cargado no pertenece a la ruta
+solicitada. No entrega ni ejecuta acciones.
 El mismo handoff preparado se reproduce después en VIZZ/PUPILA y termina en
 una vista de participante; la señal queda clasificada como `task` porque el
 contrato universal no inventa que un OSC genérico sea foco, puntero o teclado.
@@ -183,6 +191,13 @@ Los tres checks principales pueden ejecutarse juntos:
 
 ```powershell
 .\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_offline_integration.py --lucida-root C:\IA\VJ
+```
+
+Para que el acceptance gate no dependa de un checkout XIO implícito, se puede
+indicar la ruta publicada que se quiere auditar:
+
+```powershell
+.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_offline_integration.py --xio-root C:\IA\XIO --lucida-root C:\IA\VJ
 ```
 
 Si también existe un checkout de la rama `MULTI`, se puede añadir

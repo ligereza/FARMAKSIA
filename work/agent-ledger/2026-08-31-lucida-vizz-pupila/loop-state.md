@@ -220,3 +220,12 @@ latest_hito_2026_09_01_autonomous_agent_audit:
     - FARMAXIA offline integration passes 3/3 with no network, GUI or host actions.
   boundary_confirmed: XIO remains the signal and transport owner; LUCIDA remains the floating host-neutral surface; ADOBE and RESOLUME remain separate LUCIDA adapters; VIZZ/PUPILA remain bounded representation and proposal layers.
   next_action: Re-audit XIO after its autonomous objective publishes a clean commit; continue the FARMAXIA slice only from published contracts and keep the goal active.
+
+latest_hito_2026_09_01_explicit_xio_root:
+  selected_action: repair_acceptance_checkout_provenance
+  observed_failure: run_offline_integration accepted --xio-root but run_xio_route_handoff_check ignored it and always imported C:\\IA\\XIO.
+  own_change: Added explicit XIO root loading, loaded package path verification, output provenance and forwarding from the consolidated integration runner.
+  evidence: A clean XIO worktree at b58ccfa passed 103 tests; a clean MOSAIK/LUCIDA worktree at ee0f3c9 passed 104 tests; the extended FARMAXIA integration passed 4/4 with the exact roots and reported loadedXioPath inside the selected XIO checkout.
+  kill_test: An absent or outside XIO checkout now fails before the route check can pass; the report exposes xioRoot and loadedXioPath for audit.
+  boundary_confirmed: The fix changes only FARMAXIA verification provenance; it does not modify XIO, LUCIDA, host rendering, network transport or user dirty files.
+  next_action: Publish the corrected FARMAXIA gate, then audit agent branches only after a new verifiable commit; do not add speculative runtime work.

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import argparse
 import json
 from pathlib import Path
 import sys
@@ -10,24 +11,70 @@ import tempfile
 
 
 HERE = Path(__file__).resolve().parent
-XIO_ROOT = Path(r"C:\IA\XIO")
-sys.path.insert(0, str(XIO_ROOT))
 sys.path.insert(0, str(HERE))
 
-from XIO_LAYER.adapters import (  # noqa: E402
-    JsonLineHandoffStore,
-    ProtocolEventAdapter,
-    SourceAdapterRegistry,
-)
-from XIO_LAYER.adapters.handoff import (  # noqa: E402
-    PrivacyPolicy,
-    deliver_adapter_handoff,
-    prepare_adapter_handoff,
-)
-from XIO_LAYER.adapters.lucida_bridge import transport_to_application_event  # noqa: E402
-from XIO_LAYER.core.audit import AuditLedger, PermissionRegistry  # noqa: E402
-from XIO_LAYER.core.transport import Endpoint, NetworkMedium, NetworkScope, OscEnvelope  # noqa: E402
 from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
+
+
+XIO_ROOT = Path(r"C:\IA\XIO")
+
+
+def _load_xio(xio_root: Path) -> str:
+    """Load XIO from the explicitly requested checkout and prove its origin."""
+
+    global AuditLedger
+    global Endpoint
+    global JsonLineHandoffStore
+    global NetworkMedium
+    global NetworkScope
+    global OscEnvelope
+    global PermissionRegistry
+    global PrivacyPolicy
+    global ProtocolEventAdapter
+    global SourceAdapterRegistry
+    global deliver_adapter_handoff
+    global prepare_adapter_handoff
+    global transport_to_application_event
+    global XIO_ROOT
+
+    XIO_ROOT = xio_root.resolve()
+    if not XIO_ROOT.is_dir():
+        raise FileNotFoundError(f"XIO root does not exist: {XIO_ROOT}")
+    for module_name in list(sys.modules):
+        if module_name == "XIO_LAYER" or module_name.startswith("XIO_LAYER."):
+            del sys.modules[module_name]
+    sys.path.insert(0, str(XIO_ROOT))
+
+    import XIO_LAYER  # noqa: PLC0415
+    from XIO_LAYER.adapters import (  # noqa: PLC0415
+        JsonLineHandoffStore,
+        ProtocolEventAdapter,
+        SourceAdapterRegistry,
+    )
+    from XIO_LAYER.adapters.handoff import (  # noqa: PLC0415
+        PrivacyPolicy,
+        deliver_adapter_handoff,
+        prepare_adapter_handoff,
+    )
+    from XIO_LAYER.adapters.lucida_bridge import (  # noqa: PLC0415
+        transport_to_application_event,
+    )
+    from XIO_LAYER.core.audit import AuditLedger, PermissionRegistry  # noqa: PLC0415
+    from XIO_LAYER.core.transport import (  # noqa: PLC0415
+        Endpoint,
+        NetworkMedium,
+        NetworkScope,
+        OscEnvelope,
+    )
+
+    loaded_path = Path(XIO_LAYER.__file__).resolve()
+    try:
+        loaded_path.relative_to(XIO_ROOT)
+    except ValueError as error:
+        raise AssertionError(
+            f"loaded XIO package is outside requested root: {loaded_path}"
+        ) from error
+    return str(loaded_path)
 
 
 def _prepare_multi_handoff(
@@ -89,6 +136,11 @@ def _prepare_multi_handoff(
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--xio-root", default=str(XIO_ROOT))
+    args = parser.parse_args()
+    loaded_xio_path = _load_xio(Path(args.xio_root))
+
     checked_at = datetime(2026, 9, 1, 12, 0, 0, tzinfo=timezone.utc)
     registry = SourceAdapterRegistry()
     registry.register(
@@ -174,6 +226,8 @@ def main() -> int:
         consent=True,
     )
     summary = {
+        "xioRoot": str(XIO_ROOT),
+        "loadedXioPath": loaded_xio_path,
         "routeStatus": route_plan["status"],
         "selectedSource": selection.source_app,
         "handoffStatus": "prepared",

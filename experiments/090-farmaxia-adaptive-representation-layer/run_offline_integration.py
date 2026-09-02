@@ -49,7 +49,7 @@ def main() -> int:
         _run_check(
             "xio-route-persistence-and-permission",
             HERE / "run_xio_route_handoff_check.py",
-            [],
+            ["--xio-root", args.xio_root],
         ),
         _run_check(
             "pupila-lucida-atomic-consumer",
