@@ -18,7 +18,7 @@ def main() -> None:
     payload = json.loads(result.stdout)
     assert payload["status"] == "BRANCH_SUBSET_SELECTION_VERIFIED"
     assert payload["selection"]["selected_ids"] == ["plan-full", "plan-oracle", "plan-sequence", "plan-map"]
-    assert payload["selection"]["total_display_cost"] == 5.6
+    assert abs(payload["selection"]["total_display_cost"] - 5.6) <= 1e-9
     assert payload["selection"]["unselected_recoverable_ids"] == ["plan-analogy", "plan-focus", "plan-redundant"]
     assert payload["metrics"]["unselected_branches_recoverable"] is True
     assert payload["metrics"]["mmr_is_not_selection_authority"] is True
