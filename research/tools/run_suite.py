@@ -25,24 +25,34 @@ OUT_OF_SCOPE_EXPERIMENTS = frozenset(
 SKIPPED: set[str] = set()
 
 
-def out_of_scope_target(args: list[str]) -> str | None:
-    """Name the declared out-of-scope experiment a step needs but cannot find.
+def target_state(args: list[str]) -> tuple[str, str | None]:
+    """Say whether a step's targets are present, declared absent, or missing.
 
-    Steps for these experiments stay written down, because their decisions and
-    literature are published here even though their code is not. An absent
-    target is only skipped when it was declared absent: anything else missing
-    still fails, so an accidental deletion is not quietly tolerated.
+    Steps for the out-of-scope experiments stay written down, because their
+    decisions and literature are published here even though their code is not.
+    Present and absent-but-undeclared are kept as separate answers on purpose:
+    one value for both would make an experiment deleted by accident look
+    exactly like an experiment nobody ever referenced.
+
+    Only arguments that carry a path separator are treated as targets. Flags
+    and bare words -- `-m`, `-q`, `compileall`, `--dry-run` -- are arguments to
+    a step, not files it needs, and reading them as absent targets stops the
+    suite on its first line.
     """
 
     for argument in args[1:]:
+        if "/" not in argument:
+            continue
         path = Path(argument)
+        if not path.is_absolute():
+            path = ROOT / path
         if path.exists():
             continue
         for part in path.parts:
             if part in OUT_OF_SCOPE_EXPERIMENTS:
-                return part
-        return None
-    return None
+                return "declared_absent", part
+        return "missing", argument
+    return "present", None
 
 
 def unlisted_provenance(listed: list[str]) -> list[str]:
@@ -61,11 +71,13 @@ def unlisted_provenance(listed: list[str]) -> list[str]:
 
 
 def command(label: str, args: list[str], expected: str | None = None) -> None:
-    absent = out_of_scope_target(args)
-    if absent is not None:
-        SKIPPED.add(absent)
-        print(f"SKIP {label}: {absent} is not published in this scope")
+    state, target = target_state(args)
+    if state == "declared_absent":
+        SKIPPED.add(target)
+        print(f"SKIP {label}: {target} is not published in this scope")
         return
+    if state == "missing":
+        raise RuntimeError(f"{label} needs a target that is absent and not declared: {target}")
     completed = subprocess.run(
         args,
         cwd=ROOT,
