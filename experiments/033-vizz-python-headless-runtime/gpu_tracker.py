@@ -7,12 +7,20 @@ import math
 from dataclasses import dataclass
 from pathlib import Path
 
-import cv2
 import numpy as np
-import onnxruntime as ort
 
-from pretrained_gaze import decode_mobileone_angles, preprocess_mobileone_face
+from pretrained_gaze import _AbsentModule, decode_mobileone_angles, preprocess_mobileone_face
 from ray_proxy import BinocularRayProxy, build_binocular_ray_proxy
+
+try:
+    import cv2
+except ModuleNotFoundError:
+    cv2 = _AbsentModule("cv2")
+
+try:
+    import onnxruntime as ort
+except ModuleNotFoundError:
+    ort = _AbsentModule("onnxruntime")
 
 
 IRIS_IDX_481 = np.asarray([248, 252, 224, 228, 232, 236, 240, 244], dtype=np.int64)

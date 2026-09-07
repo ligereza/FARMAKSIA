@@ -3,9 +3,33 @@
 from __future__ import annotations
 
 import math
+from typing import Any
 
-import cv2
 import numpy as np
+
+
+class _AbsentModule:
+    """Stand in for an optional image dependency until something uses it.
+
+    Importing this adapter must not require OpenCV. `decode_mobileone_angles`
+    is pure NumPy and is read by offline contracts that never touch a frame;
+    only `preprocess_mobileone_face` needs real image operations. `error` is
+    kept as a usable exception class so an `except cv2.error` clause stays
+    valid when OpenCV is absent.
+    """
+
+    def __init__(self, name: str) -> None:
+        self._name = name
+        self.error = RuntimeError
+
+    def __getattr__(self, attribute: str) -> Any:
+        raise RuntimeError(f"{self._name} is required for image operations but is not installed")
+
+
+try:
+    import cv2
+except ModuleNotFoundError:
+    cv2 = _AbsentModule("cv2")
 
 
 MODEL_SOURCE = "https://github.com/yakhyo/gaze-estimation"
