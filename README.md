@@ -4,6 +4,22 @@ Laboratorio independiente de investigación computacional, matemática y
 artística. El repositorio conserva hipótesis, antecedentes, fixtures,
 experimentos, kill tests, procedencia y decisiones de adopción.
 
+## Postulación vigente: Dimensiones del Orden
+
+La versión de trabajo y la clasificación de sus antecedentes se consultan en el
+[índice del dossier](output/postulacion_dimensiones_del_orden_2027/README.md).
+Ese índice identifica los documentos vigentes, históricos y las variantes para
+otras convocatorias. La obra propuesta es audiovisual y generativa en vivo:
+pantallas como superficies de luz, sonido y luminarias relacionadas mediante
+una geometría y una partitura común. Las funciones de reconocimiento, mapping
+y traducción se distinguen de las capacidades ya comprobadas.
+
+Los textos de investigación de este repositorio documentan decisiones y
+antecedentes; no sustituyen el estado del código de cada repositorio privado.
+El dossier local tampoco acredita envío a la plataforma ni compromisos de
+terceros. Los medios originales y registros privados de MAK se mantienen fuera
+del respaldo público; los documentos conservan sus referencias de procedencia.
+
 Los nombres CODE-INE, X-ANA-X, KETAMINE y VIZZ son hipótesis de trabajo, no
 compromisos de producto. Pueden fusionarse, redefinirse o eliminarse.
 

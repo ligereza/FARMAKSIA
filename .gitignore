@@ -21,3 +21,13 @@ build/
 bin/
 obj/
 experiments/058-farmaxia-gpu-composition-runtime/inspect/
+
+# Keep local submission media and rendered derivatives out of the public repo.
+output/postulacion_dimensiones_del_orden_2027/*.mp4
+output/postulacion_dimensiones_del_orden_2027/*.png
+output/postulacion_dimensiones_del_orden_2027/*.html
+output/postulacion_dimensiones_del_orden_2027/*.pdf
+output/postulacion_dimensiones_del_orden_2027/render_manifest.json
+output/postulacion_dimensiones_del_orden_2027/qa*/
+work/agent-ledger/20260907-dimensiones-orden-postulacion/qa*/
+.private-work/
