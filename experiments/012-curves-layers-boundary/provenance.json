@@ -39,7 +39,7 @@
       "id": "farmaxia:curve-layer-cases",
       "type": "entity",
       "path": "cases.json",
-      "sha256": "EF67591EF9E8051BA473850F3681A3C7BA262188EB62AD2CB559F7187AB70400",
+      "sha256": "0F14D78B7D2F12106A96BF7431E9D702330DCF66843977A06FD581CB01D0C812",
       "role": "generated_curve_fixture",
       "authority": "experiment_defined"
     },
