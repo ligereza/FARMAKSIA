@@ -273,6 +273,7 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Decisión de watermarks y eventos tardíos](research/decisions/073-watermark-late-events.md)
 - [Atajo de adopción de infraestructura consolidada](research/decisions/074-consolidated-foundations-shortcut.md)
 - [Handoff: crecimiento entre aplicaciones y desafío institucional](research/handoffs/001-adaptive-representation-growth.md)
+- [Handoff: `XIO_LAYER` duplicado entre XIO y LUCIDA](research/handoffs/002-xio-layer-duplicated-across-surfaces.md)
 - [Futuro de FARMAKSIA como compilador de representación](research/decisions/061-farmaxia-generative-interface-roadmap.md)
 - [Literatura de observabilidad VIZZ](research/literature/010-vizz-observability-boundary.md)
 - [Literatura de condiciones de display VIZZ](research/literature/011-vizz-display-conditions.md)
