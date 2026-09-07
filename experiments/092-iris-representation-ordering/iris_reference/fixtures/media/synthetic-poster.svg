@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <rect width="960" height="540" fill="#17231d"/>
+  <circle cx="480" cy="270" r="170" fill="none" stroke="#d9b26f" stroke-width="8"/>
+  <path d="M250 360 C360 190 600 350 710 180" fill="none" stroke="#9db8a1" stroke-width="7"/>
+  <text x="48" y="492" fill="#eef0e8" font-family="Arial,sans-serif" font-size="28">IRIS · POSTER SINTÉTICO</text>
+</svg>

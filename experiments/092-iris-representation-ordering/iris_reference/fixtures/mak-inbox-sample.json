@@ -1,0 +1,9 @@
+{
+  "schema": "faro-portfolio-inbox-v1",
+  "items": [
+    {"id":"17950615887015728.mp4","tipo_contenido":"story","fecha":"2026-07-20","publicacion_id":"stories.json:0","asset_path":"/portfolio-media/stories/202607/17950615887015728.mp4","asset_available":true,"selection":null,"classification":null,"decision_draft":null},
+    {"id":"18108033539083566.jpg","tipo_contenido":"story","fecha":"2026-07-19","publicacion_id":"stories.json:2","asset_path":"/portfolio-media/stories/202607/18108033539083566.jpg","asset_available":true,"selection":null,"classification":null,"decision_draft":null},
+    {"id":"18089566880572882.jpg","tipo_contenido":"published_media","fecha":"2026-06-16","publicacion_id":"posts_1.json:0","asset_path":"/portfolio-media/posts/18089566880572882.jpg","asset_available":true,"selection":null,"classification":null,"decision_draft":null},
+    {"id":"18128093662528530.mp4","tipo_contenido":"published_media","fecha":"2026-06-16","publicacion_id":"posts_1.json:0","asset_path":"/portfolio-media/posts/18128093662528530.mp4","asset_available":true,"selection":null,"classification":null,"decision_draft":null}
+  ]
+}

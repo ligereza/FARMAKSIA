@@ -1,5 +1,9 @@
 # FARMAKSIA
 
+## Integraciones recientes
+
+- [Experimento 092: adaptador IRIS para ordenación de representaciones](experiments/092-iris-representation-ordering/README.md)
+
 Laboratorio independiente de investigación computacional, matemática y
 artística. El repositorio conserva hipótesis, antecedentes, fixtures,
 experimentos, kill tests, procedencia y decisiones de adopción.
