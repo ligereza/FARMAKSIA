@@ -22,8 +22,22 @@ ALLOWED_AUTHORITY = {
 }
 
 
+class ProvenanceInvalid(ValueError):
+    """Every defect found in one manifest, not only the first one.
+
+    Reporting a single defect per run understates how far a manifest has
+    drifted: refreshing one stale hash only uncovers the next one. The message
+    of a single-defect failure is unchanged, so a caller that records
+    `str(exc)` keeps the output it had before.
+    """
+
+    def __init__(self, defects: list[str]) -> None:
+        super().__init__("; ".join(defects))
+        self.defects = list(defects)
+
+
 def invalid(message: str) -> None:
-    raise ValueError(message)
+    raise ProvenanceInvalid([message])
 
 
 def file_hash(path: Path) -> str:
@@ -33,43 +47,50 @@ def file_hash(path: Path) -> str:
 def validate(manifest_path: Path) -> tuple[int, int, int]:
     root = manifest_path.parent
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    for key in ("schema", "agents", "entities", "activities", "queries", "unknowns"):
-        if key not in manifest:
-            invalid(f"missing top-level key: {key}")
+    missing = [
+        key
+        for key in ("schema", "agents", "entities", "activities", "queries", "unknowns")
+        if key not in manifest
+    ]
+    if missing:
+        raise ProvenanceInvalid([f"missing top-level key: {key}" for key in missing])
 
+    defects: list[str] = []
     groups = [manifest["agents"], manifest["entities"], manifest["activities"], manifest["queries"]]
     ids = [item["id"] for group in groups for item in group]
     if len(ids) != len(set(ids)):
-        invalid("duplicate identifier")
+        defects.append("duplicate identifier")
     known = set(ids)
 
     for entity in manifest["entities"]:
         if entity.get("authority") not in ALLOWED_AUTHORITY:
-            invalid(f"unknown authority on {entity.get('id')}")
+            defects.append(f"unknown authority on {entity.get('id')}")
         if entity.get("path"):
             path = root / entity["path"]
             if not path.is_file():
-                invalid(f"missing file for {entity['id']}: {entity['path']}")
-            if entity.get("sha256") and file_hash(path) != entity["sha256"]:
-                invalid(f"hash mismatch for {entity['id']}")
+                defects.append(f"missing file for {entity['id']}: {entity['path']}")
+            elif entity.get("sha256") and file_hash(path) != entity["sha256"]:
+                defects.append(f"hash mismatch for {entity['id']}")
         for ref in entity.get("derived_from", []) + entity.get("preserves", []) + entity.get("enables", []):
             if ref not in known:
-                invalid(f"unknown entity reference {ref} from {entity['id']}")
+                defects.append(f"unknown entity reference {ref} from {entity['id']}")
 
     for activity in manifest["activities"]:
         if activity.get("agent") not in known:
-            invalid(f"unknown agent on {activity['id']}")
+            defects.append(f"unknown agent on {activity['id']}")
         for ref in activity.get("used", []) + activity.get("generated", []):
             if ref not in known:
-                invalid(f"unknown activity reference {ref} from {activity['id']}")
+                defects.append(f"unknown activity reference {ref} from {activity['id']}")
 
     for query in manifest["queries"]:
         if query.get("authority") not in ALLOWED_AUTHORITY:
-            invalid(f"unknown query authority on {query['id']}")
+            defects.append(f"unknown query authority on {query['id']}")
         for ref in query.get("required_entities", []):
             if ref not in known:
-                invalid(f"unknown query entity reference {ref}")
+                defects.append(f"unknown query entity reference {ref}")
 
+    if defects:
+        raise ProvenanceInvalid(defects)
     return len(manifest["entities"]), len(manifest["activities"]), len(manifest["queries"])
 
 
@@ -77,6 +98,10 @@ def main() -> None:
     manifest = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("provenance.json")
     try:
         entities, activities, queries = validate(manifest)
+    except ProvenanceInvalid as exc:
+        for defect in exc.defects:
+            print(f"PROVENANCE_INVALID: {defect}")
+        raise SystemExit(1)
     except (OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"PROVENANCE_INVALID: {exc}")
         raise SystemExit(1)

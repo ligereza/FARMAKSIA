@@ -39,7 +39,7 @@
       "id": "farmaxia:xanax-archive-target-validator-019",
       "type": "entity",
       "path": "../../research/tools/validate_provenance.py",
-      "sha256": "0AB070BFA8B39044331E430FC01115C5F839B67A1839B4897A84D96643F91632",
+      "sha256": "D54FB92901AB1F8F7774A77FDBDEE5029D5D0833BDA1279410F5F063235101AC",
       "role": "real_repository_validator_target",
       "authority": "human_declared_tool"
     },
