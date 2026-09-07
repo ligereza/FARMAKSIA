@@ -45,6 +45,21 @@ def out_of_scope_target(args: list[str]) -> str | None:
     return None
 
 
+def unlisted_provenance(listed: list[str]) -> list[str]:
+    """Name manifests present on disk that the suite does not validate by index.
+
+    The list below is positional, so a manifest can exist and simply never be
+    reached: experiment 042 sat valid and unwatched that way. These are checked
+    without duplicating the listed ones, so an experiment kept outside the
+    suite still cannot let its provenance rot unnoticed.
+    """
+
+    on_disk = {
+        str(path.relative_to(ROOT)) for path in (ROOT / "experiments").glob("*/provenance.json")
+    }
+    return sorted(on_disk - set(listed))
+
+
 def command(label: str, args: list[str], expected: str | None = None) -> None:
     absent = out_of_scope_target(args)
     if absent is not None:
@@ -163,6 +178,12 @@ def main() -> None:
     ]
 
     command("compile Python", [PYTHON, "-m", "compileall", "-q", "research", "experiments"])
+    for path in unlisted_provenance(provenance):
+        command(
+            f"provenance unlisted {Path(path).parent.name}",
+            python_script("research/tools/validate_provenance.py", path),
+            "PROVENANCE_VALID",
+        )
     command("validate empty corpus manifest", python_script("research/tools/validate_corpus_manifest.py"), "CORPUS_VALID")
     command("audit consolidated lab state", python_script("research/tools/audit_lab_state.py"), "LAB_STATE_VALID")
     command("audit laboratory completion", python_script("research/tools/audit_lab_completion.py"), "LAB_COMPLETION_VALID")
