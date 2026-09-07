@@ -11,8 +11,46 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 PYTHON = sys.executable
 
+OUT_OF_SCOPE_EXPERIMENTS = frozenset(
+    {
+        "084-vizz-distance-scale-experiment",
+        "085-vizz-blender-focus-distance",
+        "086-vizz-blender-live-distance-bridge",
+        "087-vizz-touchdesigner-state-renderer",
+        "088-vizz-state-replay-preflight",
+        "089-vizz-dual-sensor-closed-calibration",
+    }
+)
+
+SKIPPED: set[str] = set()
+
+
+def out_of_scope_target(args: list[str]) -> str | None:
+    """Name the declared out-of-scope experiment a step needs but cannot find.
+
+    Steps for these experiments stay written down, because their decisions and
+    literature are published here even though their code is not. An absent
+    target is only skipped when it was declared absent: anything else missing
+    still fails, so an accidental deletion is not quietly tolerated.
+    """
+
+    for argument in args[1:]:
+        path = Path(argument)
+        if path.exists():
+            continue
+        for part in path.parts:
+            if part in OUT_OF_SCOPE_EXPERIMENTS:
+                return part
+        return None
+    return None
+
 
 def command(label: str, args: list[str], expected: str | None = None) -> None:
+    absent = out_of_scope_target(args)
+    if absent is not None:
+        SKIPPED.add(absent)
+        print(f"SKIP {label}: {absent} is not published in this scope")
+        return
     completed = subprocess.run(
         args,
         cwd=ROOT,
@@ -1498,6 +1536,8 @@ def main() -> None:
         raise RuntimeError(f"experiment 006 representation set mismatch: {sorted(names)}")
     print("PASS experiment 006")
     command("provenance 006", python_script("research/tools/validate_provenance.py", provenance[5]), "PROVENANCE_VALID")
+    if SKIPPED:
+        print(f"SUITE_SCOPE_SKIPPED={len(SKIPPED)}: {' '.join(sorted(SKIPPED))}")
     print("SUITE_VALID")
 
 
