@@ -77,7 +77,7 @@
       "id": "farmaxia:balanced-vizz-pilot",
       "type": "entity",
       "path": "pilot.html",
-      "sha256": "0AC7CC4888DD9690F6397DB0EF260177C6B3EE337E2675192E161CD27516082A",
+      "sha256": "A655FC5423DFDA76CCF48990C5C4B56FEEE6A088371CF3E9DC8186CEA2E87272",
       "role": "offline_human_instrument",
       "authority": "computed"
     },

@@ -39,7 +39,7 @@
       "id": "farmaxia:metamorphic-cases",
       "type": "entity",
       "path": "cases.json",
-      "sha256": "C5261933E0191658976D940E3D90F61B62CFB4FB2862C925192A4CF879E09101",
+      "sha256": "67068CE60846C9A8031C2F78BCAF4328B589F8D3D9A494AD5CD819426A45526C",
       "role": "generated_synthetic_fixture",
       "authority": "experiment_defined"
     },

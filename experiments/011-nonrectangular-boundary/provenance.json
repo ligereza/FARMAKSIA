@@ -39,7 +39,7 @@
       "id": "farmaxia:polygon-cases",
       "type": "entity",
       "path": "cases.json",
-      "sha256": "4A8F9585DECBD98D567BD6959AFA98862476EFF082FCD84BC0E5869D99CA02E0",
+      "sha256": "53E7CC1FD5574DFDEF2D7E6E3154320A19C1DE640E4A9FAF645337554E38B5D7",
       "role": "generated_polygon_fixture",
       "authority": "experiment_defined"
     },
