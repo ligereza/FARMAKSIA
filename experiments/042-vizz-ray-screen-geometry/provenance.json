@@ -3,6 +3,19 @@
   "experiment": "farmaxia:experiment:042-vizz-ray-screen-geometry",
   "status": "exploratory",
   "purpose": "Represent one shared movable screen and three conceptual optical models with explicit ray recomputation.",
+  "agents": [
+    {
+      "id": "farmaxia:human-researcher",
+      "type": "agent",
+      "role": "declares_experiment_protocol_and_scope"
+    },
+    {
+      "id": "farmaxia:python-runner",
+      "type": "software_agent",
+      "role": "runs_the_ray_screen_geometry_contract",
+      "version": "3.13"
+    }
+  ],
   "entities": [
     {
       "id": "farmaxia:vizz-042-simulator",
@@ -24,6 +37,47 @@
       "path": "README.md",
       "role": "human_reviewed_experiment_protocol",
       "authority": "human_reviewed_record"
+    },
+    {
+      "id": "farmaxia:vizz-042-results",
+      "type": "document",
+      "path": "results.md",
+      "role": "measurement_record",
+      "authority": "human_reviewed_record",
+      "residue": [
+        "the record reports a Tkinter GUI smoke run, but no checked-in script reproduces that line today; only run_contract_test.py is present"
+      ]
+    }
+  ],
+  "activities": [
+    {
+      "id": "farmaxia:declare-vizz-042-protocol",
+      "type": "activity",
+      "used": [],
+      "generated": ["farmaxia:vizz-042-readme"],
+      "agent": "farmaxia:human-researcher"
+    },
+    {
+      "id": "farmaxia:run-vizz-042-contract",
+      "type": "activity",
+      "used": ["farmaxia:vizz-042-simulator", "farmaxia:vizz-042-contract"],
+      "generated": [],
+      "agent": "farmaxia:python-runner"
+    },
+    {
+      "id": "farmaxia:review-vizz-042-results",
+      "type": "activity",
+      "used": ["farmaxia:vizz-042-contract"],
+      "generated": ["farmaxia:vizz-042-results"],
+      "agent": "farmaxia:human-researcher"
+    }
+  ],
+  "queries": [
+    {
+      "id": "farmaxia:query:vizz-042-shared-screen-ray-recompute",
+      "expression": "does moving the one shared screen change the ray bundle traced for all three conceptual eye models, keep every aperture ray converging on the same paraxial focus, and keep two distinct image distances for the astigmatic meridians",
+      "authority": "experiment_defined",
+      "required_entities": ["farmaxia:vizz-042-simulator", "farmaxia:vizz-042-contract"]
     }
   ],
   "assumptions": [
