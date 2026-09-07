@@ -1,0 +1,43 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:092-iris-representation-ordering",
+  "status": "exploratory",
+  "purpose": "Adapt an IRIS verified editorial composition into a portable FARMAKSIA representation result.",
+  "agents": [
+    {"id": "farmaxia:iris-adapter-operator-092", "type": "software_agent", "role": "maps_verified_iris_composition_to_portable_representation"},
+    {"id": "farmaxia:iris-contract-runner-092", "type": "software_agent", "role": "executes_positive_and_negative_contract_checks"}
+  ],
+  "entities": [
+    {"id": "farmaxia:iris-adapter-092", "type": "entity", "path": "iris_farmaksia_adapter.py", "role": "semantic_adapter", "authority": "human_declared_tool"},
+    {"id": "farmaxia:iris-fixture-092", "type": "entity", "path": "fixture.json", "role": "synthetic_verified_composition", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:iris-contract-092", "type": "entity", "path": "run_contract_test.py", "role": "identity_order_and_safety_contract", "authority": "human_declared_tool"},
+    {"id": "farmaxia:iris-protocol-092", "type": "entity", "path": "README.md", "role": "scope_and_reproduction_protocol", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:adapt-iris-composition-092", "type": "activity", "label": "map a verified synthetic IRIS composition into the FARMAKSIA representation contract", "agent": "farmaxia:iris-adapter-operator-092", "used": ["farmaxia:iris-fixture-092", "farmaxia:iris-adapter-092"], "generated": ["farmaxia:iris-contract-092"]},
+    {"id": "farmaxia:check-iris-boundary-092", "type": "activity", "label": "reject missing identity, altered order, failed verification and aesthetic optimality claims", "agent": "farmaxia:iris-contract-runner-092", "used": ["farmaxia:iris-contract-092", "farmaxia:iris-protocol-092"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:iris-identity-query-092", "expression": "does the result preserve project work record and context identity", "authority": "experiment_defined", "required_entities": ["farmaxia:iris-fixture-092", "farmaxia:iris-adapter-092"]},
+    {"id": "farmaxia:iris-order-query-092", "expression": "does the adapter admit only the declared authorial order", "authority": "experiment_defined", "required_entities": ["farmaxia:iris-fixture-092", "farmaxia:iris-contract-092"]},
+    {"id": "farmaxia:iris-boundary-query-092", "expression": "does the public experiment avoid copying or executing the private IRIS runtime", "authority": "experiment_defined", "required_entities": ["farmaxia:iris-protocol-092", "farmaxia:iris-contract-092"]}
+  ],
+  "assumptions": [
+    "IRIS remains authoritative for composition and independent verification.",
+    "OPTIMAL is relative to the declared objective and hard constraints.",
+    "No aesthetic or human-quality claim is encoded as computational truth.",
+    "The fixture contains no human data and no external side effect.",
+    "The private IRIS runtime is verified outside this public repository."
+  ],
+  "kill_tests": [
+    "Missing source identity blocks admission.",
+    "Authorial order mismatch blocks admission.",
+    "Independent verification failure blocks admission.",
+    "Aesthetic optimality claim blocks admission."
+  ],
+  "unknowns": [
+    "Production persistence and signature are not implemented.",
+    "The private IRIS runtime has not been automatically connected to this public adapter.",
+    "No human review or curatorial quality claim is included."
+  ]
+}
