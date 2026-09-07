@@ -1,11 +1,13 @@
-# Investigación 016 — runtime WebGazer para VIZZ
+# Investigación 016 — runtime WebGazer para VIZZ (retirado)
 
 Fecha: 2026-08-24
 
 ## Fuente informática primaria
 
-La integración usa WebGazer.js 3.5.3, fijado desde el proyecto oficial y
-servido como `experiments/030-vizz-webgazer-opt-in/vendor/webgazer.js`:
+La integración histórica evaluó WebGazer.js 3.5.3, fijado desde el proyecto
+oficial. El bundle y los assets del experimento 030 fueron retirados del árbol
+activo; se conserva este registro para no confundir una evaluación pasada con
+una dependencia vigente:
 
 - [Repositorio y README oficial](https://github.com/brownhci/WebGazer)
 - [API de control oficial](https://github.com/brownhci/WebGazer/wiki/Top-Level-API)
@@ -16,8 +18,8 @@ El README del proyecto describe inferencia en cliente con webcam,
 auto-calibración por interacción y consentimiento del usuario. El paquete
 declara `GPL-3.0-or-later` y la release 3.5.3 comunica que es la última release
 planificada, con maintenance oficial terminada y soporte comunitario posible.
-La licencia y el texto GPLv3 están archivados junto al bundle para que el
-runtime no dependa de un CDN. WebGazer 3.5.3 declara por defecto
+En el sandbox histórico, la licencia y el texto GPLv3 se archivaron junto al
+bundle para que el runtime no dependiera de un CDN. WebGazer 3.5.3 declara por defecto
 `faceMeshSolutionPath: "./mediapipe/face_mesh"`; esos assets se incorporan
 desde `@mediapipe/face_mesh` 0.4.1633559619 con licencia Apache-2.0. El
 navegador debe poder resolver los recursos
@@ -28,9 +30,9 @@ tracker, por lo que el sandbox declara `unsafe-eval` y `wasm-unsafe-eval` en
 `script-src`; esta es una excepción localizada del prototipo, no una política
 para producción.
 
-## API adoptada por el adaptador
+## API evaluada por el adaptador histórico
 
-El experimento 030 configura `saveDataAcrossSessions(false)`, `ridge`, listener
+El experimento 030 configuró `saveDataAcrossSessions(false)`, `ridge`, listener
 de predicción y una presentación sin preview de vídeo. Después del opt-in
 llama `begin()`. Cada objetivo de calibración registra un punto con
 `recordScreenPosition()`. El apagado llama `clearGazeListener()`, `pause()` si
@@ -52,10 +54,9 @@ intoxicación o neurotransmisores. Tampoco autoriza a traducir una receta óptic
 o la condición nocturna a CSS sin una especificación óptica y evaluación
 humana separadas.
 
-## Decisión operativa
+## Resultado de la evaluación
 
-WebGazer queda adoptado solo como dependencia experimental local del sandbox
-030. Pupil Core continúa diferido por hardware y API de red. La próxima
-evidencia valiosa sería una sesión consentida y separada con error frente a un
-referente, latencia extremo a extremo y retención auditada; la automatización
-no debe iniciar esa sesión ni fabricar sus datos.
+WebGazer queda retirado del estado activo y no es dependencia de VIZZ. Pupil
+Core continúa diferido por hardware y API de red. La evidencia del sandbox
+demostró integración y controles estáticos, pero no precisión ni utilidad
+perceptual; no se fabrican datos para cerrar esa brecha.

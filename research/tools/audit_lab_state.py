@@ -56,7 +56,6 @@ def main() -> None:
         "027-codeine-objective-oracle",
         "028-vizz-gaze-quality-gate",
         "029-codeine-executable-oracle",
-        "030-vizz-webgazer-opt-in",
         "060-codeine-experience-compiler",
         "061-codeine-progressive-commitment",
         "062-farmaxia-representation-space-renderer",

@@ -26,7 +26,7 @@ captura remota?
 
 | Opción | Ventaja para VIZZ | Límite o riesgo | Decisión |
 |---|---|---|---|
-| WebGazer 3.5.3 | Ya funciona en navegador, local, con API de consentimiento, `recordScreenPosition()` y regresión | Usa muestras de clic muy sensibles al momento, la pose y la calidad de la webcam; GPL-3.0-or-later y mantenimiento oficial terminado | Mantener como baseline, mejorar el protocolo antes de reemplazarlo |
+| WebGazer 3.5.3 | Referencia histórica: navegador local, consentimiento, `recordScreenPosition()` y regresión | Muestras de clic sensibles al momento, pose y calidad de webcam; GPL-3.0-or-later y mantenimiento oficial terminado | Retirado; conservar solo como antecedente, no como baseline activo |
 | RealEye Light Open | 17 puntos, landmarks, blendshapes, crops de ambos ojos, compensación de pose, diagnósticos y regresión ridge | AGPLv3 o licencia comercial; modelos/WASM se cargan desde CDN por defecto; la cifra de aproximadamente 120 CSS px es una afirmación del propio repositorio, no una validación independiente registrada aquí | Mejor referencia de arquitectura; no adoptar aún como dependencia |
 | EyeGestures | Código abierto GPL, navegador/Python, eventos de fijación, parpadeo y calibración; útil para estados de calidad | La ruta web documentada usa dependencias CDN y el repositorio no aporta un benchmark publicado comparable | Extraer ideas de eventos y fallback, no incorporar todavía |
 | OpenFace | Gaze, landmarks, pose y acción facial en un stack de escritorio | No es un runtime browser-first ni una solución directa de coordenadas CSS | Posible comparador offline, no runtime VIZZ |
@@ -39,8 +39,8 @@ reemplazo automático de la calibración gaze-to-screen.
 
 ## Evidencia sobre la calibración
 
-El hallazgo de las dos sesiones VIZZ es compatible con el mecanismo de
-WebGazer: cada clic asocia la posición de pantalla con la muestra ocular
+El hallazgo de las dos sesiones VIZZ era compatible con el mecanismo de
+WebGazer: cada clic asociaba la posición de pantalla con la muestra ocular
 disponible en ese instante. Cambiar el orden cambia la fase de calentamiento,
 la postura, el tiempo de fijación y las muestras realmente capturadas; no
 prueba que exista un orden universalmente mejor.
