@@ -153,9 +153,27 @@ Desde la raíz del repositorio:
 python research/tools/run_suite.py
 ```
 
-La suite usa Python estándar, valida la procedencia de todos los experimentos,
-regenera y verifica el piloto VIZZ y confirma explícitamente `NO_HUMAN_DATA`
-cuando no existe un archivo humano.
+La suite valida la procedencia de todos los experimentos, regenera y verifica
+el piloto VIZZ y confirma explícitamente `NO_HUMAN_DATA` cuando no existe un
+archivo humano.
+
+No se completa con la biblioteca estándar sola. Medido sobre Linux:
+
+```text
+solo stdlib     91 pasos   se detiene en el contrato 033, que necesita numpy
++ numpy        106 pasos   se detiene en el experimento 039, que llama cv2.cvtColor
++ opencv       220 pasos   se detiene en el experimento 076, que necesita Windows
+```
+
+`pip install -r requirements.txt` cubre los dos primeros escalones. Los
+experimentos 076, 077 y 078 conducen aplicaciones nativas de Windows mediante
+UI Automation, así que `SUITE_VALID` no es alcanzable en Linux ni en macOS.
+`onnxruntime` queda opcional: solo lo llama el runtime CUDA del experimento
+033 y la suite no lo alcanza. Los experimentos 084 a 089 están declarados
+fuera de este alcance y se informan como `SKIP`.
+
+Ningún escalón requiere pesos de modelo, cámara ni red: los experimentos que
+mencionan un modelo ONNX verifican contratos sintéticos.
 
 El laboratorio opera **sin datos humanos** en esta fase: los fixtures son
 sintéticos o declarativos y cualquier captura personal queda fuera del corpus
@@ -224,9 +242,10 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Sandbox nativo de ventana proxy reversible](experiments/081-farmaxia-window-proxy-sandbox/README.md)
 - [Preview pasivo de ventana seleccionada](experiments/082-farmaxia-selected-window-preview/README.md)
 - [Contrato de superficie grandMA3 → Titan](experiments/083-farmaxia-lighting-surface-contract/README.md)
-- [Escala visual relativa VIZZ: distancia, pose y Landolt C](experiments/084-vizz-distance-scale-experiment/README.md)
-- [Contrato de renderer VIZZ para TouchDesigner](experiments/087-vizz-touchdesigner-state-renderer/README.md)
-- [Replay temporal del estado VIZZ antes de TouchDesigner](experiments/088-vizz-state-replay-preflight/README.md)
+- Los experimentos 084 a 089 —escala visual relativa, distancia por Blender,
+  renderer y replay para TouchDesigner, calibración de doble sensor— quedan
+  fuera de este alcance junto con su literatura y sus decisiones: nada de eso
+  se publica aquí y la suite los informa como `SKIP`.
 - [Decisión de latencia y cobertura VIZZ](research/decisions/034-vizz-latency-coverage-boundary.md)
 - [Decisión de condición de display VIZZ](research/decisions/035-vizz-display-condition-invariance.md)
 - [Lógica de diseño para interfaz generativa sensorial](research/literature/022-farmaxia-generative-interface-design-logic.md)
@@ -246,7 +265,6 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Correlación temporal de input y estado nativo](experiments/080-farmaxia-input-native-delta-correlation/results.md)
 - [Decisión del renderer proxy visual](research/decisions/083-window-proxy-renderer.md)
 - [Investigación de interfaz grandMA3/Titan](research/literature/024-grandma-titan-interface-research.md)
-- [ONU, armas autónomas y control humano significativo](research/literature/029-un-autonomous-weapons-policy.md)
 - [Decisión del adaptador visual grandMA3 → Titan](research/decisions/084-grandma-titan-visual-adapter.md)
 - [Auditoría profunda de referencias open source y científicas](research/literature/023-open-source-reference-audit.md)
 - [Mercado disponible y capas progresivas de FARMAKSIA](research/decisions/087-farmaxia-market-entry-progressive-layers.md)
@@ -271,8 +289,6 @@ hasta contar con un protocolo y consentimiento explícitos.
 - [Cámara óptica VIZZ 045: objeto, foco y sensor](experiments/045-vizz-single-eye-camera/README.md)
 - [Investigación de calibración y herramientas open source VIZZ](research/literature/017-vizz-calibration-open-source.md)
 - [Investigación de runtime Python GPU VIZZ](research/literature/018-vizz-python-gpu-runtime.md)
-- [Investigación de renderer adaptativo VIZZ + TouchDesigner](research/literature/019-vizz-touchdesigner-adaptive-renderer.md)
-- [Decisión de frontera de runtime VIZZ + TouchDesigner](research/decisions/086-vizz-touchdesigner-runtime-boundary.md)
 - [Decisión de flujo VIZZ calibración/runtime](research/decisions/045-vizz-flow-split.md)
 - [Contrato de ingreso de corpus](research/corpus-intake.md)
 - [Piloto humano VIZZ](experiments/003-vizz-decision/pilot_protocol.md)
