@@ -55,9 +55,25 @@ def validate(manifest_path: Path) -> tuple[int, int, int]:
     if missing:
         raise ProvenanceInvalid([f"missing top-level key: {key}" for key in missing])
 
+    groups = {
+        "agents": manifest["agents"],
+        "entities": manifest["entities"],
+        "activities": manifest["activities"],
+        "queries": manifest["queries"],
+    }
+    ids: list[str] = []
+    unidentified: list[str] = []
+    for group_name, group in groups.items():
+        for position, item in enumerate(group):
+            identifier = item.get("id") if isinstance(item, dict) else None
+            if not isinstance(identifier, str) or not identifier.strip():
+                unidentified.append(f"missing id on {group_name}[{position}]")
+                continue
+            ids.append(identifier)
+    if unidentified:
+        raise ProvenanceInvalid(unidentified)
+
     defects: list[str] = []
-    groups = [manifest["agents"], manifest["entities"], manifest["activities"], manifest["queries"]]
-    ids = [item["id"] for group in groups for item in group]
     if len(ids) != len(set(ids)):
         defects.append("duplicate identifier")
     known = set(ids)
