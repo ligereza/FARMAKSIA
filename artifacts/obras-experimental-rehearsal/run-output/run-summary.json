@@ -1,11 +1,15 @@
 {
+  "console_proposal_status": "PASS",
+  "direct_dmx_channel_bytes": 400,
   "fixture": "obras-synthetic-pulse-suite-v1",
   "fixture_count": 5,
   "mosaik_replay_status": "PASS",
   "output": "C:\\IA\\FARMAXIA\\artifacts\\obras-experimental-rehearsal\\run-output",
   "phase_state_count": 7,
   "physical_audio_used": false,
+  "predictive_replay_status": "PASS",
   "safety_external_side_effects": false,
+  "semantic_packet_bytes": 59,
   "signal_count": 7,
   "status": "PASS",
   "visualization": "C:\\IA\\FARMAXIA\\artifacts\\obras-experimental-rehearsal\\run-output\\visualization.html"

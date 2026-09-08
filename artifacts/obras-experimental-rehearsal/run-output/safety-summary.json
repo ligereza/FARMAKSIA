@@ -18,9 +18,28 @@
     }
   ],
   "actions_would_have_occurred": {
+    "avolites_titan_proposals": 7,
     "phase_frames": 7,
     "physical_fixture_count": 5,
-    "resolume_cue_proposals": 7
+    "predictive_semantic_frames": 7,
+    "resolume_cue_proposals": 7,
+    "resolume_osc_proposals": 7
+  },
+  "console_revocation_result": {
+    "blockers": [
+      "permissions_revoked"
+    ],
+    "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000001",
+    "safety": {
+      "automatic_actions": false,
+      "avolites_contacted": false,
+      "external_side_effects": false,
+      "proposal_only": true,
+      "resolume_opened": false
+    },
+    "schema": "mosaik:console-proposals:0.1",
+    "status": "BLOCKED",
+    "targets": {}
   },
   "external_side_effects": false,
   "invalid_cue_result": {
@@ -46,12 +65,16 @@
     "tape": null
   },
   "scenarios": {
+    "console_permission_revocation_blocked": true,
+    "console_proposals_proposal_only": true,
     "deterministic_replay": true,
     "duplicate_delivery": true,
     "invalid_cue_blocked": true,
     "out_of_order_delivery": true,
     "permission_revocation_blocked": true,
+    "predictive_frame_deterministic": true,
     "restart_and_resume": true,
+    "semantic_packet_crc_roundtrip": true,
     "temporary_audio_loss": true,
     "variable_fixture_count": true
   }

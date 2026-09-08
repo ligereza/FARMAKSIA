@@ -31,6 +31,14 @@ coordinacion PhaseChaser y las cues que MOSAIK propone para un flujo Resolume.
   resultado de replay MOSAIK.
 - `resolume-cues.json`: representacion de timeline compatible con Resolume,
   sin escribir un showfile.
+- `predictive-frames.jsonl`: frames matematicos XIO con fase, energia,
+  pulso, estados por luminaria y paquete XSL1.
+- `predictive-transport.json`: comparacion auditable entre bytes DMX
+  directos, universos requeridos y paquete semantico.
+- `semantic-replay.json`: replay determinista y verificacion CRC de
+  cada paquete semantico.
+- `console-proposals.json`: propuestas proposal-only para Resolume OSC y
+  Avolites Titan WebAPI; no se contacta ningun host.
 - `safety-summary.json`: acciones bloqueadas y escenarios comprobados.
 - `visualization.html`: evidencia visual autocontenida, sin red ni assets
   externos.

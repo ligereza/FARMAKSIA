@@ -10,6 +10,10 @@
     "mosaik-replay-fixture.json",
     "mosaik-replay-report.json",
     "resolume-cues.json",
+    "predictive-frames.jsonl",
+    "predictive-transport.json",
+    "semantic-replay.json",
+    "console-proposals.json",
     "replay-complete.json",
     "safety-summary.json",
     "variable-fixture-check.json",
@@ -23,15 +27,15 @@
   "session_id": "obras-rehearsal-2026-09-08",
   "source_repositories": {
     "farmaxia": {
-      "commit": "55bc250785849d3699faff6ba7ca9c1e8916d570",
+      "commit": "4fab9e4d89d8977bcde880860dcc1ae69d5c8a62",
       "path": "C:\\IA\\FARMAXIA"
     },
     "mosaik": {
-      "commit": "58a3db8c4b516d943eab25651a69591db0715909",
+      "commit": "1ab2076cbfb6ef650f557fef4a5f1ac00203b76c",
       "path": "C:\\IA\\VJ"
     },
     "xio": {
-      "commit": "7d9a4071489ff070ad377351ae40015abe66b4d2",
+      "commit": "fcd8626d5d1ceed5b2f7dc0467125059c5c7e300",
       "path": "C:\\IA\\XIO"
     }
   }

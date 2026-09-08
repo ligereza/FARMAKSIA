@@ -356,6 +356,15 @@
       }
     ]
   },
+  "predictive_semantic": {
+    "compression_ratio": 6.779661,
+    "decoder_profile": "phase-chaser-v1",
+    "direct_dmx_universes": 1,
+    "fixture_count": 5,
+    "frame_count": 7,
+    "schema": "xio:predictive-semantic-lighting-frame:0.1",
+    "semantic_packet_bytes": 59
+  },
   "schema": "farmaxia:obras-rehearsal-timeline:0.1",
   "session_id": "obras-rehearsal-2026-09-08",
   "source": {

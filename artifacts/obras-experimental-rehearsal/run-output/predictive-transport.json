@@ -1,0 +1,13 @@
+{
+  "all_packets_roundtrip": true,
+  "channels_per_fixture": 80,
+  "compression_ratio": 6.779661,
+  "decoder_profile": "phase-chaser-v1",
+  "direct_dmx_channel_bytes": 400,
+  "direct_dmx_universes": 1,
+  "fixture_count": 5,
+  "frames": 7,
+  "saved_fraction": 0.8525,
+  "schema": "xio:predictive-semantic-lighting-frame:0.1",
+  "semantic_packet_bytes": 59
+}

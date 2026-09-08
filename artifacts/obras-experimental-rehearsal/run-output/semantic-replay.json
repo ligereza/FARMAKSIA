@@ -1,0 +1,74 @@
+{
+  "determinism": {
+    "first_frames_sha256": "3d437272abbc5481c3359414e4145c0a2b68527f3cd17bada7172058a1d3f520",
+    "same_outputs": true,
+    "second_frames_sha256": "3d437272abbc5481c3359414e4145c0a2b68527f3cd17bada7172058a1d3f520"
+  },
+  "packet_roundtrip": [
+    {
+      "crc32": "8898cd21",
+      "fixture_count": 5,
+      "packet_reencoded_equal": true,
+      "sequence": 1,
+      "status": "PASS"
+    },
+    {
+      "crc32": "692ba6d3",
+      "fixture_count": 5,
+      "packet_reencoded_equal": true,
+      "sequence": 2,
+      "status": "PASS"
+    },
+    {
+      "crc32": "0c51852e",
+      "fixture_count": 5,
+      "packet_reencoded_equal": true,
+      "sequence": 3,
+      "status": "PASS"
+    },
+    {
+      "crc32": "2b121c3c",
+      "fixture_count": 5,
+      "packet_reencoded_equal": true,
+      "sequence": 4,
+      "status": "PASS"
+    },
+    {
+      "crc32": "3b8c82e5",
+      "fixture_count": 5,
+      "packet_reencoded_equal": true,
+      "sequence": 5,
+      "status": "PASS"
+    },
+    {
+      "crc32": "2d88fdd2",
+      "fixture_count": 5,
+      "packet_reencoded_equal": true,
+      "sequence": 6,
+      "status": "PASS"
+    },
+    {
+      "crc32": "296a91cb",
+      "fixture_count": 5,
+      "packet_reencoded_equal": true,
+      "sequence": 7,
+      "status": "PASS"
+    }
+  ],
+  "schema": "farmaxia:predictive-semantic-replay:0.1",
+  "session_id": "obras-rehearsal-2026-09-08",
+  "status": "PASS",
+  "transport": {
+    "all_packets_roundtrip": true,
+    "channels_per_fixture": 80,
+    "compression_ratio": 6.779661,
+    "decoder_profile": "phase-chaser-v1",
+    "direct_dmx_channel_bytes": 400,
+    "direct_dmx_universes": 1,
+    "fixture_count": 5,
+    "frames": 7,
+    "saved_fraction": 0.8525,
+    "schema": "xio:predictive-semantic-lighting-frame:0.1",
+    "semantic_packet_bytes": 59
+  }
+}
