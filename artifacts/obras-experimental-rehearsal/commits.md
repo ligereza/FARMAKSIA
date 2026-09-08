@@ -22,6 +22,8 @@ El demostrador se implemento por responsabilidad de repositorio:
   predictivas de ejemplo.
 - FARMAXIA: `c0578be` — `fix: make rehearsal manifest paths explicit`
   — permite verificar desde el manifiesto los documentos del paquete padre.
+- FARMAXIA: `b257942` — `docs: record explicit rehearsal manifest paths`
+  — deja el paquete alineado con la última ejecución reproducible del launcher.
 
 El servidor remoto ofrecio URLs de creacion de PR para las tres ramas, pero no
 exigio proteccion que obligara a abrirlos durante esta ejecucion. Las ramas
