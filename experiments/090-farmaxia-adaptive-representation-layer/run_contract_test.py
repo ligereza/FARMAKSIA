@@ -167,6 +167,24 @@ def test_pupila_does_not_mix_sessions_with_same_room_id() -> None:
     assert room_a["sessionId"] != room_b["sessionId"]
 
 
+def test_pupila_expires_stale_participants_before_proposing() -> None:
+    vizz = VizzAdapter()
+    pupila = PupilaAdapter(state_ttl_ms=1000)
+    ctx_a = context(participant="user-a")
+    ctx_b = context(participant="user-b")
+    state_a = vizz.ingest(ctx_a, signal("user-a", "focus", 100, {"focused": True}))
+    state_b = vizz.ingest(ctx_b, signal("user-b", "focus", 500, {"focused": True}))
+    pupila.ingest(ctx_a, state_a)
+    pupila.ingest(ctx_b, state_b)
+
+    room = pupila.snapshot(ctx_b, now_ms=1200)
+
+    assert room["participantCount"] == 1
+    assert room["participants"][0]["participantRef"] == "user-b"
+    assert room["expiredParticipantCount"] == 1
+    assert room["proposals"] == []
+
+
 def test_lucida_envelope_projects_real_090_states_without_payloads() -> None:
     vizz = VizzAdapter()
     pupila = PupilaAdapter()
@@ -818,6 +836,7 @@ if __name__ == "__main__":
         test_pupila_does_not_register_unconsented_presence,
         test_pupila_rejects_cross_room_state,
         test_pupila_does_not_mix_sessions_with_same_room_id,
+        test_pupila_expires_stale_participants_before_proposing,
         test_audit_chain_is_replayable_and_tamper_evident,
         test_canonical_connectivity_event_is_metadata_only,
         test_canonical_keyboard_event_drops_text_and_keeps_shortcut_metadata,

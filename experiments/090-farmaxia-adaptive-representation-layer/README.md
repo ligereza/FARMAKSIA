@@ -98,6 +98,11 @@ llegan antes del intervalo minimo. Es una decision pura para que el renderer
 no haga trabajo por cada senal ni genere parpadeo; no duerme, no retiene planes
 y no ejecuta acciones.
 
+PUPILA expira estados de participantes con un TTL determinista basado en
+`latestAtMs` (15 segundos por defecto). Asi una propuesta de coordinacion no
+puede reutilizar indefinidamente un snapshot antiguo; el consumidor puede
+pasar `now_ms` en replay o elegir otro TTL para una prueba controlada.
+
 `boundary_matrix.py` es una guardia estructural offline. Comprueba que cada
 checkout tenga los marcadores de su responsabilidad y no tenga marcadores
 directos de otra superficie. Sirve para detectar una mezcla accidental de
