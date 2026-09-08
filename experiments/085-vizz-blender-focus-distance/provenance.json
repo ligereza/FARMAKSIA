@@ -1,0 +1,44 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:085-vizz-blender-focus-distance",
+  "status": "scene_contract_and_blender_build_verified",
+  "purpose": "Separate physical observer distance, display angular size and camera depth-of-field in a reproducible Blender Cycles scene.",
+  "agents": [
+    {"id": "farmaxia:researcher-085", "type": "agent", "role": "defines_optical_scene_contract_and_limits"},
+    {"id": "farmaxia:blender-builder-085", "type": "software_agent", "role": "builds_geometry_camera_lights_and_cycles_render_variants"}
+  ],
+  "entities": [
+    {"id": "farmaxia:blender-scene-085", "type": "entity", "path": "build_scene.py", "role": "reproducible_cycles_scene_with_screen_near_plane_and_distance_focus_controls", "authority": "human_declared_tool"},
+    {"id": "farmaxia:blender-readme-085", "type": "entity", "path": "README.md", "role": "reproduction_protocol_and_unknown_boundaries", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:blender-contract-test-085", "type": "entity", "path": "run_contract_test.py", "role": "static_scene_contract_test", "authority": "computed"},
+    {"id": "farmaxia:blender-kill-test-085", "type": "entity", "path": "run_kill_test.py", "role": "reject_external_asset_and_missing_control_boundaries", "authority": "computed"},
+    {"id": "farmaxia:blender-provenance-085", "type": "entity", "path": "provenance.json", "role": "lineage_and_unknowns", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:build-blender-scene-085", "type": "activity", "label": "construct physical display, near plane, camera distance driver and focus offset driver", "agent": "farmaxia:blender-builder-085", "used": ["farmaxia:blender-scene-085"], "generated": []},
+    {"id": "farmaxia:verify-blender-contract-085", "type": "activity", "label": "verify Cycles, explicit controls, no network and no external image dependency", "agent": "farmaxia:blender-builder-085", "used": ["farmaxia:blender-contract-test-085", "farmaxia:blender-kill-test-085"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:distance-query-085", "expression": "does observer_distance_m change camera depth from the fixed monitor plane", "authority": "experiment_defined", "required_entities": ["farmaxia:blender-scene-085"]},
+    {"id": "farmaxia:focus-query-085", "expression": "does focus_offset_m select screen or near-plane focus without changing scene geometry", "authority": "experiment_defined", "required_entities": ["farmaxia:blender-scene-085"]},
+    {"id": "farmaxia:honesty-query-085", "expression": "does the scene declare camera-optics simulation rather than human visual or comfort evidence", "authority": "experiment_defined", "required_entities": ["farmaxia:blender-readme-085", "farmaxia:blender-provenance-085"]}
+  ],
+  "assumptions": [
+    "The monitor is represented as a fixed 420 x 236.25 mm 16:9 plane.",
+    "The camera is a geometric observer proxy and is not a biological eye.",
+    "Cycles depth of field is useful for visualizing focal-plane separation but is not a clinical accommodation model.",
+    "No external image asset is needed for this first controlled scene."
+  ],
+  "kill_tests": [
+    "The scene must use Cycles.",
+    "Observer distance and focus offset must be separate explicit controls.",
+    "The script must not use network resources, input injection or external image assets.",
+    "A flat emissive screen must not be described as true stereoscopic depth.",
+    "Failure to observe changed angular size or changed DOF invalidates the visual experiment."
+  ],
+  "unknowns": [
+    "Whether the simulated transition predicts a useful human sensory response.",
+    "Whether a real monitor can reproduce the same cue without stereoscopic hardware.",
+    "Whether the user's Blender Cycles device is configured for GPU rendering."
+  ]
+}

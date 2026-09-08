@@ -1,0 +1,50 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:089-vizz-dual-sensor-closed-calibration",
+  "status": "human_capture_analyzed_ir_branch_diagnostic",
+  "purpose": "Collect one new paired calibration from a visible-light webcam and an oblique Hikvision IR stream, using pre-click windows, total numerical fusion and scalar pupil/glint diagnostics.",
+  "agents": [
+    {"id": "farmaxia:designer-089", "type": "agent", "role": "defines_dual_sensor_and_pre_click_protocol"},
+    {"id": "farmaxia:python-runner-089", "type": "software_agent", "role": "implements_runtime_and_pure_contracts", "version": "3.13"}
+  ],
+  "entities": [
+    {"id": "farmaxia:dual-contract-089", "type": "entity", "path": "dual_contract.py", "role": "robust_window_fusion_geometry_diagnostics_ir_summary_ridge_and_grouped_validation", "authority": "computed"},
+    {"id": "farmaxia:dual-runtime-089", "type": "entity", "path": "run_dual_calibration.py", "role": "single_process_two_source_pre_click_capture_numeric_projection_ir_branch_and_rtsp_reconnect", "authority": "human_declared_tool"},
+    {"id": "farmaxia:gpu-tracker-089", "type": "entity", "path": "../033-vizz-python-headless-runtime/gpu_tracker.py", "role": "cuda_face_eye_pipeline_plus_scalar_ir_pupil_glint_diagnostics", "authority": "computed"},
+    {"id": "farmaxia:dual-test-089", "type": "entity", "path": "run_contract_test.py", "role": "offline_invariant_and_synthetic_ir_tests", "authority": "computed"},
+    {"id": "farmaxia:dual-readme-089", "type": "entity", "path": "README.md", "role": "human_reproduction_protocol_and_limits", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:implement-dual-089", "type": "activity", "label": "implement paired webcam and Hikvision calibration with click-closing pre-click windows", "agent": "farmaxia:python-runner-089", "used": ["farmaxia:dual-contract-089"], "generated": ["farmaxia:dual-runtime-089"]},
+    {"id": "farmaxia:implement-ir-optics-089", "type": "activity", "label": "add a lightweight scalar pupil/glint branch to the Hikvision path without a second GPU model or raw-frame persistence", "agent": "farmaxia:python-runner-089", "used": ["farmaxia:gpu-tracker-089"], "generated": ["farmaxia:dual-runtime-089", "farmaxia:dual-contract-089"]},
+    {"id": "farmaxia:verify-dual-089", "type": "activity", "label": "verify total numeric output, grouped target validation and non-persistence policy offline", "agent": "farmaxia:python-runner-089", "used": ["farmaxia:dual-contract-089", "farmaxia:dual-runtime-089", "farmaxia:dual-test-089"], "generated": []},
+    {"id": "farmaxia:verify-ir-optics-089", "type": "activity", "label": "verify synthetic pupil/glint recovery, scalar-only serialization and separation from the screen mapper", "agent": "farmaxia:python-runner-089", "used": ["farmaxia:gpu-tracker-089", "farmaxia:dual-contract-089", "farmaxia:dual-test-089"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:dual-query-089", "expression": "does one paired point produce independent webcam and Hikvision summaries from samples collected before the click", "authority": "experiment_defined", "required_entities": ["farmaxia:dual-runtime-089", "farmaxia:dual-test-089"]},
+    {"id": "farmaxia:fusion-query-089", "expression": "does the dual eye-centre proxy return a numerical estimate with two sensors, one sensor or no current sensor window without claiming screen gaze or metric depth", "authority": "experiment_defined", "required_entities": ["farmaxia:dual-contract-089", "farmaxia:dual-test-089"]}
+  ],
+  "assumptions": [
+    "The same six feature vector and ten design terms remain compatible with the existing VIZZ profile.",
+    "The pinned RetinaFace, screen-gaze and MobileOne ONNX assets are available locally and can initialize through CUDA.",
+    "The two camera streams can be read in one Python process with a bounded timestamp skew.",
+    "The Hikvision stream is processed night video; RTSP exposes encoded video rather than a sensor-plane IR measurement.",
+    "The pupil/glint detector is a conservative diagnostic heuristic and can confuse eyelashes, reflections or exposure boundaries with optical features.",
+    "Metric stereo triangulation is deferred until camera intrinsics and relative extrinsics are measured."
+  ],
+  "kill_tests": [
+    "The runtime must not start sampling after the click.",
+    "The runtime must not persist raw frames or credentials.",
+    "The grouped validation must not split consecutive frames into independent folds.",
+    "The fusion must return a numeric screen coordinate for zero, one or two available sensors.",
+    "The runtime must use both new sensor calibrations rather than silently reusing the prior profile.",
+    "The IR branch must remain separate from the mapper until a held-out comparison proves useful signal beyond exposure and camera geometry."
+  ],
+  "unknowns": [
+    "Whether the oblique Hikvision eye-centre proxy is stable enough for a metric stereo solve.",
+    "Whether the two streams can maintain acceptable skew on the current 10 Mbps negotiated link.",
+    "Whether a physical stereo-board stage will be needed for reliable K/R/t recovery.",
+    "Whether pupil/glint candidates remain stable across the real Hikvision stream, pose and illumination.",
+    "The first human capture predates polarity and MAD aggregation, so those diagnostics must be collected on the next run."
+  ]
+}

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Landolt C de referencia">
+  <rect width="256" height="256" fill="white"/>
+  <circle cx="128" cy="128" r="88" fill="none" stroke="black" stroke-width="36"/>
+  <rect x="128" y="74" width="112" height="108" fill="white"/>
+</svg>

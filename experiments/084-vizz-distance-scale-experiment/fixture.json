@@ -1,0 +1,37 @@
+{
+  "experiment": "084-vizz-distance-scale-experiment",
+  "reference": {
+    "eye_distance_px": 120.0,
+    "face_width_px": 300.0,
+    "yaw_deg": 0.0,
+    "pitch_deg": 0.0,
+    "roll_deg": 0.0,
+    "eye_quality": 1.0,
+    "face_quality": 1.0
+  },
+  "screen": {
+    "width_mm": 380.0,
+    "height_mm": 210.0,
+    "width_px": 2560,
+    "height_px": 1440
+  },
+  "visual_target": {
+    "shape": "landolt_c",
+    "base_diameter_px": 100.0,
+    "reference_distance_mm": 600.0,
+    "gap_ratio": 0.2,
+    "stroke_ratio": 0.2
+  },
+  "runtime_contract": {
+    "card_role": "one_time_reference_only",
+    "required_measurements": ["eye_distance_px", "face_width_px"],
+    "max_abs_yaw_deg": 35.0,
+    "max_abs_pitch_deg": 35.0,
+    "max_log_disagreement": 0.25,
+    "camera_started": false,
+    "network_used": false,
+    "input_injected": false,
+    "raw_frames_persisted": false,
+    "screen_mutated": false
+  }
+}

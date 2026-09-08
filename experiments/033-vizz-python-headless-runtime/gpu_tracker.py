@@ -9,7 +9,11 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-import onnxruntime as ort
+
+try:
+    import onnxruntime as ort
+except ModuleNotFoundError:  # pragma: no cover - exercised by offline consumers
+    ort = None  # type: ignore[assignment]
 
 from pretrained_gaze import decode_mobileone_angles, preprocess_mobileone_face
 from ray_proxy import BinocularRayProxy, build_binocular_ray_proxy
@@ -45,6 +49,248 @@ class Detection:
 
 
 @dataclass(frozen=True)
+class IREyeFeature:
+    """Small scalar-only pupil/glint measurement from an IR-looking frame.
+
+    This is deliberately a diagnostic optical branch, not a calibrated gaze
+    estimator.  It records where dark-pupil and bright-glint candidates were
+    found in an eye ROI, while retaining an explicit status when either
+    feature is absent.  No image pixels are retained.
+    """
+
+    eye_center_px: tuple[float, float]
+    pupil_center_px: tuple[float, float] | None
+    glint_center_px: tuple[float, float] | None
+    pupil_diameter_px: float | None
+    glint_area_px2: float | None
+    pupil_glint_vector_px: tuple[float, float] | None
+    pupil_mean_intensity: float | None
+    glint_mean_intensity: float | None
+    local_contrast: float
+    confidence: float
+    status: str
+    pupil_polarity: str | None = None
+
+    def as_dict(self) -> dict[str, object]:
+        return {
+            "eye_center_px": list(self.eye_center_px),
+            "pupil_center_px": list(self.pupil_center_px) if self.pupil_center_px is not None else None,
+            "glint_center_px": list(self.glint_center_px) if self.glint_center_px is not None else None,
+            "pupil_diameter_px": self.pupil_diameter_px,
+            "glint_area_px2": self.glint_area_px2,
+            "pupil_glint_vector_px": list(self.pupil_glint_vector_px) if self.pupil_glint_vector_px is not None else None,
+            "pupil_mean_intensity": self.pupil_mean_intensity,
+            "glint_mean_intensity": self.glint_mean_intensity,
+            "local_contrast": self.local_contrast,
+            "confidence": self.confidence,
+            "status": self.status,
+            "pupil_polarity": self.pupil_polarity,
+        }
+
+
+def _gray_image(image: np.ndarray) -> np.ndarray:
+    if not isinstance(image, np.ndarray) or image.size == 0:
+        raise ValueError("IR image must be a non-empty numpy array")
+    if image.ndim == 2:
+        return image
+    if image.ndim == 3 and image.shape[2] == 1:
+        return image[..., 0]
+    if image.ndim == 3 and image.shape[2] >= 3:
+        return cv2.cvtColor(image[..., :3], cv2.COLOR_BGR2GRAY)
+    raise ValueError("IR image must be grayscale or BGR")
+
+
+def _eye_roi(gray: np.ndarray, center_px: tuple[float, float], roi_side_px: float) -> tuple[np.ndarray, int, int]:
+    height, width = gray.shape[:2]
+    if height < 1 or width < 1:
+        raise ValueError("IR image has no pixels")
+    if not math.isfinite(float(roi_side_px)) or float(roi_side_px) <= 0.0:
+        raise ValueError("IR eye ROI size must be finite and positive")
+    side = max(24, int(round(float(roi_side_px))))
+    cx, cy = float(center_px[0]), float(center_px[1])
+    if not math.isfinite(cx) or not math.isfinite(cy):
+        raise ValueError("IR eye centre must be finite")
+    x1 = max(0, min(width - 1, int(round(cx - side * 0.5))))
+    y1 = max(0, min(height - 1, int(round(cy - side * 0.5))))
+    x2 = min(width, x1 + side)
+    y2 = min(height, y1 + side)
+    roi = gray[y1:y2, x1:x2]
+    if roi.size == 0:
+        raise ValueError("IR eye ROI is empty")
+    return roi, x1, y1
+
+
+def _candidate_blobs(
+    mask: np.ndarray,
+    roi: np.ndarray,
+    *,
+    dark: bool,
+    max_area_fraction: float | None = None,
+    compact_only: bool | None = None,
+) -> list[tuple[float, float, float, float, float]]:
+    count, labels, stats, centroids = cv2.connectedComponentsWithStats(mask, connectivity=8)
+    height, width = roi.shape[:2]
+    roi_area = float(max(1, height * width))
+    candidates: list[tuple[float, float, float, float, float]] = []
+    max_area_fraction = max_area_fraction if max_area_fraction is not None else (0.22 if dark else 0.035)
+    compact_only = compact_only if compact_only is not None else not dark
+    for label in range(1, count):
+        area = float(stats[label, cv2.CC_STAT_AREA])
+        box_width = float(stats[label, cv2.CC_STAT_WIDTH])
+        box_height = float(stats[label, cv2.CC_STAT_HEIGHT])
+        if area < (2.0 if dark else 1.0) or area > roi_area * max_area_fraction:
+            continue
+        if box_width <= 0.0 or box_height <= 0.0:
+            continue
+        aspect = min(box_width, box_height) / max(box_width, box_height)
+        if dark and aspect < 0.22:
+            continue
+        if compact_only and not dark and max(box_width, box_height) > max(5.0, width * 0.24):
+            continue
+        x, y = [float(value) for value in centroids[label]]
+        center_distance = math.hypot((x - width * 0.5) / max(1.0, width * 0.5), (y - height * 0.5) / max(1.0, height * 0.5))
+        if center_distance > 1.25:
+            continue
+        values = roi[labels == label].astype(np.float32)
+        mean_intensity = float(np.mean(values)) if values.size else 0.0
+        compactness = min(1.0, (area / max(1.0, box_width * box_height)) * 1.5)
+        center_score = max(0.0, 1.0 - center_distance / 1.25)
+        if dark:
+            intensity_score = max(0.0, min(1.0, 1.0 - mean_intensity / 180.0))
+        else:
+            intensity_score = max(0.0, min(1.0, mean_intensity / 255.0))
+        score = 0.45 * intensity_score + 0.35 * center_score + 0.20 * compactness
+        candidates.append((score, x, y, area, mean_intensity))
+    return sorted(candidates, reverse=True)
+
+
+def _extract_ir_eye_feature_gray(
+    gray: np.ndarray,
+    eye_center_px: tuple[float, float],
+    *,
+    roi_side_px: float,
+) -> IREyeFeature:
+    roi, origin_x, origin_y = _eye_roi(gray, eye_center_px, roi_side_px)
+    roi_float = roi.astype(np.float32)
+    local_contrast = float(np.std(roi_float) / 255.0)
+    q25, q75 = [float(value) for value in np.percentile(roi_float, [25.0, 75.0])]
+    mean = float(np.mean(roi_float))
+    std = float(np.std(roi_float))
+
+    # Dark-pupil candidate: use an adaptive low threshold so exposure changes
+    # do not turn the branch into a fixed-camera brightness test.
+    dark_cut = max(12.0, min(105.0, q25 + 10.0, mean - 0.35 * std))
+    dark_mask = (roi_float <= dark_cut).astype(np.uint8)
+    dark_pupil_candidates = _candidate_blobs(dark_mask, roi, dark=True)
+
+    # Active IR can also produce a bright-pupil response.  Search that
+    # polarity separately so the branch does not silently fail when the
+    # illuminator/camera geometry differs from the usual dark-pupil case.
+    bright_pupil_cut = max(150.0, q75 + max(10.0, std * 0.25))
+    bright_pupil_cut = min(252.0, bright_pupil_cut)
+    bright_pupil_mask = (roi_float >= bright_pupil_cut).astype(np.uint8)
+    bright_pupil_candidates = _candidate_blobs(
+        bright_pupil_mask,
+        roi,
+        dark=False,
+        max_area_fraction=0.22,
+        compact_only=False,
+    )
+
+    def pupil_rank(candidate: tuple[float, float, float, float, float]) -> float:
+        expected_diameter = max(4.0, roi.shape[1] * 0.18)
+        diameter = math.sqrt(4.0 * candidate[3] / math.pi)
+        size_score = math.exp(-abs(math.log(max(1.0, diameter) / expected_diameter)))
+        return 0.55 * candidate[0] + 0.45 * size_score
+
+    pupil_options = [(pupil_rank(candidate), candidate, "dark") for candidate in dark_pupil_candidates]
+    pupil_options.extend((pupil_rank(candidate), candidate, "bright") for candidate in bright_pupil_candidates)
+    pupil_option = max(pupil_options, key=lambda item: item[0]) if pupil_options else None
+    pupil = pupil_option[1] if pupil_option is not None else None
+    pupil_polarity = pupil_option[2] if pupil_option is not None else None
+
+    # Corneal reflection candidate: a small high-intensity blob near the eye
+    # centre (and, when available, near the pupil).  This is intentionally
+    # conservative because a monochrome stream may contain many bright areas.
+    bright_cut = max(170.0, q75 + max(18.0, std * 0.75))
+    bright_cut = min(254.0, bright_cut)
+    bright_mask = (roi_float >= bright_cut).astype(np.uint8)
+    glint_candidates = _candidate_blobs(bright_mask, roi, dark=False)
+    glint = None
+    if glint_candidates:
+        if pupil is None:
+            glint = glint_candidates[0]
+        else:
+            pupil_x, pupil_y = pupil[1], pupil[2]
+            ranked: list[tuple[float, tuple[float, float, float, float, float]]] = []
+            for candidate in glint_candidates:
+                distance = math.hypot(candidate[1] - pupil_x, candidate[2] - pupil_y)
+                proximity = max(0.0, 1.0 - distance / max(1.0, roi.shape[1] * 0.55))
+                ranked.append((0.65 * candidate[0] + 0.35 * proximity, candidate))
+            glint = max(ranked, key=lambda item: item[0])[1]
+
+    pupil_center = None
+    pupil_diameter = None
+    pupil_intensity = None
+    if pupil is not None:
+        pupil_center = (origin_x + pupil[1], origin_y + pupil[2])
+        pupil_diameter = math.sqrt(4.0 * pupil[3] / math.pi)
+        pupil_intensity = pupil[4]
+    glint_center = None
+    glint_area = None
+    glint_intensity = None
+    if glint is not None:
+        glint_center = (origin_x + glint[1], origin_y + glint[2])
+        glint_area = glint[3]
+        glint_intensity = glint[4]
+    vector = None
+    if pupil_center is not None and glint_center is not None:
+        vector = (glint_center[0] - pupil_center[0], glint_center[1] - pupil_center[1])
+
+    if pupil is not None and glint is not None:
+        status = "PUPIL_GLINT"
+        confidence = 0.5 * pupil[0] + 0.5 * glint[0]
+    elif pupil is not None:
+        status = "PUPIL_ONLY"
+        confidence = 0.55 * pupil[0]
+    elif glint is not None:
+        status = "GLINT_ONLY"
+        confidence = 0.45 * glint[0]
+    else:
+        status = "NO_FEATURES"
+        confidence = 0.0
+    return IREyeFeature(
+        eye_center_px=(float(eye_center_px[0]), float(eye_center_px[1])),
+        pupil_center_px=pupil_center,
+        glint_center_px=glint_center,
+        pupil_diameter_px=float(pupil_diameter) if pupil_diameter is not None else None,
+        glint_area_px2=float(glint_area) if glint_area is not None else None,
+        pupil_glint_vector_px=vector,
+        pupil_mean_intensity=float(pupil_intensity) if pupil_intensity is not None else None,
+        glint_mean_intensity=float(glint_intensity) if glint_intensity is not None else None,
+        local_contrast=max(0.0, local_contrast),
+        confidence=max(0.0, min(1.0, confidence)),
+        status=status,
+        pupil_polarity=pupil_polarity,
+    )
+
+
+def extract_ir_optics(
+    frame: np.ndarray,
+    eye_centers_px: tuple[tuple[float, float], tuple[float, float]],
+    *,
+    roi_side_px: float,
+) -> tuple[IREyeFeature, IREyeFeature]:
+    """Extract two scalar pupil/glint diagnostics from one IR frame."""
+
+    gray = _gray_image(frame)
+    return tuple(
+        _extract_ir_eye_feature_gray(gray, center, roi_side_px=roi_side_px)
+        for center in eye_centers_px
+    )  # type: ignore[return-value]
+
+
+@dataclass(frozen=True)
 class GazeSample:
     features: tuple[float, float, float, float, float, float]
     quality: float
@@ -70,6 +316,10 @@ class GazeSample:
     # independently solved.
     binocular_ray_proxy: BinocularRayProxy | None = None
     binocular_ray_unknown_reason: str | None = None
+    # IR-specific pupil/glint diagnostics.  Kept separate from the gaze
+    # mapper until a calibration proves that this signal improves held-out
+    # predictions rather than merely tracking exposure or camera position.
+    ir_optics: tuple[IREyeFeature, IREyeFeature] | None = None
 
 
 def sha256(path: Path) -> str:
@@ -81,6 +331,8 @@ def sha256(path: Path) -> str:
 
 
 def create_cuda_session(model_path: Path) -> ort.InferenceSession:
+    if ort is None:
+        raise GpuUnavailable("onnxruntime-gpu is not installed")
     if not model_path.is_file():
         raise FileNotFoundError(model_path)
     available = set(ort.get_available_providers())
@@ -178,26 +430,41 @@ def _eye_centric_geometry(
 class GpuTracker:
     """Minimal model pipeline extracted from the MIT screen-eye-tracking approach."""
 
-    def __init__(self, face_model: Path, gaze_model: Path, pretrained_gaze_model: Path | None = None) -> None:
+    def __init__(
+        self,
+        face_model: Path,
+        gaze_model: Path | None,
+        pretrained_gaze_model: Path | None = None,
+        *,
+        scale_only: bool = False,
+    ) -> None:
         self.face_model_sha256 = sha256(face_model)
         self.face = create_cuda_session(face_model)
-        self.gaze = create_cuda_session(gaze_model)
-        self.pretrained_gaze = create_cuda_session(pretrained_gaze_model) if pretrained_gaze_model is not None else None
         self.face_input = self.face.get_inputs()[0]
         self.face_output = self.face.get_outputs()[0]
-        self.gaze_input = self.gaze.get_inputs()[0]
-        self.gaze_output = self.gaze.get_outputs()[0]
         if self.face_input.name != "input" or list(self.face_input.shape) != [1, 3, 480, 640]:
             raise GpuUnavailable("unexpected RetinaFace input signature")
         if self.face_output.name != "batchno_classid_score_x1y1x2y2_landms":
             raise GpuUnavailable("unexpected RetinaFace output signature")
+        self.gaze = None
+        self.gaze_input = None
+        self.gaze_output = None
+        self.pretrained_gaze = None
+        self.pretrained_input = None
+        self.pretrained_yaw_output = None
+        self.pretrained_pitch_output = None
+        if scale_only:
+            return
+        if gaze_model is None:
+            raise FileNotFoundError("gaze model is required outside scale_only mode")
+        self.gaze = create_cuda_session(gaze_model)
+        self.pretrained_gaze = create_cuda_session(pretrained_gaze_model) if pretrained_gaze_model is not None else None
+        self.gaze_input = self.gaze.get_inputs()[0]
+        self.gaze_output = self.gaze.get_outputs()[0]
         if self.gaze_input.name != "input" or list(self.gaze_input.shape[1:]) != [3, 160, 160]:
             raise GpuUnavailable("unexpected gaze input signature")
         if self.gaze_output.name != "output" or list(self.gaze_output.shape[1:]) != [962, 3]:
             raise GpuUnavailable("unexpected gaze output signature")
-        self.pretrained_input = None
-        self.pretrained_yaw_output = None
-        self.pretrained_pitch_output = None
         if self.pretrained_gaze is not None:
             self.pretrained_input = self.pretrained_gaze.get_inputs()[0]
             outputs = {output.name: output for output in self.pretrained_gaze.get_outputs()}
@@ -269,7 +536,9 @@ class GpuTracker:
         ]
         return face, sorted(eyes, key=lambda item: item.center[0])
 
-    def sample(self, frame: np.ndarray) -> GazeSample | None:
+    def sample(self, frame: np.ndarray, *, enable_ir_optics: bool = False) -> GazeSample | None:
+        if self.gaze is None or self.gaze_input is None or self.gaze_output is None:
+            raise RuntimeError("gaze sampling is unavailable in scale_only mode")
         detected = self.detect_face(frame)
         if detected is None:
             return None
@@ -336,6 +605,18 @@ class GpuTracker:
                 binocular_gaze_deg[0] - pretrained_gaze_deg[0],
                 binocular_gaze_deg[1] - pretrained_gaze_deg[1],
             )
+        ir_optics = None
+        if enable_ir_optics:
+            try:
+                ir_optics = extract_ir_optics(
+                    frame,
+                    (tuple(left_center.tolist()), tuple(right_center.tolist())),
+                    roi_side_px=max(28.0, face.width * 0.22),
+                )
+            except (TypeError, ValueError, cv2.error):
+                # The gaze sample remains usable; the optical branch carries
+                # its own missingness through a null value in the scalar log.
+                ir_optics = None
         if eye_centric is None:
             return GazeSample(
                 features,
@@ -352,6 +633,7 @@ class GpuTracker:
                 raw_model_angle_delta_deg,
                 binocular_ray_proxy,
                 binocular_ray_unknown_reason,
+                ir_optics,
             )
         return GazeSample(
             features,
@@ -368,4 +650,5 @@ class GpuTracker:
             raw_model_angle_delta_deg,
             binocular_ray_proxy,
             binocular_ray_unknown_reason,
+            ir_optics,
         )

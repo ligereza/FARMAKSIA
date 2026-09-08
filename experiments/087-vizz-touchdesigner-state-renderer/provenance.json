@@ -1,0 +1,51 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:087-vizz-touchdesigner-state-renderer",
+  "status": "written_and_pure_contract_verified",
+  "purpose": "Prepare a privacy-bounded normalized state contract and passive TouchDesigner renderer scaffold without starting applications.",
+  "agents": [
+    {"id": "farmaxia:researcher-087", "type": "agent", "role": "researches_touchdesigner_windows_capture_uia_and_render_boundary"},
+    {"id": "farmaxia:contract-builder-087", "type": "software_agent", "role": "writes_schema_router_bootstrap_and_pure_tests", "version": "3.13"}
+  ],
+  "entities": [
+    {"id": "farmaxia:state-schema-087", "type": "entity", "path": "state_schema.json", "role": "normalized_renderer_state_schema", "authority": "experiment_defined"},
+    {"id": "farmaxia:state-router-087", "type": "entity", "path": "state_router.py", "role": "safe_normalization_and_unknown_boundary", "authority": "computed"},
+    {"id": "farmaxia:host-adapter-087", "type": "entity", "path": "host_adapter.py", "role": "tracker_pose_and_046_geometry_adapter_without_invented_gaze", "authority": "computed"},
+    {"id": "farmaxia:render-policy-087", "type": "entity", "path": "render_policy.py", "role": "bounded_visual_policy_from_normalized_state", "authority": "experiment_defined"},
+    {"id": "farmaxia:td-bootstrap-087", "type": "entity", "path": "touchdesigner/bootstrap_vizz_renderer.py", "role": "passive_touchdesigner_network_scaffold", "authority": "human_declared_tool"},
+    {"id": "farmaxia:contract-test-087", "type": "entity", "path": "run_contract_test.py", "role": "pure_router_policy_and_static_privacy_tests", "authority": "computed"},
+    {"id": "farmaxia:readme-087", "type": "entity", "path": "README.md", "role": "reproduction_protocol_and_limits", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:write-state-contract-087", "type": "activity", "label": "define bounded normalized state and safe UNKNOWN behavior", "agent": "farmaxia:contract-builder-087", "used": ["farmaxia:state-schema-087", "farmaxia:state-router-087"], "generated": []},
+    {"id": "farmaxia:write-render-policy-087", "type": "activity", "label": "derive a bounded visual plan without treating input as intent or gaze", "agent": "farmaxia:contract-builder-087", "used": ["farmaxia:state-router-087", "farmaxia:render-policy-087"], "generated": []},
+    {"id": "farmaxia:adapt-geometry-087", "type": "activity", "label": "connect 046 geometry UV to focus while preserving ambiguous monitor states", "agent": "farmaxia:contract-builder-087", "used": ["farmaxia:host-adapter-087", "farmaxia:state-router-087"], "generated": []},
+    {"id": "farmaxia:write-td-scaffold-087", "type": "activity", "label": "write a manual-state TouchDesigner CHOP/TOP scaffold with inactive transport", "agent": "farmaxia:contract-builder-087", "used": ["farmaxia:td-bootstrap-087"], "generated": []},
+    {"id": "farmaxia:pure-verify-087", "type": "activity", "label": "run standard-library contract and static privacy checks", "agent": "farmaxia:contract-builder-087", "used": ["farmaxia:contract-test-087"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:unknown-query-087", "expression": "does stale low-confidence malformed state become UNKNOWN and neutral renderer channels", "authority": "experiment_defined", "required_entities": ["farmaxia:state-router-087", "farmaxia:contract-test-087"]},
+    {"id": "farmaxia:privacy-query-087", "expression": "does the prepared bootstrap avoid camera capture input process and active transport startup", "authority": "experiment_defined", "required_entities": ["farmaxia:td-bootstrap-087", "farmaxia:contract-test-087"]},
+    {"id": "farmaxia:td-query-087", "expression": "does the scaffold expose manual state filtered state and a visual output without claiming runtime verification", "authority": "experiment_defined", "required_entities": ["farmaxia:td-bootstrap-087", "farmaxia:readme-087"]}
+  ],
+  "assumptions": [
+    "TouchDesigner 2023.12000 is the user's installed version.",
+    "The host will later provide already-normalized values; this slice does not implement capture.",
+    "A local normalized state contract is safer than sending raw frames or arbitrary payloads to the renderer.",
+    "TouchDesigner parameter names and node creation behavior remain to be verified in the user's licensed runtime."
+  ],
+  "kill_tests": [
+    "A stale, low-confidence, future-clock or malformed state must not be accepted.",
+    "Raw unknown keys must not reach renderer channels.",
+    "The bootstrap must not activate OSC or create camera, capture, input or process dependencies.",
+    "The bootstrap must not overwrite an existing renderer container.",
+    "This experiment must not claim that TouchDesigner, Maxine, Spout or license-specific nodes were run."
+  ],
+  "unknowns": [
+    "Whether the installed TouchDesigner edition exposes Spout, Shared Memory or Direct Display Out.",
+    "Whether Face Track CHOP's Maxine runtime is installed and compatible.",
+    "Whether the host-to-renderer transport will be Spout, shared memory or a later local numeric channel.",
+    "Measured source-to-render latency and GPU/CPU load.",
+    "Whether each target application exposes useful UI Automation semantics."
+  ]
+}
