@@ -33,6 +33,37 @@ def _run_check(label: str, script: Path, arguments: list[str]) -> dict[str, obje
     }
 
 
+def _xio_root_check(root: str) -> dict[str, object]:
+    """Report a wrong checkout before importing a different XIO layout."""
+
+    resolved = Path(root).expanduser().resolve()
+    package = resolved / "XIO_LAYER"
+    if not resolved.is_dir():
+        return {
+            "label": "xio-route-persistence-and-permission",
+            "status": "FAIL",
+            "exitCode": 2,
+            "summary": None,
+            "error": f"XIO root does not exist: {resolved}",
+        }
+    if not (package / "__init__.py").is_file():
+        return {
+            "label": "xio-route-persistence-and-permission",
+            "status": "FAIL",
+            "exitCode": 2,
+            "summary": None,
+            "error": (
+                f"XIO contract package missing under {resolved}; "
+                "select a checkout containing XIO_LAYER/__init__.py"
+            ),
+        }
+    return _run_check(
+        "xio-route-persistence-and-permission",
+        HERE / "run_xio_route_handoff_check.py",
+        ["--xio-root", str(resolved)],
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--xio-root", default=r"C:\IA\XIO")
@@ -46,11 +77,7 @@ def main() -> int:
             HERE / "run_contract_test.py",
             [],
         ),
-        _run_check(
-            "xio-route-persistence-and-permission",
-            HERE / "run_xio_route_handoff_check.py",
-            ["--xio-root", args.xio_root],
-        ),
+        _xio_root_check(args.xio_root),
         _run_check(
             "pupila-lucida-atomic-consumer",
             HERE / "run_lucida_pupila_consumer_check.py",

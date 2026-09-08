@@ -219,6 +219,11 @@ indicar la ruta publicada que se quiere auditar:
 .\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_offline_integration.py --xio-root C:\IA\XIO --lucida-root C:\IA\VJ
 ```
 
+El gate valida primero que `--xio-root` contenga el paquete contractual
+`XIO_LAYER/__init__.py`. Si se entrega un checkout que sólo contiene plugins
+actuales, conserva el fallo pero explica qué raíz debe seleccionarse, en vez de
+ocultar la causa detrás de un `ModuleNotFoundError`.
+
 Si también existe un checkout de la rama `MULTI`, se puede añadir
 `--lucida-multi-root C:\IA\LUCIDA-MULTI-CHECK` para incluir el transporte
 LUCIDA/MULTI en el mismo reporte.
