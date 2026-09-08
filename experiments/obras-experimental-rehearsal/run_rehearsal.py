@@ -58,19 +58,31 @@ def _load_modules(xio_root: Path, mosaik_root: Path):
         normalize_signal_events,
         sha256_json,
     )
+    from xio.semantic_lighting import (  # type: ignore[import-not-found]
+        build_predictive_frame,
+        pack_semantic_frame,
+        unpack_semantic_frame,
+    )
     from adapters.vj.experimental_rehearsal import (  # type: ignore[import-not-found]
         RehearsalBridgeError,
         build_rehearsal_projection,
         validate_resolume_cue,
+    )
+    from adapters.vj.console_proposals import (  # type: ignore[import-not-found]
+        build_console_proposals,
     )
     return (
         extract_pulses,
         load_fixture,
         normalize_signal_events,
         sha256_json,
+        build_predictive_frame,
+        pack_semantic_frame,
+        unpack_semantic_frame,
         RehearsalBridgeError,
         build_rehearsal_projection,
         validate_resolume_cue,
+        build_console_proposals,
     )
 
 
@@ -200,9 +212,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         load_fixture,
         normalize_signal_events,
         sha256_json,
+        build_predictive_frame,
+        pack_semantic_frame,
+        unpack_semantic_frame,
         RehearsalBridgeError,
         build_rehearsal_projection,
         validate_resolume_cue,
+        build_console_proposals,
     ) = _load_modules(xio_root, mosaik_root)
     from phase_chaser import PhaseChaser
 
@@ -248,6 +264,88 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         source_event_digest=source_event_digest,
         sample_hz=args.fps,
     )
+
+    predictive_parameters = {
+        "cycle_seconds": 2.4,
+        "angle_offset_degrees": 12.0,
+        "master_intensity": 1.0,
+        "sensitivity": 1.0,
+        "seed": 2026,
+        "channels_per_fixture": 80,
+    }
+    predictive_frames = [
+        build_predictive_frame(
+            event,
+            session_id=session_id,
+            fixture_ids=fixture_ids,
+            parameters=predictive_parameters,
+        )
+        for event in normalized_events
+    ]
+    predictive_replay_frames = [
+        build_predictive_frame(
+            event,
+            session_id=session_id,
+            fixture_ids=fixture_ids,
+            parameters=predictive_parameters,
+        )
+        for event in normalized_events
+    ]
+    console_proposals = [
+        build_console_proposals(
+            frame,
+            resolume_layer=1,
+            resolume_clip=1,
+            avolites_playback=1,
+        )
+        for frame in predictive_frames
+    ]
+    revoked_console_proposal = build_console_proposals(
+        predictive_frames[0],
+        permissions_revoked=True,
+    )
+    semantic_roundtrip_checks: list[dict[str, Any]] = []
+    for frame in predictive_frames:
+        packet = bytes.fromhex(frame["transport"]["packet_hex"])
+        decoded = unpack_semantic_frame(packet)
+        reencoded = pack_semantic_frame(frame)
+        semantic_roundtrip_checks.append(
+            {
+                "sequence": frame["sequence"],
+                "fixture_count": decoded["fixture_count"],
+                "crc32": decoded["crc32"],
+                "packet_reencoded_equal": reencoded == packet,
+                "status": "PASS"
+                if decoded["fixture_count"] == len(fixture_ids) and reencoded == packet
+                else "FAIL",
+            }
+        )
+    predictive_same_outputs = predictive_frames == predictive_replay_frames
+    predictive_transport = {
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "decoder_profile": predictive_frames[0]["transport"]["decoder_profile"],
+        "fixture_count": args.fixtures,
+        "channels_per_fixture": predictive_parameters["channels_per_fixture"],
+        "frames": len(predictive_frames),
+        "semantic_packet_bytes": predictive_frames[0]["transport"]["packet_bytes"],
+        "direct_dmx_channel_bytes": predictive_frames[0]["transport"]["compression"]["direct_channel_bytes"],
+        "direct_dmx_universes": predictive_frames[0]["transport"]["direct_dmx"]["universes"],
+        "compression_ratio": predictive_frames[0]["transport"]["compression"]["ratio"],
+        "saved_fraction": predictive_frames[0]["transport"]["compression"]["saved_fraction"],
+        "all_packets_roundtrip": all(item["status"] == "PASS" for item in semantic_roundtrip_checks),
+    }
+    semantic_replay = {
+        "schema": "farmaxia:predictive-semantic-replay:0.1",
+        "session_id": session_id,
+        "status": "PASS" if predictive_same_outputs and predictive_transport["all_packets_roundtrip"] else "REVIEW",
+        "determinism": {
+            "first_frames_sha256": sha256_json(predictive_frames),
+            "second_frames_sha256": sha256_json(predictive_replay_frames),
+            "same_outputs": predictive_same_outputs,
+        },
+        "packet_roundtrip": semantic_roundtrip_checks,
+        "transport": predictive_transport,
+    }
 
     variable_fixture_check = []
     for count in (2, 5, 8):
@@ -305,6 +403,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "frame_count": projection["frame_count"],
             "fixture_count": projection["fixture_count"],
         },
+        "predictive_semantic": {
+            "schema": predictive_transport["schema"],
+            "decoder_profile": predictive_transport["decoder_profile"],
+            "frame_count": predictive_transport["frames"],
+            "fixture_count": predictive_transport["fixture_count"],
+            "direct_dmx_universes": predictive_transport["direct_dmx_universes"],
+            "semantic_packet_bytes": predictive_transport["semantic_packet_bytes"],
+            "compression_ratio": predictive_transport["compression_ratio"],
+        },
     }
     safety = {
         "mode": "dry-run",
@@ -318,6 +425,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "actions_would_have_occurred": {
             "phase_frames": len(phase_states),
             "resolume_cue_proposals": len(projection["resolume_cues"]),
+            "predictive_semantic_frames": len(predictive_frames),
+            "resolume_osc_proposals": len(console_proposals),
+            "avolites_titan_proposals": len(console_proposals),
             "physical_fixture_count": args.fixtures,
         },
         "scenarios": {
@@ -329,8 +439,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "invalid_cue_blocked": invalid_cue_result["status"] == "PASS",
             "permission_revocation_blocked": revoked_projection["status"] == "BLOCKED",
             "deterministic_replay": projection["tape_sha256"] == replay_again["tape_sha256"],
+            "predictive_frame_deterministic": semantic_replay["determinism"]["same_outputs"],
+            "semantic_packet_crc_roundtrip": semantic_replay["packet_roundtrip"]
+            and semantic_replay["status"] == "PASS",
+            "console_proposals_proposal_only": all(
+                item["status"] == "PENDING_APPROVAL"
+                and item["safety"]["external_side_effects"] is False
+                for item in console_proposals
+            ),
+            "console_permission_revocation_blocked": revoked_console_proposal["status"] == "BLOCKED",
         },
         "revocation_result": revoked_projection,
+        "console_revocation_result": revoked_console_proposal,
         "invalid_cue_result": invalid_cue_result,
     }
     replay_complete = {
@@ -345,6 +465,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "same_outputs": projection["tape_sha256"] == replay_again["tape_sha256"] and restart_resume_equivalent,
         },
         "mosaik_replay_report": projection["replay_report"],
+        "predictive_semantic_replay": semantic_replay,
         "safety": safety,
     }
     manifest = {
@@ -369,6 +490,10 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "mosaik-replay-fixture.json",
             "mosaik-replay-report.json",
             "resolume-cues.json",
+            "predictive-frames.jsonl",
+            "predictive-transport.json",
+            "semantic-replay.json",
+            "console-proposals.json",
             "replay-complete.json",
             "safety-summary.json",
             "variable-fixture-check.json",
@@ -386,6 +511,18 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     _write_json(output / "mosaik-replay-fixture.json", projection["replay_fixture"])
     _write_json(output / "mosaik-replay-report.json", projection["replay_report"])
     _write_json(output / "resolume-cues.json", {"proposal_only": True, "cues": projection["resolume_cues"]})
+    _write_jsonl(output / "predictive-frames.jsonl", predictive_frames)
+    _write_json(output / "predictive-transport.json", predictive_transport)
+    _write_json(output / "semantic-replay.json", semantic_replay)
+    _write_json(
+        output / "console-proposals.json",
+        {
+            "schema": "mosaik:console-proposals:0.1",
+            "proposal_only": True,
+            "proposals": console_proposals,
+            "revocation": revoked_console_proposal,
+        },
+    )
     _write_json(output / "replay-complete.json", replay_complete)
     _write_json(output / "safety-summary.json", safety)
     _write_json(output / "variable-fixture-check.json", {"checks": variable_fixture_check})
@@ -406,6 +543,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "phase_state_count": len(phase_states),
         "fixture_count": args.fixtures,
         "mosaik_replay_status": projection["replay_report"]["status"],
+        "predictive_replay_status": semantic_replay["status"],
+        "console_proposal_status": "PASS"
+        if all(item["status"] == "PENDING_APPROVAL" for item in console_proposals)
+        else "REVIEW",
+        "semantic_packet_bytes": predictive_transport["semantic_packet_bytes"],
+        "direct_dmx_channel_bytes": predictive_transport["direct_dmx_channel_bytes"],
         "safety_external_side_effects": safety["external_side_effects"],
         "visualization": str(output / "visualization.html"),
     }
