@@ -473,7 +473,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "schema_version": "0.1",
         "session_id": session_id,
         "mode": "dry-run",
-        "fixture": "../../experiments/obras-experimental-rehearsal/fixture-synthetic-audio.json",
+        "fixture": "../../../experiments/obras-experimental-rehearsal/fixture-synthetic-audio.json",
         "physical_audio_used": False,
         "source_repositories": {
             "xio": {"path": str(xio_root), "commit": _git_ref(xio_root)},
