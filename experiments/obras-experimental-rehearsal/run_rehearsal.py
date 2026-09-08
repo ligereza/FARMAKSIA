@@ -481,7 +481,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "mosaik": {"path": str(mosaik_root), "commit": _git_ref(mosaik_root)},
         },
         "files": [
-            "instructions.md",
+            "../instructions.md",
+            "../commits.md",
             "xio-envelope.json",
             "signal-events.jsonl",
             "timeline-normalized.json",
