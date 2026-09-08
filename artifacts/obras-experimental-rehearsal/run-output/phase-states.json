@@ -1,0 +1,334 @@
+{
+  "schema": "farmaxia:phase-chaser-state:0.1",
+  "states": [
+    {
+      "event_id": "pulse-001",
+      "lights": [
+        {
+          "angle_degrees": 64.5,
+          "fixture_id": "ble-01",
+          "intensity": 0.882242,
+          "phase": 0.145833,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 136.5,
+          "fixture_id": "ble-02",
+          "intensity": 0.890843,
+          "phase": 0.345833,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 208.5,
+          "fixture_id": "ble-03",
+          "intensity": 0.581118,
+          "phase": 0.545833,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 280.5,
+          "fixture_id": "ble-04",
+          "intensity": 0.381096,
+          "phase": 0.745833,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 352.5,
+          "fixture_id": "ble-05",
+          "intensity": 0.567201,
+          "phase": 0.945833,
+          "pulse": 1.0
+        }
+      ],
+      "schema": "farmaxia:phase-chaser-state:0.1",
+      "sequence": 1,
+      "signal_state": "present",
+      "source_event_type": "audio.pulse",
+      "time_seconds": 0.35,
+      "timecode": "00:00:00:09",
+      "timestamp": "2026-01-01T20:00:00.350Z"
+    },
+    {
+      "event_id": "pulse-002",
+      "lights": [
+        {
+          "angle_degrees": 177.0,
+          "fixture_id": "ble-01",
+          "intensity": 0.672111,
+          "phase": 0.458333,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 249.0,
+          "fixture_id": "ble-02",
+          "intensity": 0.393897,
+          "phase": 0.658333,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 321.0,
+          "fixture_id": "ble-03",
+          "intensity": 0.409493,
+          "phase": 0.858333,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 33.0,
+          "fixture_id": "ble-04",
+          "intensity": 0.697346,
+          "phase": 0.058333,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 105.0,
+          "fixture_id": "ble-05",
+          "intensity": 0.859653,
+          "phase": 0.258333,
+          "pulse": 1.0
+        }
+      ],
+      "schema": "farmaxia:phase-chaser-state:0.1",
+      "sequence": 2,
+      "signal_state": "present",
+      "source_event_type": "audio.pulse",
+      "time_seconds": 1.1,
+      "timecode": "00:00:01:03",
+      "timestamp": "2026-01-01T20:00:01.100Z"
+    },
+    {
+      "event_id": "audio-gap-001",
+      "lights": [
+        {
+          "angle_degrees": 214.5,
+          "fixture_id": "ble-01",
+          "intensity": 0.0,
+          "phase": 0.5625,
+          "pulse": 0.0
+        },
+        {
+          "angle_degrees": 286.5,
+          "fixture_id": "ble-02",
+          "intensity": 0.0,
+          "phase": 0.7625,
+          "pulse": 0.0
+        },
+        {
+          "angle_degrees": 358.5,
+          "fixture_id": "ble-03",
+          "intensity": 0.0,
+          "phase": 0.9625,
+          "pulse": 0.0
+        },
+        {
+          "angle_degrees": 70.5,
+          "fixture_id": "ble-04",
+          "intensity": 0.0,
+          "phase": 0.1625,
+          "pulse": 0.0
+        },
+        {
+          "angle_degrees": 142.5,
+          "fixture_id": "ble-05",
+          "intensity": 0.0,
+          "phase": 0.3625,
+          "pulse": 0.0
+        }
+      ],
+      "schema": "farmaxia:phase-chaser-state:0.1",
+      "sequence": 3,
+      "signal_state": "missing",
+      "source_event_type": "audio.gap",
+      "time_seconds": 1.35,
+      "timecode": "00:00:01:09",
+      "timestamp": "2026-01-01T20:00:01.350Z"
+    },
+    {
+      "event_id": "pulse-003",
+      "lights": [
+        {
+          "angle_degrees": 259.5,
+          "fixture_id": "ble-01",
+          "intensity": 0.349812,
+          "phase": 0.6875,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 331.5,
+          "fixture_id": "ble-02",
+          "intensity": 0.414029,
+          "phase": 0.8875,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 43.5,
+          "fixture_id": "ble-03",
+          "intensity": 0.688265,
+          "phase": 0.0875,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 115.5,
+          "fixture_id": "ble-04",
+          "intensity": 0.793535,
+          "phase": 0.2875,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 187.5,
+          "fixture_id": "ble-05",
+          "intensity": 0.584359,
+          "phase": 0.4875,
+          "pulse": 1.0
+        }
+      ],
+      "schema": "farmaxia:phase-chaser-state:0.1",
+      "sequence": 4,
+      "signal_state": "present",
+      "source_event_type": "audio.pulse",
+      "time_seconds": 1.65,
+      "timecode": "00:00:01:16",
+      "timestamp": "2026-01-01T20:00:01.650Z"
+    },
+    {
+      "event_id": "pulse-004",
+      "lights": [
+        {
+          "angle_degrees": 327.0,
+          "fixture_id": "ble-01",
+          "intensity": 0.485123,
+          "phase": 0.875,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 39.0,
+          "fixture_id": "ble-02",
+          "intensity": 0.828518,
+          "phase": 0.075,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 111.0,
+          "fixture_id": "ble-03",
+          "intensity": 0.986359,
+          "phase": 0.275,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 183.0,
+          "fixture_id": "ble-04",
+          "intensity": 0.740515,
+          "phase": 0.475,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 255.0,
+          "fixture_id": "ble-05",
+          "intensity": 0.430735,
+          "phase": 0.675,
+          "pulse": 1.0
+        }
+      ],
+      "schema": "farmaxia:phase-chaser-state:0.1",
+      "sequence": 5,
+      "signal_state": "present",
+      "source_event_type": "audio.pulse",
+      "time_seconds": 2.1,
+      "timecode": "00:00:02:02",
+      "timestamp": "2026-01-01T20:00:02.100Z"
+    },
+    {
+      "event_id": "pulse-005",
+      "lights": [
+        {
+          "angle_degrees": 72.0,
+          "fixture_id": "ble-01",
+          "intensity": 0.883425,
+          "phase": 0.166667,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 144.0,
+          "fixture_id": "ble-02",
+          "intensity": 0.849879,
+          "phase": 0.366667,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 216.0,
+          "fixture_id": "ble-03",
+          "intensity": 0.535961,
+          "phase": 0.566667,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 288.0,
+          "fixture_id": "ble-04",
+          "intensity": 0.375496,
+          "phase": 0.766667,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 0.0,
+          "fixture_id": "ble-05",
+          "intensity": 0.59024,
+          "phase": 0.966667,
+          "pulse": 1.0
+        }
+      ],
+      "schema": "farmaxia:phase-chaser-state:0.1",
+      "sequence": 6,
+      "signal_state": "present",
+      "source_event_type": "audio.pulse",
+      "time_seconds": 2.8,
+      "timecode": "00:00:02:20",
+      "timestamp": "2026-01-01T20:00:02.800Z"
+    },
+    {
+      "event_id": "pulse-006",
+      "lights": [
+        {
+          "angle_degrees": 147.0,
+          "fixture_id": "ble-01",
+          "intensity": 0.713367,
+          "phase": 0.375,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 219.0,
+          "fixture_id": "ble-02",
+          "intensity": 0.449217,
+          "phase": 0.575,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 291.0,
+          "fixture_id": "ble-03",
+          "intensity": 0.327801,
+          "phase": 0.775,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 3.0,
+          "fixture_id": "ble-04",
+          "intensity": 0.516911,
+          "phase": 0.975,
+          "pulse": 1.0
+        },
+        {
+          "angle_degrees": 75.0,
+          "fixture_id": "ble-05",
+          "intensity": 0.755204,
+          "phase": 0.175,
+          "pulse": 1.0
+        }
+      ],
+      "schema": "farmaxia:phase-chaser-state:0.1",
+      "sequence": 7,
+      "signal_state": "present",
+      "source_event_type": "audio.pulse",
+      "time_seconds": 3.3,
+      "timecode": "00:00:03:07",
+      "timestamp": "2026-01-01T20:00:03.300Z"
+    }
+  ]
+}

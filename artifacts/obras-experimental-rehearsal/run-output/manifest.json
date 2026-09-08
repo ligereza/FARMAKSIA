@@ -1,0 +1,38 @@
+{
+  "artifact_type": "ObrasExperimentalRehearsalEvidence",
+  "files": [
+    "instructions.md",
+    "xio-envelope.json",
+    "signal-events.jsonl",
+    "timeline-normalized.json",
+    "phase-states.jsonl",
+    "mosaik-proposals.json",
+    "mosaik-replay-fixture.json",
+    "mosaik-replay-report.json",
+    "resolume-cues.json",
+    "replay-complete.json",
+    "safety-summary.json",
+    "variable-fixture-check.json",
+    "visualization.html",
+    "run-summary.json"
+  ],
+  "fixture": "../../experiments/obras-experimental-rehearsal/fixture-synthetic-audio.json",
+  "mode": "dry-run",
+  "physical_audio_used": false,
+  "schema_version": "0.1",
+  "session_id": "obras-rehearsal-2026-09-08",
+  "source_repositories": {
+    "farmaxia": {
+      "commit": "55bc250785849d3699faff6ba7ca9c1e8916d570",
+      "path": "C:\\IA\\FARMAXIA"
+    },
+    "mosaik": {
+      "commit": "58a3db8c4b516d943eab25651a69591db0715909",
+      "path": "C:\\IA\\VJ"
+    },
+    "xio": {
+      "commit": "7d9a4071489ff070ad377351ae40015abe66b4d2",
+      "path": "C:\\IA\\XIO"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "cues": [
+    {
+      "clip": "synthetic-phasechaser",
+      "layer": "phasechaser-main",
+      "opacity": 0.6605,
+      "proposal_only": true,
+      "rotation_degrees": 208.5,
+      "strobe": true,
+      "transport": "timeline"
+    },
+    {
+      "clip": "synthetic-phasechaser",
+      "layer": "phasechaser-main",
+      "opacity": 0.6065,
+      "proposal_only": true,
+      "rotation_degrees": 177.0,
+      "strobe": true,
+      "transport": "timeline"
+    },
+    {
+      "clip": "synthetic-phasechaser",
+      "layer": "phasechaser-main",
+      "opacity": 0.0,
+      "proposal_only": true,
+      "rotation_degrees": 214.5,
+      "strobe": false,
+      "transport": "timeline"
+    },
+    {
+      "clip": "synthetic-phasechaser",
+      "layer": "phasechaser-main",
+      "opacity": 0.566,
+      "proposal_only": true,
+      "rotation_degrees": 187.5,
+      "strobe": true,
+      "transport": "timeline"
+    },
+    {
+      "clip": "synthetic-phasechaser",
+      "layer": "phasechaser-main",
+      "opacity": 0.69425,
+      "proposal_only": true,
+      "rotation_degrees": 183.0,
+      "strobe": true,
+      "transport": "timeline"
+    },
+    {
+      "clip": "synthetic-phasechaser",
+      "layer": "phasechaser-main",
+      "opacity": 0.647,
+      "proposal_only": true,
+      "rotation_degrees": 144.0,
+      "strobe": true,
+      "transport": "timeline"
+    },
+    {
+      "clip": "synthetic-phasechaser",
+      "layer": "phasechaser-main",
+      "opacity": 0.5525,
+      "proposal_only": true,
+      "rotation_degrees": 147.0,
+      "strobe": true,
+      "transport": "timeline"
+    }
+  ],
+  "proposal_only": true
+}

@@ -1,0 +1,12 @@
+{
+  "fixture": "obras-synthetic-pulse-suite-v1",
+  "fixture_count": 5,
+  "mosaik_replay_status": "PASS",
+  "output": "C:\\IA\\FARMAXIA\\artifacts\\obras-experimental-rehearsal\\run-output",
+  "phase_state_count": 7,
+  "physical_audio_used": false,
+  "safety_external_side_effects": false,
+  "signal_count": 7,
+  "status": "PASS",
+  "visualization": "C:\\IA\\FARMAXIA\\artifacts\\obras-experimental-rehearsal\\run-output\\visualization.html"
+}

@@ -1,0 +1,32 @@
+{
+  "proposal": {
+    "event_id": "pulse-006",
+    "evidence": [
+      "consumer:mosaik-vj",
+      "tape_schema:farmaxia:semantic-light-field-tape:0.1",
+      "tape_sha256:18b2e6b61eb582ca0f5b8e0788c155309ed200adbd6f8af02ce2f7c310b637b7",
+      "frame_count:7",
+      "fixture_count:5",
+      "source_event_sha256:c2c2b2f3ec11603571d158b44dc830f1bc9b312463c0e220277d997dbd97d28a"
+    ],
+    "execution_mode": "proposal_only",
+    "operation": "preview_semantic_light_field",
+    "phase": "show",
+    "proposal_id": "proposal-obras-rehearsal-2026-09-08-phasechaser-preview",
+    "reason": "Preview PhaseChaser light states as reversible Resolume-compatible scene cues.",
+    "requires_explicit_approval": true,
+    "reversible": true,
+    "risk": "medium"
+  },
+  "safety": {
+    "artnet_emitted": false,
+    "automatic_actions": false,
+    "external_side_effects": false,
+    "irreversible_actions_executed": false,
+    "osc_emitted": false,
+    "permissions_revoked": false,
+    "proposal_only": true,
+    "resolume_opened": false
+  },
+  "schema": "mosaik:experimental-rehearsal:0.1"
+}

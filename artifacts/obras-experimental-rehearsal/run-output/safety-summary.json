@@ -1,0 +1,58 @@
+{
+  "actions_blocked": [
+    {
+      "action": "artnet.emit",
+      "reason": "dry-run never emits Art-Net"
+    },
+    {
+      "action": "osc.send",
+      "reason": "dry-run never sends OSC outside localhost"
+    },
+    {
+      "action": "resolume.open",
+      "reason": "dry-run never opens Resolume automatically"
+    },
+    {
+      "action": "host.command",
+      "reason": "dry-run never executes host actions"
+    }
+  ],
+  "actions_would_have_occurred": {
+    "phase_frames": 7,
+    "physical_fixture_count": 5,
+    "resolume_cue_proposals": 7
+  },
+  "external_side_effects": false,
+  "invalid_cue_result": {
+    "blocked": true,
+    "reason": "cue must remain proposal_only",
+    "status": "PASS"
+  },
+  "mode": "dry-run",
+  "revocation_result": {
+    "blockers": [
+      "permissions_revoked"
+    ],
+    "proposal": null,
+    "resolume_cues": [],
+    "safety": {
+      "automatic_actions": false,
+      "external_side_effects": false,
+      "permissions_revoked": true
+    },
+    "schema": "mosaik:experimental-rehearsal:0.1",
+    "session_id": "obras-rehearsal-2026-09-08",
+    "status": "BLOCKED",
+    "tape": null
+  },
+  "scenarios": {
+    "deterministic_replay": true,
+    "duplicate_delivery": true,
+    "invalid_cue_blocked": true,
+    "out_of_order_delivery": true,
+    "permission_revocation_blocked": true,
+    "restart_and_resume": true,
+    "temporary_audio_loss": true,
+    "variable_fixture_count": true
+  }
+}
