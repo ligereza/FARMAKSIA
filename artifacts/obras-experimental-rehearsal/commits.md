@@ -17,6 +17,9 @@ El demostrador se implemento por responsabilidad de repositorio:
 - FARMAXIA: `4fab9e4` — `feat: integrate predictive lighting into rehearsal runner`
   — integra frames XSL1, replay CRC y propuestas de ambas superficies en el
   comando único.
+- FARMAXIA: `b4233d0` — `docs: publish predictive rehearsal evidence`
+  — publica el paquete regenerado, el manifiesto de commits y las salidas
+  predictivas de ejemplo.
 
 El servidor remoto ofrecio URLs de creacion de PR para las tres ramas, pero no
 exigio proteccion que obligara a abrirlos durante esta ejecucion. Las ramas
