@@ -1,7 +1,8 @@
 {
   "artifact_type": "ObrasExperimentalRehearsalEvidence",
   "files": [
-    "instructions.md",
+    "../instructions.md",
+    "../commits.md",
     "xio-envelope.json",
     "signal-events.jsonl",
     "timeline-normalized.json",
@@ -27,7 +28,7 @@
   "session_id": "obras-rehearsal-2026-09-08",
   "source_repositories": {
     "farmaxia": {
-      "commit": "b4233d07c68cee08be4963d4a075b887ace224d7",
+      "commit": "c0578be0753f33382bd51666a881e80539219c2a",
       "path": "C:\\IA\\FARMAXIA"
     },
     "mosaik": {

@@ -20,6 +20,8 @@ El demostrador se implemento por responsabilidad de repositorio:
 - FARMAXIA: `b4233d0` — `docs: publish predictive rehearsal evidence`
   — publica el paquete regenerado, el manifiesto de commits y las salidas
   predictivas de ejemplo.
+- FARMAXIA: `c0578be` — `fix: make rehearsal manifest paths explicit`
+  — permite verificar desde el manifiesto los documentos del paquete padre.
 
 El servidor remoto ofrecio URLs de creacion de PR para las tres ramas, pero no
 exigio proteccion que obligara a abrirlos durante esta ejecucion. Las ramas
