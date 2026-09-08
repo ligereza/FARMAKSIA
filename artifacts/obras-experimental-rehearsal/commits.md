@@ -8,6 +8,8 @@ El demostrador se implemento por responsabilidad de repositorio:
   — rama publicada `codex/obras-experimental-rehearsal-mosaik-root`.
 - FARMAXIA: `55bc250` — `feat: add Obras end-to-end rehearsal runner`
   — rama publicada `codex/obras-experimental-rehearsal-farmaxia-root`.
+- FARMAXIA: `448c325` — `docs: publish Obras rehearsal evidence package`
+  — contiene el paquete ejecutable y la salida de ejemplo.
 
 El servidor remoto ofrecio URLs de creacion de PR para las tres ramas, pero no
 exigio proteccion que obligara a abrirlos durante esta ejecucion. Las ramas
