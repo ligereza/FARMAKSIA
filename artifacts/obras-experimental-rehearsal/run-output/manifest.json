@@ -21,14 +21,14 @@
     "visualization.html",
     "run-summary.json"
   ],
-  "fixture": "../../experiments/obras-experimental-rehearsal/fixture-synthetic-audio.json",
+  "fixture": "../../../experiments/obras-experimental-rehearsal/fixture-synthetic-audio.json",
   "mode": "dry-run",
   "physical_audio_used": false,
   "schema_version": "0.1",
   "session_id": "obras-rehearsal-2026-09-08",
   "source_repositories": {
     "farmaxia": {
-      "commit": "b2579426d15b8c9b08c42327ad0549afb79c18b6",
+      "commit": "a92a148a19c2f77f056131ccecee2b46d1534762",
       "path": "C:\\IA\\FARMAXIA"
     },
     "mosaik": {
