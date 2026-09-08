@@ -287,3 +287,103 @@ latest_hito_2026_09_01_current_surface_audit:
   decision: Keep all six surfaces separate and use the published XIO and LUCIDA contracts in the offline gate.
   limitation: This proves repository and contract compatibility only; it does not prove live Adobe/Resolume operation, network authentication or visual quality.
   next_action: Let XIO and MOSAIK/LUCIDA continue their branch-specific objectives; audit only a new published hito and avoid speculative cross-host code.
+
+latest_hito_2026_09_02_lucida_engine_contract_pipeline:
+  objective: Continue autonomously as director while preserving repository boundaries.
+  selected_action: Build the executable host-neutral integration seam before adding host or GUI behavior.
+  own_change: Published the isolated LUCIDA Python engine with an explicit adapter registry, input contract registry and deterministic pipeline. The pipeline requires adapter_id and contract_id, validates source/version/event_type/capabilities, then invokes the pure reducer and returns the selected routing metadata with the RenderPlan.
+  evidence: LUCIDA engine branch codex/lucida-python-engine is clean and published at commit 7e7be96. The focused suite passes 17 tests and the full suite passes 80 tests. git diff --check passes. Contract rejection leaves the reducer state unchanged and unknown routes are not inferred.
+  boundary_confirmed: XIO and MOSAIK remain autonomous and are not audited or modified in this iteration. VIZZ and PUPILA have provisional integration slots only; their domain behavior remains unimplemented until their own contracts are reviewed.
+  limitation: This is an offline Python seam. It does not prove live transport, transparent rendering, Adobe behavior, Resolume behavior, eye tracking or learning outcomes.
+  next_action: Keep XIO and MOSAIK running without polling. Next own milestone is to add a replayable pipeline fixture with two synthetic domain adapters and prove deterministic cross-source ordering without importing either domain repository. Audit and integrate their published commits only when the user decides to close their autonomous cycle.
+
+latest_hito_2026_09_02_lucida_pipeline_replay:
+  selected_action: prove_deterministic_cross_source_replay
+  own_change: Added replay_pipeline_fixture with a strict step shape containing adapter_id, contract_id and value. The replay executes the explicit adapter and contract registries before the pure reducer, records routing metadata and exposes side-effect flags.
+  evidence: LUCIDA engine branch codex/lucida-python-engine is clean and published at commit 261666b. The fixture interleaves synthetic XIO-like and MOSAIK-like sources; 20 engine tests and 83 total tests pass. Replaying the same fixture twice produces identical JSON, and each source preserves its own sequence.
+  kill_test: A malformed step, unknown route or undeclared event vocabulary fails before a host-neutral state transition can be accepted. No domain repository was imported and no network, GUI or host action was opened.
+  boundary_confirmed: XIO and MOSAIK remain autonomous and untouched. The synthetic sources are only test fixtures; they are not claims about the agents' current contracts. VIZZ and PUPILA remain future bounded producers, not hidden behavior inside the engine.
+  limitation: The pipeline proves deterministic offline composition only. It does not yet consume the published XIO/MOSAIK contracts, render a live overlay or infer VIZZ perception/PUPILA learning outcomes.
+  next_action: Preserve this engine seam, avoid speculative host integrations, and wait for the user-selected review point before auditing XIO/MOSAIK. In the next own iteration, select one measurable VIZZ/PUPILA input behavior or stop if no stronger evidence can be obtained without their final contracts.
+
+latest_hito_2026_09_02_xio_limen_confusion_audit:
+  selected_action: diagnose_stale_autonomous_state_before_sending_new_direction
+  observed_error: After XIO was asked to continue autonomously, it returned to LIMEN work instead of staying on the current XIO/LUCIDA input objective.
+  confirmed_cause: XIO retained an active durable loop state named xio-source-registry-20260901 whose objective and next_action explicitly referenced LIMEN. A separate worktree also remained on codex/limen-xio-adapter at commit a5a94ba, while the current XIO checkout was on codex/xio-lucida-input-contract at ff53e88. The old persisted objective was therefore still available to the agent and the repository had two valid histories.
+  language_check: Technical files in the current XIO_LAYER and old LIMEN core contain no non-ASCII bytes in Python, JSON, shell, TOML or YAML files. The old README contains localized explanatory text, which is not a technical identifier or parser field. LIMEN tests pass 12/12; the current XIO_LAYER test command exits successfully. This does not prove all repository code is correct.
+  decision: Do not send another implementation order until one canonical XIO objective is selected and the stale LIMEN state is explicitly closed, archived or renamed. Do not delete the old worktree or branch without user approval.
+  prevention: Every autonomous agent must have one canonical objective file, one active worktree/branch and a next_action that names the current project. A new direction must supersede the previous objective in durable state, not exist only in a chat message.
+  next_action: Report the diagnosis to the user first; after approval, repair the XIO autonomous-state boundary and then issue one narrow objective. No XIO code is accepted or merged from this audit.
+
+latest_hito_2026_09_02_lucida_proposal_expiry_pruning:
+  selected_action: bound_long_running_proposal_state
+  observed_failure: Expired proposals disappeared from render plans but remained in EngineState.active_proposals until replaced or otherwise removed.
+  own_change: The LUCIDA reducer now prunes proposals whose expiry is at or before each accepted event timestamp before adding the incoming proposal. Added a regression test covering a later event after TTL expiry.
+  evidence: LUCIDA branch codex/lucida-python-engine commit e61224f is published. The engine suite passes 21 tests and the full LUCIDA suite passes 84 tests; git diff --check passes.
+  kill_test: A proposal with ttl_ms=1000 is absent from both the next state and render plan after an event at +2 seconds; proposal replacement and explicit-time rendering remain covered by existing tests.
+  boundary_confirmed: This is a pure host-neutral state bound. It does not import XIO, MOSAIK, VIZZ or PUPILA and does not open a window, network connection or host action.
+  limitation: render_plan remains pure and cannot mutate an old state when no new event arrives; callers that retain state must advance it through accepted events or an explicit future state transition.
+  next_action: Continue with one bounded VIZZ/PUPILA-compatible input behavior only after inspecting the current LUCIDA contract surface; avoid adding an adapter or UI without a concrete event schema and testable outcome.
+
+latest_hito_2026_09_02_lucida_vizz_pupila_adapters:
+  selected_action: connect_redacted_vizz_pupila_states_to_lucida_engine
+  observed_gap: FARMAXIA 090 had isolated VIZZ/PUPILA metadata logic, while the LUCIDA Python engine exposed only provisional future slots for those domains.
+  own_change: Added strict `vizz.metadata` and `pupila.coordination` adapters with versioned contracts. VIZZ accepts bounded focus, geometry and perception summaries; PUPILA accepts bounded coordination state or reversible proposal metadata. Unknown, raw and executable fields fail before reduction.
+  evidence: LUCIDA branch codex/lucida-python-engine commit 351d96e is published. The engine suite passes 31 focused tests and 94 total tests; compileall, git diff --check and the ASCII guard pass. Deterministic replay composes a VIZZ observation and a PUPILA proposal with no side effects.
+  kill_test: VIZZ coordinates/raw fields and non-finite values are rejected; PUPILA executable proposal fields and state-plus-proposal smuggling are rejected; an unhashable event type becomes a contract error; replay reports network_opened=false, gui_opened=false and host_actions_executed=false.
+  boundary_confirmed: The adapters consume only already-redacted metadata. They do not import FARMAKSIA, open cameras, inspect screens, open network sockets, infer attention or learning, or execute a host action. XIO and MOSAIK remain outside this change.
+  limitation: This is a contract bridge, not a live VIZZ/PUPILA runtime. It still needs real published source envelopes and host-neutral acceptance checks before any transport or overlay integration.
+  next_action: Use the new explicit routes as the only entry point for a small offline VIZZ/PUPILA replay acceptance check; do not add live capture, UI or network code until source envelopes are published and independently audited.
+
+latest_hito_2026_09_02_lucida_domain_metadata_validation:
+  selected_action: close_typed_metadata_gap_before_acceptance
+  observed_failure: The new VIZZ/PUPILA adapters rejected raw structures but initially accepted semantically invalid scalar values such as focused="yes" or quality=2.0.
+  own_change: Added type, finiteness and range validation for focus, quality, timing, sample counts, participant counts, interocular scale and head-pose summaries, plus malformed event-type coverage.
+  evidence: LUCIDA branch codex/lucida-python-engine commit 8e12255 is published. The engine suite passes 32 focused tests and 95 total tests; compileall, git diff --check and the ASCII guard pass.
+  kill_test: Boolean, normalized quality, bounded integer and geometric range violations fail as DomainAdapterError before reducer state changes. An unhashable event type also fails as a contract error.
+  boundary_confirmed: This remains a pure metadata boundary. No raw sensor stream, screen capture, network, GUI, host action or medical/learning inference was added.
+  limitation: VIZZ/PUPILA source repositories still need to publish envelopes that match these exact snake_case contracts; the bridge is not yet a live runtime or a production calibration claim.
+  next_action: Build the offline acceptance runner from the actual FARMAXIA 090 redacted VIZZ/PUPILA outputs against an explicitly selected LUCIDA checkout, with path provenance and no implicit local imports.
+
+latest_hito_2026_09_02_lucida_vizz_pupila_acceptance:
+  selected_action: verify_real_090_states_against_explicit_lucida_checkout
+  own_change: Added FARMAKSIA experiment 091. It consumes the actual redacted VIZZ and PUPILA outputs from experiment 090, maps them into the new LUCIDA routes, verifies the loaded package path and reports the resulting render plan without implicit imports.
+  evidence: FARMAKSIA commit 01ec15e is published to origin/main. The runner passes with C:\IA\LUCIDA_ENGINE: stateRevision=2, activeProposalCount=1, renderItemCount=1, renderSource=pupila, and all network/gui/host-action flags false. The provenance manifest validates with 4 entities, 2 activities and 2 queries. The missing-adapter path kill test passes.
+  limitation: The general FARMAKSIA suite still stops at pre-existing experiment 018 provenance hash mismatch; this change does not modify 018. The acceptance runner proves a local offline bridge, not live transport, overlay rendering or source contract compatibility in another checkout.
+  boundary_confirmed: Only experiment 091 and its suite provenance entry were committed. Existing dirty VIZZ captures, outputs, research files and ledgers were not staged.
+  next_action: Audit the exact LUCIDA branch boundary and add no more code until deciding whether the next value is source-envelope publication or a renderer integration. Prefer source-envelope publication; it is the remaining prerequisite for live VIZZ/PUPILA use.
+
+latest_hito_2026_09_02_source_owned_lucida_envelope:
+  selected_action: move_domain_mapping_to_farmaxia_source_boundary
+  observed_gap: Experiment 091 duplicated the conversion from FARMAXIA 090 camelCase states into LUCIDA snake_case events inside the acceptance runner.
+  own_change: Added the pure `lucida_engine_envelope.py` source adapter to experiment 090, with bounded ASCII and proposal checks, and changed experiment 091 to consume it. Added 2 contract tests, including rejection of a non-ASCII proposal reason.
+  evidence: FARMAKSIA commit 28b9495 is published to origin/main. Experiment 090 passes 25 tests, experiment 091 passes with the explicit LUCIDA checkout, provenance validates with 5 entities/2 activities/2 queries, the missing-adapter kill test passes and the touched files pass the ASCII guard.
+  boundary_confirmed: FARMAKSIA owns knowledge of its VIZZ/PUPILA source shape; LUCIDA owns only the generic event reducer and strict domain route. The runner no longer contains source-specific field mapping.
+  limitation: The envelope is still local/offline and has no live source transport. The full FARMAKSIA suite remains blocked at pre-existing experiment 018 hash mismatch.
+  next_action: Stop adding schema layers; audit the published LUCIDA branch diff and then choose one renderer-facing contract only if it can be tested without opening a host application or touching the user's active Adobe/Resolume work.
+
+latest_hito_2026_09_02_lucida_published_diff_audit:
+  selected_action: audit_published_engine_boundary_before_renderer_choice
+  evidence: The published LUCIDA branch diff from origin/RESOLUME passes git diff --check, the touched Python engine files pass the ASCII guard, and the dependency surface review found no socket, subprocess, camera, screen capture or host execution dependency.
+  decision: Do not add a renderer-facing contract yet. The current boundary is sufficiently small to reuse, but a live renderer would require a host-specific event envelope and a non-interference test first.
+  prediction: The highest-probability next gain is a source-envelope compatibility check, not a new visual feature. Estimated chance of a clean offline continuation is high; live Adobe/Resolume success remains unknown until a host adapter is selected.
+  limitation: This audit is static/offline and does not prove visual behavior, latency, transport authentication or user outcome.
+  next_action: Keep the LUCIDA engine published at 8e12255 plus 351d96e and  e61224f history, keep FARMAKSIA at 28b9495 for the source bridge, and wait for a concrete host-safe renderer contract rather than inventing one.
+
+latest_hito_2026_09_02_lucida_overlay_frame:
+  selected_action: add_minimal_renderer_facing_contract_without_host_control
+  observed_gap: RenderPlan had safe proposal items but no explicit renderer-facing declaration of transparency, click-through behavior or blocking policy.
+  decision: Do not flatten the richer VJ LucidaOverlayView. Add a separate generic LucidaOverlayFrame projection that preserves bounded elements and explicitly sets transparent=true, click_through=true and blocking=false.
+  evidence: LUCIDA commit 1af23c8 is published. The engine suite passes 38 focused tests and 101 total tests. The real FARMAKSIA 090 to LUCIDA 091 acceptance reports overlayElementCount=1, overlayTransparent=true, overlayClickThrough=true and overlayBlocking=false, with all side-effect flags false. FARMAKSIA commit b57732d publishes that acceptance assertion.
+  kill_test: Unsafe plan flags, extra executable item fields, invalid expiry and non-ASCII visual text are rejected by OverlayFrame; no renderer, host or window is opened.
+  boundary_confirmed: LUCIDA now owns a generic frame contract only. VJ retains its state/cursor/diff protocol; FARMAKSIA owns source-specific VIZZ/PUPILA mapping.
+  limitation: The frame is a JSON-like contract, not a real transparent window. Live GPU composition, input pass-through and host focus behavior remain unverified.
+  next_action: Implement no window yet. First create a static contract comparison report between the frame and the existing VJ overlay consumer, then decide whether a renderer adapter can be added without importing VJ host state.
+
+latest_hito_2026_09_02_lucida_overlay_schema:
+  selected_action: publish_machine_readable_overlay_boundary
+  own_change: Added `overlay-frame.schema.json` beside the LUCIDA engine and a runtime/schema parity test. The schema fixes the exact fields, element bound, expiry format, confirmation requirement and transparent non-blocking safety constants.
+  evidence: LUCIDA commit 7882b0a is published. The engine suite passes 48 focused tests and 111 total tests; schema parity, compilation, git diff --check and ASCII checks pass. The FARMAKSIA 091 acceptance remains green against the updated checkout.
+  boundary_confirmed: A future renderer can validate a generic frame without importing VJ state, Resolume, Adobe, XIO or sensor code. The VJ `OverlayView` remains a separate state/cursor/diff protocol.
+  limitation: JSON Schema parity is structural; no schema validator or real window has been introduced, and visual latency/input pass-through remain unknown.
+  next_action: Continue toward one real host-neutral renderer adapter only after a static comparison of frame delivery needs; keep transport and host permissions outside the engine.
