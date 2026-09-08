@@ -1,0 +1,42 @@
+{
+  "fixture_type": "SyntheticAudioRehearsalFixture",
+  "fixture_id": "obras-synthetic-pulse-suite-v1",
+  "description": "Synthetic amplitude envelope for a dry-run rehearsal; not a physical audio capture.",
+  "sample_rate_hz": 20,
+  "duration_seconds": 3.6,
+  "envelope_definition": "Documented amplitude samples; a pulse is the first sample above threshold after min_gap_seconds.",
+  "samples": [
+    {"time_seconds": 0.00, "amplitude": 0.08},
+    {"time_seconds": 0.20, "amplitude": 0.24},
+    {"time_seconds": 0.35, "amplitude": 0.86},
+    {"time_seconds": 0.55, "amplitude": 0.31},
+    {"time_seconds": 0.80, "amplitude": 0.18},
+    {"time_seconds": 1.10, "amplitude": 0.78},
+    {"time_seconds": 1.25, "amplitude": 0.35},
+    {"time_seconds": 1.65, "amplitude": 0.72},
+    {"time_seconds": 1.85, "amplitude": 0.22},
+    {"time_seconds": 2.10, "amplitude": 0.91},
+    {"time_seconds": 2.35, "amplitude": 0.37},
+    {"time_seconds": 2.80, "amplitude": 0.84},
+    {"time_seconds": 3.05, "amplitude": 0.28},
+    {"time_seconds": 3.30, "amplitude": 0.70},
+    {"time_seconds": 3.55, "amplitude": 0.16}
+  ],
+  "loss_intervals": [
+    {
+      "start_seconds": 1.35,
+      "end_seconds": 1.55,
+      "reason": "fixture_audio_dropout"
+    }
+  ],
+  "delivery_order": [
+    "pulse-002",
+    "pulse-001",
+    "pulse-001",
+    "audio-gap-001",
+    "pulse-004",
+    "pulse-003",
+    "pulse-005",
+    "pulse-006"
+  ]
+}
