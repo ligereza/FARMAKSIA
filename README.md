@@ -162,15 +162,17 @@ No se completa con la biblioteca estándar sola. Medido sobre Linux:
 ```text
 solo stdlib     91 pasos   se detiene en el contrato 033, que necesita numpy
 + numpy        106 pasos   se detiene en el experimento 039, que llama cv2.cvtColor
-+ opencv       220 pasos   se detiene en el experimento 076, que necesita Windows
++ opencv       SUITE_VALID; 16 skips explícitos (10 por Windows, 6 fuera de alcance)
 ```
 
 `pip install -r requirements.txt` cubre los dos primeros escalones. Los
-experimentos 076, 077 y 078 conducen aplicaciones nativas de Windows mediante
-UI Automation, así que `SUITE_VALID` no es alcanzable en Linux ni en macOS.
-`onnxruntime` queda opcional: solo lo llama el runtime CUDA del experimento
-033 y la suite no lo alcanza. Los experimentos 084 a 089 están declarados
-fuera de este alcance y se informan como `SKIP`.
+experimentos 076 a 080 conducen aplicaciones nativas de Windows mediante UI
+Automation, Excel o COM. En Linux y macOS esos pasos se omiten explícitamente;
+sus kill tests y sus manifiestos de procedencia siguen ejecutándose. Los
+contratos estáticos 081–082 y el adaptador declarativo 083 sí pasan fuera de
+Windows. `onnxruntime` queda opcional: solo lo llama el runtime CUDA del
+experimento 033 y la suite no lo alcanza. Los experimentos 084 a 089 están
+declarados fuera de este alcance y se informan como `SKIP`.
 
 Ningún escalón requiere pesos de modelo, cámara ni red: los experimentos que
 mencionan un modelo ONNX verifican contratos sintéticos.

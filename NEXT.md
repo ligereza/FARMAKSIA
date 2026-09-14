@@ -1,19 +1,17 @@
 # NEXT — open work, observations, suggestions
 
-Written from memory at the end of the 2026-09-07 session, deliberately without
-re-reading the tree. Every number here is a recollection: re-measure before
-acting on one. This file is not a contract and nothing in it overrides
-`AGENTS.md`, `RESEARCH_LOOP.md` or a decision in `research/decisions/`.
+Updated after the 2026-09-13 suite audit. This file is not a contract and
+nothing in it overrides `AGENTS.md`, `RESEARCH_LOOP.md` or a decision in
+`research/decisions/`.
 
 ## Decisions that are the author's, not an agent's
 
-**What should `SUITE_VALID` mean off Windows.** Experiments 076 to 078 drive
-real Windows applications through UI Automation, so on Linux the suite reaches
-its last runnable step and stops there. Experiment 076 already degrades
-gracefully and reports blockers; only the suite treats that as fatal. A
-platform-gated skip would make the suite green here, but it changes what the
-terminal marker asserts: "everything passed" against "everything runnable here
-passed". That is a claim about the laboratory, so it was left alone.
+**What `SUITE_VALID` means off Windows.** Experiments 076 to 080 drive real
+Windows applications through UI Automation, Excel or COM. `run_suite.py` now
+records those unavailable steps as platform-gated skips while continuing their
+portable kill tests and provenance checks. The terminal marker therefore means
+"everything runnable on this platform passed"; the output retains the exact
+Windows-only steps that were not exercised.
 
 **Whether experiment 042 belongs in the suite.** Its README calls it a
 historical prototype superseded by 044, and it appears nowhere in
@@ -30,6 +28,25 @@ but never executed: the audit that must precede it checks, for every
 `command("provenance NNN", ..., provenance[M])`, that the path at index `M`
 really lives under `NNN`. If a single pair is misaligned, stop and report --
 rewriting on top of a wrong pairing would freeze it as if correct.
+
+**The 2026-09-13 Linux run is green with declared scope.** With the isolated
+OpenCV dependency, `research/tools/run_suite.py` reaches `SUITE_VALID`: 076–080
+are recorded as Windows-only skips, their portable kill tests and provenance
+checks pass, 081–083 pass locally, and 084–089 remain declared out of scope.
+
+**One historical shadow copy is still unrecoverable.** The manifest entry for
+`plataforma__providers.py.before-projection-20260821` names the expected
+SHA-256, but the file is absent. Current and rollback provider files were
+checked and do not match; do not substitute either one. The archive contract
+now records this as an explicit incomplete recovery audit, while the five
+available copies remain hash-checked.
+
+**The root language ratchet is clean after the XIO admission pass.** The
+untracked XIO files were reviewed, comments/docstrings were translated where
+they belonged to active code, and private test identifiers were made English
+without changing public payload keys or routes. The direct meter now reports no
+new Spanish comments or identifiers; future untracked additions remain subject
+to the same gate.
 
 **`results.md` in 042 reports a Tkinter GUI smoke** (`VIZZ_042_GUI_SMOKE_VALID`)
 that no checked-in script reproduces; only the headless contract test is

@@ -70,7 +70,20 @@ def unlisted_provenance(listed: list[str]) -> list[str]:
     return sorted(on_disk - set(listed))
 
 
-def command(label: str, args: list[str], expected: str | None = None) -> None:
+def command(
+    label: str,
+    args: list[str],
+    expected: str | None = None,
+    *,
+    required_platform: str | None = None,
+) -> None:
+    if required_platform is not None and sys.platform != required_platform:
+        SKIPPED.add(f"{label} (requires {required_platform})")
+        print(
+            f"SKIP {label}: requires {required_platform}; "
+            f"current platform is {sys.platform}"
+        )
+        return
     state, target = target_state(args)
     if state == "declared_absent":
         SKIPPED.add(target)
@@ -1326,11 +1339,13 @@ def main() -> None:
         "experiment FARMAKSIA pywinauto UIA adapter 076",
         python_script("experiments/076-farmaxia-pywinauto-uia-adapter/run_experiment.py", "--inspect-controls"),
         '"status": "PYWINAUTO_UIA_PROBE_VERIFIED"',
+        required_platform="win32",
     )
     command(
         "contract test FARMAKSIA pywinauto UIA adapter 076",
         python_script("experiments/076-farmaxia-pywinauto-uia-adapter/run_contract_test.py"),
         "FARMAXIA_076_PYWINAUTO_UIA_CONTRACT_VALID",
+        required_platform="win32",
     )
     command(
         "kill test FARMAKSIA pywinauto UIA adapter 076",
@@ -1342,11 +1357,13 @@ def main() -> None:
         "experiment FARMAKSIA Excel Blender capability inventory 077",
         python_script("experiments/077-farmaxia-excel-blender-capability-inventory/run_experiment.py"),
         '"status": "EXCEL_BLENDER_CAPABILITY_INVENTORY_VERIFIED"',
+        required_platform="win32",
     )
     command(
         "contract test FARMAKSIA Excel Blender capability inventory 077",
         python_script("experiments/077-farmaxia-excel-blender-capability-inventory/run_contract_test.py"),
         "FARMAXIA_077_EXCEL_BLENDER_CAPABILITY_CONTRACT_VALID",
+        required_platform="win32",
     )
     command(
         "kill test FARMAKSIA Excel Blender capability inventory 077",
@@ -1358,11 +1375,13 @@ def main() -> None:
         "experiment FARMAKSIA native Excel Blender transitions 078",
         python_script("experiments/078-farmaxia-native-transition-probe/run_experiment.py"),
         '"status": "NATIVE_TRANSITIONS_VERIFIED"',
+        required_platform="win32",
     )
     command(
         "contract test FARMAKSIA native Excel Blender transitions 078",
         python_script("experiments/078-farmaxia-native-transition-probe/run_contract_test.py"),
         "FARMAXIA_078_NATIVE_TRANSITION_CONTRACT_VALID",
+        required_platform="win32",
     )
     command(
         "kill test FARMAKSIA native Excel Blender transitions 078",
@@ -1374,11 +1393,13 @@ def main() -> None:
         "experiment FARMAKSIA consented input semantic bridge 079",
         python_script("experiments/079-farmaxia-consented-input-semantic-bridge/run_experiment.py", "--duration", "1.0", "--sample-hz", "5"),
         '"status": "CONSENTED_INPUT_OBSERVER_VERIFIED"',
+        required_platform="win32",
     )
     command(
         "contract test FARMAKSIA consented input semantic bridge 079",
         python_script("experiments/079-farmaxia-consented-input-semantic-bridge/run_contract_test.py"),
         "FARMAXIA_079_CONSENTED_INPUT_CONTRACT_VALID",
+        required_platform="win32",
     )
     command(
         "kill test FARMAKSIA consented input semantic bridge 079",
@@ -1390,11 +1411,13 @@ def main() -> None:
         "experiment FARMAKSIA input native delta correlation 080",
         python_script("experiments/080-farmaxia-input-native-delta-correlation/run_experiment.py", "--mode", "scratch"),
         '"status": "INPUT_NATIVE_DELTA_CORRELATION_VERIFIED"',
+        required_platform="win32",
     )
     command(
         "contract test FARMAKSIA input native delta correlation 080",
         python_script("experiments/080-farmaxia-input-native-delta-correlation/run_contract_test.py"),
         "FARMAXIA_080_INPUT_NATIVE_DELTA_CONTRACT_VALID",
+        required_platform="win32",
     )
     command(
         "kill test FARMAKSIA input native delta correlation 080",
