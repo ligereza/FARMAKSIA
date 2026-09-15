@@ -72,7 +72,7 @@ def _load_multi_transport(multi_root: Path) -> tuple[object, object, object, obj
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--xio-root", default=r"C:\IA\XIO")
+    parser.add_argument("--xio-root", required=True)
     parser.add_argument("--lucida-multi-root", required=True)
     args = parser.parse_args()
 

@@ -6,12 +6,12 @@ import json
 
 from pupila_adapter import PupilaAdapter
 from pupila_view import project_pupila_view
-from vizz_adapter import VizzAdapter
+from visual_adapter import VisualAdapter
 
 
 def main() -> None:
     context = {"sessionId": "demo-session", "roomId": "demo-room", "surfaceId": "surface-a", "host": "fixture", "task": "shared-demo"}
-    adapter = VizzAdapter()
+    adapter = VisualAdapter()
     user_a = {**context, "participantRef": "user-a"}
     user_b = {**context, "participantRef": "user-b"}
     state_a = adapter.ingest(user_a, {**user_a, "kind": "focus", "atMs": 100, "value": {"focused": True}, "consent": True})
@@ -21,7 +21,7 @@ def main() -> None:
     shared = room.ingest(user_b, state_b)
     print(
         json.dumps(
-            {"vizz": [state_a, state_b], "pupila": shared, "pupilaView": project_pupila_view(shared)},
+            {"visual": [state_a, state_b], "pupila": shared, "pupilaView": project_pupila_view(shared)},
             ensure_ascii=False,
             indent=2,
         )

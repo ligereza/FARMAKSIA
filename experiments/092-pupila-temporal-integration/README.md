@@ -1,4 +1,4 @@
-# Experimento 092 - Integracion temporal PUPILA/LUCIDA
+# Experimento 092 — integración temporal PUPILA/LUCIDA
 
 This experiment adds a durable temporal shell to the native FARMAKSIA 090
 adaptive representation layer. Facts are stored in SQLite; every view is
@@ -16,9 +16,9 @@ The coordinator provides:
 - a read-only, proposal-only, click-through LUCIDA render boundary.
 
 LUCIDA remains a projection only. It performs no host action, captures no
-input and receives no raw payload. IRIS and VIBECODEINE remain future source
-orchestration boundaries; VJ/LUCIDA remains a future renderer boundary; and
-WACHUMA remains a future transport or operational boundary.
+input and receives no raw payload. IRIS is evaluated separately in experiment
+093. XIO remains a possible future signal source; this experiment opens no
+transport and does not activate a live host.
 
 Run the focused acceptance check:
 

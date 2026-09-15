@@ -1,4 +1,4 @@
-"""Offline tests for the ZIGO-derived VIZZ/PUPILA vertical slice."""
+"""Offline tests for the ZIGO-derived VISUAL/PUPILA vertical slice."""
 
 from __future__ import annotations
 
@@ -31,11 +31,11 @@ from lucida_render_budget import (  # noqa: E402
     LucidaRenderBudgetError,
     assess_render_update,
 )
-from vizz_adapter import VizzAdapter  # noqa: E402
+from visual_adapter import VisualAdapter  # noqa: E402
 from lucida_engine_envelope import (  # noqa: E402
     LucidaEnvelopeError,
     pupila_room_to_lucida_value,
-    vizz_state_to_lucida_value,
+    visual_state_to_lucida_value,
 )
 
 
@@ -97,13 +97,13 @@ def test_consent_blocks_signal_and_drops_content() -> None:
     assert event["value"] == {}
 
 
-def test_vizz_is_metadata_only_and_becomes_quiet_when_active() -> None:
-    adapter = VizzAdapter()
+def test_visual_is_metadata_only_and_becomes_quiet_when_active() -> None:
+    adapter = VisualAdapter()
     ctx = context(participant="user-a")
     state = adapter.ingest(ctx, signal("user-a", "focus", 100, {"focused": True}))
     for index in range(6):
         state = adapter.ingest(ctx, signal("user-a", "keyboard", 200 + index * 100, {"count": 1, "text": "never-persist"}))
-    assert state["adapter"] == "vizz"
+    assert state["adapter"] == "visual"
     assert state["policy"] in {"support", "quiet"}
     assert state["overlay"]["blocking"] is False
     assert state["overlay"]["clickThrough"] is True
@@ -111,12 +111,12 @@ def test_vizz_is_metadata_only_and_becomes_quiet_when_active() -> None:
 
 
 def test_pupila_emerges_shared_checkpoint_for_two_different_policies() -> None:
-    vizz = VizzAdapter()
+    visual = VisualAdapter()
     pupila = PupilaAdapter()
     ctx_a = context(participant="user-a")
     ctx_b = context(participant="user-b")
-    state_a = vizz.ingest(ctx_a, signal("user-a", "focus", 100, {"focused": True}))
-    state_b = vizz.ingest(ctx_b, signal("user-b", "focus", 100, {"focused": False}))
+    state_a = visual.ingest(ctx_a, signal("user-a", "focus", 100, {"focused": True}))
+    state_b = visual.ingest(ctx_b, signal("user-b", "focus", 100, {"focused": False}))
     pupila.ingest(ctx_a, state_a)
     room = pupila.ingest(ctx_b, state_b)
     assert room["participantCount"] == 2
@@ -127,18 +127,18 @@ def test_pupila_emerges_shared_checkpoint_for_two_different_policies() -> None:
 
 
 def test_pupila_does_not_register_unconsented_presence() -> None:
-    vizz = VizzAdapter()
+    visual = VisualAdapter()
     pupila = PupilaAdapter()
     ctx = context(participant="user-a")
-    state = vizz.state(ctx, "user-a")
+    state = visual.state(ctx, "user-a")
     room = pupila.ingest(ctx, state)
     assert room["participantCount"] == 0
 
 
 def test_pupila_rejects_cross_room_state() -> None:
-    vizz = VizzAdapter()
+    visual = VisualAdapter()
     pupila = PupilaAdapter()
-    state = vizz.ingest(context(room="room-a"), signal("user-a", "focus", 100, {"focused": True}))
+    state = visual.ingest(context(room="room-a"), signal("user-a", "focus", 100, {"focused": True}))
     try:
         pupila.ingest(context(room="room-b"), state)
     except ValueError as error:
@@ -148,12 +148,12 @@ def test_pupila_rejects_cross_room_state() -> None:
 
 
 def test_pupila_does_not_mix_sessions_with_same_room_id() -> None:
-    vizz = VizzAdapter()
+    visual = VisualAdapter()
     pupila = PupilaAdapter()
     session_a = context(participant="user-a")
     session_b = {**context(participant="user-b"), "sessionId": "session-other"}
-    state_a = vizz.ingest(session_a, signal("user-a", "focus", 100, {"focused": True}))
-    state_b = vizz.ingest(
+    state_a = visual.ingest(session_a, signal("user-a", "focus", 100, {"focused": True}))
+    state_b = visual.ingest(
         session_b,
         {
             **signal("user-b", "focus", 100, {"focused": True}),
@@ -168,12 +168,12 @@ def test_pupila_does_not_mix_sessions_with_same_room_id() -> None:
 
 
 def test_pupila_expires_stale_participants_before_proposing() -> None:
-    vizz = VizzAdapter()
+    visual = VisualAdapter()
     pupila = PupilaAdapter(state_ttl_ms=1000)
     ctx_a = context(participant="user-a")
     ctx_b = context(participant="user-b")
-    state_a = vizz.ingest(ctx_a, signal("user-a", "focus", 100, {"focused": True}))
-    state_b = vizz.ingest(ctx_b, signal("user-b", "focus", 500, {"focused": True}))
+    state_a = visual.ingest(ctx_a, signal("user-a", "focus", 100, {"focused": True}))
+    state_b = visual.ingest(ctx_b, signal("user-b", "focus", 500, {"focused": True}))
     pupila.ingest(ctx_a, state_a)
     pupila.ingest(ctx_b, state_b)
 
@@ -186,16 +186,16 @@ def test_pupila_expires_stale_participants_before_proposing() -> None:
 
 
 def test_lucida_envelope_projects_real_090_states_without_payloads() -> None:
-    vizz = VizzAdapter()
+    visual = VisualAdapter()
     pupila = PupilaAdapter()
-    state_a = vizz.ingest(context(participant="user-a"), signal("user-a", "focus", 100, {"focused": True}))
-    state_b = vizz.ingest(context(participant="user-b"), signal("user-b", "focus", 100, {"focused": False}))
+    state_a = visual.ingest(context(participant="user-a"), signal("user-a", "focus", 100, {"focused": True}))
+    state_b = visual.ingest(context(participant="user-b"), signal("user-b", "focus", 100, {"focused": False}))
     pupila.ingest(context(participant="user-a"), state_a)
     room = pupila.ingest(context(participant="user-b"), state_b)
 
-    vizz_value = vizz_state_to_lucida_value(
+    visual_value = visual_state_to_lucida_value(
         state_a,
-        event_id="vizz-envelope-001",
+        event_id="visual-envelope-001",
         timestamp="2026-09-02T12:00:00Z",
         sequence=1,
     )
@@ -205,9 +205,9 @@ def test_lucida_envelope_projects_real_090_states_without_payloads() -> None:
         timestamp="2026-09-02T12:00:01Z",
         sequence=1,
     )
-    assert vizz_value["summary"] == {"focused": True}
+    assert visual_value["summary"] == {"focused": True}
     assert pupila_value["summary"]["participant_count"] == 2
-    assert "payload" not in json.dumps(vizz_value | pupila_value, ensure_ascii=True)
+    assert "payload" not in json.dumps(visual_value | pupila_value, ensure_ascii=True)
 
 
 def test_lucida_envelope_rejects_non_ascii_proposal_reason() -> None:
@@ -248,8 +248,8 @@ def test_canonical_connectivity_event_is_metadata_only() -> None:
     )
     assert result["status"] == "accepted"
     assert result["signal"]["kind"] == "presence"
-    assert result["vizzState"]["signalCoverage"] == ["presence"]
-    assert result["vizzState"]["activityScore"] == 0.0
+    assert result["visualState"]["signalCoverage"] == ["presence"]
+    assert result["visualState"]["activityScore"] == 0.0
     assert result["pupilaView"]["contractType"] == "PupilaOverlayView"
     assert result["pupilaView"]["nextAttention"]["kind"] == "waiting"
     assert "secret" not in json.dumps(result, ensure_ascii=True)
@@ -272,7 +272,7 @@ def test_canonical_keyboard_event_drops_text_and_keeps_shortcut_metadata() -> No
     value = result["signal"]["value"]
     assert result["signal"]["kind"] == "keyboard"
     assert value == {"count": 2, "shortcut": "CTRL+K"}
-    assert result["vizzState"]["activityScore"] > 0.0
+    assert result["visualState"]["activityScore"] > 0.0
     assert "PASSWORD" not in json.dumps(result, ensure_ascii=True)
 
 
@@ -285,7 +285,7 @@ def test_unconsented_canonical_event_is_blocked_before_registration() -> None:
     )
     assert result["status"] == "blocked"
     assert result["signal"]["value"] == {}
-    assert result["vizzState"]["sampleCount"] == 0
+    assert result["visualState"]["sampleCount"] == 0
     assert result["pupilaState"]["participantCount"] == 0
     assert result["pupilaView"]["participantCount"] == 0
     assert result["pupilaView"]["nextAttention"]["kind"] == "waiting"
@@ -300,8 +300,8 @@ def test_duplicate_external_event_is_idempotent() -> None:
     second = bridge.ingest(event, context(), consent=True)
     assert first["status"] == "accepted"
     assert second["status"] == "duplicate"
-    assert first["vizzState"]["sampleCount"] == 1
-    assert second["vizzState"]["sampleCount"] == 1
+    assert first["visualState"]["sampleCount"] == 1
+    assert second["visualState"]["sampleCount"] == 1
     assert first["pupilaView"] == second["pupilaView"]
 
 
@@ -660,7 +660,7 @@ def test_boundary_matrix_accepts_separated_surfaces() -> None:
             "canonical_event_bridge.py",
             "pupila_adapter.py",
             "pupila_view.py",
-            "vizz_adapter.py",
+            "visual_adapter.py",
         ):
             (farmaxia / name).touch()
         (vj / "lucida").mkdir()
@@ -673,7 +673,7 @@ def test_boundary_matrix_accepts_separated_surfaces() -> None:
 
         report = inspect_matrix(
             {
-                "farmaxia_vizz_pupila": farmaxia,
+                "farmaxia_visual_pupila": farmaxia,
                 "vj_lucida": vj,
                 "lucida_adobe": adobe,
                 "lucida_resolume": resolume,
@@ -831,7 +831,7 @@ def test_lucida_render_budget_rejects_invalid_timing_and_plan() -> None:
 if __name__ == "__main__":
     tests = [
         test_consent_blocks_signal_and_drops_content,
-        test_vizz_is_metadata_only_and_becomes_quiet_when_active,
+        test_visual_is_metadata_only_and_becomes_quiet_when_active,
         test_pupila_emerges_shared_checkpoint_for_two_different_policies,
         test_pupila_does_not_register_unconsented_presence,
         test_pupila_rejects_cross_room_state,

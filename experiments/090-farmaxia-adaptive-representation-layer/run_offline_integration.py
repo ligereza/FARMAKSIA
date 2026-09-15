@@ -66,8 +66,8 @@ def _xio_root_check(root: str) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--xio-root", default=r"C:\IA\XIO")
-    parser.add_argument("--lucida-root", default=r"C:\IA\VJ")
+    parser.add_argument("--xio-root", required=True)
+    parser.add_argument("--lucida-root", required=True)
     parser.add_argument("--lucida-multi-root")
     args = parser.parse_args()
 

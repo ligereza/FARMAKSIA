@@ -1,0 +1,9 @@
+# What the reproducible suite needs beyond the standard library.
+numpy>=2.0,<3
+opencv-python-headless>=4.10,<6
+
+# Deliberately not installed here:
+#   onnxruntime         only the CUDA gaze runtime of experiment 033 calls it;
+#                       the suite reaches its boundary without it.
+#   pywinauto, pywin32  Windows only, for experiments 076 to 078.
+# Installing a dependency is not adopting it: see research/decisions/011-tool-adoption-gate.md

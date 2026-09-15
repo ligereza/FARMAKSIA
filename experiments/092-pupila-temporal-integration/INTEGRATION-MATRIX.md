@@ -8,4 +8,4 @@
 | Consent and revocation | durable participant epochs | local engine/API tests | old epochs invalidated |
 | PUPILA projection | 090 `PupilaView` | local `public/app.js` | read-only |
 | LUCIDA projection/render budget | 090 projection and render plan | local `app/lucida_consumer.py` | no host action |
-| Future relationships | documented only | local docs | IRIS/VIBECODEINE/VJ/WACHUMA not activated |
+| Future relationships | documented only | local docs | IRIS experiment 093 and XIO remain separate; no live transport is activated |

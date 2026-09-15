@@ -2,9 +2,9 @@
   "schema": "farmaxia:provenance-manifest:0.1",
   "experiment": "farmaxia:experiment:090-adaptive-representation-layer",
   "status": "offline_contract_slice",
-  "purpose": "Adapt the generic ZIGO interface-layer structure into distinct VIZZ and PUPILA metadata-only adapters.",
+  "purpose": "Adapt the generic ZIGO interface-layer structure into distinct VISUAL and PUPILA metadata-only adapters.",
   "agents": [
-    {"id": "farmaxia:designer-090", "type": "agent", "role": "defines_separation_between_vizz_and_pupila"},
+    {"id": "farmaxia:designer-090", "type": "agent", "role": "defines_separation_between_visual_and_pupila"},
     {"id": "farmaxia:implementer-090", "type": "software_agent", "role": "implements_offline_python_contract_slice", "version": "3.13"}
   ],
   "source_boundaries": [
@@ -13,11 +13,11 @@
   ],
   "entities": [
     {"id": "farmaxia:contracts-090", "path": "contracts.py", "role": "versioned_context_signal_audit_contracts", "authority": "computed"},
-    {"id": "farmaxia:vizz-090", "path": "vizz_adapter.py", "role": "local_visual_policy_from_consented_metadata", "authority": "computed"},
+    {"id": "farmaxia:visual-090", "path": "visual_adapter.py", "role": "local_visual_policy_from_consented_metadata", "authority": "computed"},
     {"id": "farmaxia:pupila-090", "path": "pupila_adapter.py", "role": "multi_participant_emergent_proposals", "authority": "computed"},
     {"id": "farmaxia:bridge-090", "path": "canonical_event_bridge.py", "role": "xio_canonical_event_to_metadata_only_boundary", "authority": "computed"},
     {"id": "farmaxia:fixture-090", "path": "fixtures/xio-connectivity-status.json", "role": "synthetic_canonical_event_fixture", "authority": "computed"},
-    {"id": "farmaxia:cross-branch-check-090", "path": "run_xio_cross_branch_check.py", "role": "reproducible_xio_to_vizz_boundary_check", "authority": "computed"},
+    {"id": "farmaxia:cross-branch-check-090", "path": "run_xio_cross_branch_check.py", "role": "reproducible_xio_to_visual_boundary_check", "authority": "computed"},
     {"id": "farmaxia:replay-090", "path": "canonical_event_bridge.py", "role": "deterministic_canonical_event_replay", "authority": "computed"},
     {"id": "farmaxia:pupila-view-090", "path": "pupila_view.py", "role": "bounded_multi_participant_overlay_projection", "authority": "computed"},
     {"id": "farmaxia:pupila-diff-090", "path": "pupila_view.py", "role": "bounded_incremental_pupila_view_projection", "authority": "computed"},
@@ -33,13 +33,13 @@
   ],
   "activities": [
     {"id": "farmaxia:implement-contracts-090", "type": "activity", "label": "implement metadata-only context, signal and audit contracts", "agent": "farmaxia:implementer-090", "used": [], "generated": ["farmaxia:contracts-090"]},
-    {"id": "farmaxia:implement-vizz-090", "type": "activity", "label": "implement VIZZ visual rendering policy from consented signals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090"], "generated": ["farmaxia:vizz-090"]},
-    {"id": "farmaxia:implement-pupila-090", "type": "activity", "label": "implement PUPILA multi-participant emergent proposals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090"], "generated": ["farmaxia:pupila-090"]},
-    {"id": "farmaxia:implement-bridge-090", "type": "activity", "label": "bridge canonical XIO events into consented metadata-only VIZZ and PUPILA signals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:pupila-090"], "generated": ["farmaxia:bridge-090", "farmaxia:fixture-090", "farmaxia:cross-branch-check-090"]},
+    {"id": "farmaxia:implement-visual-090", "type": "activity", "label": "implement VISUAL visual rendering policy from consented signals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090"], "generated": ["farmaxia:visual-090"]},
+    {"id": "farmaxia:implement-pupila-090", "type": "activity", "label": "implement PUPILA multi-participant emergent proposals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:visual-090"], "generated": ["farmaxia:pupila-090"]},
+    {"id": "farmaxia:implement-bridge-090", "type": "activity", "label": "bridge canonical XIO events into consented metadata-only VISUAL and PUPILA signals", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:visual-090", "farmaxia:pupila-090"], "generated": ["farmaxia:bridge-090", "farmaxia:fixture-090", "farmaxia:cross-branch-check-090"]},
     {"id": "farmaxia:verify-replay-090", "type": "activity", "label": "replay canonical events without forwarding raw payload content", "agent": "farmaxia:implementer-090", "used": ["farmaxia:bridge-090", "farmaxia:tests-090"], "generated": ["farmaxia:replay-090"]},
     {"id": "farmaxia:implement-pupila-view-090", "type": "activity", "label": "project shared PUPILA state into bounded proposal-only overlay data", "agent": "farmaxia:implementer-090", "used": ["farmaxia:pupila-090", "farmaxia:tests-090"], "generated": ["farmaxia:pupila-view-090"]},
     {"id": "farmaxia:implement-pupila-diff-090", "type": "activity", "label": "project bounded deterministic changes between PUPILA overlay views", "agent": "farmaxia:implementer-090", "used": ["farmaxia:pupila-view-090", "farmaxia:tests-090"], "generated": ["farmaxia:pupila-diff-090"]},
-    {"id": "farmaxia:verify-090", "type": "activity", "label": "run offline contract and tamper-evidence tests", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:pupila-090", "farmaxia:tests-090"], "generated": []}
+    {"id": "farmaxia:verify-090", "type": "activity", "label": "run offline contract and tamper-evidence tests", "agent": "farmaxia:implementer-090", "used": ["farmaxia:contracts-090", "farmaxia:visual-090", "farmaxia:pupila-090", "farmaxia:tests-090"], "generated": []}
     ,{"id": "farmaxia:verify-boundaries-090", "type": "activity", "label": "verify direct repository markers do not cross surface responsibilities", "agent": "farmaxia:implementer-090", "used": ["farmaxia:boundary-guard-090", "farmaxia:tests-090"], "generated": ["farmaxia:boundary-report-090"]}
     ,{"id": "farmaxia:build-render-plan-090", "type": "activity", "label": "convert a safe LUCIDA view into bounded non-blocking visual elements", "agent": "farmaxia:implementer-090", "used": ["farmaxia:pupila-view-090", "farmaxia:boundary-guard-090", "farmaxia:tests-090"], "generated": ["farmaxia:render-plan-090"]}
     ,{"id": "farmaxia:verify-xio-root-090", "type": "activity", "label": "load and report the explicitly requested XIO checkout", "agent": "farmaxia:implementer-090", "used": ["farmaxia:cross-branch-check-090", "farmaxia:tests-090"], "generated": ["farmaxia:xio-root-provenance-090"]}
@@ -48,11 +48,11 @@
     ,{"id": "farmaxia:build-render-budget-090", "type": "activity", "label": "bound transparent render cadence without retaining state or executing host actions", "agent": "farmaxia:implementer-090", "used": ["farmaxia:render-plan-090", "farmaxia:tests-090"], "generated": ["farmaxia:render-budget-090"]}
   ],
   "queries": [
-    {"id": "farmaxia:vizz-query-090", "expression": "does VIZZ produce a non-blocking visual policy from consented metadata without camera or raw content", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:vizz-090", "farmaxia:tests-090"]},
+    {"id": "farmaxia:visual-query-090", "expression": "does VISUAL produce a non-blocking visual policy from consented metadata without camera or raw content", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:visual-090", "farmaxia:tests-090"]},
     {"id": "farmaxia:pupila-query-090", "expression": "does PUPILA produce an explicit reversible proposal from two same-room participant states without executing an action", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:pupila-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:bridge-query-090", "expression": "does the bridge accept canonical XIO events while dropping raw payload content and preserving lineage", "authority": "experiment_defined", "required_entities": ["farmaxia:contracts-090", "farmaxia:bridge-090", "farmaxia:fixture-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:boundary-query-090", "expression": "do the named repository surfaces expose required markers without direct markers from another responsibility", "authority": "experiment_defined", "required_entities": ["farmaxia:boundary-guard-090", "farmaxia:boundary-report-090", "farmaxia:tests-090"]}
-    ,{"id": "farmaxia:render-query-090", "expression": "can a safe VIZZ/PUPILA view become a transparent non-blocking LUCIDA render plan without raw payloads or host actions", "authority": "experiment_defined", "required_entities": ["farmaxia:render-plan-090", "farmaxia:pupila-view-090", "farmaxia:tests-090"]}
+    ,{"id": "farmaxia:render-query-090", "expression": "can a safe VISUAL/PUPILA view become a transparent non-blocking LUCIDA render plan without raw payloads or host actions", "authority": "experiment_defined", "required_entities": ["farmaxia:render-plan-090", "farmaxia:pupila-view-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:xio-root-query-090", "expression": "does the XIO route check load the package from the exact checkout selected by the acceptance runner", "authority": "experiment_defined", "required_entities": ["farmaxia:xio-root-provenance-090", "farmaxia:cross-branch-check-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:lucida-root-query-090", "expression": "does the LUCIDA consumer check load the package from the exact checkout selected by the acceptance runner", "authority": "experiment_defined", "required_entities": ["farmaxia:lucida-root-provenance-090", "farmaxia:pupila-view-090", "farmaxia:tests-090"]}
     ,{"id": "farmaxia:multi-roots-query-090", "expression": "does the MULTI check use the requested XIO checkout for event generation and the requested MULTI checkout for transport", "authority": "experiment_defined", "required_entities": ["farmaxia:multi-roots-provenance-090", "farmaxia:xio-root-provenance-090", "farmaxia:tests-090"]}
@@ -68,7 +68,7 @@
     "missing consent is blocked",
     "unconsented participant presence is not registered",
     "keyboard text is not serialized",
-    "VIZZ remains camera-optional",
+    "VISUAL remains camera-optional",
     "cross-room PUPILA state is rejected",
     "canonical event payload content is not forwarded",
     "duplicate canonical event ids are idempotent within a session peer surface key",

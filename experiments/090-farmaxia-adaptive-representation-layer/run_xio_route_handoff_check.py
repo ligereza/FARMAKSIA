@@ -16,7 +16,7 @@ sys.path.insert(0, str(HERE))
 from canonical_event_bridge import CanonicalEventReplay  # noqa: E402
 
 
-XIO_ROOT = Path(r"C:\IA\XIO")
+XIO_ROOT: Path | None = None
 
 
 def _load_xio(xio_root: Path) -> str:
@@ -111,7 +111,7 @@ def _prepare_multi_handoff(
         registry,
         selection,
         {
-            "envelope": OscEnvelope("/vizz/focus", (focus_value,), timetag=checked_at),
+            "envelope": OscEnvelope("/visual/focus", (focus_value,), timetag=checked_at),
             "channel": "osc",
             "sequence": 1,
             "source_timestamp": checked_at,
@@ -137,7 +137,7 @@ def _prepare_multi_handoff(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--xio-root", default=str(XIO_ROOT))
+    parser.add_argument("--xio-root", required=True)
     args = parser.parse_args()
     loaded_xio_path = _load_xio(Path(args.xio_root))
 
@@ -165,7 +165,7 @@ def main() -> int:
         registry,
         selection,
         {
-            "envelope": OscEnvelope("/vizz/focus", (1.0,), timetag=checked_at),
+            "envelope": OscEnvelope("/visual/focus", (1.0,), timetag=checked_at),
             "channel": "osc",
             "sequence": 1,
             "source_timestamp": checked_at,

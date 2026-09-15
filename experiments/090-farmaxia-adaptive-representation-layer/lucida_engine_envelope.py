@@ -34,19 +34,19 @@ def _mapping(value: Any, field_name: str) -> Mapping[str, Any]:
     return value
 
 
-def vizz_state_to_lucida_value(
+def visual_state_to_lucida_value(
     state: Mapping[str, Any],
     *,
     event_id: str,
     timestamp: str,
     sequence: int,
 ) -> dict[str, Any]:
-    """Project one VIZZ state without copying its source payload."""
+    """Project one VISUAL state without copying its source payload."""
 
-    source = _mapping(state, "vizz_state")
-    session_id = _text(source.get("sessionId"), "vizz_state.sessionId", 120)
+    source = _mapping(state, "visual_state")
+    session_id = _text(source.get("sessionId"), "visual_state.sessionId", 120)
     if not isinstance(source.get("focusState"), bool):
-        raise LucidaEnvelopeError("vizz_state.focusState must be boolean")
+        raise LucidaEnvelopeError("visual_state.focusState must be boolean")
     return {
         "session_id": session_id,
         "event_id": _text(event_id, "event_id", 120),
@@ -105,5 +105,5 @@ def pupila_room_to_lucida_value(
 __all__ = [
     "LucidaEnvelopeError",
     "pupila_room_to_lucida_value",
-    "vizz_state_to_lucida_value",
+    "visual_state_to_lucida_value",
 ]

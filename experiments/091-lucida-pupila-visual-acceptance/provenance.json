@@ -1,8 +1,8 @@
 {
   "schema": "farmaxia:provenance-manifest:0.1",
-  "experiment": "farmaxia:experiment:091-lucida-vizz-pupila-acceptance",
+  "experiment": "farmaxia:experiment:091-lucida-pupila-visual-acceptance",
   "status": "offline_contract_acceptance",
-  "purpose": "Route redacted VIZZ and PUPILA states from experiment 090 through an explicitly selected LUCIDA engine checkout.",
+  "purpose": "Route redacted VISUAL and PUPILA states from experiment 090 through an explicitly selected LUCIDA engine checkout.",
   "source_experiment": "090-farmaxia-adaptive-representation-layer",
   "required_input": "lucida_root_with_domain_adapters",
   "outputs": ["explicit_route_report", "state_revision", "render_item_count", "side_effect_flags"],
@@ -20,10 +20,10 @@
   ],
   "entities": [
     {
-      "id": "farmaxia:source-vizz-090",
+      "id": "farmaxia:source-visual-090",
       "type": "entity",
-      "path": "../090-farmaxia-adaptive-representation-layer/vizz_adapter.py",
-      "role": "existing_vizz_metadata_source",
+      "path": "../090-farmaxia-adaptive-representation-layer/visual_adapter.py",
+      "role": "existing_visual_metadata_source",
       "authority": "computed"
     },
     {
@@ -59,9 +59,9 @@
     {
       "id": "farmaxia:build-091",
       "type": "activity",
-      "label": "build_explicit_vizz_pupila_to_lucida_acceptance",
+      "label": "build_explicit_visual_pupila_to_lucida_acceptance",
       "agent": "farmaxia:python-runner-091",
-      "used": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090", "farmaxia:source-envelope-090"],
+      "used": ["farmaxia:source-visual-090", "farmaxia:source-pupila-090", "farmaxia:source-envelope-090"],
       "generated": ["farmaxia:acceptance-runner-091"]
     },
     {
@@ -76,9 +76,9 @@
   "queries": [
     {
       "id": "farmaxia:query-091-route",
-      "expression": "do_redacted_vizz_and_pupila_states_reach_lucida_through_explicit_routes",
+      "expression": "do_redacted_visual_and_pupila_states_reach_lucida_through_explicit_routes",
       "authority": "experiment_defined",
-      "required_entities": ["farmaxia:source-vizz-090", "farmaxia:source-pupila-090", "farmaxia:source-envelope-090", "farmaxia:acceptance-runner-091"]
+      "required_entities": ["farmaxia:source-visual-090", "farmaxia:source-pupila-090", "farmaxia:source-envelope-090", "farmaxia:acceptance-runner-091"]
     },
     {
       "id": "farmaxia:query-091-safety",

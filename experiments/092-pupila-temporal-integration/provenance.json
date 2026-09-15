@@ -1,0 +1,49 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:092-pupila-temporal-integration",
+  "status": "exploratory",
+  "purpose": "Validate replayable temporal state, consent epochs, expiry and a proposal-only PUPILA-to-LUCIDA projection.",
+  "source": {
+    "repository": "ligereza/FARMAKSIA",
+    "branch": "codex/pupila-farmaksia-integration",
+    "commit": "761a62e0be078d372d1fc4b7868b7c787d050658"
+  },
+  "agents": [
+    {"id": "farmaxia:temporal-operator-092", "type": "software_agent", "role": "implements_durable_temporal_coordinator"},
+    {"id": "farmaxia:temporal-check-runner-092", "type": "software_agent", "role": "runs_acceptance_checks_and_replay"}
+  ],
+  "entities": [
+    {"id": "farmaxia:temporal-coordinator-092", "type": "entity", "path": "temporal_coordinator.py", "role": "durable_temporal_state_and_replay", "authority": "human_declared_tool"},
+    {"id": "farmaxia:temporal-reference-092", "type": "entity", "path": "temporal_reference.py", "role": "independent_reference_oracle", "authority": "human_declared_tool"},
+    {"id": "farmaxia:temporal-integration-runner-092", "type": "entity", "path": "run_integration.py", "role": "offline_acceptance_runner", "authority": "human_declared_tool"},
+    {"id": "farmaxia:temporal-protocol-092", "type": "entity", "path": "README.md", "role": "scope_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:temporal-boundary-092", "type": "entity", "path": "INTEGRATION-MATRIX.md", "role": "ownership_and_boundary_matrix", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:temporal-local-reference-092", "type": "entity", "path": "reference-local/README.md", "role": "labelled_source_snapshot_not_runtime", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:run-temporal-checks-092", "type": "activity", "label": "exercise durable clock expiry consent revocation replay and proposal-only projection", "agent": "farmaxia:temporal-check-runner-092", "used": ["farmaxia:temporal-coordinator-092", "farmaxia:temporal-reference-092", "farmaxia:temporal-integration-runner-092"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:temporal-expiry-query-092", "expression": "does stale evidence stop affecting a reconstructed view", "authority": "experiment_defined", "required_entities": ["farmaxia:temporal-coordinator-092", "farmaxia:temporal-integration-runner-092"]},
+    {"id": "farmaxia:temporal-consent-query-092", "expression": "does revoking a consent epoch make prior evidence ineligible", "authority": "experiment_defined", "required_entities": ["farmaxia:temporal-coordinator-092", "farmaxia:temporal-integration-runner-092"]},
+    {"id": "farmaxia:temporal-restart-query-092", "expression": "does replay reconstruct the same eligible state after restart", "authority": "experiment_defined", "required_entities": ["farmaxia:temporal-coordinator-092", "farmaxia:temporal-reference-092"]},
+    {"id": "farmaxia:temporal-host-boundary-query-092", "expression": "does the output remain a read-only proposal without host actions or raw payload", "authority": "experiment_defined", "required_entities": ["farmaxia:temporal-boundary-092", "farmaxia:temporal-integration-runner-092"]}
+  ],
+  "assumptions": [
+    "Fixtures are synthetic and do not represent observations of a real person.",
+    "SQLite persistence and deterministic replay are local experiment mechanisms, not a production service guarantee.",
+    "LUCIDA receives only a bounded projection and performs no host action."
+  ],
+  "kill_tests": [
+    "Expired evidence must not affect a current view.",
+    "Evidence from a revoked consent epoch must not be eligible.",
+    "Duplicate decisions must be idempotent.",
+    "Reconstruction after restart must agree with the independent temporal reference.",
+    "The projected result must contain no raw payload or executable host action."
+  ],
+  "unknowns": [
+    "Concurrent multi-process writers have not been validated.",
+    "No live LUCIDA host, network transport, sensor or human study was tested.",
+    "Production persistence, authentication and deployment policy remain unimplemented."
+  ]
+}

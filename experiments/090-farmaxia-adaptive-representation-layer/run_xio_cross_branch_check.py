@@ -1,4 +1,4 @@
-"""Verify the real XIO event contract against the local VIZZ/PUPILA bridge."""
+"""Verify the real XIO event contract against the local VISUAL/PUPILA bridge."""
 
 from __future__ import annotations
 
@@ -80,7 +80,7 @@ def build_interaction_event(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--xio-root", default=r"C:\IA\XIO")
+    parser.add_argument("--xio-root", required=True)
     args = parser.parse_args()
     from canonical_event_bridge import CanonicalEventReplay
 

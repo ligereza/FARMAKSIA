@@ -1,4 +1,4 @@
-"""Bridge canonical application events into metadata-only VIZZ/PUPILA input."""
+"""Bridge canonical application events into metadata-only VISUAL/PUPILA input."""
 
 from __future__ import annotations
 
@@ -10,11 +10,11 @@ from typing import Any, Mapping
 from contracts import normalize_context, normalize_signal
 from pupila_adapter import PupilaAdapter
 from pupila_view import diff_pupila_view, project_pupila_view
-from vizz_adapter import VizzAdapter
+from visual_adapter import VisualAdapter
 
 
 class CanonicalEventError(ValueError):
-    """Raised when an external event cannot cross the VIZZ/PUPILA boundary."""
+    """Raised when an external event cannot cross the VISUAL/PUPILA boundary."""
 
 
 _REQUIRED_FIELDS = frozenset(
@@ -170,10 +170,10 @@ def _lineage(event: Mapping[str, Any]) -> dict[str, Any]:
 
 
 class CanonicalEventBridge:
-    """Convert app-independent events into consented VIZZ/PUPILA metadata."""
+    """Convert app-independent events into consented VISUAL/PUPILA metadata."""
 
-    def __init__(self, vizz: VizzAdapter | None = None, pupila: PupilaAdapter | None = None) -> None:
-        self._vizz = vizz or VizzAdapter()
+    def __init__(self, visual: VisualAdapter | None = None, pupila: PupilaAdapter | None = None) -> None:
+        self._visual = visual or VisualAdapter()
         self._pupila = pupila or PupilaAdapter()
         self._seen: dict[tuple[str, str, str], set[str]] = {}
 
@@ -192,12 +192,12 @@ class CanonicalEventBridge:
         seen = self._seen.setdefault(key, set())
         at_ms = int(event["source_timestamp"].timestamp() * 1000)
         if event["event_id"] in seen:
-            vizz_state = self._vizz.state(context, event["peer_id"])
+            visual_state = self._visual.state(context, event["peer_id"])
             pupila_state = self._pupila.snapshot(context, now_ms=at_ms)
             return {
                 "status": "duplicate",
                 "eventId": event["event_id"],
-                "vizzState": vizz_state,
+                "visualState": visual_state,
                 "pupilaState": pupila_state,
                 "pupilaView": project_pupila_view(pupila_state),
                 "lineage": _lineage(event),
@@ -216,15 +216,15 @@ class CanonicalEventBridge:
                 "consent": consent,
             }
         )
-        vizz_state = self._vizz.ingest(context, signal)
-        pupila_state = self._pupila.ingest(context, vizz_state)
+        visual_state = self._visual.ingest(context, signal)
+        pupila_state = self._pupila.ingest(context, visual_state)
         if signal["accepted"]:
             seen.add(event["event_id"])
         return {
             "status": "accepted" if signal["accepted"] else "blocked",
             "eventId": event["event_id"],
             "signal": signal,
-            "vizzState": vizz_state,
+            "visualState": visual_state,
             "pupilaState": pupila_state,
             "pupilaView": project_pupila_view(pupila_state),
             "lineage": _lineage(event),
@@ -232,7 +232,7 @@ class CanonicalEventBridge:
 
 
 class CanonicalEventReplay:
-    """Replay canonical events into one in-memory VIZZ/PUPILA bridge."""
+    """Replay canonical events into one in-memory VISUAL/PUPILA bridge."""
 
     def __init__(self, bridge: CanonicalEventBridge | None = None) -> None:
         self.bridge = bridge or CanonicalEventBridge()
@@ -290,7 +290,7 @@ class CanonicalEventReplay:
             "results": results,
             "interactionMetrics": _interaction_metrics(results),
             "pupilaViewDiffs": view_diffs,
-            "finalVizzState": final["vizzState"] if final else None,
+            "finalVisualState": final["visualState"] if final else None,
             "finalPupilaState": final["pupilaState"] if final else None,
             "finalPupilaView": final["pupilaView"] if final else None,
         }
@@ -316,7 +316,7 @@ def _interaction_metrics(results: list[dict[str, Any]]) -> dict[str, Any]:
         kind = kind if isinstance(kind, str) and kind else "unknown"
         kind_status_counts.setdefault(kind, Counter())[status] += 1
 
-        state = result.get("vizzState")
+        state = result.get("visualState")
         if isinstance(state, Mapping):
             participant = state.get("participantRef")
             if isinstance(participant, str) and participant:

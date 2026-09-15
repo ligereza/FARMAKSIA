@@ -16,12 +16,12 @@ class BoundaryRule:
 
 
 BOUNDARY_RULES: dict[str, BoundaryRule] = {
-    "farmaxia_vizz_pupila": BoundaryRule(
+    "farmaxia_visual_pupila": BoundaryRule(
         required=(
             "canonical_event_bridge.py",
             "pupila_adapter.py",
             "pupila_view.py",
-            "vizz_adapter.py",
+            "visual_adapter.py",
         ),
         forbidden=("adobe", "resolume", "XIO_LAYER"),
     ),

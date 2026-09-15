@@ -13,10 +13,10 @@ SOURCE_ROOT = HERE.parent / "090-farmaxia-adaptive-representation-layer"
 sys.path.insert(0, str(SOURCE_ROOT))
 
 from pupila_adapter import PupilaAdapter  # noqa: E402
-from vizz_adapter import VizzAdapter  # noqa: E402
+from visual_adapter import VisualAdapter  # noqa: E402
 from lucida_engine_envelope import (  # noqa: E402
     pupila_room_to_lucida_value,
-    vizz_state_to_lucida_value,
+    visual_state_to_lucida_value,
 )
 
 
@@ -64,7 +64,7 @@ def _load_engine(lucida_root: Path):
         LucidaPipeline,
         OverlayFrameConsumer,
         build_overlay_frame,
-        register_vizz_pupila_routes,
+        register_visual_pupila_routes,
     )
 
     loaded_path = Path(lucida.__file__).resolve()
@@ -78,7 +78,7 @@ def _load_engine(lucida_root: Path):
         LucidaPipeline,
         OverlayFrameConsumer,
         build_overlay_frame,
-        register_vizz_pupila_routes,
+        register_visual_pupila_routes,
         lucida_root,
         loaded_path,
     )
@@ -94,29 +94,29 @@ def main() -> int:
         LucidaPipeline,
         OverlayFrameConsumer,
         build_overlay_frame,
-        register_vizz_pupila_routes,
+        register_visual_pupila_routes,
         lucida_root,
         loaded_path,
     ) = _load_engine(Path(args.lucida_root))
 
-    vizz = VizzAdapter()
+    visual = VisualAdapter()
     pupila = PupilaAdapter()
-    state_a = vizz.ingest(_context("user-a"), _focus_signal("user-a", 100, True))
-    state_b = vizz.ingest(_context("user-b"), _focus_signal("user-b", 100, False))
+    state_a = visual.ingest(_context("user-a"), _focus_signal("user-a", 100, True))
+    state_b = visual.ingest(_context("user-b"), _focus_signal("user-b", 100, False))
     pupila.ingest(_context("user-a"), state_a)
     room = pupila.ingest(_context("user-b"), state_b)
 
     adapters = AdapterRegistry()
     contracts = ContractRegistry()
-    register_vizz_pupila_routes(adapters, contracts)
+    register_visual_pupila_routes(adapters, contracts)
     pipeline = LucidaPipeline(adapters, contracts)
     state = pipeline.initial_state("session-091")
     first = pipeline.apply(
-        adapter_id="vizz.metadata",
-        contract_id="vizz.perception.v1",
-        value=vizz_state_to_lucida_value(
+        adapter_id="visual.metadata",
+        contract_id="visual.perception.v1",
+        value=visual_state_to_lucida_value(
             state_a,
-            event_id="vizz-091-user-a",
+            event_id="visual-091-user-a",
             timestamp="2026-09-02T12:00:00Z",
             sequence=1,
         ),
@@ -142,7 +142,7 @@ def main() -> int:
         "lucidaRoot": str(lucida_root),
         "loadedLucidaPath": str(loaded_path),
         "sourceExperiment": "090-farmaxia-adaptive-representation-layer",
-        "routes": ["vizz.metadata:vizz.perception.v1", "pupila.coordination:pupila.coordination.v1"],
+        "routes": ["visual.metadata:visual.perception.v1", "pupila.coordination:pupila.coordination.v1"],
         "stateRevision": second.state.revision,
         "activeProposalCount": len(second.state.active_proposals),
         "renderItemCount": len(second.plan.items),

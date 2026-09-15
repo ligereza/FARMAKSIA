@@ -1,4 +1,4 @@
-# Experimento 090 — Capa adaptativa VIZZ/PUPILA derivada de ZIGO
+# Experimento 090 — Capa adaptativa VISUAL/PUPILA derivada de ZIGO
 
 ## Propósito
 
@@ -9,10 +9,10 @@ assets, modelos, credenciales ni datos del repositorio SVG.
 
 La diferencia funcional es deliberada:
 
-- **VIZZ** convierte señales consentidas de una superficie en una política de
+- **VISUAL** convierte señales consentidas de una superficie en una política de
   representación: `quiet`, `anchor`, `guide` o `support`. Es una sugerencia de
   renderizado, no una medición de la mente, la comprensión ni la mirada.
-- **PUPILA** recibe estados VIZZ de varios participantes y hace emerger una
+- **PUPILA** recibe estados VISUAL de varios participantes y hace emerger una
   propuesta de coordinación: `peer-bridge`, `shared-checkpoint` o
   `co-presence`. No envía mensajes ni ejecuta acciones automáticamente.
 - Una persona sólo entra a la sala PUPILA después de una señal consentida;
@@ -29,7 +29,7 @@ señal consentida
        ↓
 contrato metadata-only
        ↓
-VIZZ: política visual local
+VISUAL: política visual local
        ↓
 PUPILA: diferencia entre participantes
        ↓
@@ -41,7 +41,7 @@ aceptación explícita (fuera de este slice)
 ## Puente de eventos canónicos
 
 `canonical_event_bridge.py` permite que XIO entregue un evento de aplicación a
-VIZZ/PUPILA sin acoplar el experimento a la implementación de XIO. El puente
+VISUAL/PUPILA sin acoplar el experimento a la implementación de XIO. El puente
 valida el sobre, conserva la procedencia y transforma sólo un resumen
 metadata-only. Nunca copia el `payload` completo: conectividad se convierte en
 `presence`, teclado conserva sólo `count` y `shortcut`, y las demás señales
@@ -53,13 +53,13 @@ sesiones con el mismo `room_id` no se mezclan.
 
 `CanonicalEventReplay` permite reproducir una secuencia de eventos en memoria
 y devuelve conteos de aceptados, bloqueados y duplicados junto con el estado
-final VIZZ/PUPILA. Cada resultado también incluye `pupilaView`, la proyección
+final VISUAL/PUPILA. Cada resultado también incluye `pupilaView`, la proyección
 acotada que consumiría una superficie transparente, y el replay la expone como
 `finalPupilaView`. No es todavía un transporte de red ni un ejecutor de
 acciones.
 
 El replay también entrega `interactionMetrics`: conteos por estado y tipo de
-señal, más la última política VIZZ observable por participante. Incluye sólo
+señal, más la última política VISUAL observable por participante. Incluye sólo
 metadata acotada de `pointer`, `keyboard`, `focus` y otras señales aceptadas;
 nunca conserva texto, coordenadas crudas ni payloads.
 
@@ -106,7 +106,7 @@ pasar `now_ms` en replay o elegir otro TTL para una prueba controlada.
 `boundary_matrix.py` es una guardia estructural offline. Comprueba que cada
 checkout tenga los marcadores de su responsabilidad y no tenga marcadores
 directos de otra superficie. Sirve para detectar una mezcla accidental de
-Adobe, Resolume, MULTI, XIO o la capa VIZZ/PUPILA; no pretende demostrar por
+Adobe, Resolume, MULTI, XIO o la capa VISUAL/PUPILA; no pretende demostrar por
 si sola que el comportamiento semantico de una aplicacion sea correcto.
 
 ## Qué se adopta de ZIGO
@@ -131,19 +131,24 @@ si sola que el comportamiento semantico de una aplicacion sea correcto.
 
 ## Ejecución
 
-Desde `C:\IA\FARMAXIA`:
+Desde la raíz del checkout FARMAKSIA. Define primero las rutas de los
+consumidores reales; ningún comando presupone nombres de carpetas de Windows.
 
 ```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_contract_test.py
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_demo.py
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_cross_branch_check.py
+$XIO_ROOT = '<checkout de XIO>'
+$LUCIDA_ROOT = '<checkout canónico de X-ANA-X/LUCIDA>'
+$LUCIDA_RESOLUME_ROOT = '<checkout de LUCIDA/RESOLUME>'
+$LUCIDA_MULTI_ROOT = '<checkout de LUCIDA/MULTI>'
+python experiments/090-farmaxia-adaptive-representation-layer/run_contract_test.py
+python experiments/090-farmaxia-adaptive-representation-layer/run_demo.py
+python experiments/090-farmaxia-adaptive-representation-layer/run_xio_cross_branch_check.py --xio-root $XIO_ROOT
 ```
 
 Para verificar el envelope de transporte exacto de LUCIDA/MULTI, ejecutar el
 cuarto comando con un checkout local de esa rama:
 
 ```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_lucida_multi_check.py --lucida-multi-root C:\IA\LUCIDA
+python experiments/090-farmaxia-adaptive-representation-layer/run_lucida_multi_check.py --xio-root $XIO_ROOT --lucida-multi-root $LUCIDA_MULTI_ROOT
 ```
 
 Ese comando requiere que la ruta indicada contenga `XIO_LAYER` de la rama
@@ -157,13 +162,7 @@ incluida en MULTI no puede ocultar el checkout XIO que se queria auditar.
 El flujo de selección y handoff de XIO se verifica con:
 
 ```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_route_handoff_check.py
-```
-
-Para auditar un checkout concreto de XIO, indicar la ruta explícitamente:
-
-```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_xio_route_handoff_check.py --xio-root C:\IA\XIO
+python experiments/090-farmaxia-adaptive-representation-layer/run_xio_route_handoff_check.py --xio-root $XIO_ROOT
 ```
 
 El chequeo exige una ruta coincidente, selecciona el adaptador explícitamente,
@@ -171,7 +170,7 @@ redacta el payload mediante una allowlist, conserva el envelope de
 `application-event` y sólo prepara el handoff. El resultado incluye `xioRoot` y
 `loadedXioPath`; el chequeo falla si el paquete cargado no pertenece a la ruta
 solicitada. No entrega ni ejecuta acciones.
-El mismo handoff preparado se reproduce después en VIZZ/PUPILA y termina en
+El mismo handoff preparado se reproduce después en VISUAL/PUPILA y termina en
 una vista de participante; la señal queda clasificada como `task` porque el
 contrato universal no inventa que un OSC genérico sea foco, puntero o teclado.
 
@@ -185,7 +184,7 @@ El consumidor host-neutral de LUCIDA se verifica aplicando los snapshots y
 diffs derivados de PUPILA:
 
 ```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_lucida_pupila_consumer_check.py --lucida-root C:\IA\VJ
+python experiments/090-farmaxia-adaptive-representation-layer/run_lucida_pupila_consumer_check.py --lucida-root $LUCIDA_ROOT
 ```
 
 El checkout local debe estar en la rama `LUCIDA`. El chequeo sólo usa memoria:
@@ -196,10 +195,10 @@ solicitado.
 La guardia estructural se ejecuta con roles y rutas explicitos:
 
 ```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_boundary_matrix_check.py `
-  --root farmaxia_vizz_pupila=C:\IA\FARMAXIA\experiments\090-farmaxia-adaptive-representation-layer `
-  --root vj_lucida=C:\IA\VJ `
-  --root xio=C:\IA\XIO
+python experiments/090-farmaxia-adaptive-representation-layer/run_boundary_matrix_check.py `
+  --root farmaxia_visual_pupila=experiments/090-farmaxia-adaptive-representation-layer `
+  --root lucida_resolume=$LUCIDA_RESOLUME_ROOT `
+  --root xio=$XIO_ROOT
 ```
 
 Para `lucida_adobe`, `lucida_resolume` y `lucida_multi`, usar checkouts
@@ -209,14 +208,7 @@ de cada ruta y nunca cambia de rama.
 Los tres checks principales pueden ejecutarse juntos:
 
 ```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_offline_integration.py --lucida-root C:\IA\VJ
-```
-
-Para que el acceptance gate no dependa de un checkout XIO implícito, se puede
-indicar la ruta publicada que se quiere auditar:
-
-```powershell
-.\.venv\Scripts\python.exe experiments\090-farmaxia-adaptive-representation-layer\run_offline_integration.py --xio-root C:\IA\XIO --lucida-root C:\IA\VJ
+python experiments/090-farmaxia-adaptive-representation-layer/run_offline_integration.py --xio-root $XIO_ROOT --lucida-root $LUCIDA_ROOT
 ```
 
 El gate valida primero que `--xio-root` contenga el paquete contractual
@@ -225,7 +217,7 @@ actuales, conserva el fallo pero explica qué raíz debe seleccionarse, en vez d
 ocultar la causa detrás de un `ModuleNotFoundError`.
 
 Si también existe un checkout de la rama `MULTI`, se puede añadir
-`--lucida-multi-root C:\IA\LUCIDA-MULTI-CHECK` para incluir el transporte
+`--lucida-multi-root $LUCIDA_MULTI_ROOT` para incluir el transporte
 LUCIDA/MULTI en el mismo reporte.
 
 Los tests son offline y no abren ventanas, cámaras, aplicaciones externas ni
@@ -242,7 +234,7 @@ coordenada o carga cruda en la salida.
 
 - una señal sin consentimiento no entra al estado;
 - el texto de teclado no se persiste;
-- VIZZ no necesita cámara para producir una política básica;
+- VISUAL no necesita cámara para producir una política básica;
 - PUPILA no acepta estados de otra sala;
 - una propuesta no contiene una acción ejecutable;
 - alterar un evento rompe la cadena de auditoría;

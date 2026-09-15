@@ -1,4 +1,4 @@
-"""VIZZ adapter: convert consented interaction signals into visual policy."""
+"""VISUAL adapter: convert consented interaction signals into visual policy."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from typing import Any
 from contracts import clamp, deterministic_id, normalize_context, normalize_signal, sha256
 
 
-class VizzAdapter:
+class VisualAdapter:
     """A rendering heuristic, not a classifier of attention or mental state."""
 
     def __init__(self, window_ms: int = 5000, max_events: int = 128) -> None:
@@ -56,8 +56,8 @@ class VizzAdapter:
             policy, reason = "support", "active-surface-within-normal-signal-budget"
         return {
             "schemaVersion": 1,
-            "adapter": "vizz",
-            "stateId": deterministic_id("vizz-state", {"contextHash": context["contextHash"], "participantRef": participant_ref, "events": [item["eventId"] for item in recent]}),
+            "adapter": "visual",
+            "stateId": deterministic_id("visual-state", {"contextHash": context["contextHash"], "participantRef": participant_ref, "events": [item["eventId"] for item in recent]}),
             "contextHash": context["contextHash"],
             "sessionId": context["sessionId"],
             "roomId": context["roomId"],

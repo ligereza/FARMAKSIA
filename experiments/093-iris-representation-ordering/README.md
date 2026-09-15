@@ -1,10 +1,9 @@
-# Experimento 092 — adaptador IRIS para ordenación de representaciones
+# Experimento 093 — adaptador IRIS para ordenación de representaciones
 
-Este experimento define el contrato explícito entre IRIS y FARMAKSIA. IRIS
-privado conserva el motor de composición, sus superficies y su verificador
-independiente. FARMAKSIA sólo recibe una representación semántica portable; no
-reimplementa la semántica de IRIS ni convierte una preferencia estética en
-verdad.
+Este experimento define un contrato de investigación para transferir una
+composición IRIS a FARMAKSIA. FARMAKSIA sólo recibe una representación
+semántica portable; no contiene la aplicación editorial, no reimplementa su
+semántica ni convierte una preferencia estética en verdad.
 
 ## Contrato
 
@@ -21,13 +20,13 @@ preferencia humana.
 ## Reproducir
 
 ```powershell
-python experiments/092-iris-representation-ordering/run_experiment.py
-python experiments/092-iris-representation-ordering/run_contract_test.py
+python experiments/093-iris-representation-ordering/run_experiment.py
+python experiments/093-iris-representation-ordering/run_contract_test.py
 ```
 
-El motor y las superficies de IRIS no se copian al archivo público. La
-referencia privada se verifica en su propio repositorio; aquí sólo queda el
-contrato, un fixture sintético y el adaptador que permite replay offline.
+El runtime de la aplicación IRIS queda fuera de este experimento. Aquí sólo
+quedan el contrato, un fixture sintético y el adaptador que permite replay
+offline.
 
 ## Evidencia y continuidad
 
