@@ -9,12 +9,13 @@ declara precisión humana.
 
 ## Decisión
 
-VIZZ conservará WebGazer 3.5.3 como baseline local y comparará una segunda
-ruta inspirada en RealEye Light Open, sin copiar su dependencia antes de una
-revisión de licencia, modelos y procedencia. La implementación futura se
+El baseline histórico de VIZZ incluía WebGazer 3.5.3. Esa dependencia fue
+retirada del árbol activo y la comparación futura debe partir de una ruta
+independiente inspirada en RealEye Light Open, sin copiar dependencias antes
+de revisar licencia, modelos y procedencia. La implementación futura se
 divide en dos capas:
 
-1. **Protocolo VIZZ-Cal v2 sobre el baseline:** calentamiento central fuera del
+1. **Protocolo VIZZ-Cal v2 sobre un baseline independiente:** calentamiento central fuera del
    entrenamiento, patrón de 17 objetivos con cobertura de bordes, esquinas y
    zonas intermedias, y captura de una ventana de muestras después de que la
    persona fija la mirada. El orden se registrará y se alternará entre sesiones
@@ -76,4 +77,4 @@ colores, tamaño, paneles ni contenido basándose en la mirada.
   crudas o ejecuta pruebas bajo intoxicación.
 
 La siguiente tarea segura es implementar el experimento 031 como auditoría
-comparativa de calibración, no reemplazar WebGazer en producción.
+comparativa de calibración; no se reintroduce WebGazer como runtime activo.
