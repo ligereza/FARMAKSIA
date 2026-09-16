@@ -1,0 +1,946 @@
+{
+  "proposal_only": true,
+  "proposals": [
+    {
+      "decision": {
+        "execution_mode": "proposal_only",
+        "requires_explicit_approval": true,
+        "reversible": true
+      },
+      "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000001",
+      "safety": {
+        "automatic_actions": false,
+        "avolites_contacted": false,
+        "external_side_effects": false,
+        "proposal_only": true,
+        "resolume_opened": false
+      },
+      "schema": "mosaik:console-proposals:0.1",
+      "source": {
+        "event_id": "pulse-001",
+        "frame_sha256": "4f92cf5dc360acea6d7d36402e5de24493553182968c5dfa7e39d19276d145e7",
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "sequence": 1,
+        "session_id": "obras-rehearsal-2026-09-08",
+        "timecode": "00:00:00:09"
+      },
+      "status": "PENDING_APPROVAL",
+      "targets": {
+        "avolites": {
+          "actions": [
+            {
+              "method": "GET",
+              "operation": "Playbacks.PlayPlayback",
+              "path": "/titan/script/2/Playbacks/PlayPlayback",
+              "query": {
+                "accuracy": 0.01,
+                "handle_userNumber": 1,
+                "level_level": 0.968955
+              },
+              "when": "pulse >= 0.5"
+            },
+            {
+              "method": "GET",
+              "operation": "Masters.PlaybackLevel",
+              "path": "/titan/script/2/Masters/PlaybackLevel",
+              "query": {
+                "initalise": false,
+                "oldValue": null,
+                "value": 0.968955
+              }
+            }
+          ],
+          "external_side_effects": false,
+          "fixture_intents": [
+            {
+              "angle_degrees": 89.350532,
+              "fixture_id": "ble-01",
+              "intensity": 1.0,
+              "pulse": 0.937
+            },
+            {
+              "angle_degrees": 161.350532,
+              "fixture_id": "ble-02",
+              "intensity": 1.0,
+              "pulse": 0.937
+            },
+            {
+              "angle_degrees": 233.350532,
+              "fixture_id": "ble-03",
+              "intensity": 0.936674,
+              "pulse": 0.937
+            },
+            {
+              "angle_degrees": 305.350532,
+              "fixture_id": "ble-04",
+              "intensity": 0.918653,
+              "pulse": 0.937
+            },
+            {
+              "angle_degrees": 17.350532,
+              "fixture_id": "ble-05",
+              "intensity": 0.989447,
+              "pulse": 0.937
+            }
+          ],
+          "host": "127.0.0.1",
+          "mapping": {
+            "fixture_intents": "requires Titan patch and explicit fixture mapping",
+            "playback_fire": "pulse edge proposal",
+            "playback_level": "mean fixture intensity"
+          },
+          "port": 4430,
+          "target": "Avolites Titan",
+          "transport": "Titan WebAPI proposal"
+        },
+        "resolume": {
+          "external_side_effects": false,
+          "host": "127.0.0.1",
+          "mapping": {
+            "connect": "pulse edge proposal; operator may reject",
+            "opacity": "mean fixture intensity",
+            "rotation_degrees": "mean fixture angle",
+            "transport_position": "global semantic phase"
+          },
+          "messages": [
+            {
+              "address": "/composition/layers/1/opacity",
+              "args": [
+                0.968955
+              ]
+            },
+            {
+              "address": "/composition/layers/1/rotation",
+              "args": [
+                161.350532
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/transport/position",
+              "args": [
+                0.214863
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/connect",
+              "args": [],
+              "when": "pulse >= 0.5"
+            }
+          ],
+          "port": 7000,
+          "target": "Resolume Arena",
+          "transport": "OSC"
+        }
+      }
+    },
+    {
+      "decision": {
+        "execution_mode": "proposal_only",
+        "requires_explicit_approval": true,
+        "reversible": true
+      },
+      "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000002",
+      "safety": {
+        "automatic_actions": false,
+        "avolites_contacted": false,
+        "external_side_effects": false,
+        "proposal_only": true,
+        "resolume_opened": false
+      },
+      "schema": "mosaik:console-proposals:0.1",
+      "source": {
+        "event_id": "pulse-002",
+        "frame_sha256": "86f3d0243572d7d7cb2ba932b2597635d0f1f6fdea007640a5bae5ccc43a77df",
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "sequence": 2,
+        "session_id": "obras-rehearsal-2026-09-08",
+        "timecode": "00:00:01:03"
+      },
+      "status": "PENDING_APPROVAL",
+      "targets": {
+        "avolites": {
+          "actions": [
+            {
+              "method": "GET",
+              "operation": "Playbacks.PlayPlayback",
+              "path": "/titan/script/2/Playbacks/PlayPlayback",
+              "query": {
+                "accuracy": 0.01,
+                "handle_userNumber": 1,
+                "level_level": 0.93316
+              },
+              "when": "pulse >= 0.5"
+            },
+            {
+              "method": "GET",
+              "operation": "Masters.PlaybackLevel",
+              "path": "/titan/script/2/Masters/PlaybackLevel",
+              "query": {
+                "initalise": false,
+                "oldValue": null,
+                "value": 0.93316
+              }
+            }
+          ],
+          "external_side_effects": false,
+          "fixture_intents": [
+            {
+              "angle_degrees": 201.850532,
+              "fixture_id": "ble-01",
+              "intensity": 0.921185,
+              "pulse": 0.901
+            },
+            {
+              "angle_degrees": 273.850532,
+              "fixture_id": "ble-02",
+              "intensity": 0.863867,
+              "pulse": 0.901
+            },
+            {
+              "angle_degrees": 345.850532,
+              "fixture_id": "ble-03",
+              "intensity": 0.90231,
+              "pulse": 0.901
+            },
+            {
+              "angle_degrees": 57.850532,
+              "fixture_id": "ble-04",
+              "intensity": 0.983387,
+              "pulse": 0.901
+            },
+            {
+              "angle_degrees": 129.850532,
+              "fixture_id": "ble-05",
+              "intensity": 0.995052,
+              "pulse": 0.901
+            }
+          ],
+          "host": "127.0.0.1",
+          "mapping": {
+            "fixture_intents": "requires Titan patch and explicit fixture mapping",
+            "playback_fire": "pulse edge proposal",
+            "playback_level": "mean fixture intensity"
+          },
+          "port": 4430,
+          "target": "Avolites Titan",
+          "transport": "Titan WebAPI proposal"
+        },
+        "resolume": {
+          "external_side_effects": false,
+          "host": "127.0.0.1",
+          "mapping": {
+            "connect": "pulse edge proposal; operator may reject",
+            "opacity": "mean fixture intensity",
+            "rotation_degrees": "mean fixture angle",
+            "transport_position": "global semantic phase"
+          },
+          "messages": [
+            {
+              "address": "/composition/layers/1/opacity",
+              "args": [
+                0.93316
+              ]
+            },
+            {
+              "address": "/composition/layers/1/rotation",
+              "args": [
+                201.850532
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/transport/position",
+              "args": [
+                0.527363
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/connect",
+              "args": [],
+              "when": "pulse >= 0.5"
+            }
+          ],
+          "port": 7000,
+          "target": "Resolume Arena",
+          "transport": "OSC"
+        }
+      }
+    },
+    {
+      "decision": {
+        "execution_mode": "proposal_only",
+        "requires_explicit_approval": true,
+        "reversible": true
+      },
+      "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000003",
+      "safety": {
+        "automatic_actions": false,
+        "avolites_contacted": false,
+        "external_side_effects": false,
+        "proposal_only": true,
+        "resolume_opened": false
+      },
+      "schema": "mosaik:console-proposals:0.1",
+      "source": {
+        "event_id": "audio-gap-001",
+        "frame_sha256": "2c37f9033ea61aecfd5479276023ccf7c0b85a97cb8e562bb87dd3e644f07c91",
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "sequence": 3,
+        "session_id": "obras-rehearsal-2026-09-08",
+        "timecode": "00:00:01:09"
+      },
+      "status": "PENDING_APPROVAL",
+      "targets": {
+        "avolites": {
+          "actions": [
+            {
+              "method": "GET",
+              "operation": "Playbacks.PlayPlayback",
+              "path": "/titan/script/2/Playbacks/PlayPlayback",
+              "query": {
+                "accuracy": 0.01,
+                "handle_userNumber": 1,
+                "level_level": 0.25
+              },
+              "when": "pulse >= 0.5"
+            },
+            {
+              "method": "GET",
+              "operation": "Masters.PlaybackLevel",
+              "path": "/titan/script/2/Masters/PlaybackLevel",
+              "query": {
+                "initalise": false,
+                "oldValue": null,
+                "value": 0.25
+              }
+            }
+          ],
+          "external_side_effects": false,
+          "fixture_intents": [
+            {
+              "angle_degrees": 239.350532,
+              "fixture_id": "ble-01",
+              "intensity": 0.198514,
+              "pulse": 0.0
+            },
+            {
+              "angle_degrees": 311.350532,
+              "fixture_id": "ble-02",
+              "intensity": 0.188985,
+              "pulse": 0.0
+            },
+            {
+              "angle_degrees": 23.350532,
+              "fixture_id": "ble-03",
+              "intensity": 0.263777,
+              "pulse": 0.0
+            },
+            {
+              "angle_degrees": 95.350532,
+              "fixture_id": "ble-04",
+              "intensity": 0.319529,
+              "pulse": 0.0
+            },
+            {
+              "angle_degrees": 167.350532,
+              "fixture_id": "ble-05",
+              "intensity": 0.279195,
+              "pulse": 0.0
+            }
+          ],
+          "host": "127.0.0.1",
+          "mapping": {
+            "fixture_intents": "requires Titan patch and explicit fixture mapping",
+            "playback_fire": "pulse edge proposal",
+            "playback_level": "mean fixture intensity"
+          },
+          "port": 4430,
+          "target": "Avolites Titan",
+          "transport": "Titan WebAPI proposal"
+        },
+        "resolume": {
+          "external_side_effects": false,
+          "host": "127.0.0.1",
+          "mapping": {
+            "connect": "pulse edge proposal; operator may reject",
+            "opacity": "mean fixture intensity",
+            "rotation_degrees": "mean fixture angle",
+            "transport_position": "global semantic phase"
+          },
+          "messages": [
+            {
+              "address": "/composition/layers/1/opacity",
+              "args": [
+                0.25
+              ]
+            },
+            {
+              "address": "/composition/layers/1/rotation",
+              "args": [
+                167.350532
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/transport/position",
+              "args": [
+                0.631529
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/connect",
+              "args": [],
+              "when": "pulse >= 0.5"
+            }
+          ],
+          "port": 7000,
+          "target": "Resolume Arena",
+          "transport": "OSC"
+        }
+      }
+    },
+    {
+      "decision": {
+        "execution_mode": "proposal_only",
+        "requires_explicit_approval": true,
+        "reversible": true
+      },
+      "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000004",
+      "safety": {
+        "automatic_actions": false,
+        "avolites_contacted": false,
+        "external_side_effects": false,
+        "proposal_only": true,
+        "resolume_opened": false
+      },
+      "schema": "mosaik:console-proposals:0.1",
+      "source": {
+        "event_id": "pulse-003",
+        "frame_sha256": "a34eef50608526a0422f9060e799e77a71bc09888eae05b4cedc6d508d613d0c",
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "sequence": 4,
+        "session_id": "obras-rehearsal-2026-09-08",
+        "timecode": "00:00:01:16"
+      },
+      "status": "PENDING_APPROVAL",
+      "targets": {
+        "avolites": {
+          "actions": [
+            {
+              "method": "GET",
+              "operation": "Playbacks.PlayPlayback",
+              "path": "/titan/script/2/Playbacks/PlayPlayback",
+              "query": {
+                "accuracy": 0.01,
+                "handle_userNumber": 1,
+                "level_level": 0.89584
+              },
+              "when": "pulse >= 0.5"
+            },
+            {
+              "method": "GET",
+              "operation": "Masters.PlaybackLevel",
+              "path": "/titan/script/2/Masters/PlaybackLevel",
+              "query": {
+                "initalise": false,
+                "oldValue": null,
+                "value": 0.89584
+              }
+            }
+          ],
+          "external_side_effects": false,
+          "fixture_intents": [
+            {
+              "angle_degrees": 284.350532,
+              "fixture_id": "ble-01",
+              "intensity": 0.825899,
+              "pulse": 0.874
+            },
+            {
+              "angle_degrees": 356.350532,
+              "fixture_id": "ble-02",
+              "intensity": 0.876957,
+              "pulse": 0.874
+            },
+            {
+              "angle_degrees": 68.350532,
+              "fixture_id": "ble-03",
+              "intensity": 0.954111,
+              "pulse": 0.874
+            },
+            {
+              "angle_degrees": 140.350532,
+              "fixture_id": "ble-04",
+              "intensity": 0.950736,
+              "pulse": 0.874
+            },
+            {
+              "angle_degrees": 212.350532,
+              "fixture_id": "ble-05",
+              "intensity": 0.871497,
+              "pulse": 0.874
+            }
+          ],
+          "host": "127.0.0.1",
+          "mapping": {
+            "fixture_intents": "requires Titan patch and explicit fixture mapping",
+            "playback_fire": "pulse edge proposal",
+            "playback_level": "mean fixture intensity"
+          },
+          "port": 4430,
+          "target": "Avolites Titan",
+          "transport": "Titan WebAPI proposal"
+        },
+        "resolume": {
+          "external_side_effects": false,
+          "host": "127.0.0.1",
+          "mapping": {
+            "connect": "pulse edge proposal; operator may reject",
+            "opacity": "mean fixture intensity",
+            "rotation_degrees": "mean fixture angle",
+            "transport_position": "global semantic phase"
+          },
+          "messages": [
+            {
+              "address": "/composition/layers/1/opacity",
+              "args": [
+                0.89584
+              ]
+            },
+            {
+              "address": "/composition/layers/1/rotation",
+              "args": [
+                212.350532
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/transport/position",
+              "args": [
+                0.756529
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/connect",
+              "args": [],
+              "when": "pulse >= 0.5"
+            }
+          ],
+          "port": 7000,
+          "target": "Resolume Arena",
+          "transport": "OSC"
+        }
+      }
+    },
+    {
+      "decision": {
+        "execution_mode": "proposal_only",
+        "requires_explicit_approval": true,
+        "reversible": true
+      },
+      "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000005",
+      "safety": {
+        "automatic_actions": false,
+        "avolites_contacted": false,
+        "external_side_effects": false,
+        "proposal_only": true,
+        "resolume_opened": false
+      },
+      "schema": "mosaik:console-proposals:0.1",
+      "source": {
+        "event_id": "pulse-004",
+        "frame_sha256": "3df635df4a599020c2fa66e0ca3531785be9035b34e6780a3cb16dedf56bd407",
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "sequence": 5,
+        "session_id": "obras-rehearsal-2026-09-08",
+        "timecode": "00:00:02:02"
+      },
+      "status": "PENDING_APPROVAL",
+      "targets": {
+        "avolites": {
+          "actions": [
+            {
+              "method": "GET",
+              "operation": "Playbacks.PlayPlayback",
+              "path": "/titan/script/2/Playbacks/PlayPlayback",
+              "query": {
+                "accuracy": 0.01,
+                "handle_userNumber": 1,
+                "level_level": 0.985775
+              },
+              "when": "pulse >= 0.5"
+            },
+            {
+              "method": "GET",
+              "operation": "Masters.PlaybackLevel",
+              "path": "/titan/script/2/Masters/PlaybackLevel",
+              "query": {
+                "initalise": false,
+                "oldValue": null,
+                "value": 0.985775
+              }
+            }
+          ],
+          "external_side_effects": false,
+          "fixture_intents": [
+            {
+              "angle_degrees": 351.850532,
+              "fixture_id": "ble-01",
+              "intensity": 0.989907,
+              "pulse": 0.9595
+            },
+            {
+              "angle_degrees": 63.850532,
+              "fixture_id": "ble-02",
+              "intensity": 1.0,
+              "pulse": 0.9595
+            },
+            {
+              "angle_degrees": 135.850532,
+              "fixture_id": "ble-03",
+              "intensity": 1.0,
+              "pulse": 0.9595
+            },
+            {
+              "angle_degrees": 207.850532,
+              "fixture_id": "ble-04",
+              "intensity": 0.994901,
+              "pulse": 0.9595
+            },
+            {
+              "angle_degrees": 279.850532,
+              "fixture_id": "ble-05",
+              "intensity": 0.944069,
+              "pulse": 0.9595
+            }
+          ],
+          "host": "127.0.0.1",
+          "mapping": {
+            "fixture_intents": "requires Titan patch and explicit fixture mapping",
+            "playback_fire": "pulse edge proposal",
+            "playback_level": "mean fixture intensity"
+          },
+          "port": 4430,
+          "target": "Avolites Titan",
+          "transport": "Titan WebAPI proposal"
+        },
+        "resolume": {
+          "external_side_effects": false,
+          "host": "127.0.0.1",
+          "mapping": {
+            "connect": "pulse edge proposal; operator may reject",
+            "opacity": "mean fixture intensity",
+            "rotation_degrees": "mean fixture angle",
+            "transport_position": "global semantic phase"
+          },
+          "messages": [
+            {
+              "address": "/composition/layers/1/opacity",
+              "args": [
+                0.985775
+              ]
+            },
+            {
+              "address": "/composition/layers/1/rotation",
+              "args": [
+                207.850532
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/transport/position",
+              "args": [
+                0.944029
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/connect",
+              "args": [],
+              "when": "pulse >= 0.5"
+            }
+          ],
+          "port": 7000,
+          "target": "Resolume Arena",
+          "transport": "OSC"
+        }
+      }
+    },
+    {
+      "decision": {
+        "execution_mode": "proposal_only",
+        "requires_explicit_approval": true,
+        "reversible": true
+      },
+      "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000006",
+      "safety": {
+        "automatic_actions": false,
+        "avolites_contacted": false,
+        "external_side_effects": false,
+        "proposal_only": true,
+        "resolume_opened": false
+      },
+      "schema": "mosaik:console-proposals:0.1",
+      "source": {
+        "event_id": "pulse-005",
+        "frame_sha256": "ff6015b2559252ee0dc0a71bd670b6591f363e2ac047cacf1bc68a11167b45ba",
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "sequence": 6,
+        "session_id": "obras-rehearsal-2026-09-08",
+        "timecode": "00:00:02:20"
+      },
+      "status": "PENDING_APPROVAL",
+      "targets": {
+        "avolites": {
+          "actions": [
+            {
+              "method": "GET",
+              "operation": "Playbacks.PlayPlayback",
+              "path": "/titan/script/2/Playbacks/PlayPlayback",
+              "query": {
+                "accuracy": 0.01,
+                "handle_userNumber": 1,
+                "level_level": 0.96244
+              },
+              "when": "pulse >= 0.5"
+            },
+            {
+              "method": "GET",
+              "operation": "Masters.PlaybackLevel",
+              "path": "/titan/script/2/Masters/PlaybackLevel",
+              "query": {
+                "initalise": false,
+                "oldValue": null,
+                "value": 0.96244
+              }
+            }
+          ],
+          "external_side_effects": false,
+          "fixture_intents": [
+            {
+              "angle_degrees": 96.850532,
+              "fixture_id": "ble-01",
+              "intensity": 1.0,
+              "pulse": 0.928
+            },
+            {
+              "angle_degrees": 168.850532,
+              "fixture_id": "ble-02",
+              "intensity": 0.997999,
+              "pulse": 0.928
+            },
+            {
+              "angle_degrees": 240.850532,
+              "fixture_id": "ble-03",
+              "intensity": 0.91777,
+              "pulse": 0.928
+            },
+            {
+              "angle_degrees": 312.850532,
+              "fixture_id": "ble-04",
+              "intensity": 0.910384,
+              "pulse": 0.928
+            },
+            {
+              "angle_degrees": 24.850532,
+              "fixture_id": "ble-05",
+              "intensity": 0.986049,
+              "pulse": 0.928
+            }
+          ],
+          "host": "127.0.0.1",
+          "mapping": {
+            "fixture_intents": "requires Titan patch and explicit fixture mapping",
+            "playback_fire": "pulse edge proposal",
+            "playback_level": "mean fixture intensity"
+          },
+          "port": 4430,
+          "target": "Avolites Titan",
+          "transport": "Titan WebAPI proposal"
+        },
+        "resolume": {
+          "external_side_effects": false,
+          "host": "127.0.0.1",
+          "mapping": {
+            "connect": "pulse edge proposal; operator may reject",
+            "opacity": "mean fixture intensity",
+            "rotation_degrees": "mean fixture angle",
+            "transport_position": "global semantic phase"
+          },
+          "messages": [
+            {
+              "address": "/composition/layers/1/opacity",
+              "args": [
+                0.96244
+              ]
+            },
+            {
+              "address": "/composition/layers/1/rotation",
+              "args": [
+                168.850532
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/transport/position",
+              "args": [
+                0.235696
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/connect",
+              "args": [],
+              "when": "pulse >= 0.5"
+            }
+          ],
+          "port": 7000,
+          "target": "Resolume Arena",
+          "transport": "OSC"
+        }
+      }
+    },
+    {
+      "decision": {
+        "execution_mode": "proposal_only",
+        "requires_explicit_approval": true,
+        "reversible": true
+      },
+      "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000007",
+      "safety": {
+        "automatic_actions": false,
+        "avolites_contacted": false,
+        "external_side_effects": false,
+        "proposal_only": true,
+        "resolume_opened": false
+      },
+      "schema": "mosaik:console-proposals:0.1",
+      "source": {
+        "event_id": "pulse-006",
+        "frame_sha256": "654fb6cbcb028f5e098809bf759809f17104c0b664aa423feec4155cc8b18036",
+        "schema": "xio:predictive-semantic-lighting-frame:0.1",
+        "sequence": 7,
+        "session_id": "obras-rehearsal-2026-09-08",
+        "timecode": "00:00:03:07"
+      },
+      "status": "PENDING_APPROVAL",
+      "targets": {
+        "avolites": {
+          "actions": [
+            {
+              "method": "GET",
+              "operation": "Playbacks.PlayPlayback",
+              "path": "/titan/script/2/Playbacks/PlayPlayback",
+              "query": {
+                "accuracy": 0.01,
+                "handle_userNumber": 1,
+                "level_level": 0.8834
+              },
+              "when": "pulse >= 0.5"
+            },
+            {
+              "method": "GET",
+              "operation": "Masters.PlaybackLevel",
+              "path": "/titan/script/2/Masters/PlaybackLevel",
+              "query": {
+                "initalise": false,
+                "oldValue": null,
+                "value": 0.8834
+              }
+            }
+          ],
+          "external_side_effects": false,
+          "fixture_intents": [
+            {
+              "angle_degrees": 171.850532,
+              "fixture_id": "ble-01",
+              "intensity": 0.907513,
+              "pulse": 0.865
+            },
+            {
+              "angle_degrees": 243.850532,
+              "fixture_id": "ble-02",
+              "intensity": 0.828352,
+              "pulse": 0.865
+            },
+            {
+              "angle_degrees": 315.850532,
+              "fixture_id": "ble-03",
+              "intensity": 0.825265,
+              "pulse": 0.865
+            },
+            {
+              "angle_degrees": 27.850532,
+              "fixture_id": "ble-04",
+              "intensity": 0.902519,
+              "pulse": 0.865
+            },
+            {
+              "angle_degrees": 99.850532,
+              "fixture_id": "ble-05",
+              "intensity": 0.953351,
+              "pulse": 0.865
+            }
+          ],
+          "host": "127.0.0.1",
+          "mapping": {
+            "fixture_intents": "requires Titan patch and explicit fixture mapping",
+            "playback_fire": "pulse edge proposal",
+            "playback_level": "mean fixture intensity"
+          },
+          "port": 4430,
+          "target": "Avolites Titan",
+          "transport": "Titan WebAPI proposal"
+        },
+        "resolume": {
+          "external_side_effects": false,
+          "host": "127.0.0.1",
+          "mapping": {
+            "connect": "pulse edge proposal; operator may reject",
+            "opacity": "mean fixture intensity",
+            "rotation_degrees": "mean fixture angle",
+            "transport_position": "global semantic phase"
+          },
+          "messages": [
+            {
+              "address": "/composition/layers/1/opacity",
+              "args": [
+                0.8834
+              ]
+            },
+            {
+              "address": "/composition/layers/1/rotation",
+              "args": [
+                171.850532
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/transport/position",
+              "args": [
+                0.444029
+              ]
+            },
+            {
+              "address": "/composition/layers/1/clips/1/connect",
+              "args": [],
+              "when": "pulse >= 0.5"
+            }
+          ],
+          "port": 7000,
+          "target": "Resolume Arena",
+          "transport": "OSC"
+        }
+      }
+    }
+  ],
+  "revocation": {
+    "blockers": [
+      "permissions_revoked"
+    ],
+    "proposal_id": "proposal-obras-rehearsal-2026-09-08-frame-000001",
+    "safety": {
+      "automatic_actions": false,
+      "avolites_contacted": false,
+      "external_side_effects": false,
+      "proposal_only": true,
+      "resolume_opened": false
+    },
+    "schema": "mosaik:console-proposals:0.1",
+    "status": "BLOCKED",
+    "targets": {}
+  },
+  "schema": "mosaik:console-proposals:0.1"
+}

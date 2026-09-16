@@ -1,0 +1,43 @@
+{
+  "artifact_type": "ObrasExperimentalRehearsalEvidence",
+  "files": [
+    "../instructions.md",
+    "../commits.md",
+    "xio-envelope.json",
+    "signal-events.jsonl",
+    "timeline-normalized.json",
+    "phase-states.jsonl",
+    "mosaik-proposals.json",
+    "mosaik-replay-fixture.json",
+    "mosaik-replay-report.json",
+    "resolume-cues.json",
+    "predictive-frames.jsonl",
+    "predictive-transport.json",
+    "semantic-replay.json",
+    "console-proposals.json",
+    "replay-complete.json",
+    "safety-summary.json",
+    "variable-fixture-check.json",
+    "visualization.html",
+    "run-summary.json"
+  ],
+  "fixture": "../../../experiments/obras-experimental-rehearsal/fixture-synthetic-audio.json",
+  "mode": "dry-run",
+  "physical_audio_used": false,
+  "schema_version": "0.1",
+  "session_id": "obras-rehearsal-2026-09-08",
+  "source_repositories": {
+    "farmaxia": {
+      "commit": "e4fb65d672709ba6276f91411161541e94907a48",
+      "path": "C:\\IA\\FARMAXIA"
+    },
+    "mosaik": {
+      "commit": "1ab2076cbfb6ef650f557fef4a5f1ac00203b76c",
+      "path": "C:\\IA\\VJ"
+    },
+    "xio": {
+      "commit": "fcd8626d5d1ceed5b2f7dc0467125059c5c7e300",
+      "path": "C:\\IA\\XIO"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:088-vizz-state-replay-preflight",
+  "status": "written_and_pure_contract_verified",
+  "purpose": "Replay normalized VIZZ state transitions offline and reject duplicate or out-of-order sequence values before renderer integration.",
+  "agents": [
+    {"id": "farmaxia:researcher-088", "type": "agent", "role": "defines_temporal_replay_boundary_for_vizz_renderer"},
+    {"id": "farmaxia:contract-builder-088", "type": "software_agent", "role": "writes_replay_and_pure_tests", "version": "3.13"}
+  ],
+  "entities": [
+    {"id": "farmaxia:replay-runner-088", "type": "entity", "path": "run_replay.py", "role": "deterministic_state_replay_and_sequence_cursor", "authority": "computed"},
+    {"id": "farmaxia:replay-test-088", "type": "entity", "path": "run_contract_test.py", "role": "pure_temporal_and_neutral_fallback_tests", "authority": "computed"},
+    {"id": "farmaxia:replay-fixture-088", "type": "entity", "path": "fixtures/sequence.jsonl", "role": "declared_manual_state_sequence", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:replay-readme-088", "type": "entity", "path": "README.md", "role": "reproduction_protocol_and_limits", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:replay-results-088", "type": "entity", "path": "results.md", "role": "measurement_record", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:define-sequence-cursor-088", "type": "activity", "label": "reject duplicate and out-of-order state sequences", "agent": "farmaxia:contract-builder-088", "used": ["farmaxia:replay-runner-088"], "generated": []},
+    {"id": "farmaxia:pure-verify-replay-088", "type": "activity", "label": "verify active-to-neutral transitions without external applications", "agent": "farmaxia:contract-builder-088", "used": ["farmaxia:replay-runner-088", "farmaxia:replay-test-088", "farmaxia:replay-fixture-088"], "generated": ["farmaxia:replay-results-088"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:sequence-query-088", "expression": "does a duplicate or delayed state fail closed instead of reusing an old adaptation", "authority": "experiment_defined", "required_entities": ["farmaxia:replay-runner-088", "farmaxia:replay-test-088"]},
+    {"id": "farmaxia:renderer-query-088", "expression": "does only a valid current state produce an active bounded visual plan", "authority": "experiment_defined", "required_entities": ["farmaxia:replay-runner-088", "farmaxia:replay-test-088"]}
+  ],
+  "assumptions": [
+    "The host assigns a monotonic sequence before a state enters the renderer boundary.",
+    "The 087 normalized state and render policy remain the source of truth for this replay.",
+    "An unknown or malformed line must be visible as a failed replay rather than silently skipped."
+  ],
+  "kill_tests": [
+    "Duplicate sequence must not produce an ACTIVE plan.",
+    "Out-of-order sequence must not produce an ACTIVE plan.",
+    "Low-confidence or stale state must remain neutral.",
+    "Malformed JSON must return a non-zero replay result and an explicit error."
+  ],
+  "unknowns": [
+    "The actual transport ordering and loss behavior of the future host process.",
+    "Whether OSC, shared memory or another local transport will be selected after the manual TouchDesigner test.",
+    "Perceptual effect and measured latency of the final renderer."
+  ]
+}

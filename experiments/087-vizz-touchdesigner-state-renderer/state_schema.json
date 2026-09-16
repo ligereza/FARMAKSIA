@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://farmaxia.local/schema/vizz-state-0.1.json",
+  "title": "FARMAXIA VIZZ normalized renderer state",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "seq",
+    "timestamp_monotonic_ms",
+    "source",
+    "confidence",
+    "head",
+    "focus",
+    "input",
+    "window",
+    "permissions"
+  ],
+  "properties": {
+    "schema": {"const": "farmaxia:vizz-state:0.1"},
+    "seq": {"type": "integer", "minimum": 0},
+    "timestamp_monotonic_ms": {"type": "number", "minimum": 0},
+    "source": {"enum": ["manual", "face_track", "uia", "input", "combined", "unknown"]},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "head": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "z", "rx", "ry", "rz"],
+      "properties": {
+        "x": {"type": "number", "minimum": -1, "maximum": 1},
+        "y": {"type": "number", "minimum": -1, "maximum": 1},
+        "z": {"type": "number", "minimum": -1, "maximum": 1},
+        "rx": {"type": "number", "minimum": -180, "maximum": 180},
+        "ry": {"type": "number", "minimum": -180, "maximum": 180},
+        "rz": {"type": "number", "minimum": -180, "maximum": 180}
+      }
+    },
+    "focus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "w", "h", "interest"],
+      "properties": {
+        "x": {"type": "number", "minimum": 0, "maximum": 1},
+        "y": {"type": "number", "minimum": 0, "maximum": 1},
+        "w": {"type": "number", "minimum": 0, "maximum": 1},
+        "h": {"type": "number", "minimum": 0, "maximum": 1},
+        "interest": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keyboard_activity", "pointer_x", "pointer_y", "pointer_active"],
+      "properties": {
+        "keyboard_activity": {"type": "number", "minimum": 0, "maximum": 1},
+        "pointer_x": {"type": "number", "minimum": 0, "maximum": 1},
+        "pointer_y": {"type": "number", "minimum": 0, "maximum": 1},
+        "pointer_active": {"type": "boolean"}
+      }
+    },
+    "window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected", "monitor_id", "source_rect"],
+      "properties": {
+        "selected": {"type": "boolean"},
+        "monitor_id": {"type": "string", "maxLength": 128},
+        "source_rect": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["left", "top", "width", "height"],
+          "properties": {
+            "left": {"type": "integer"},
+            "top": {"type": "integer"},
+            "width": {"type": "integer", "minimum": 1},
+            "height": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["camera", "capture", "overlay", "input_remap"],
+      "properties": {
+        "camera": {"type": "boolean"},
+        "capture": {"type": "boolean"},
+        "overlay": {"type": "boolean"},
+        "input_remap": {"type": "boolean"}
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:086-vizz-blender-live-distance-bridge",
+  "status": "bridge_contract_verified_not_started",
+  "purpose": "Connect the existing GPU facial-scale signal to the Blender 085 virtual camera through a local atomic JSON state using a virtual P0 baseline without claiming absolute physical depth.",
+  "agents": [
+    {"id": "farmaxia:researcher-086", "type": "agent", "role": "defines_relative_distance_and_privacy_boundary"},
+    {"id": "farmaxia:bridge-builder-086", "type": "software_agent", "role": "implements_gpu_tracker_to_blender_timer_bridge"}
+  ],
+  "entities": [
+    {"id": "farmaxia:live-runner-086", "type": "entity", "path": "run_live_distance.py", "role": "consented_p0_gpu_face_scale_capture_and_atomic_state_writer", "authority": "human_declared_tool"},
+    {"id": "farmaxia:live-blender-086", "type": "entity", "path": "blender_live_bridge.py", "role": "local_timer_reader_and_vizz_controller_updater", "authority": "human_declared_tool"},
+    {"id": "farmaxia:live-contract-test-086", "type": "entity", "path": "run_contract_test.py", "role": "static_bridge_contract_test", "authority": "computed"},
+    {"id": "farmaxia:live-kill-test-086", "type": "entity", "path": "run_kill_test.py", "role": "unknown_privacy_partial_write_and_domain_kill_tests", "authority": "computed"},
+    {"id": "farmaxia:live-protocol-086", "type": "entity", "path": "README.md", "role": "two_process_reproduction_protocol", "authority": "human_reviewed_record"}
+  ],
+  "activities": [
+    {"id": "farmaxia:build-live-distance-086", "type": "activity", "label": "reuse the VIZZ 084 two-ruler scale estimator and stream calibrated distance state", "agent": "farmaxia:bridge-builder-086", "used": ["farmaxia:live-runner-086"], "generated": []},
+    {"id": "farmaxia:install-live-blender-086", "type": "activity", "label": "poll local state and update the Blender 085 controller without rendering or executing payloads", "agent": "farmaxia:bridge-builder-086", "used": ["farmaxia:live-blender-086"], "generated": []}
+  ],
+  "queries": [
+    {"id": "farmaxia:live-distance-query-086", "expression": "does the webcam-derived relative ratio control observer_distance_m only after explicit P0", "authority": "experiment_defined", "required_entities": ["farmaxia:live-runner-086", "farmaxia:live-blender-086"]},
+    {"id": "farmaxia:live-unknown-query-086", "expression": "does an invalid face or contradictory facial rulers leave the Blender camera unchanged", "authority": "experiment_defined", "required_entities": ["farmaxia:live-runner-086", "farmaxia:live-kill-test-086"]},
+    {"id": "farmaxia:live-privacy-query-086", "expression": "does the bridge avoid network, input injection and raw-video persistence", "authority": "experiment_defined", "required_entities": ["farmaxia:live-runner-086", "farmaxia:live-blender-086"]}
+  ],
+  "assumptions": [
+    "P0 is an explicit virtual baseline; the experiment uses relative scale and does not claim absolute physical distance.",
+    "The existing VIZZ 084 GPU tracker and local RetinaFace model are available.",
+    "A local file is sufficient for the first two-process bridge and has lower surface area than a socket.",
+    "The Blender 085 scene is open before the bridge is installed."
+  ],
+  "kill_tests": [
+    "No P0 means the live runner does not start.",
+    "Missing face or contradictory rulers produce UNKNOWN.",
+    "UNKNOWN never updates the Blender controller.",
+    "Out-of-domain distances are rejected.",
+    "Partial JSON writes are prevented by atomic replacement.",
+    "No raw video, network access, input injection or remote execution is allowed."
+  ],
+  "unknowns": [
+    "Whether the live webcam signal is stable enough during unconstrained work.",
+    "Whether the user prefers camera movement, display scaling or both.",
+    "Whether interactive Cycles viewport rendering is fast enough on the configured device.",
+    "Whether the single P0 meter reading remains sufficient for multiple monitors or head poses."
+  ]
+}

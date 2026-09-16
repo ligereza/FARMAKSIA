@@ -1,0 +1,19 @@
+{
+  "checks": [
+    {
+      "fixture_count": 2,
+      "state_count": 2,
+      "status": "PASS"
+    },
+    {
+      "fixture_count": 5,
+      "state_count": 5,
+      "status": "PASS"
+    },
+    {
+      "fixture_count": 8,
+      "state_count": 8,
+      "status": "PASS"
+    }
+  ]
+}

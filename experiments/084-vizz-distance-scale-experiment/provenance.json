@@ -1,0 +1,52 @@
+{
+  "schema": "farmaxia:provenance-manifest:0.1",
+  "experiment": "farmaxia:experiment:084-vizz-distance-scale-experiment",
+  "status": "exploratory_human_trace_analyzed",
+  "purpose": "Test a two-ruler, pose-bounded, distance-relative display transform without treating a credit card as a runtime sensor.",
+  "agents": [
+    {"id": "farmaxia:researcher-084", "type": "agent", "role": "defines_distance_scale_contract_and_human_protocol"},
+    {"id": "farmaxia:python-runner-084", "type": "software_agent", "role": "executes_standard_library_geometry_and_kill_tests", "version": "3.13"}
+  ],
+  "entities": [
+    {"id": "farmaxia:scale-geometry-084", "type": "entity", "path": "scale_geometry.py", "role": "two_ruler_log_geometric_fusion_pose_bound_and_screen_geometry", "authority": "computed"},
+    {"id": "farmaxia:scale-fixture-084", "type": "entity", "path": "fixture.json", "role": "synthetic_reference_screen_and_safety_fixture", "authority": "human_declared_fixture"},
+    {"id": "farmaxia:scale-runner-084", "type": "entity", "path": "run_experiment.py", "role": "offline_experiment_compiler", "authority": "computed"},
+    {"id": "farmaxia:scale-contract-test-084", "type": "entity", "path": "run_contract_test.py", "role": "positive_invariant_tests", "authority": "computed"},
+    {"id": "farmaxia:scale-kill-test-084", "type": "entity", "path": "run_kill_test.py", "role": "missing_signal_pose_and_disagreement_kill_tests", "authority": "computed"},
+    {"id": "farmaxia:scale-analyzer-084", "type": "entity", "path": "analyze_trace.py", "role": "reproducible_human_trace_summary_without_absolute_depth_or_comfort_claims", "authority": "computed"},
+    {"id": "farmaxia:scale-analyzer-test-084", "type": "entity", "path": "run_analyzer_test.py", "role": "trace_analyzer_invariant_tests", "authority": "computed"},
+    {"id": "farmaxia:scale-capture-084", "type": "entity", "path": "run_capture.py", "role": "explicit_space_armed_gpu_face_geometry_capture_with_no_raw_video", "authority": "human_declared_tool"},
+    {"id": "farmaxia:scale-protocol-084", "type": "entity", "path": "README.md", "role": "explicit_p0_face_geometry_and_distance_validation_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:scale-results-084", "type": "entity", "path": "results.md", "role": "synthetic_evidence_and_unknowns", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:scale-target-084", "type": "entity", "path": "landolt_c.svg", "role": "visual_scale_and_orientation_target", "authority": "human_declared_fixture"}
+  ],
+  "activities": [
+    {"id": "farmaxia:compile-scale-084", "type": "activity", "label": "compile synthetic distance ratios and constant-angle target sizes", "agent": "farmaxia:python-runner-084", "used": ["farmaxia:scale-geometry-084", "farmaxia:scale-fixture-084", "farmaxia:scale-target-084"], "generated": ["farmaxia:scale-results-084"]},
+    {"id": "farmaxia:kill-scale-084", "type": "activity", "label": "reject one-ruler estimates, excessive pose and contradictory rulers", "agent": "farmaxia:python-runner-084", "used": ["farmaxia:scale-geometry-084", "farmaxia:scale-kill-test-084"], "generated": []},
+    {"id": "farmaxia:analyze-scale-trace-084", "type": "activity", "label": "summarize one consented trace with integrity and unknown boundaries", "agent": "farmaxia:python-runner-084", "used": ["farmaxia:scale-analyzer-084", "farmaxia:scale-capture-084"], "generated": ["farmaxia:scale-results-084"]}
+  ],
+  "queries": [
+    {"id": "farmaxia:scale-query-084", "expression": "does runtime scale use both eye distance and face width after bounded pose correction", "authority": "experiment_defined", "required_entities": ["farmaxia:scale-geometry-084", "farmaxia:scale-contract-test-084"]},
+    {"id": "farmaxia:p0-query-084", "expression": "is P0 sealed explicitly from two facial rulers rather than generic object recognition", "authority": "experiment_defined", "required_entities": ["farmaxia:scale-geometry-084", "farmaxia:scale-capture-084", "farmaxia:scale-protocol-084"]},
+    {"id": "farmaxia:visual-query-084", "expression": "does the target diameter grow with distance to preserve approximate angular size", "authority": "experiment_defined", "required_entities": ["farmaxia:scale-target-084", "farmaxia:scale-results-084"]}
+  ],
+  "assumptions": [
+    "Eye-centre distance and facial width are available as camera-pixel summaries.",
+    "Cosine correction is valid only inside the declared bounded pose fixture.",
+    "One measured P0 distance is needed for absolute millimetres; otherwise only ratios are reported.",
+    "The Landolt C is a visual control target, not a clinical acuity instrument."
+  ],
+  "kill_tests": [
+    "Missing or nonpositive eye distance is rejected.",
+    "Missing or nonpositive face width is rejected.",
+    "A single changed ruler cannot produce a valid estimate.",
+    "Yaw/pitch outside the calibrated domain returns an error rather than extrapolation.",
+    "Contradictory rulers return UNKNOWN and no fused distance.",
+    "The offline contract does not start camera, use network, inject input or mutate the screen."
+  ],
+  "unknowns": [
+    "Whether current webcam landmarks remain stable during natural work and distance changes.",
+    "Whether the visual transform improves perceived comfort or task performance.",
+    "Whether a future 3-D landmark model materially outperforms this bounded correction."
+  ]
+}
