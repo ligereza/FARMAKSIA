@@ -1,0 +1,10 @@
+{
+  "source": "MAK read-only PORTFOLIO_INBOX.json",
+  "sourceSchema": "faro-portfolio-inbox-v1",
+  "sourceSha256Observed": "001bb38f8f9cfb319e4b38234ba61c4d3bffa6fb6fe307873ab4594418036d93",
+  "localFixtureSha256": "99F95AB5926F2E9946CC903C213C673C95CF1918AA83C13F2EF29231A0D8C73A",
+  "copiedAt": "2026-09-06",
+  "copiedRecords": 4,
+  "mediaCopied": false,
+  "note": "Metadata subset only; no private media copied. IDs and source paths are retained to test provenance and missing-media handling."
+}

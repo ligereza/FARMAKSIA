@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "iris.project/1",
+  "title": "El archivo como respiración",
+  "subtitle": "Demo editable para ensayar un orden de obras, registros y contexto.",
+  "curatorialQuestion": "¿Qué aparece cuando una secuencia de registros se vuelve una lectura pública?",
+  "demoNotice": "Corpus sintético de demostración. Sustituir por material propio o consentido antes de publicar.",
+  "items": [
+    {"id":"work-iris-001","title":"Umbral de luz","description":"Una habitación cambia de escala al repetir una sombra. La pieza se presenta aquí como una entrada al archivo, no como una conclusión.","credits":"Demo IRIS · corpus sintético","date":"2024-03-12","year":2024,"mediaType":"imagen","tags":["luz","espacio"],"selected":true,"status":"seleccionada","source":{"id":"record-demo-001","label":"Registro de prueba A","kind":"fixture"}},
+    {"id":"record-iris-002","title":"Notas de montaje","description":"Registro de proceso: tres decisiones anotadas durante una instalación. Conserva el contexto para que no se confunda con la obra final.","credits":"Demo IRIS · corpus sintético","date":"2024-04-02","year":2024,"mediaType":"video","videoUrl":"https://example.com/video-demo","tags":["proceso","montaje"],"selected":true,"status":"seleccionada","source":{"id":"record-demo-002","label":"Registro de prueba B","kind":"fixture"}},
+    {"id":"work-iris-003","title":"Mapa de retornos","description":"Ensayo de orden temporal: una pieza sin imagen disponible, pero con texto, créditos e identidad preservados.","credits":"Demo IRIS · corpus sintético","date":"2023-11-18","year":2023,"mediaType":"sin-media","tags":["tiempo","archivo"],"selected":true,"status":"seleccionada","source":{"id":"record-demo-003","label":"Registro de prueba C","kind":"fixture"}},
+    {"id":"context-iris-004","title":"Conversación de sala","description":"Contexto asociado, no obra. Se mantiene fuera de la selección inicial para demostrar que el editor conserva la distinción.","credits":"Demo IRIS · corpus sintético","date":"2024-04-03","year":2024,"mediaType":"registro","tags":["contexto"],"selected":false,"status":"revisar","source":{"id":"record-demo-004","label":"Contexto de prueba D","kind":"fixture"}}
+  ]
+}

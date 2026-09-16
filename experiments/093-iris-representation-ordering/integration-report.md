@@ -9,6 +9,12 @@ verificación y procedencia. Los contratos negativos demuestran que no se
 aceptan órdenes alteradas, selección inexistente, verificación falsa ni
 optimalidad estética.
 
+También se incorporó `iris_reference/`: snapshot portable del frente IRIS con
+su engine, CLI, servidor, cliente, pruebas, documentación y fixtures. Es una
+referencia de investigación dentro de 093, no una segunda implementación ni
+una dependencia de ejecución de FARMAKSIA. Se excluyeron `node_modules/`,
+`outputs/` y `work/`.
+
 ## Decisiones
 
 1. IRIS sigue siendo la autoridad de composición y verificación.
@@ -21,8 +27,10 @@ optimalidad estética.
 
 - Adaptador: `IRIS_FARMAKSIA_ADAPTER_VERIFIED`.
 - Contrato FARMAKSIA: `IRIS_FARMAKSIA_CONTRACT_TESTS_PASSED`.
-- La referencia privada de IRIS no se copia ni se ejecuta desde FARMAKSIA;
-  su verificación queda a cargo de su propio repositorio.
+- La referencia portable de IRIS está presente en `iris_reference/`; su
+  ejecución queda aislada del runtime Python de FARMAKSIA y no requiere red.
+- `npm run check`, `npm test` y `npm run smoke` fueron verificados en la fuente
+  local equivalente antes de copiar el snapshot; no se versionan sus salidas.
 - Contrato FARMAKSIA existente 068: contrato y kill tests pasaron.
 - `pytest -q` global no es utilizable sin una corrección previa del harness:
   durante la colección importa scripts repetidos (`run_contract_test` y
@@ -32,5 +40,7 @@ optimalidad estética.
 ## Límites
 
 No se afirma interoperabilidad productiva, persistencia, firma, broker,
-evaluación humana ni calidad curatorial. Tampoco se incluye el motor privado
-de IRIS ni se mezclan cambios locales preexistentes del checkout principal.
+evaluación humana ni calidad curatorial. La referencia incluida no contiene
+medios privados, credenciales ni datos de ejecución; los IDs de los fixtures
+se mantienen porque son parte de la procedencia MAK y no deben confundirse con
+identidad estética o validación humana.

@@ -24,9 +24,17 @@ python experiments/093-iris-representation-ordering/run_experiment.py
 python experiments/093-iris-representation-ordering/run_contract_test.py
 ```
 
-El runtime de la aplicación IRIS queda fuera de este experimento. Aquí sólo
-quedan el contrato, un fixture sintético y el adaptador que permite replay
-offline.
+El runtime de la aplicación IRIS no es una dependencia de FARMAKSIA. Se incluye
+una referencia portable autocontenida en [iris_reference](iris_reference/),
+para que el experimento conserve el motor, CLI, servidor, pruebas, contrato y
+fixtures que originaron la integración. La referencia no incluye
+`node_modules/`, salidas generadas ni directorios de trabajo; FARMAKSIA sigue
+siendo investigativo y no ejecuta IRIS como parte de su propio runtime.
+
+Los fixtures `mak-*-sample.json` conservan IDs y procedencia de metadatos
+observados en MAK, pero no copian medios privados. “Sintético” describe la
+composición de prueba y sus medios demo, no una sustitución de los IDs de
+procedencia.
 
 ## Evidencia y continuidad
 
@@ -34,6 +42,8 @@ offline.
 - [dependency-matrix.md](dependency-matrix.md): dependencias y límites portables.
 - [provenance.json](provenance.json): manifiesto de procedencia del experimento.
 - [continuation-proposal.md](continuation-proposal.md): siguiente bloque propuesto.
+- [iris_reference/README.md](iris_reference/README.md): fuente portable y su
+  límite de ejecución.
 
 ## Kill tests
 

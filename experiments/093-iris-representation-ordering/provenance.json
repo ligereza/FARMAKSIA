@@ -16,23 +16,25 @@
     {"id": "farmaxia:iris-adapter-093", "type": "entity", "path": "iris_farmaksia_adapter.py", "role": "semantic_adapter", "authority": "human_declared_tool"},
     {"id": "farmaxia:iris-fixture-093", "type": "entity", "path": "fixture.json", "role": "synthetic_verified_composition", "authority": "human_declared_fixture"},
     {"id": "farmaxia:iris-contract-093", "type": "entity", "path": "run_contract_test.py", "role": "identity_order_and_safety_contract", "authority": "human_declared_tool"},
-    {"id": "farmaxia:iris-protocol-093", "type": "entity", "path": "README.md", "role": "scope_and_reproduction_protocol", "authority": "human_reviewed_record"}
+    {"id": "farmaxia:iris-protocol-093", "type": "entity", "path": "README.md", "role": "scope_and_reproduction_protocol", "authority": "human_reviewed_record"},
+    {"id": "farmaxia:iris-reference-093", "type": "entity", "path": "iris_reference/", "role": "portable_iris_reference_snapshot", "authority": "human_reviewed_snapshot"}
   ],
   "activities": [
     {"id": "farmaxia:adapt-iris-composition-093", "type": "activity", "label": "map a verified synthetic IRIS composition into the FARMAKSIA representation contract", "agent": "farmaxia:iris-adapter-operator-093", "used": ["farmaxia:iris-fixture-093", "farmaxia:iris-adapter-093"], "generated": ["farmaxia:iris-contract-093"]},
-    {"id": "farmaxia:check-iris-boundary-093", "type": "activity", "label": "reject missing identity, altered order, failed verification and aesthetic optimality claims", "agent": "farmaxia:iris-contract-runner-093", "used": ["farmaxia:iris-contract-093", "farmaxia:iris-protocol-093"], "generated": []}
+    {"id": "farmaxia:check-iris-boundary-093", "type": "activity", "label": "reject missing identity, altered order, failed verification and aesthetic optimality claims", "agent": "farmaxia:iris-contract-runner-093", "used": ["farmaxia:iris-contract-093", "farmaxia:iris-protocol-093"], "generated": []},
+    {"id": "farmaxia:preserve-iris-reference-093", "type": "activity", "label": "preserve a portable IRIS reference without importing its runtime into FARMAKSIA", "agent": "farmaxia:iris-adapter-operator-093", "used": ["farmaxia:iris-reference-093", "farmaxia:iris-protocol-093"], "generated": []}
   ],
   "queries": [
     {"id": "farmaxia:iris-identity-query-093", "expression": "does the result preserve project work record and context identity", "authority": "experiment_defined", "required_entities": ["farmaxia:iris-fixture-093", "farmaxia:iris-adapter-093"]},
     {"id": "farmaxia:iris-order-query-093", "expression": "does the adapter admit only the declared authorial order", "authority": "experiment_defined", "required_entities": ["farmaxia:iris-fixture-093", "farmaxia:iris-contract-093"]},
-    {"id": "farmaxia:iris-boundary-query-093", "expression": "does the public experiment avoid copying or executing the private IRIS runtime", "authority": "experiment_defined", "required_entities": ["farmaxia:iris-protocol-093", "farmaxia:iris-contract-093"]}
+    {"id": "farmaxia:iris-boundary-query-093", "expression": "does the public experiment keep the IRIS reference isolated from the FARMAKSIA runtime", "authority": "experiment_defined", "required_entities": ["farmaxia:iris-protocol-093", "farmaxia:iris-contract-093", "farmaxia:iris-reference-093"]}
   ],
   "assumptions": [
     "IRIS remains authoritative for composition and independent verification.",
     "OPTIMAL is relative to the declared objective and hard constraints.",
     "No aesthetic or human-quality claim is encoded as computational truth.",
     "The fixture contains no human data and no external side effect.",
-    "The IRIS application runtime is outside this research experiment."
+    "The IRIS reference is included for research traceability, but its runtime is outside FARMAKSIA execution."
   ],
   "kill_tests": [
     "Missing source identity blocks admission.",
@@ -42,7 +44,7 @@
   ],
   "unknowns": [
     "Production persistence and signature are not implemented.",
-    "The private IRIS runtime has not been automatically connected to this public adapter.",
+    "The portable IRIS reference has not been connected as a FARMAKSIA runtime dependency.",
     "No human review or curatorial quality claim is included."
   ]
 }
