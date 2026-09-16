@@ -1,0 +1,13 @@
+{
+  "version": "mak-archivo-v1",
+  "fuente": "iskvw/datos/archivo.json",
+  "piezas": [
+    {"id":"vola","titulo":"VOLÁ · lo visible y lo invisible","clase":"obra","fecha":"2026","resumen":"El vaso que el humano ve y el vacío que se anima: figura y fondo de la misma imagen.","etiquetas":["generativo","animación","tilde"],"medio":{"tipo":"imagen","src":"assets/works/vola-vaso.svg"},"estado":"publicada","extra":{"categoria":"Animación"}},
+    {"id":"campo-motor-diagnostico","titulo":"Campo · Motor de Diagnóstico","clase":"obra","fecha":"2026","resumen":"El código que audita el sistema, tejido como campo repetido.","etiquetas":["generativo","field"],"medio":{"tipo":"imagen","src":"assets/works/campo-motor-diagnostico.svg"},"estado":"publicada","extra":{"categoria":"Generative"}},
+    {"id":"cenefa-dossier","titulo":"Cenefa · Dossier","clase":"obra","fecha":"2026","resumen":"Una investigación escrita tejida como borde: el texto que enmarca la obra se vuelve el marco mismo.","etiquetas":["generativo","border"],"medio":{"tipo":"imagen","src":"assets/works/cenefa-dossier.svg"},"estado":"publicada","extra":{"categoria":"2D"}}
+  ],
+  "vinculos": [
+    {"de":"campo-motor-diagnostico","a":"cenefa-dossier","peso":0.333,"clase":"etiqueta"}
+  ],
+  "meta":{"regimen":"semantico","piezas":2034,"vinculos":5812,"por_clase":{"codigo":208,"obra":1826}}
+}

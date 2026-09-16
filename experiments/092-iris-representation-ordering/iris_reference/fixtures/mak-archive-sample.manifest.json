@@ -1,0 +1,11 @@
+{
+  "source": "MAK read-only logical fixture: archive.json",
+  "sourceSchema": "mak-archivo-v1",
+  "sourceSha256Observed": "83cf54902508b3d50ed582fb2aafa307dbde2b83218ad40301ff924080fe0207",
+  "companionFieldSha256Observed": "f4273875fe3ffcb1c0c22dbfcdf73935a7623ac0dbf112e7c6c89cebc3580e34",
+  "localFixtureSha256": "24289B114490312347EDBDA13F3B459588250E182D6237C03A9FC36FE401CDBD",
+  "copiedRecords": 3,
+  "copiedRelations": 1,
+  "mediaCopied": false,
+  "note": "Metadata subset only; archive classes and typed relation retained. campo.json was inspected but no unrelated positions were copied."
+}
